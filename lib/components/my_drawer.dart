@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projet7/authentication/login_or_register.dart';
 import 'package:projet7/components/my_drawer_tile.dart';
 import 'package:projet7/pages/settings_page.dart';
 
@@ -49,21 +48,6 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           // on met ensuite un espace
-          const Spacer(),
-          // ensuite se deconnecter ou quiter
-          MyDrawerTile(
-            text: "QUITTER",
-            icon: Icons.logout,
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginOrRegister(),
-                ),
-              );
-            },
-          ),
           const SizedBox(height: 25),
         ],
       ),
