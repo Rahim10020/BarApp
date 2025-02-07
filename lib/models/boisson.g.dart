@@ -87,15 +87,15 @@ Boisson _boissonDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Boisson(
-    casiers: reader.readLong(offsets[0]),
-    modele: _BoissonmodeleValueEnumMap[reader.readByteOrNull(offsets[1])] ??
-        Modele.petit,
-    nbBouteilleParCasier: reader.readLong(offsets[2]),
-    nom: reader.readString(offsets[3]),
-    prix: reader.readDouble(offsets[4]),
-  );
+  final object = Boisson();
+  object.casiers = reader.readLong(offsets[0]);
   object.id = id;
+  object.modele =
+      _BoissonmodeleValueEnumMap[reader.readByteOrNull(offsets[1])] ??
+          Modele.petit;
+  object.nbBouteilleParCasier = reader.readLong(offsets[2]);
+  object.nom = reader.readString(offsets[3]);
+  object.prix = reader.readDouble(offsets[4]);
   return object;
 }
 

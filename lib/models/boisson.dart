@@ -5,7 +5,6 @@ part 'boisson.g.dart';
 @Collection()
 class Boisson {
   Id id = Isar.autoIncrement;
-
   late String nom;
   @enumerated // Convertit automatiquement l'énumération en int
   late Modele modele;
@@ -13,16 +12,8 @@ class Boisson {
   late int casiers;
   late int nbBouteilleParCasier;
 
-  Boisson({
-    required this.nom,
-    required this.modele,
-    required this.prix,
-    required this.casiers,
-    required this.nbBouteilleParCasier,
-  });
-
-  // Constructeur par défaut requis par Isar
-  Boisson.empty();
+  // ✅ Constructeur sans paramètre requis par Isar
+  Boisson();
 
   // Méthode pour calculer le prix total de la boisson dans un casier
   double calculerPrixPourCasier() {

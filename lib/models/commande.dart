@@ -11,12 +11,8 @@ class Commande {
   final IsarLinks<DetailsCommande> detailsCommandes =
       IsarLinks(); // Relation avec DetailsCommande
 
-  Commande({
-    required this.date,
-  });
-
   // Constructeur vide requis par Isar
-  Commande.empty();
+  Commande();
 
   // Méthode pour calculer le prix total de la commande
   double get prixTotal {

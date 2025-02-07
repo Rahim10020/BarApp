@@ -12,13 +12,8 @@ class Vente {
       IsarLink<Boisson>(); // Relation avec Boisson
   late int quantiteVendu; // Nombre de boissons vendues
 
-  Vente({
-    required this.date,
-    required this.quantiteVendu,
-  });
-
   // Constructeur par défaut requis par Isar
-  Vente.empty();
+  Vente();
 
   // Méthode pour calculer le montant de la vente
   double get montantVente {

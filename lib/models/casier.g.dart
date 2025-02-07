@@ -68,10 +68,9 @@ Casier _casierDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Casier(
-    nbBouteillesRestantes: reader.readLong(offsets[0]),
-  );
+  final object = Casier();
   object.id = id;
+  object.nbBouteillesRestantes = reader.readLong(offsets[0]);
   return object;
 }
 

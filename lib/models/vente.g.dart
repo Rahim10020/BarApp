@@ -80,11 +80,10 @@ Vente _venteDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Vente(
-    date: reader.readDateTime(offsets[0]),
-    quantiteVendu: reader.readLong(offsets[2]),
-  );
+  final object = Vente();
+  object.date = reader.readDateTime(offsets[0]);
   object.id = id;
+  object.quantiteVendu = reader.readLong(offsets[2]);
   return object;
 }
 

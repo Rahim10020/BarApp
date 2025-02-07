@@ -74,9 +74,8 @@ Commande _commandeDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Commande(
-    date: reader.readDateTime(offsets[0]),
-  );
+  final object = Commande();
+  object.date = reader.readDateTime(offsets[0]);
   object.id = id;
   return object;
 }

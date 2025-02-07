@@ -10,12 +10,8 @@ class Casier {
       IsarLink<Boisson>(); // Relation avec Boisson
   late int nbBouteillesRestantes;
 
-  Casier({
-    required this.nbBouteillesRestantes,
-  });
-
-  // Constructeur par défaut requis par Isar
-  Casier.empty();
+  // Constructeur vide requis par Isar
+  Casier();
 
   // Méthode pour calculer le prix des boissons restantes
   double prixBoissonRestant() {

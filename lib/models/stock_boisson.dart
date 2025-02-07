@@ -8,7 +8,7 @@ class StockBoisson {
   Id id = Isar.autoIncrement;
 
   final IsarLink<Boisson> boisson = IsarLink();
-  int quantite = 0;
+  late int quantite = 0;
 
   StockBoisson();
 }

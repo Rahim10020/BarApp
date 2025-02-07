@@ -68,10 +68,9 @@ DetailsCommande _detailsCommandeDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = DetailsCommande(
-    nbCasiers: reader.readLong(offsets[0]),
-  );
+  final object = DetailsCommande();
   object.id = id;
+  object.nbCasiers = reader.readLong(offsets[0]);
   return object;
 }
 

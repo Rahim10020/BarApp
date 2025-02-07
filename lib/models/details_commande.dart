@@ -8,11 +8,9 @@ class DetailsCommande {
   Id id = Isar.autoIncrement;
 
   final IsarLink<Boisson> boisson = IsarLink();
-  final int nbCasiers;
+  late int nbCasiers;
 
-  DetailsCommande({
-    required this.nbCasiers,
-  });
+  DetailsCommande();
 
   // Méthode pour calculer le prix total pour chaque boisson de la commande
   double calculPrixTotal() {
