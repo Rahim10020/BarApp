@@ -1,10 +1,17 @@
+import 'package:isar/isar.dart';
+
+part 'boisson.g.dart';
+
+@Collection()
 class Boisson {
-  final String nom;
-  final Modele
-      modele; // soit la boisson en question est petite soit elle est grande
-  double prix;
-  int casiers; // nombre total de casiers disponibles pour cette boisson
-  int nbBouteilleParCasier; // nombre de bouteilles dans un casier de cette boisson
+  Id id = Isar.autoIncrement;
+
+  late String nom;
+  @enumerated // Convertit automatiquement l'énumération en int
+  late Modele modele;
+  late double prix;
+  late int casiers;
+  late int nbBouteilleParCasier;
 
   Boisson({
     required this.nom,
@@ -14,15 +21,19 @@ class Boisson {
     required this.nbBouteilleParCasier,
   });
 
-  // methode qui me calcule le prix total de la boisson dans un casier
+  // Constructeur par défaut requis par Isar
+  Boisson.empty();
+
+  // Méthode pour calculer le prix total de la boisson dans un casier
   double calculerPrixPourCasier() {
     return prix * nbBouteilleParCasier;
   }
 
-  // methode qui me permet de calculer le prix total de la boisson pour tous ses casiers
+  // Méthode pour calculer le prix total de la boisson pour tous ses casiers
   double calculerPrixPourTousCasier() {
     return casiers * calculerPrixPourCasier();
   }
 }
 
+// Enumération pour représenter la taille de la boisson
 enum Modele { petit, grand }

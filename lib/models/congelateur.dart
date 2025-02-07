@@ -1,40 +1,59 @@
-import 'package:projet7/models/boisson.dart';
+import 'package:isar/isar.dart';
+import 'stock_boisson.dart';
 
+part 'congelateur.g.dart';
+
+@Collection()
 class Congelateur {
-  final Map<Boisson, int> stockBoissons =
-      {}; //cle = boisson et valeur = quantite de boissons
+  Id id = Isar.autoIncrement;
 
-  // methode qui me permet d'ajouter une boisson au congelateur
-  void ajouterBoisson(Boisson boisson, int quantite) {
-    // si cette boisson existe deja dans le congelateur, on va juste incrementer sa quantite
-    if (stockBoissons.containsKey(boisson)) {
-      stockBoissons[boisson] = stockBoissons[boisson]! + quantite;
-    } else {
-      stockBoissons[boisson] = quantite;
-    }
-  }
+  final IsarLinks<StockBoisson> stockBoissons = IsarLinks();
 
-  // methode qui me permet de retirer une boisson du congelateur
-  void retirerBoisson(Boisson boisson, int quantite) {
-    if (!stockBoissons.containsKey(boisson) ||
-        stockBoissons[boisson]! < quantite) {
-      throw Exception("Quantite insuffisante dans le congelateur");
-    }
-    stockBoissons[boisson] = stockBoissons[boisson]! - quantite;
-    if (stockBoissons[boisson] == 0) {
-      stockBoissons.remove(boisson);
-    }
-  }
+  Congelateur();
 
-  // methode qui me permet de recuperer la quantite totale d'une certaine boisson
-  int getQuantiteTotal(Boisson boisson) {
-    return stockBoissons[boisson] ?? 0;
-  }
+  // Ajouter une boisson au stock
+  // Future<void> ajouterBoisson(Isar isar, Boisson boisson, int quantite) async {
+  //   await isar.writeTxn(() async {
+  //     // Vérifier si la boisson est déjà stockée
+  //     final stockExistant =
+  //         stockBoissons.where((s) => s.boisson.value == boisson).firstOrNull;
+  //     if (stockExistant != null) {
+  //       stockExistant.quantite += quantite;
+  //       await isar.stockBoissons.put(stockExistant);
+  //     } else {
+  //       final nouveauStock = StockBoisson()
+  //         ..boisson.value = boisson
+  //         ..quantite = quantite;
+  //       stockBoissons.add(nouveauStock);
+  //       await isar.stockBoissons.put(nouveauStock);
+  //     }
+  //     await stockBoissons.save();
+  //   });
+  // }
 
-  // methode qui me permet de calculer le prix total des boissons qui sont dans le congelateur
-  double calculPrixTotalStock() {
-    return stockBoissons.entries.fold(0, (total, entry) {
-      return total + (entry.key.prix * entry.value);
-    });
-  }
+  // // Retirer une boisson du stock
+  // Future<void> retirerBoisson(Isar isar, Boisson boisson, int quantite) async {
+  //   await isar.writeTxn(() async {
+  //     final stockExistant =
+  //         stockBoissons.where((s) => s.boisson.value == boisson).firstOrNull;
+  //     if (stockExistant == null || stockExistant.quantite < quantite) {
+  //       throw Exception("Quantité insuffisante dans le congélateur");
+  //     }
+  //     stockExistant.quantite -= quantite;
+  //     if (stockExistant.quantite == 0) {
+  //       stockBoissons.remove(stockExistant);
+  //       await isar.stockBoissons.delete(stockExistant.id!);
+  //     } else {
+  //       await isar.stockBoissons.put(stockExistant);
+  //     }
+  //     await stockBoissons.save();
+  //   });
+  // }
+
+  // // Calculer le prix total du stock
+  // double calculPrixTotalStock() {
+  //   return stockBoissons.fold(0, (total, stock) {
+  //     return total + (stock.boisson.value!.prix * stock.quantite);
+  //   });
+  // }
 }

@@ -1,28 +1,48 @@
-import 'package:projet7/models/boisson.dart';
-import 'package:projet7/models/congelateur.dart';
+import 'package:isar/isar.dart';
+import 'boisson.dart';
 
+part 'vente.g.dart';
+
+@Collection()
 class Vente {
-  final DateTime date; // la date de la vente
-  final Boisson boisson; // le type de boisson vendu
-  final int quantiteVendu; // le nombre total de ce type de boisson vendu
-  final double
-      montantVente; // le montant de la vente ( qu'il faut calculer en fonction du prix du type de boisson vendu )
+  Id id = Isar.autoIncrement; // ID auto-géré par Isar
+
+  late DateTime date; // Date de la vente
+  final IsarLink<Boisson> boisson =
+      IsarLink<Boisson>(); // Relation avec Boisson
+  late int quantiteVendu; // Nombre de boissons vendues
 
   Vente({
     required this.date,
-    required this.boisson,
     required this.quantiteVendu,
-  }) : montantVente = quantiteVendu * boisson.prix;
+  });
 
-  // methode me permettant d'effectuer une vente ( c'est ici que je retire la boisson du congelateur)
-  static Vente effectuerVente(
-      Congelateur congelateur, Boisson boisson, int quantite) {
-    // on va d'abord retirer la boisson qu'on veut vendre
-    congelateur.retirerBoisson(boisson, quantite);
-    return Vente(
-      date: DateTime.now(),
-      boisson: boisson,
-      quantiteVendu: quantite,
-    );
+  // Constructeur par défaut requis par Isar
+  Vente.empty();
+
+  // Méthode pour calculer le montant de la vente
+  double get montantVente {
+    return (boisson.value?.prix ?? 0) * quantiteVendu;
   }
+
+  // Méthode pour effectuer une vente et l’enregistrer dans Isar
+  // static Future<Vente?> effectuerVente(
+  //     Isar isar, Congelateur congelateur, Boisson boisson, int quantite) async {
+  //   if (quantite <= 0) return null; // Vérification simple
+
+  //   final vente = Vente(
+  //     date: DateTime.now(),
+  //     quantiteVendu: quantite,
+  //   );
+
+  //   vente.boisson.value = boisson; // Associer la boisson vendue
+
+  //   return await isar.writeTxn(() async {
+  //     await congelateur.retirerBoisson(
+  //         boisson, quantite); // Mise à jour congelateur
+  //     await isar.ventes.put(vente); // Enregistrement de la vente
+  //     await vente.boisson.save(); // Sauvegarde de la relation avec Boisson
+  //     return vente;
+  //   });
+  // }
 }
