@@ -15,6 +15,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Settings"),
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -25,7 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
               borderRadius: BorderRadius.circular(12),
               color: Theme.of(context).colorScheme.primary,
             ),
-            padding: const EdgeInsets.all(25),
+            padding: const EdgeInsets.all(18),
             margin: const EdgeInsets.only(left: 25, top: 25, right: 25),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,7 +36,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   "Dark mode",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 19,
+                    fontSize: 16,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),

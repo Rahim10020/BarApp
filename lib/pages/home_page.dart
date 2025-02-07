@@ -13,9 +13,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        elevation: 0,
+        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      drawer: MyDrawer(),
+      drawer: const MyDrawer(),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Column(
+        children: [
+          //  texte de salutation
+          // partie pour les categories
+          // Affichaage des plus vendus
+          // affichages des recemments ajoutes
+        ],
+      ),
     );
   }
 }
