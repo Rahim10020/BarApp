@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:projet7/components/boisson_box.dart';
 import 'package:projet7/components/boisson_populaire_box.dart';
 import 'package:projet7/components/casier_box.dart';
+import 'package:projet7/pages/boisson_page.dart';
+import 'package:projet7/pages/boisson_populaire_page.dart';
+import 'package:projet7/pages/casier_page.dart';
 
 class BarPage extends StatelessWidget {
   const BarPage({super.key});
@@ -50,10 +53,15 @@ class BarPage extends StatelessWidget {
               itemCount: 10,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return const BoissonBox(
+                return BoissonBox(
                   text: "Fanta",
                   icon: Icons.water_drop_outlined,
-                  onTap: null,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BoissonPage(),
+                    ),
+                  ),
                 );
               },
             ),
@@ -113,8 +121,13 @@ class BarPage extends StatelessWidget {
                   itemCount: 5,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return const CasierBox(
-                      onTap: null,
+                    return CasierBox(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CasierPage(),
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -173,8 +186,13 @@ class BarPage extends StatelessWidget {
                   itemCount: 5,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return const BoissonPopulaireBox(
-                      onTap: null,
+                    return BoissonPopulaireBox(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BoissonPopulairePage(),
+                        ),
+                      ),
                     );
                   },
                 ),
