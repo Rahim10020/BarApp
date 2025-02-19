@@ -1,19 +1,19 @@
-import 'package:isar/isar.dart';
-import 'boisson.dart';
+// import 'package:isar/isar.dart';
+// import 'boisson.dart';
 
-part 'details_commande.g.dart';
+// part 'details_commande.g.dart';
 
-@Collection()
-class DetailsCommande {
-  Id id = Isar.autoIncrement;
+// @Collection()
+// class DetailsCommande {
+//   Id id = Isar.autoIncrement;
 
-  final IsarLink<Boisson> boisson = IsarLink();
-  late int nbCasiers;
+//   final IsarLink<Boisson> boisson = IsarLink();
+//   late int nbCasiers;
 
-  DetailsCommande();
+//   DetailsCommande();
 
-  // Méthode pour calculer le prix total pour chaque boisson de la commande
-  double calculPrixTotal() {
-    return nbCasiers * (boisson.value?.calculerPrixPourCasier() ?? 0);
-  }
-}
+//   // Méthode pour calculer le prix total pour chaque boisson de la commande
+//   double calculPrixTotal() {
+//     return nbCasiers * (boisson.value?.calculerPrixPourCasier() ?? 0);
+//   }
+// }

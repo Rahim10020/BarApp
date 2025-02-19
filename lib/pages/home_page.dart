@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:projet7/components/categorie_tile.dart';
 import 'package:projet7/components/my_drawer.dart';
+import 'package:projet7/pages/archive_page.dart';
+import 'package:projet7/pages/bar_page.dart';
+import 'package:projet7/pages/commande_page.dart';
+import 'package:projet7/pages/vente_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +14,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  void navigateBottomBar(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  final List _pages = [
+    const BarPage(),
+    const VentePage(),
+    const CommandePage(),
+    const ArchivePage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +52,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(8),
             gap: 8,
             onTabChange: (index) {
-              print(index);
+              navigateBottomBar(index);
             },
             tabs: const [
               GButton(
@@ -57,94 +75,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            //  texte de salutation
-            Column(
-              children: [
-                Center(
-                  child: Text(
-                    "Bar la Royaute",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    "Chambres de sejours disponibles",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            // partie pour les categories
-            const Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CategorieTile(image: "❤️", modele: "Grang modele"),
-                  CategorieTile(image: "😊", modele: "Petit modele"),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Affichage des plus vendus
-            Column(
-              children: [
-                // text
-                Text(
-                  "Les plus vendus",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                ),
-                // autre column
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      // image
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "😒",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 9),
-                      // nom
-                      Text("Pils", style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary,),),
-                      const SizedBox(height: 5),
-                      // prix
-                      Text("500fcfa", style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary,),),
-                      const SizedBox(height: 5),
-                    ],
-                  ),
-                )
-              ],
-            )
-            // affichages des recemments ajoutes
-          ],
-        ),
-      ),
+      body: _pages[_selectedIndex],
     );
   }
 }
