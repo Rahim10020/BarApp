@@ -35,6 +35,8 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+        centerTitle: true,
+        title: const Text("Mon Bar"),
       ),
       drawer: const MyDrawer(),
       backgroundColor: Theme.of(context).colorScheme.surface,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/boisson_box.dart';
-import 'package:projet7/components/casier_box.dart';
 import 'package:projet7/pages/boisson_page.dart';
 
 class CasierPage extends StatefulWidget {
@@ -241,27 +240,8 @@ class _CasierPageState extends State<CasierPage> {
               ),
 
               Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
-                  left: 16.0,
-                  right: 16.0,
-                ),
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        "Casier rafraîchissant",
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary),
-                        softWrap: true,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                padding:
+                    const EdgeInsets.only(left: 16.0, top: 8.0, bottom: 16.0),
                 child: Row(
                   children: [
                     Text(
@@ -308,6 +288,7 @@ class _CasierPageState extends State<CasierPage> {
                     ),
               Padding(
                 padding: const EdgeInsets.only(
+                  top: 16.0,
                   left: 16.0,
                   right: 16.0,
                 ),
