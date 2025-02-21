@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/boisson_box.dart';
 import 'package:projet7/components/build_text_field.dart';
+import 'package:projet7/pages/ajouter_boisson_page.dart';
 import 'package:projet7/pages/boisson_page.dart';
 
 class CommandePage extends StatefulWidget {
@@ -12,40 +13,34 @@ class CommandePage extends StatefulWidget {
 
 class _CommandePageState extends State<CommandePage> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _marqueController;
+  late TextEditingController _nomController;
   late TextEditingController _prixController;
   late TextEditingController _descriptionController;
-  late TextEditingController _tailleController;
-  late TextEditingController _categorieController;
-  late TextEditingController _groupeController;
-  late TextEditingController _stockController;
+  late TextEditingController _modeleController;
+  late TextEditingController _quantiteController;
   String? _imagePath;
 
   @override
   void initState() {
     super.initState();
-    _marqueController = TextEditingController();
+    _nomController = TextEditingController();
     _prixController = TextEditingController();
     _descriptionController = TextEditingController();
-    _tailleController = TextEditingController();
-    _categorieController = TextEditingController();
-    _groupeController = TextEditingController();
-    _stockController = TextEditingController();
+    _modeleController = TextEditingController();
+    _quantiteController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _marqueController.dispose();
+    _nomController.dispose();
     _prixController.dispose();
     _descriptionController.dispose();
-    _tailleController.dispose();
-    _categorieController.dispose();
-    _groupeController.dispose();
-    _stockController.dispose();
+    _modeleController.dispose();
+    _quantiteController.dispose();
     super.dispose();
   }
 
-  void _ajouterVetement() {
+  void _ajouterBoisson() {
     if (_formKey.currentState!.validate()) {
       if (_imagePath != null) {
         Navigator.pop(context);
@@ -76,11 +71,11 @@ class _CommandePageState extends State<CommandePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.only(bottom: 16.0),
-              child: Center(
-                child: Text(
-                  "Passer une commande",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              padding: EdgeInsets.only(left: 16.0, bottom: 16.0),
+              child: Text(
+                "Passer une commande",
+                style: TextStyle(
+                  fontSize: 18.0,
                 ),
               ),
             ),
@@ -89,7 +84,7 @@ class _CommandePageState extends State<CommandePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: BuildTextField(
-                controller: _stockController,
+                controller: _quantiteController,
                 label: "Total boisson",
                 hint: "Entrez le nombre de boisson",
                 icon: Icons.inventory,
@@ -104,17 +99,24 @@ class _CommandePageState extends State<CommandePage> {
             ),
             const SizedBox(height: 16.0),
 
-            const Padding(
-              padding: EdgeInsets.only(left: 16.0, bottom: 16.0, right: 16.0),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 16.0, bottom: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Choisir boisson",
                     style: TextStyle(fontSize: 18.0),
                   ),
-                  Icon(
-                    Icons.add_box_outlined,
+                  IconButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AjouterBoissonPage(),
+                      ),
+                    ),
+                    icon: const Icon(Icons.add_box_outlined),
                     color: Colors.red,
                   )
                 ],
@@ -150,7 +152,7 @@ class _CommandePageState extends State<CommandePage> {
             // Bouton Ajouter
             Center(
               child: ElevatedButton(
-                onPressed: _ajouterVetement,
+                onPressed: _ajouterBoisson,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   padding: const EdgeInsets.symmetric(
