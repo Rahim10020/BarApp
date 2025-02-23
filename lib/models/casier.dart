@@ -1,20 +1,35 @@
-// import 'package:isar/isar.dart';
-// import 'boisson.dart';
+import 'package:hive/hive.dart';
 
-// part 'casier.g.dart';
+import 'boisson.dart';
 
-// @Collection()
-// class Casier {
-//   Id id = Isar.autoIncrement;
-//   final IsarLink<Boisson> boisson =
-//       IsarLink<Boisson>(); // Relation avec Boisson
-//   late int nbBouteillesRestantes;
+part 'casier.g.dart';
 
-//   // Constructeur vide requis par Isar
-//   Casier();
+@HiveType(typeId: 1)
+class Casier {
+  @HiveField(0)
+  final int id;
 
-//   // Méthode pour calculer le prix des boissons restantes
-//   double prixBoissonRestant() {
-//     return (boisson.value?.prix ?? 0) * nbBouteillesRestantes;
-//   }
-// }
+  @HiveField(1)
+  final Boisson boisson;
+
+  @HiveField(2)
+  late int quantiteBoisson;
+
+  @HiveField(3)
+  final DateTime dateCreation;
+
+  @HiveField(4)
+  DateTime? dateModification;
+
+  Casier({
+    required this.id,
+    required this.boisson,
+    required this.quantiteBoisson,
+    required this.dateCreation,
+    this.dateModification,
+  });
+
+  double get prixTotal {
+    return boisson.prix.last * quantiteBoisson;
+  }
+}

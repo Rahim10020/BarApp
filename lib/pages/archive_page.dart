@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:projet7/components/boisson_archive.dart';
 import 'package:projet7/components/casier_archive.dart';
 import 'package:projet7/components/my_tab_bar.dart';
+import 'package:projet7/components/vente_tile_archive.dart';
+import 'package:projet7/models/bar.dart';
+import 'package:provider/provider.dart';
 
 class ArchivePage extends StatefulWidget {
   const ArchivePage({super.key});
@@ -38,26 +42,36 @@ class _ArchivePageState extends State<ArchivePage>
           child: MyTabBar(tabController: _tabController),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return const CasierArchive(
-                onTap: null,
-              );
-            },
-          ),
-          ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return const CasierArchive(
-                onTap: null,
-              );
-            },
-          ),
-        ],
+      body: Consumer<Bar>(
+        builder: (context, bar, child) => TabBarView(
+          controller: _tabController,
+          children: [
+            ListView.builder(
+              itemCount: bar.ventes.length,
+              itemBuilder: (context, index) {
+                return VenteTileArchive(
+                  vente: bar.ventes.reversed.toList()[index],
+                );
+              },
+            ),
+            ListView.builder(
+              itemCount: bar.casiers.length,
+              itemBuilder: (context, index) {
+                return CasierArchive(
+                  casier: bar.casiers.reversed.toList()[index],
+                );
+              },
+            ),
+            ListView.builder(
+              itemCount: bar.boissons.length,
+              itemBuilder: (context, index) {
+                return BoissonArchive(
+                  boisson: bar.boissons.reversed.toList()[index],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

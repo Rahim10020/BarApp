@@ -1,17 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:projet7/components/casier_box.dart';
+import 'package:projet7/models/bar.dart';
+import 'package:projet7/models/boisson.dart';
+import 'package:projet7/models/vente.dart';
 import 'package:projet7/pages/casier_page.dart';
+import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class BoissonPage extends StatefulWidget {
-  const BoissonPage({super.key});
+  Boisson boisson;
+
+  BoissonPage({super.key, required this.boisson});
 
   @override
   State<BoissonPage> createState() => _BoissonPageState();
 }
 
 class _BoissonPageState extends State<BoissonPage> {
+  int quantite = 0;
+
+  void ajouterVente(Vente venteVente) {
+    Navigator.pop(context);
+
+    context.read<Bar>().ajouterVente(venteVente);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bar = context.watch<Bar>();
+
+    // Rechercher le vêtement mis à jour
+    final boissonMisAJour = bar.boissons.firstWhere(
+      (v) => v.id == widget.boisson.id,
+      orElse: () => widget.boisson, // Garder l'ancien si non trouvé
+    );
+
+    widget.boisson = boissonMisAJour;
+
     return Stack(
       children: [
         Scaffold(
@@ -102,7 +128,7 @@ class _BoissonPageState extends State<BoissonPage> {
                 child: Row(
                   children: [
                     Text(
-                      "Ajouté le 19/02/2025",
+                      "Ajouté le ${widget.boisson.dateAjout.day.toString().padLeft(2, '0')}/${widget.boisson.dateAjout.month.toString().padLeft(2, '0')}/${widget.boisson.dateAjout.year.toString()} à ${widget.boisson.dateAjout.hour.toString().padLeft(2, "0")}:${widget.boisson.dateAjout.minute.toString().padLeft(2, "0")}",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 14.0,
@@ -111,13 +137,13 @@ class _BoissonPageState extends State<BoissonPage> {
                   ],
                 ),
               ),
-              if (2 == 1)
+              if (widget.boisson.dateModification != null)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 4.0),
                   child: Row(
                     children: [
                       Text(
-                        "Modifié le 20/02/2025",
+                        "Modifié le ${widget.boisson.dateModification!.day.toString().padLeft(2, '0')}/${widget.boisson.dateModification!.month.toString().padLeft(2, '0')}/${widget.boisson.dateModification!.year.toString()} à ${widget.boisson.dateModification!.hour.toString().padLeft(2, "0")}:${widget.boisson.dateModification!.minute.toString().padLeft(2, "0")}",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 14.0,
@@ -135,7 +161,12 @@ class _BoissonPageState extends State<BoissonPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      setState(() {});
+                      setState(() {
+                        if (widget.boisson.stock > 0) {
+                          widget.boisson.stock--;
+                          bar.modifierBoisson(widget.boisson);
+                        }
+                      });
                     },
                     child: Container(
                       margin: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -147,12 +178,12 @@ class _BoissonPageState extends State<BoissonPage> {
                       child: const Icon(Icons.remove),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Text(
-                      "5",
-                      style: TextStyle(
-                        fontSize: 20.0,
+                      "${widget.boisson.stock - quantite >= 0 ? widget.boisson.stock - quantite : 0}",
+                      style: const TextStyle(
+                        fontSize: 18.0,
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
                       ),
@@ -160,7 +191,12 @@ class _BoissonPageState extends State<BoissonPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {});
+                      setState(() {
+                        if (widget.boisson.stock > 0) {
+                          widget.boisson.stock++;
+                          bar.modifierBoisson(widget.boisson);
+                        }
+                      });
                     },
                     child: Container(
                       margin: const EdgeInsets.only(
@@ -185,7 +221,7 @@ class _BoissonPageState extends State<BoissonPage> {
                 child: Row(
                   children: [
                     Text(
-                      "Fanta",
+                      widget.boisson.nom!,
                       style: TextStyle(
                           fontSize: 24.0,
                           color: Theme.of(context).colorScheme.inversePrimary,
@@ -200,7 +236,9 @@ class _BoissonPageState extends State<BoissonPage> {
                 child: Row(
                   children: [
                     Text(
-                      "500 FCFA",
+                      NumberFormat.currency(
+                              locale: "fr_FR", symbol: "FCFA", decimalDigits: 0)
+                          .format(widget.boisson.prix.last),
                       style: TextStyle(
                         color: Colors.red.shade700,
                         fontWeight: FontWeight.bold,
@@ -210,9 +248,14 @@ class _BoissonPageState extends State<BoissonPage> {
                     const SizedBox(
                       width: 8.0,
                     ),
-                    if (0 > 1)
+                    if (widget.boisson.prix.length > 1)
                       Text(
-                        "600 FCFA",
+                        NumberFormat.currency(
+                                locale: "fr_FR",
+                                symbol: "FCFA",
+                                decimalDigits: 0)
+                            .format(widget
+                                .boisson.prix[widget.boisson.prix.length - 2]),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.inversePrimary,
                             fontSize: 18.0,
@@ -224,9 +267,65 @@ class _BoissonPageState extends State<BoissonPage> {
                     const SizedBox(
                       width: 12.0,
                     ),
-                    if (0 > 2)
+                    if (widget.boisson.prix.length > 2)
                       GestureDetector(
-                        onTap: null,
+                        onTap: () => showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text(
+                              "Prix",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            content: Container(
+                              height: 200.0,
+                              child: ListView.builder(
+                                itemCount: widget.boisson.prix.length,
+                                itemBuilder: (context, index) => Column(
+                                  children: [
+                                    if (index == 0)
+                                      Divider(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
+                                      ),
+                                    ListTile(
+                                      title: Text(
+                                        NumberFormat.currency(
+                                                locale: "fr_FR",
+                                                symbol: "FCFA",
+                                                decimalDigits: 0)
+                                            .format(
+                                          widget.boisson.prix.reversed
+                                              .elementAt(index),
+                                        ),
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary),
+                                      ),
+                                    ),
+                                    Divider(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text(
+                                  "ok",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                              )
+                            ],
+                          ),
+                        ),
                         child: Icon(
                           Icons.remove_red_eye_outlined,
                           color: Theme.of(context).colorScheme.inversePrimary,
@@ -252,26 +351,27 @@ class _BoissonPageState extends State<BoissonPage> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
-                  left: 16.0,
-                  right: 16.0,
-                ),
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        "Boisson rafraîchissante",
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary),
-                        softWrap: true,
+              if (widget.boisson.description != "")
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 8.0,
+                    left: 16.0,
+                    right: 16.0,
+                  ),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          widget.boisson.description!,
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary),
+                          softWrap: true,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, top: 8.0),
                 child: Row(
@@ -285,7 +385,12 @@ class _BoissonPageState extends State<BoissonPage> {
                   ],
                 ),
               ),
-              2 == 1
+              bar.casiers
+                      .where(
+                        (c) => c.boisson.id == widget.boisson.id,
+                      )
+                      .toList()
+                      .isEmpty
                   ? SizedBox(
                       height: 180.0,
                       child: Column(
@@ -309,14 +414,31 @@ class _BoissonPageState extends State<BoissonPage> {
                     )
                   : Expanded(
                       child: ListView.builder(
-                        itemCount: 5,
+                        itemCount: bar.casiers
+                            .where(
+                              (c) => c.boisson.id == widget.boisson.id,
+                            )
+                            .toList()
+                            .length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return CasierBox(
+                            casier: bar.casiers
+                                .where(
+                                  (c) => c.boisson.id == widget.boisson.id,
+                                )
+                                .toList()[index],
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const CasierPage(),
+                                builder: (context) => CasierPage(
+                                  casier: bar.casiers
+                                      .where(
+                                        (c) =>
+                                            c.boisson.id == widget.boisson.id,
+                                      )
+                                      .toList()[index],
+                                ),
                               ),
                             ),
                           );
@@ -341,7 +463,11 @@ class _BoissonPageState extends State<BoissonPage> {
                       // Bouton de décrémentation
                       GestureDetector(
                         onTap: () {
-                          setState(() {});
+                          setState(() {
+                            if (quantite > 0) {
+                              quantite--;
+                            }
+                          });
                         },
                         child: Icon(Icons.remove,
                             size: 20.0,
@@ -350,12 +476,17 @@ class _BoissonPageState extends State<BoissonPage> {
                       ),
 
                       // Quantité
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: SizedBox(
                           width: 20.0,
                           child: Center(
-                            child: Text("3"),
+                            child: Text(
+                              quantite.toString(),
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -363,7 +494,11 @@ class _BoissonPageState extends State<BoissonPage> {
                       // Bouton d'incrémentation
                       GestureDetector(
                         onTap: () {
-                          setState(() {});
+                          setState(() {
+                            if (widget.boisson.stock - quantite > 0) {
+                              quantite++;
+                            }
+                          });
                         },
                         child: Icon(Icons.add,
                             size: 20.0,
@@ -378,13 +513,25 @@ class _BoissonPageState extends State<BoissonPage> {
                 height: 8.0,
               ),
               GestureDetector(
-                onTap: null,
+                onTap: quantite > 0
+                    ? () {
+                        ajouterVente(
+                          Vente(
+                            id: DateTime.now().millisecondsSinceEpoch %
+                                0xFFFFFFFF,
+                            boisson: widget.boisson,
+                            quantiteVendu: quantite,
+                            dateVente: DateTime.now(),
+                          ),
+                        );
+                      }
+                    : null,
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 64.0),
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 16.0),
                   decoration: BoxDecoration(
-                      color: -1 > 0
+                      color: quantite > 0
                           ? Theme.of(context).colorScheme.inversePrimary
                           : Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(20.0)),

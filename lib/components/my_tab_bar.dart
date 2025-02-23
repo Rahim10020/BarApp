@@ -14,6 +14,9 @@ class MyTabBar extends StatelessWidget {
           controller: tabController,
           tabs: const [
             Tab(
+              text: "Vente",
+            ),
+            Tab(
               text: "Casier",
             ),
             Tab(

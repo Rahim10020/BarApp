@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/casier_box.dart';
+import 'package:projet7/models/bar.dart';
+import 'package:projet7/models/casier.dart';
 import 'package:projet7/pages/casier_page.dart';
+import 'package:provider/provider.dart';
 
 class CasiersPage extends StatefulWidget {
   const CasiersPage({super.key});
@@ -11,35 +14,51 @@ class CasiersPage extends StatefulWidget {
 
 class _CasiersPageState extends State<CasiersPage> {
   int attributIndex = 0;
+  List<Casier> _casiersFiltres = [];
+  List<Casier> _casiersAffiches = [];
   String _searchText = "";
 
-  void appliquerPremierTri(bool petit, bool grand) {
-    _appliquerFiltresCombines();
-  }
+  void _appliquerFiltres() {
+    final bar = Provider.of<Bar>(context, listen: false);
+    List<Casier> resultats = List.from(_casiersFiltres);
 
-  void reinitialiserPremierTri() {
-    attributIndex = 0;
-    setState(() {});
+    switch (attributIndex) {
+      case 0:
+        _casiersFiltres = bar.getRecentCasiers();
+        break;
+      case 1:
+        resultats = bar.trierCasierParBoisson(resultats);
+        break;
+      case 2:
+        resultats = bar.trierCasierParPrix(resultats);
+        break;
+      default:
+        break;
+    }
 
-    _appliquerFiltresCombines();
-  }
+    if (_searchText.isNotEmpty) {
+      resultats = resultats
+          .where(
+            (c) => c.boisson.nom!
+                .toLowerCase()
+                .contains(_searchText.toLowerCase()),
+          )
+          .toList();
+    }
 
-  void _appliquerRecherche(String text) {
     setState(() {
-      _searchText = text;
+      _casiersAffiches = resultats;
     });
-
-    _appliquerFiltresCombines();
-  }
-
-  void _appliquerFiltresCombines() {
-    if (_searchText.isNotEmpty) {}
-
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final bar = context.watch<Bar>();
+
+    _casiersFiltres = bar.getRecentCasiers();
+
+    _appliquerFiltres();
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
@@ -68,7 +87,10 @@ class _CasiersPageState extends State<CasiersPage> {
                     right: 32.0,
                   ),
                   child: TextField(
-                    onChanged: _appliquerRecherche,
+                    onChanged: (value) {
+                      _searchText = value;
+                      _appliquerFiltres();
+                    },
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(vertical: 2.0),
                       enabledBorder: OutlineInputBorder(
@@ -111,7 +133,10 @@ class _CasiersPageState extends State<CasiersPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () => reinitialiserPremierTri(),
+                  onTap: () {
+                    attributIndex = 0;
+                    _appliquerFiltres();
+                  },
                   child: Container(
                     padding: const EdgeInsets.only(
                       left: 18.0,
@@ -129,7 +154,10 @@ class _CasiersPageState extends State<CasiersPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => appliquerPremierTri(true, false),
+                  onTap: () {
+                    attributIndex = 1;
+                    _appliquerFiltres();
+                  },
                   child: Container(
                     padding: const EdgeInsets.only(
                       left: 18.0,
@@ -147,7 +175,10 @@ class _CasiersPageState extends State<CasiersPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => appliquerPremierTri(false, true),
+                  onTap: () {
+                    attributIndex = 2;
+                    _appliquerFiltres();
+                  },
                   child: Container(
                     padding: const EdgeInsets.only(
                       left: 18.0,
@@ -170,7 +201,7 @@ class _CasiersPageState extends State<CasiersPage> {
           const SizedBox(
             height: 8.0,
           ),
-          2 == 1
+          _casiersAffiches.isEmpty
               ? Expanded(
                   child: Center(
                     child: Column(
@@ -194,7 +225,7 @@ class _CasiersPageState extends State<CasiersPage> {
                 )
               : Expanded(
                   child: GridView.builder(
-                    itemCount: 10,
+                    itemCount: _casiersAffiches.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -202,10 +233,13 @@ class _CasiersPageState extends State<CasiersPage> {
                     ),
                     itemBuilder: (context, index) {
                       return CasierBox(
+                        casier: _casiersAffiches[index],
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CasierPage(),
+                            builder: (context) => CasierPage(
+                              casier: _casiersAffiches[index],
+                            ),
                           ),
                         ),
                       );

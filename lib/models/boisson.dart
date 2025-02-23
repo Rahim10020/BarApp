@@ -1,30 +1,61 @@
-// import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
+import 'package:projet7/utils/modele.dart';
 
-// part 'boisson.g.dart';
+part 'boisson.g.dart';
 
-// @Collection()
-// class Boisson {
-//   Id id = Isar.autoIncrement;
-//   late String nom;
-//   @enumerated // Convertit automatiquement l'énumération en int
-//   late Modele modele;
-//   late double prix;
-//   late int casiers;
-//   late int nbBouteilleParCasier;
+@HiveType(typeId: 0)
+class Boisson {
+  @HiveField(0)
+  final int id;
 
-//   // ✅ Constructeur sans paramètre requis par Isar
-//   Boisson();
+  @HiveField(1)
+  String? nom;
 
-//   // Méthode pour calculer le prix total de la boisson dans un casier
-//   double calculerPrixPourCasier() {
-//     return prix * nbBouteilleParCasier;
-//   }
+  @HiveField(2)
+  Modele? modele;
 
-//   // Méthode pour calculer le prix total de la boisson pour tous ses casiers
-//   double calculerPrixPourTousCasier() {
-//     return casiers * calculerPrixPourCasier();
-//   }
-// }
+  @HiveField(3)
+  bool estFroid;
 
-// // Enumération pour représenter la taille de la boisson
-// enum Modele { petit, grand }
+  @HiveField(4)
+  final List<double> prix;
+
+  @HiveField(5)
+  String? description;
+
+  @HiveField(6)
+  int stock;
+
+  @HiveField(7)
+  final String imagePath;
+
+  @HiveField(8)
+  final DateTime dateAjout;
+
+  @HiveField(9)
+  DateTime? dateModification;
+
+  Boisson({
+    required this.id,
+    this.nom,
+    this.modele,
+    this.estFroid = false,
+    required this.prix,
+    required this.stock,
+    this.description,
+    required this.imagePath,
+    required this.dateAjout,
+    this.dateModification,
+  });
+
+  String? getModele() {
+    switch (modele) {
+      case Modele.petit:
+        return "Petit";
+      case Modele.grand:
+        return "Grand";
+      case null:
+        return null;
+    }
+  }
+}

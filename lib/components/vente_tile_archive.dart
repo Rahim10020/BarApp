@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:projet7/models/casier.dart';
+import 'package:projet7/models/vente.dart';
 
-class CasierArchive extends StatelessWidget {
-  final Casier casier;
+class VenteTileArchive extends StatelessWidget {
+  final Vente vente;
 
-  const CasierArchive({
+  const VenteTileArchive({
     super.key,
-    required this.casier,
+    required this.vente,
   });
 
   @override
@@ -29,7 +29,7 @@ class CasierArchive extends StatelessWidget {
             children: [
               const Icon(
                 Icons.water_drop_outlined,
-                size: 100.0,
+                size: 60.0,
               ),
               const SizedBox(
                 width: 8.0,
@@ -37,9 +37,9 @@ class CasierArchive extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (casier.boisson.nom != "")
+                  if (vente.boisson.nom != "")
                     Text(
-                      casier.boisson.nom!,
+                      vente.boisson.nom!,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16.0,
@@ -48,19 +48,29 @@ class CasierArchive extends StatelessWidget {
                   Text(
                     NumberFormat.currency(
                             locale: "fr_FR", symbol: "FCFA", decimalDigits: 0)
-                        .format(casier.prixTotal),
+                        .format(vente.boisson.prix.last),
                     style: const TextStyle(
                       color: Colors.redAccent,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  if (vente.boisson.modele != null)
+                    Text(
+                      "${vente.boisson.modele}",
+                      style: TextStyle(color: Colors.yellow.shade900),
+                    ),
                   Text(
-                    "Total Boisson: ${casier.quantiteBoisson}",
+                    "Quantité: ${vente.quantiteVendu.toString()}",
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.inversePrimary),
                   ),
                   Text(
-                    "Crée le: ${casier.dateCreation.day.toString().padLeft(2, '0')}/${casier.dateCreation.month.toString().padLeft(2, '0')}/${casier.dateCreation.year.toString()} ${casier.dateCreation.hour.toString().padLeft(2, '0')}:${casier.dateCreation.minute.toString().padLeft(2, '0')}",
+                    "Total: ${NumberFormat.currency(locale: "fr_FR", symbol: "FCFA", decimalDigits: 0).format(vente.quantiteVendu * vente.boisson.prix.last)}",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary),
+                  ),
+                  Text(
+                    "Vendu le: ${vente.dateVente.day.toString().padLeft(2, '0')}/${vente.dateVente.month.toString().padLeft(2, '0')}/${vente.dateVente.year.toString()} ${vente.dateVente.hour.toString().padLeft(2, '0')}:${vente.dateVente.minute.toString().padLeft(2, '0')}",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 13.0,

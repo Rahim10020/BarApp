@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:projet7/models/boisson.dart';
 
 class BoissonBox extends StatelessWidget {
-  final String text;
-  final IconData icon;
+  final Boisson boisson;
   final void Function()? onTap;
 
   const BoissonBox({
     super.key,
-    required this.text,
-    required this.icon,
+    required this.boisson,
     required this.onTap,
   });
 
@@ -26,17 +25,18 @@ class BoissonBox extends StatelessWidget {
         child: Column(
           children: [
             Icon(
-              icon,
+              Icons.water_drop_outlined,
               size: 36.0,
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
             const SizedBox(height: 8.0),
             Text(
-              text,
+              boisson.nom!.toUpperCase(),
               style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary),
             ),
-            Text("Petit", style: TextStyle(color: Colors.yellow.shade900)),
+            Text(boisson.getModele()!,
+                style: TextStyle(color: Colors.yellow.shade900)),
           ],
         ),
       ),

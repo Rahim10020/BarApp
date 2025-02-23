@@ -17,7 +17,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Settings"),
+        title: const Text("Paramètres"),
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
@@ -33,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Dark mode",
+                  "Mode sombre",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,

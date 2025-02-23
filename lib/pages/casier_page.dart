@@ -1,17 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:projet7/components/boisson_box.dart';
+import 'package:projet7/models/bar.dart';
+import 'package:projet7/models/casier.dart';
+import 'package:projet7/models/vente.dart';
 import 'package:projet7/pages/boisson_page.dart';
+import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class CasierPage extends StatefulWidget {
-  const CasierPage({super.key});
+  Casier casier;
+  CasierPage({super.key, required this.casier});
 
   @override
   State<CasierPage> createState() => _CasierPageState();
 }
 
 class _CasierPageState extends State<CasierPage> {
+  int quantite = 0;
+
+  void ajouterVente(Vente venteVente) {
+    Navigator.pop(context);
+
+    context.read<Bar>().ajouterVente(venteVente);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bar = context.watch<Bar>();
+
+    // Rechercher le vêtement mis à jour
+    final casierMisAJour = bar.casiers.firstWhere(
+      (v) => v.id == widget.casier.id,
+      orElse: () => widget.casier, // Garder l'ancien si non trouvé
+    );
+
+    widget.casier = casierMisAJour;
+
     return Stack(
       children: [
         Scaffold(
@@ -101,7 +126,7 @@ class _CasierPageState extends State<CasierPage> {
                 child: Row(
                   children: [
                     Text(
-                      "Ajouté le 19/02/2025",
+                      "Ajouté le ${widget.casier.dateCreation.day.toString().padLeft(2, '0')}/${widget.casier.dateCreation.month.toString().padLeft(2, '0')}/${widget.casier.dateCreation.year.toString()} à ${widget.casier.dateCreation.hour.toString().padLeft(2, "0")}:${widget.casier.dateCreation.minute.toString().padLeft(2, "0")}",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 14.0,
@@ -110,13 +135,13 @@ class _CasierPageState extends State<CasierPage> {
                   ],
                 ),
               ),
-              if (2 == 1)
+              if (widget.casier.dateModification != null)
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 4.0),
                   child: Row(
                     children: [
                       Text(
-                        "Modifié le 20/02/2025",
+                        "Modifié le ${widget.casier.dateModification!.day.toString().padLeft(2, '0')}/${widget.casier.dateModification!.month.toString().padLeft(2, '0')}/${widget.casier.dateModification!.year.toString()} à ${widget.casier.dateModification!.hour.toString().padLeft(2, "0")}:${widget.casier.dateModification!.minute.toString().padLeft(2, "0")}",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 14.0,
@@ -134,7 +159,10 @@ class _CasierPageState extends State<CasierPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      setState(() {});
+                      setState(() {
+                        widget.casier.quantiteBoisson--;
+                        bar.modifierCasier(widget.casier);
+                      });
                     },
                     child: Container(
                       margin: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -146,11 +174,11 @@ class _CasierPageState extends State<CasierPage> {
                       child: const Icon(Icons.remove),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Text(
-                      "5",
-                      style: TextStyle(
+                      "${widget.casier.quantiteBoisson - quantite >= 0 ? widget.casier.quantiteBoisson - quantite : 0}",
+                      style: const TextStyle(
                         fontSize: 20.0,
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
@@ -159,7 +187,12 @@ class _CasierPageState extends State<CasierPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {});
+                      setState(() {
+                        if (widget.casier.quantiteBoisson > 0) {
+                          widget.casier.quantiteBoisson++;
+                          bar.modifierCasier(widget.casier);
+                        }
+                      });
                     },
                     child: Container(
                       margin: const EdgeInsets.only(
@@ -180,30 +213,13 @@ class _CasierPageState extends State<CasierPage> {
               ),
 
               Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 16.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.numbers,
-                      color: Colors.red.shade900,
-                    ),
-                    Text(
-                      "10",
-                      style: TextStyle(
-                          fontSize: 22.0,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-
-              Padding(
                 padding: const EdgeInsets.only(left: 16.0, top: 8.0),
                 child: Row(
                   children: [
                     Text(
-                      "15 000 FCFA",
+                      NumberFormat.currency(
+                              locale: "fr_FR", symbol: "FCFA", decimalDigits: 0)
+                          .format(widget.casier.prixTotal),
                       style: TextStyle(
                         color: Colors.red.shade700,
                         fontWeight: FontWeight.bold,
@@ -213,28 +229,6 @@ class _CasierPageState extends State<CasierPage> {
                     const SizedBox(
                       width: 8.0,
                     ),
-                    if (0 > 1)
-                      Text(
-                        "600 FCFA",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                            fontSize: 18.0,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor:
-                                Theme.of(context).colorScheme.inversePrimary,
-                            decorationThickness: 2.0),
-                      ),
-                    const SizedBox(
-                      width: 12.0,
-                    ),
-                    if (0 > 2)
-                      GestureDetector(
-                        onTap: null,
-                        child: Icon(
-                          Icons.remove_red_eye_outlined,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                        ),
-                      ),
                   ],
                 ),
               ),
@@ -254,7 +248,12 @@ class _CasierPageState extends State<CasierPage> {
                   ],
                 ),
               ),
-              2 == 1
+              bar.boissons
+                      .where(
+                        (b) => b.id == widget.casier.boisson.id,
+                      )
+                      .toList()
+                      .isEmpty
                   ? SizedBox(
                       height: 180.0,
                       child: Column(
@@ -277,12 +276,21 @@ class _CasierPageState extends State<CasierPage> {
                       ),
                     )
                   : BoissonBox(
-                      icon: Icons.water_drop_outlined,
-                      text: "Fanta",
+                      boisson: bar.boissons
+                          .where(
+                            (b) => b.id == widget.casier.boisson.id,
+                          )
+                          .toList()[0],
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const BoissonPage(),
+                          builder: (context) => BoissonPage(
+                            boisson: bar.boissons
+                                .where(
+                                  (b) => b.id == widget.casier.boisson.id,
+                                )
+                                .toList()[0],
+                          ),
                         ),
                       ),
                     ),
@@ -305,7 +313,11 @@ class _CasierPageState extends State<CasierPage> {
                       // Bouton de décrémentation
                       GestureDetector(
                         onTap: () {
-                          setState(() {});
+                          setState(() {
+                            if (quantite > 0) {
+                              quantite--;
+                            }
+                          });
                         },
                         child: Icon(Icons.remove,
                             size: 20.0,
@@ -314,12 +326,17 @@ class _CasierPageState extends State<CasierPage> {
                       ),
 
                       // Quantité
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: SizedBox(
                           width: 20.0,
                           child: Center(
-                            child: Text("3"),
+                            child: Text(
+                              quantite.toString(),
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -327,7 +344,11 @@ class _CasierPageState extends State<CasierPage> {
                       // Bouton d'incrémentation
                       GestureDetector(
                         onTap: () {
-                          setState(() {});
+                          setState(() {
+                            if (widget.casier.quantiteBoisson - quantite > 0) {
+                              quantite++;
+                            }
+                          });
                         },
                         child: Icon(Icons.add,
                             size: 20.0,
@@ -342,13 +363,25 @@ class _CasierPageState extends State<CasierPage> {
                 height: 8.0,
               ),
               GestureDetector(
-                onTap: null,
+                onTap: quantite > 0
+                    ? () {
+                        ajouterVente(
+                          Vente(
+                            id: DateTime.now().millisecondsSinceEpoch %
+                                0xFFFFFFFF,
+                            boisson: widget.casier.boisson,
+                            quantiteVendu: quantite,
+                            dateVente: DateTime.now(),
+                          ),
+                        );
+                      }
+                    : null,
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 64.0),
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 16.0),
                   decoration: BoxDecoration(
-                      color: -1 > 0
+                      color: quantite > 0
                           ? Theme.of(context).colorScheme.inversePrimary
                           : Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(20.0)),

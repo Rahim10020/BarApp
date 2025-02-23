@@ -4,9 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:projet7/components/build_drop_down.dart';
 import 'package:projet7/components/build_text_field.dart';
 import 'package:projet7/components/image_picker_widget.dart';
+import 'package:projet7/models/bar.dart';
+import 'package:projet7/models/boisson.dart';
+import 'package:projet7/pages/archive_page.dart';
+import 'package:projet7/utils/helpers.dart';
+import 'package:projet7/utils/modele.dart';
+import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class AjouterBoissonPage extends StatefulWidget {
-  const AjouterBoissonPage({super.key});
+  Boisson? boisson;
+  AjouterBoissonPage({super.key, this.boisson});
 
   @override
   State<AjouterBoissonPage> createState() => _AjouterBoissonPageState();
@@ -18,17 +26,24 @@ class _AjouterBoissonPageState extends State<AjouterBoissonPage> {
   late TextEditingController _prixController;
   late TextEditingController _descriptionController;
   late TextEditingController _modeleController;
-  late TextEditingController _quantiteController;
+  late TextEditingController _stockController;
   String? _imagePath;
+  late DateTime _dateAjout;
 
   @override
   void initState() {
     super.initState();
-    _nomController = TextEditingController();
-    _prixController = TextEditingController();
-    _descriptionController = TextEditingController();
-    _modeleController = TextEditingController();
-    _quantiteController = TextEditingController();
+    _nomController = TextEditingController(text: widget.boisson?.nom);
+    _prixController =
+        TextEditingController(text: widget.boisson?.prix.last.toString());
+    _descriptionController =
+        TextEditingController(text: widget.boisson?.description);
+    _modeleController =
+        TextEditingController(text: getModeleString(widget.boisson?.modele));
+    _stockController =
+        TextEditingController(text: widget.boisson?.stock.toString());
+    _imagePath = widget.boisson?.imagePath;
+    _dateAjout = widget.boisson?.dateAjout ?? DateTime.now();
   }
 
   @override
@@ -37,19 +52,43 @@ class _AjouterBoissonPageState extends State<AjouterBoissonPage> {
     _prixController.dispose();
     _descriptionController.dispose();
     _modeleController.dispose();
-    _quantiteController.dispose();
+    _stockController.dispose();
     super.dispose();
   }
 
   void _ajouterBoisson() {
     if (_formKey.currentState!.validate()) {
       if (_imagePath != null) {
-        Navigator.pop(context);
+        final monBoisson = Boisson(
+          id: widget.boisson?.id ??
+              (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
+          nom: _nomController.text.toUpperCase(),
+          prix: widget.boisson == null
+              ? [double.parse(_prixController.text)]
+              : widget.boisson!.prix.last == double.parse(_prixController.text)
+                  ? widget.boisson!.prix
+                  : [
+                      ...widget.boisson!.prix,
+                      double.parse(_prixController.text)
+                    ],
+          description: _descriptionController.text,
+          modele: getModele(_modeleController.text),
+          stock: int.parse(_stockController.text.padLeft(2, "0")),
+          imagePath: _imagePath!,
+          dateAjout: _dateAjout,
+          dateModification: widget.boisson == null ? null : DateTime.now(),
+        );
+
+        context.read<Bar>().ajouterBoisson(monBoisson);
+
+        widget.boisson == null
+            ? Navigator.pop(context, "Boisson ajoutée avec succès")
+            : Navigator.pop(context, "Boisson Modifiée avec succès");
       } else {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Veuillez choisir une image pour le casier"),
+            title: const Text("Veuillez choisir une image"),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -102,7 +141,7 @@ class _AjouterBoissonPageState extends State<AjouterBoissonPage> {
                 value: _modeleController.text.isEmpty
                     ? null
                     : _modeleController.text,
-                items: const ["petit", "grand"],
+                items: const ["Petit", "Grand"],
                 icon: Icons.shape_line,
                 onChanged: (value) {
                   setState(() {
@@ -131,6 +170,23 @@ class _AjouterBoissonPageState extends State<AjouterBoissonPage> {
               ),
             ),
             const SizedBox(height: 16.0),
+
+            // Champ Stock
+            BuildTextField(
+              controller: _stockController,
+              label: "Stock",
+              hint: "Entrez la quantité en stock",
+              icon: Icons.inventory,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Ce champ est obligatoire";
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16.0),
+
             // Champ Description
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -167,7 +223,7 @@ class _AjouterBoissonPageState extends State<AjouterBoissonPage> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                child: 1 == 1
+                child: widget.boisson == null
                     ? const Text(
                         "Ajouter",
                         style: TextStyle(fontSize: 18.0, color: Colors.white),

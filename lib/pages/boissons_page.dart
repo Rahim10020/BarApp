@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/boisson_box.dart';
+import 'package:projet7/models/bar.dart';
+import 'package:projet7/models/boisson.dart';
 import 'package:projet7/pages/boisson_page.dart';
+import 'package:provider/provider.dart';
 
 class BoissonsPage extends StatefulWidget {
   const BoissonsPage({super.key});
@@ -11,35 +14,49 @@ class BoissonsPage extends StatefulWidget {
 
 class _BoissonsPageState extends State<BoissonsPage> {
   int attributIndex = 0;
+  List<Boisson> _boissonsFiltres = [];
+  List<Boisson> _boissonsAffiches = [];
   String _searchText = "";
 
-  void appliquerPremierTri(bool petit, bool grand) {
-    _appliquerFiltresCombines();
-  }
+  void _appliquerFiltres() {
+    final bar = Provider.of<Bar>(context, listen: false);
+    List<Boisson> resultats = List.from(_boissonsFiltres);
 
-  void reinitialiserPremierTri() {
-    attributIndex = 0;
-    setState(() {});
+    switch (attributIndex) {
+      case 0:
+        _boissonsFiltres = bar.boissons;
+        break;
+      case 1:
+        resultats = bar.getPetitModele();
+        break;
+      case 2:
+        resultats = bar.getGrandModele();
+        break;
+      default:
+        break;
+    }
 
-    _appliquerFiltresCombines();
-  }
+    if (_searchText.isNotEmpty) {
+      resultats = resultats
+          .where(
+            (b) => b.nom!.toLowerCase().contains(_searchText.toLowerCase()),
+          )
+          .toList();
+    }
 
-  void _appliquerRecherche(String text) {
     setState(() {
-      _searchText = text;
+      _boissonsAffiches = resultats;
     });
-
-    _appliquerFiltresCombines();
-  }
-
-  void _appliquerFiltresCombines() {
-    if (_searchText.isNotEmpty) {}
-
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final bar = context.watch<Bar>();
+
+    _boissonsFiltres = bar.boissons;
+
+    _appliquerFiltres();
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
@@ -68,7 +85,10 @@ class _BoissonsPageState extends State<BoissonsPage> {
                     right: 32.0,
                   ),
                   child: TextField(
-                    onChanged: _appliquerRecherche,
+                    onChanged: (value) {
+                      _searchText = value;
+                      _appliquerFiltres();
+                    },
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(vertical: 2.0),
                       enabledBorder: OutlineInputBorder(
@@ -113,7 +133,10 @@ class _BoissonsPageState extends State<BoissonsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () => reinitialiserPremierTri(),
+                  onTap: () {
+                    attributIndex = 0;
+                    _appliquerFiltres();
+                  },
                   child: Container(
                     padding: const EdgeInsets.only(
                       left: 18.0,
@@ -131,7 +154,10 @@ class _BoissonsPageState extends State<BoissonsPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => appliquerPremierTri(true, false),
+                  onTap: () {
+                    attributIndex = 1;
+                    _appliquerFiltres();
+                  },
                   child: Container(
                     margin: const EdgeInsets.only(
                       left: 16.0,
@@ -153,7 +179,10 @@ class _BoissonsPageState extends State<BoissonsPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => appliquerPremierTri(false, true),
+                  onTap: () {
+                    attributIndex = 2;
+                    _appliquerFiltres();
+                  },
                   child: Container(
                     padding: const EdgeInsets.only(
                       left: 18.0,
@@ -173,7 +202,7 @@ class _BoissonsPageState extends State<BoissonsPage> {
               ],
             ),
           ),
-          2 == 1
+          _boissonsAffiches.isEmpty
               ? Expanded(
                   child: Center(
                     child: Column(
@@ -196,7 +225,7 @@ class _BoissonsPageState extends State<BoissonsPage> {
                 )
               : Expanded(
                   child: GridView.builder(
-                    itemCount: 10,
+                    itemCount: _boissonsAffiches.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
@@ -204,12 +233,13 @@ class _BoissonsPageState extends State<BoissonsPage> {
                     ),
                     itemBuilder: (context, index) {
                       return BoissonBox(
-                        icon: Icons.water_drop_outlined,
-                        text: "Fanta",
+                        boisson: _boissonsAffiches[index],
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const BoissonPage(),
+                            builder: (context) => BoissonPage(
+                              boisson: _boissonsAffiches[index],
+                            ),
                           ),
                         ),
                       );

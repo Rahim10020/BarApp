@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:projet7/models/casier.dart';
 
 class CasierBox extends StatelessWidget {
+  final Casier casier;
   final void Function()? onTap;
 
-  const CasierBox({super.key, required this.onTap});
+  const CasierBox({super.key, required this.casier, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -42,44 +45,45 @@ class CasierBox extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Ajouter une icône de devise et le mettre en Row avec le texte
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "500 FCFA",
-                        style: TextStyle(
+                      Text(
+                        NumberFormat.currency(
+                                locale: "fr_FR",
+                                symbol: "FCFA",
+                                decimalDigits: 0)
+                            .format(casier.prixTotal),
+                        style: const TextStyle(
                             color: Colors.redAccent,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "10",
+                        casier.quantiteBoisson.toString(),
                         style: TextStyle(
                             color: Colors.red.shade900,
                             fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
-
                   const SizedBox(
                     height: 8.0,
                   ),
-
                   Row(
-                      mainAxisAlignment: 2 != 1
+                      mainAxisAlignment: casier.boisson.nom != null
                           ? MainAxisAlignment.spaceBetween
                           : MainAxisAlignment.start,
                       children: [
                         // Au lieu d'ajouter texte, ajoutez le logo même de la marque
                         Text(
-                          "MALTA",
+                          casier.boisson.nom!,
                           style: TextStyle(
                               color:
                                   Theme.of(context).colorScheme.inversePrimary,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "petit",
+                          casier.boisson.getModele()!,
                           style: TextStyle(color: Colors.yellow.shade900),
                         ),
                       ]),

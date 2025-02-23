@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:projet7/models/boisson.dart';
 
 class BoissonPopulaireBox extends StatelessWidget {
+  final Boisson boisson;
   final void Function()? onTap;
 
-  const BoissonPopulaireBox({super.key, required this.onTap});
+  const BoissonPopulaireBox(
+      {super.key, required this.boisson, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +47,11 @@ class BoissonPopulaireBox extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Ajouter une icône de devise et le mettre en Row avec le texte
-                  const Text(
-                    "500 FCFA",
-                    style: TextStyle(
+                  Text(
+                    NumberFormat.currency(
+                            locale: "fr_FR", symbol: "FCFA", decimalDigits: 0)
+                        .format(boisson.prix.last),
+                    style: const TextStyle(
                         color: Colors.redAccent, fontWeight: FontWeight.bold),
                   ),
 
@@ -54,20 +60,20 @@ class BoissonPopulaireBox extends StatelessWidget {
                   ),
 
                   Row(
-                      mainAxisAlignment: 2 != 1
+                      mainAxisAlignment: boisson.nom != null
                           ? MainAxisAlignment.spaceBetween
                           : MainAxisAlignment.start,
                       children: [
                         // Au lieu d'ajouter texte, ajoutez le logo même de la marque
                         Text(
-                          "MALTA",
+                          boisson.nom!,
                           style: TextStyle(
                               color:
                                   Theme.of(context).colorScheme.inversePrimary,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "grand",
+                          boisson.getModele()!,
                           style: TextStyle(color: Colors.yellow.shade900),
                         ),
                       ]),

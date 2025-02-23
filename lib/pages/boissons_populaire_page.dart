@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/boisson_box.dart';
+import 'package:projet7/models/bar.dart';
+import 'package:projet7/models/vente.dart';
 import 'package:projet7/pages/boisson_page.dart';
+import 'package:projet7/utils/modele.dart';
+import 'package:provider/provider.dart';
 
 class BoissonsPopulairePage extends StatefulWidget {
   const BoissonsPopulairePage({super.key});
@@ -11,35 +15,56 @@ class BoissonsPopulairePage extends StatefulWidget {
 
 class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
   int attributIndex = 0;
+  List<List<Vente>> _ventesFiltres = [];
+  List<List<Vente>> _ventesAffiches = [];
   String _searchText = "";
 
-  void appliquerPremierTri(bool petit, bool grand) {
-    _appliquerFiltresCombines();
-  }
+  void _appliquerFiltres() {
+    final bar = Provider.of<Bar>(context, listen: false);
+    List<List<Vente>> resultats = List.from(_ventesFiltres);
 
-  void reinitialiserPremierTri() {
-    attributIndex = 0;
-    setState(() {});
+    switch (attributIndex) {
+      case 0:
+        _ventesFiltres = bar.getVentesLesPlusVendues();
+      case 1:
+        resultats = resultats
+            .where((b) => b.last.boisson.modele == Modele.petit)
+            .toList();
+        break;
+      case 2:
+        resultats = resultats
+            .where((b) => b.last.boisson.modele == Modele.grand)
+            .toList();
+        break;
+      default:
+        break;
+    }
 
-    _appliquerFiltresCombines();
-  }
+    if (_searchText.isNotEmpty) {
+      resultats = resultats
+          .where(
+            (v) => v[0]
+                .boisson
+                .nom!
+                .toLowerCase()
+                .contains(_searchText.toLowerCase()),
+          )
+          .toList();
+    }
 
-  void _appliquerRecherche(String text) {
     setState(() {
-      _searchText = text;
+      _ventesAffiches = resultats;
     });
-
-    _appliquerFiltresCombines();
-  }
-
-  void _appliquerFiltresCombines() {
-    if (_searchText.isNotEmpty) {}
-
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final bar = context.watch<Bar>();
+
+    _ventesFiltres = bar.getVentesLesPlusVendues();
+
+    _appliquerFiltres();
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
@@ -68,7 +93,10 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
                     right: 32.0,
                   ),
                   child: TextField(
-                    onChanged: _appliquerRecherche,
+                    onChanged: (value) {
+                      _searchText = value;
+                      _appliquerFiltres();
+                    },
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(vertical: 2.0),
                       enabledBorder: OutlineInputBorder(
@@ -113,7 +141,10 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () => reinitialiserPremierTri(),
+                  onTap: () {
+                    attributIndex = 0;
+                    _appliquerFiltres();
+                  },
                   child: Container(
                     padding: const EdgeInsets.only(
                       left: 18.0,
@@ -131,7 +162,10 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => appliquerPremierTri(true, false),
+                  onTap: () {
+                    attributIndex = 1;
+                    _appliquerFiltres();
+                  },
                   child: Container(
                     margin: const EdgeInsets.only(
                       left: 16.0,
@@ -153,7 +187,10 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => appliquerPremierTri(false, true),
+                  onTap: () {
+                    attributIndex = 2;
+                    _appliquerFiltres();
+                  },
                   child: Container(
                     padding: const EdgeInsets.only(
                       left: 18.0,
@@ -173,7 +210,7 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
               ],
             ),
           ),
-          2 == 1
+          _ventesAffiches.isEmpty
               ? Expanded(
                   child: Center(
                     child: Column(
@@ -196,7 +233,7 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
                 )
               : Expanded(
                   child: GridView.builder(
-                    itemCount: 10,
+                    itemCount: _ventesAffiches.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
@@ -204,12 +241,13 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
                     ),
                     itemBuilder: (context, index) {
                       return BoissonBox(
-                        icon: Icons.water_drop_outlined,
-                        text: "Fanta",
+                        boisson: _ventesAffiches[index].last.boisson,
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const BoissonPage(),
+                            builder: (context) => BoissonPage(
+                              boisson: _ventesAffiches[index].last.boisson,
+                            ),
                           ),
                         ),
                       );

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/boisson_box.dart';
+import 'package:projet7/components/boisson_picker.dart';
 import 'package:projet7/components/build_text_field.dart';
+import 'package:projet7/models/bar.dart';
+import 'package:projet7/models/boisson.dart';
+import 'package:projet7/models/casier.dart';
 import 'package:projet7/pages/ajouter_boisson_page.dart';
 import 'package:projet7/pages/boisson_page.dart';
+import 'package:provider/provider.dart';
 
 class CommandePage extends StatefulWidget {
   const CommandePage({super.key});
@@ -19,6 +24,9 @@ class _CommandePageState extends State<CommandePage> {
   late TextEditingController _modeleController;
   late TextEditingController _quantiteController;
   String? _imagePath;
+
+  int? selectedBoissonIndex;
+  Boisson? selectedBoisson;
 
   @override
   void initState() {
@@ -40,15 +48,30 @@ class _CommandePageState extends State<CommandePage> {
     super.dispose();
   }
 
-  void _ajouterBoisson() {
+  void _ajouterCasier() {
     if (_formKey.currentState!.validate()) {
-      if (_imagePath != null) {
-        Navigator.pop(context);
+      if (selectedBoisson != null) {
+        final monCasier = Casier(
+          id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
+          boisson: selectedBoisson!,
+          quantiteBoisson: int.parse(_quantiteController.text.padLeft(2, "0")),
+          dateCreation: DateTime.now(),
+        );
+
+        context.read<Bar>().ajouterCasier(monCasier);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Casier crée avec succès"),
+          ),
+        );
+
+        _quantiteController.clear();
       } else {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Veuillez choisir une image pour le casier"),
+            title: const Text("Veuillez choisir une boisson"),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -113,7 +136,7 @@ class _CommandePageState extends State<CommandePage> {
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AjouterBoissonPage(),
+                        builder: (context) => AjouterBoissonPage(),
                       ),
                     ),
                     icon: const Icon(Icons.add_box_outlined),
@@ -122,28 +145,48 @@ class _CommandePageState extends State<CommandePage> {
                 ],
               ),
             ),
-
-            SizedBox(
-              height: 150,
-              child: Expanded(
-                child: ListView.builder(
-                  itemCount: 10,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return BoissonBox(
-                      text: "Fanta",
-                      icon: Icons.water_drop_outlined,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const BoissonPage(),
+            Provider.of<Bar>(context).boissons.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.inbox,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 120.0,
                         ),
+                        Text(
+                          "Aucune boisson disponible",
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ],
+                    ),
+                  )
+                : SizedBox(
+                    height: 150,
+                    child: Expanded(
+                      child: ListView.builder(
+                        itemCount: Provider.of<Bar>(context).boissons.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final boisson =
+                              Provider.of<Bar>(context).boissons[index];
+                          return BoissonPicker(
+                            boisson: boisson,
+                            isSelected: selectedBoissonIndex == index,
+                            onTap: () {
+                              setState(() {
+                                selectedBoissonIndex = index;
+                                selectedBoisson = boisson;
+                              });
+                            },
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
-            ),
+                    ),
+                  ),
 
             const SizedBox(
               height: 16.0,
@@ -152,7 +195,7 @@ class _CommandePageState extends State<CommandePage> {
             // Bouton Ajouter
             Center(
               child: ElevatedButton(
-                onPressed: _ajouterBoisson,
+                onPressed: _ajouterCasier,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   padding: const EdgeInsets.symmetric(
@@ -161,15 +204,10 @@ class _CommandePageState extends State<CommandePage> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                child: 1 == 1
-                    ? const Text(
-                        "Ajouter",
-                        style: TextStyle(fontSize: 20.0, color: Colors.white),
-                      )
-                    : const Text(
-                        "Modifier",
-                        style: TextStyle(fontSize: 20.0, color: Colors.white),
-                      ),
+                child: const Text(
+                  "Ajouter",
+                  style: TextStyle(fontSize: 20.0, color: Colors.white),
+                ),
               ),
             ),
           ],

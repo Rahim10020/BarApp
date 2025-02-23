@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:projet7/models/vente.dart';
 
 class VenteTile extends StatelessWidget {
+  final Vente vente;
   final void Function()? onTap;
   final void Function()? onDelete;
 
-  const VenteTile({super.key, required this.onTap, required this.onDelete});
+  const VenteTile(
+      {super.key,
+      required this.vente,
+      required this.onTap,
+      required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -35,25 +42,40 @@ class VenteTile extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "5",
-                      style: TextStyle(
+                    if (vente.boisson.nom != "")
+                      Text(
+                        vente.boisson.nom!,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    Text(
+                      NumberFormat.currency(
+                              locale: "fr_FR", symbol: "FCFA", decimalDigits: 0)
+                          .format(vente.boisson.prix.last),
+                      style: const TextStyle(
+                        color: Colors.redAccent,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
                       ),
                     ),
-                    const Text(
-                      "15 000 FCFA",
-                      style: TextStyle(
-                          color: Colors.redAccent, fontWeight: FontWeight.bold),
-                    ),
+                    if (vente.boisson.modele != null)
+                      Text(
+                        "${vente.boisson.modele}",
+                        style: TextStyle(color: Colors.yellow.shade900),
+                      ),
                     Text(
-                      "Quantité: 8",
+                      "Quantité: ${vente.quantiteVendu.toString()}",
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.inversePrimary),
                     ),
                     Text(
-                      "Vendu le: 19/02/2025 à 21:22",
+                      "Total: ${NumberFormat.currency(locale: "fr_FR", symbol: "FCFA", decimalDigits: 0).format(vente.quantiteVendu * vente.boisson.prix.last)}",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary),
+                    ),
+                    Text(
+                      "Vendu le: ${vente.dateVente.day.toString().padLeft(2, '0')}/${vente.dateVente.month.toString().padLeft(2, '0')}/${vente.dateVente.year.toString()} ${vente.dateVente.hour.toString().padLeft(2, '0')}:${vente.dateVente.minute.toString().padLeft(2, '0')}",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 13.0,
