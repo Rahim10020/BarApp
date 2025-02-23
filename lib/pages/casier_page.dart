@@ -96,9 +96,15 @@ class _CasierPageState extends State<CasierPage> {
                               onPressed: () => Navigator.pop(context),
                               child: const Text("Annuler"),
                             ),
-                            const TextButton(
-                              onPressed: null,
-                              child: Text("Oui"),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                context
+                                    .read<Bar>()
+                                    .supprimerCasier(widget.casier);
+                                Navigator.pop(context);
+                              },
+                              child: const Text("Oui"),
                             ),
                           ],
                         ),

@@ -4,8 +4,10 @@ import 'package:projet7/components/casier_box.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/vente.dart';
+import 'package:projet7/pages/ajouter_boisson_page.dart';
 import 'package:projet7/pages/casier_page.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
 class BoissonPage extends StatefulWidget {
@@ -64,9 +66,28 @@ class _BoissonPageState extends State<BoissonPage> {
                               onPressed: () => Navigator.pop(context),
                               child: const Text("Annuler"),
                             ),
-                            const TextButton(
-                              onPressed: null,
-                              child: Text("Oui"),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AjouterBoissonPage(
+                                      boisson: widget.boisson,
+                                    ),
+                                  ),
+                                ).then(
+                                  (value) {
+                                    if (value != null) {
+                                      Fluttertoast.showToast(
+                                          msg: value,
+                                          backgroundColor: Colors.grey.shade100,
+                                          textColor: Colors.grey.shade700);
+                                    }
+                                  },
+                                );
+                              },
+                              child: const Text("Oui"),
                             ),
                           ],
                         ),
@@ -98,9 +119,15 @@ class _BoissonPageState extends State<BoissonPage> {
                               onPressed: () => Navigator.pop(context),
                               child: const Text("Annuler"),
                             ),
-                            const TextButton(
-                              onPressed: null,
-                              child: Text("Oui"),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                context
+                                    .read<Bar>()
+                                    .supprimerBoisson(widget.boisson);
+                                Navigator.pop(context);
+                              },
+                              child: const Text("Oui"),
                             ),
                           ],
                         ),
