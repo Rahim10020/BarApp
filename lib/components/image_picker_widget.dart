@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import "package:path/path.dart" as path;
 import 'package:path_provider/path_provider.dart';
-// import 'package:vetement/utils/responsive.dart';
 
 // ignore: must_be_immutable
 class ImagePickerWidget extends StatefulWidget {
@@ -16,7 +15,7 @@ class ImagePickerWidget extends StatefulWidget {
 }
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
-  // final ImagePicker _picker = ImagePicker();
+  final ImagePicker _picker = ImagePicker();
 
   // Future<void> _pickImage(ImageSource source) async {
   //   final pickedFile = await _picker.pickImage(source: source);
@@ -31,17 +30,17 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   //   }
   // }
 
-  Future<void> _pickImage() async {
-    // final pickedFile = await _picker.pickImage(source: source);
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
 
-    // if (pickedFile != null) {
-    //   final File file = File(pickedFile.path);
-    //   final savedImage = await saveImage(file);
-    //   setState(() {
-    //     widget.imageFile = savedImage;
-    //   });
-    //   widget.onImageSelected(savedImage.path);
-    // }
+    if (pickedFile != null) {
+      final File file = File(pickedFile.path);
+      final savedImage = await saveImage(file);
+      setState(() {
+        widget.imageFile = savedImage;
+      });
+      widget.onImageSelected(savedImage.path);
+    }
   }
 
   Future<File> saveImage(File imageFile) async {
@@ -75,7 +74,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               title: const Text("Choisir depuis la galerie"),
               onTap: () {
                 Navigator.pop(context);
-                // _pickImage(ImageSource.gallery);
+                _pickImage(ImageSource.gallery);
               },
             ),
             ListTile(
@@ -83,7 +82,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               title: const Text("Prendre une photo"),
               onTap: () {
                 Navigator.pop(context);
-                // _pickImage(ImageSource.camera);
+                _pickImage(ImageSource.camera);
               },
             ),
             ListTile(

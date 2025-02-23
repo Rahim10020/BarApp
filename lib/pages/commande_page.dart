@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:projet7/components/boisson_box.dart';
 import 'package:projet7/components/boisson_picker.dart';
 import 'package:projet7/components/build_text_field.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/pages/ajouter_boisson_page.dart';
-import 'package:projet7/pages/boisson_page.dart';
 import 'package:provider/provider.dart';
 
 class CommandePage extends StatefulWidget {
@@ -23,7 +21,6 @@ class _CommandePageState extends State<CommandePage> {
   late TextEditingController _descriptionController;
   late TextEditingController _modeleController;
   late TextEditingController _quantiteController;
-  String? _imagePath;
 
   int? selectedBoissonIndex;
   Boisson? selectedBoisson;

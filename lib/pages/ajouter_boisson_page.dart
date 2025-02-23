@@ -6,9 +6,7 @@ import 'package:projet7/components/build_text_field.dart';
 import 'package:projet7/components/image_picker_widget.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/boisson.dart';
-import 'package:projet7/pages/archive_page.dart';
 import 'package:projet7/utils/helpers.dart';
-import 'package:projet7/utils/modele.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -58,7 +56,7 @@ class _AjouterBoissonPageState extends State<AjouterBoissonPage> {
 
   void _ajouterBoisson() {
     if (_formKey.currentState!.validate()) {
-      if (_imagePath != null) {
+      if (_imagePath == null) {
         final monBoisson = Boisson(
           id: widget.boisson?.id ??
               (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
