@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:projet7/components/casier_box.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/boisson.dart';
@@ -12,6 +11,7 @@ import 'package:projet7/pages/detail/components/my_back_button.dart';
 import 'package:projet7/pages/detail/components/my_counter.dart';
 import 'package:projet7/pages/detail/components/sell_button.dart';
 import 'package:projet7/pages/detail/components/sell_counter.dart';
+import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -100,7 +100,7 @@ class _BoissonPageState extends State<BoissonPage> {
                 child: Row(
                   children: [
                     Text(
-                      "Ajouté le ${widget.boisson.dateAjout.day.toString().padLeft(2, '0')}/${widget.boisson.dateAjout.month.toString().padLeft(2, '0')}/${widget.boisson.dateAjout.year.toString()} à ${widget.boisson.dateAjout.hour.toString().padLeft(2, "0")}:${widget.boisson.dateAjout.minute.toString().padLeft(2, "0")}",
+                      "Ajouté le ${Helpers.formatterDate(widget.boisson.dateAjout)}",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 14.0,
@@ -115,7 +115,7 @@ class _BoissonPageState extends State<BoissonPage> {
                   child: Row(
                     children: [
                       Text(
-                        "Modifié le ${widget.boisson.dateModification!.day.toString().padLeft(2, '0')}/${widget.boisson.dateModification!.month.toString().padLeft(2, '0')}/${widget.boisson.dateModification!.year.toString()} à ${widget.boisson.dateModification!.hour.toString().padLeft(2, "0")}:${widget.boisson.dateModification!.minute.toString().padLeft(2, "0")}",
+                        "Modifié le ${Helpers.formatterDate(widget.boisson.dateModification!)}",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontSize: 14.0,
@@ -164,13 +164,11 @@ class _BoissonPageState extends State<BoissonPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                padding: const EdgeInsets.only(left: 16.0),
                 child: Row(
                   children: [
                     Text(
-                      NumberFormat.currency(
-                              locale: "fr_FR", symbol: "FCFA", decimalDigits: 0)
-                          .format(widget.boisson.prix.last),
+                      Helpers.formatterEnCFA(widget.boisson.prix.last),
                       style: TextStyle(
                         color: Colors.red.shade700,
                         fontWeight: FontWeight.bold,
@@ -182,12 +180,8 @@ class _BoissonPageState extends State<BoissonPage> {
                     ),
                     if (widget.boisson.prix.length > 1)
                       Text(
-                        NumberFormat.currency(
-                                locale: "fr_FR",
-                                symbol: "FCFA",
-                                decimalDigits: 0)
-                            .format(widget
-                                .boisson.prix[widget.boisson.prix.length - 2]),
+                        Helpers.formatterEnCFA(widget
+                            .boisson.prix[widget.boisson.prix.length - 2]),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.inversePrimary,
                             fontSize: 18.0,
@@ -222,11 +216,7 @@ class _BoissonPageState extends State<BoissonPage> {
                                       ),
                                     ListTile(
                                       title: Text(
-                                        NumberFormat.currency(
-                                                locale: "fr_FR",
-                                                symbol: "FCFA",
-                                                decimalDigits: 0)
-                                            .format(
+                                        Helpers.formatterEnCFA(
                                           widget.boisson.prix.reversed
                                               .elementAt(index),
                                         ),
@@ -267,7 +257,7 @@ class _BoissonPageState extends State<BoissonPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 16.0),
+                padding: const EdgeInsets.only(left: 16.0),
                 child: Row(
                   children: [
                     Text(
@@ -277,9 +267,34 @@ class _BoissonPageState extends State<BoissonPage> {
                           color: Theme.of(context).colorScheme.inversePrimary,
                           fontWeight: FontWeight.bold),
                     ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 16.0),
+                child: Row(
+                  children: [
+                    Text(
+                      widget.boisson.estFroid ? "Froid" : "Chaud",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: widget.boisson.estFroid
+                              ? Colors.blue
+                              : Colors.red,
+                          fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(
                       width: 8.0,
                     ),
+                    widget.boisson.estFroid
+                        ? const Icon(
+                            Icons.water_drop,
+                            color: Colors.blue,
+                          )
+                        : const Icon(
+                            Icons.fire_extinguisher,
+                            color: Colors.red,
+                          ),
                   ],
                 ),
               ),

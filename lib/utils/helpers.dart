@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:projet7/models/modele.dart';
 
 class Helpers {
@@ -20,5 +21,15 @@ class Helpers {
       case null:
         return null;
     }
+  }
+
+  static String formatterEnCFA(double montant) {
+    return NumberFormat.currency(
+            locale: "fr_FR", symbol: "FCFA", decimalDigits: 0)
+        .format(montant);
+  }
+
+  static String formatterDate(DateTime date) {
+    return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString()} à ${date.hour.toString().padLeft(2, "0")}:${date.minute.toString().padLeft(2, "0")}";
   }
 }

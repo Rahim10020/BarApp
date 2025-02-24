@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:projet7/pages/congelateur/congelateur_page.dart';
 import 'package:projet7/pages/home/components/my_drawer.dart';
 import 'package:projet7/pages/archive/archive_page.dart';
 import 'package:projet7/pages/bar/bar_page.dart';
@@ -37,6 +38,16 @@ class _HomePageState extends State<HomePage> {
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
         title: const Text("Mon Bar"),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CongelateurPage(),
+                )),
+            icon: const Icon(Icons.door_sliding),
+          ),
+        ],
       ),
       drawer: const MyDrawer(),
       backgroundColor: Theme.of(context).colorScheme.surface,
