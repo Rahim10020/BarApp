@@ -4,6 +4,7 @@ import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:projet7/pages/detail/boisson/boisson_page.dart';
 import 'package:projet7/models/modele.dart';
+import 'package:projet7/pages/liste/components/choice_filter_box.dart';
 import 'package:provider/provider.dart';
 
 class BoissonsPopulairePage extends StatefulWidget {
@@ -140,72 +141,38 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
+                ChoiceFilterBox(
+                  text: "Tout",
                   onTap: () {
                     attributIndex = 0;
                     _appliquerFiltres();
                   },
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                      left: 18.0,
-                      right: 18.0,
-                      top: 4.0,
-                      bottom: 4.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: attributIndex == 0
-                          ? Theme.of(context).colorScheme.tertiary
-                          : Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: const Text("Tout"),
+                  couleur: attributIndex == 0
+                      ? Theme.of(context).colorScheme.tertiary
+                      : Theme.of(context).colorScheme.secondary,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: ChoiceFilterBox(
+                    text: "Petit",
+                    onTap: () {
+                      attributIndex = 1;
+                      _appliquerFiltres();
+                    },
+                    couleur: attributIndex == 1
+                        ? Theme.of(context).colorScheme.tertiary
+                        : Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    attributIndex = 1;
-                    _appliquerFiltres();
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                    ),
-                    padding: const EdgeInsets.only(
-                      left: 18.0,
-                      right: 18.0,
-                      top: 4.0,
-                      bottom: 4.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: attributIndex == 1
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: const Text("Petit"),
-                  ),
-                ),
-                GestureDetector(
+                ChoiceFilterBox(
+                  text: "Grand",
                   onTap: () {
                     attributIndex = 2;
                     _appliquerFiltres();
                   },
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                      left: 18.0,
-                      right: 18.0,
-                      top: 4.0,
-                      bottom: 4.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: attributIndex == 2
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: const Text("Grand"),
-                  ),
+                  couleur: attributIndex == 2
+                      ? Theme.of(context).colorScheme.tertiary
+                      : Theme.of(context).colorScheme.secondary,
                 ),
               ],
             ),
