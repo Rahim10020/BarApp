@@ -8,23 +8,28 @@ import 'package:projet7/models/modele.dart';
 
 class Bar extends ChangeNotifier {
   late Box<Boisson> _boissonBox;
+  late Box<Boisson> _boissonCongeleeBox;
   late Box<Casier> _casierBox;
   late Box<Vente> _venteBox;
 
   List<Boisson> _boissons = [];
+  List<Boisson> _boissonsCongelees = [];
   List<Casier> _casiers = [];
   List<Vente> _ventes = [];
 
   List<Boisson> get boissons => _boissons;
+  List<Boisson> get boissonsCongelees => _boissonsCongelees;
   List<Casier> get casiers => _casiers;
   List<Vente> get ventes => _ventes;
 
   Future<void> initHive() async {
     _boissonBox = await Hive.openBox<Boisson>("boissonsBox");
+    _boissonCongeleeBox = await Hive.openBox<Boisson>("boissonsCongeleesBox");
     _casierBox = await Hive.openBox<Casier>("casiersBox");
     _venteBox = await Hive.openBox<Vente>("ventesBox");
 
     _boissons = _boissonBox.values.toList();
+    _boissonsCongelees = _boissonCongeleeBox.values.toList();
     _casiers = _casierBox.values.toList();
     _ventes = _venteBox.values.toList();
 
@@ -41,6 +46,18 @@ class Bar extends ChangeNotifier {
       // _vetementsHistorique = _vetementHistoriqueBox.values.toList();
     } else {
       modifierBoisson(boisson);
+    }
+    notifyListeners();
+  }
+
+  Future<void> congelerBoisson(Boisson boisson) async {
+    if (!_boissonCongeleeBox.containsKey(boisson.id)) {
+      await _boissonCongeleeBox.put(
+          boisson.id, boisson); // Utilisation de vetement.id comme clé
+
+      _boissonsCongelees = _boissonCongeleeBox.values.toList();
+    } else {
+      modifierBoissonCongelee(boisson);
     }
     notifyListeners();
   }
@@ -84,6 +101,14 @@ class Bar extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> supprimerBoissonCongelee(Boisson boisson) async {
+    if (_boissonCongeleeBox.containsKey(boisson.id)) {
+      await _boissonCongeleeBox.delete(boisson.id);
+      _boissonsCongelees = _boissonCongeleeBox.values.toList();
+    }
+    notifyListeners();
+  }
+
   Future<void> supprimerCasier(Casier casier) async {
     if (_casierBox.containsKey(casier.id)) {
       await _casierBox.delete(casier.id);
@@ -117,6 +142,17 @@ class Bar extends ChangeNotifier {
       _boissons = _boissonBox.values.toList();
 
       // _vetementsHistorique = _vetementHistoriqueBox.values.toList();
+      notifyListeners();
+    }
+  }
+
+  void modifierBoissonCongelee(Boisson boisson) {
+    if (_boissonCongeleeBox.containsKey(boisson.id)) {
+      _boissonCongeleeBox.put(
+          boisson.id, boisson); // Mise à jour directe via l'ID
+
+      _boissonsCongelees = _boissonCongeleeBox.values.toList();
+
       notifyListeners();
     }
   }
