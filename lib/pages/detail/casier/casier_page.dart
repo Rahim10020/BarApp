@@ -10,6 +10,7 @@ import 'package:projet7/pages/detail/components/edit_box.dart';
 import 'package:projet7/pages/detail/components/my_back_button.dart';
 import 'package:projet7/pages/detail/components/my_counter.dart';
 import 'package:projet7/pages/detail/components/sell_button.dart';
+import 'package:projet7/pages/detail/components/sell_counter.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -204,70 +205,24 @@ class _CasierPageState extends State<CasierPage> {
                         ),
                       ),
                     ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16.0,
-                  left: 16.0,
-                  right: 16.0,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Bouton de décrémentation
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (quantite > 0) {
-                              quantite--;
-                            }
-                          });
-                        },
-                        child: Icon(Icons.remove,
-                            size: 20.0,
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary),
-                      ),
-
-                      // Quantité
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: SizedBox(
-                          width: 20.0,
-                          child: Center(
-                            child: Text(
-                              quantite.toString(),
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // Bouton d'incrémentation
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (widget.casier.quantiteBoisson - quantite > 0) {
-                              quantite++;
-                            }
-                          });
-                        },
-                        child: Icon(Icons.add,
-                            size: 20.0,
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary),
-                      ),
-                    ],
-                  ),
-                ),
+              SellCounter(
+                text: quantite.toString(),
+                onDecrement: () {
+                  setState(
+                    () {
+                      if (quantite > 0) {
+                        quantite--;
+                      }
+                    },
+                  );
+                },
+                onIncrement: () {
+                  setState(() {
+                    if (widget.casier.quantiteBoisson - quantite > 0) {
+                      quantite++;
+                    }
+                  });
+                },
               ),
               const SizedBox(
                 height: 8.0,
