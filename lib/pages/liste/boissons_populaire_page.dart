@@ -237,7 +237,7 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
-                      childAspectRatio: 0.7,
+                      childAspectRatio: 0.6,
                     ),
                     itemBuilder: (context, index) {
                       return BoissonBox(

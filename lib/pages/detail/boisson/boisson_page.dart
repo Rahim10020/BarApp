@@ -261,7 +261,7 @@ class _BoissonPageState extends State<BoissonPage> {
                 child: Row(
                   children: [
                     Text(
-                      "Petit",
+                      widget.boisson.getModele()!,
                       style: TextStyle(
                           fontSize: 16.0,
                           color: Theme.of(context).colorScheme.inversePrimary,
@@ -271,7 +271,7 @@ class _BoissonPageState extends State<BoissonPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 16.0),
+                padding: const EdgeInsets.only(left: 16.0),
                 child: Row(
                   children: [
                     Text(
@@ -339,14 +339,14 @@ class _BoissonPageState extends State<BoissonPage> {
                       .toList()
                       .isEmpty
                   ? SizedBox(
-                      height: 180.0,
+                      height: 140.0,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Center(
                             child: Icon(
                               Icons.inbox,
-                              size: 120.0,
+                              size: 100.0,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
@@ -431,9 +431,6 @@ class _BoissonPageState extends State<BoissonPage> {
                         );
                       }
                     : null,
-              ),
-              const SizedBox(
-                height: 16.0,
               ),
             ],
           ),
