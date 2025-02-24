@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:projet7/utils/modele.dart';
+import 'package:projet7/models/modele.dart';
 
 part 'boisson.g.dart';
 

@@ -37,6 +37,12 @@ class BoissonBox extends StatelessWidget {
             ),
             Text(boisson.getModele()!,
                 style: TextStyle(color: Colors.yellow.shade900)),
+            Text(
+              boisson.stock.toString(),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
       ),

@@ -5,9 +5,9 @@ import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/vente.dart';
-import 'package:projet7/pages/home_page.dart';
-import 'package:projet7/theme/theme_provider.dart';
-import 'package:projet7/utils/modele.dart';
+import 'package:projet7/pages/home/home_page.dart';
+import 'package:projet7/provider/theme_provider.dart';
+import 'package:projet7/models/modele.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -28,7 +28,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => themeProvider),
         ChangeNotifierProvider(create: (context) => bar),
       ],
       child: const MyApp(),

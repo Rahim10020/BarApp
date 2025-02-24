@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/vente.dart';
-import 'package:projet7/utils/modele.dart';
+import 'package:projet7/models/modele.dart';
 
 class Bar extends ChangeNotifier {
   late Box<Boisson> _boissonBox;
@@ -47,12 +47,14 @@ class Bar extends ChangeNotifier {
 
   Future<void> ajouterCasier(Casier casier) async {
     if (!_casierBox.containsKey(casier.id)) {
+      // Diminuer le stock et mettre à jour dans Hive
+      casier.boisson.stock -= casier.quantiteBoisson;
+      await _boissonBox.put(casier.boisson.id, casier.boisson);
+
       await _casierBox.put(
           casier.id, casier); // Utilisation de vetement.id comme clé
 
       _casiers = _casierBox.values.toList();
-
-      // _vetementsHistorique = _vetementHistoriqueBox.values.toList();
     } else {
       modifierCasier(casier);
     }
@@ -242,5 +244,17 @@ class Bar extends ChangeNotifier {
     ventesTriees.sort((a, b) => (a.quantiteVendu * a.boisson.prix.last)
         .compareTo(b.quantiteVendu * b.boisson.prix.last));
     return ventesTriees;
+  }
+
+  Future<void> viderBoissons() async {
+    await _boissonBox.clear();
+    _boissons = _boissonBox.values.toList();
+    notifyListeners();
+  }
+
+  Future<void> viderVentes() async {
+    await _venteBox.clear();
+    _ventes = _venteBox.values.toList();
+    notifyListeners();
   }
 }
