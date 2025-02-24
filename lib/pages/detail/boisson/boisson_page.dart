@@ -142,10 +142,8 @@ class _BoissonPageState extends State<BoissonPage> {
                 },
                 onIncrement: () {
                   setState(() {
-                    if (widget.boisson.stock > 0) {
-                      widget.boisson.stock++;
-                      bar.modifierBoisson(widget.boisson);
-                    }
+                    widget.boisson.stock++;
+                    bar.modifierBoisson(widget.boisson);
                   });
                 },
               ),
