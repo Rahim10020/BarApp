@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projet7/models/bar.dart';
+import 'package:projet7/pages/congelateur/components/boisson_congelee_tile.dart';
+import 'package:projet7/pages/detail/boisson/congelee/boisson_congelee_page.dart';
+import 'package:provider/provider.dart';
 
 class CongelateurPage extends StatelessWidget {
   const CongelateurPage({super.key});
@@ -16,8 +20,53 @@ class CongelateurPage extends StatelessWidget {
         centerTitle: true,
         title: const Text("Congélateur"),
       ),
-      body: const Column(
-        children: [],
+      body: Consumer<Bar>(
+        builder: (context, bar, child) => Column(
+          children: [
+            bar.boissonsCongelees.isEmpty
+                ? SizedBox(
+                    height: 140.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Icon(
+                            Icons.inbox,
+                            size: 100.0,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        Text(
+                          "Aucune boisson congelée",
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ],
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: bar.boissonsCongelees.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final boisson =
+                            bar.boissonsCongelees.reversed.toList()[index];
+                        return BoissonCongeleeTile(
+                          boisson: boisson,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BoissonCongeleePage(boisson: boisson),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
   }

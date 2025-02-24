@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:projet7/models/vente.dart';
+import 'package:projet7/models/boisson.dart';
 import 'package:projet7/utils/helpers.dart';
 
-class VenteTile extends StatelessWidget {
-  final Vente vente;
+class BoissonCongeleeTile extends StatelessWidget {
+  final Boisson boisson;
   final void Function()? onTap;
-  final void Function()? onDelete;
 
-  const VenteTile(
-      {super.key,
-      required this.vente,
-      required this.onTap,
-      required this.onDelete});
+  const BoissonCongeleeTile({
+    super.key,
+    required this.boisson,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,38 +41,33 @@ class VenteTile extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (vente.boisson.nom != "")
+                    if (boisson.nom != "")
                       Text(
-                        vente.boisson.nom!,
+                        boisson.nom!,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
                         ),
                       ),
                     Text(
-                      Helpers.formatterEnCFA(vente.boisson.prix.last),
+                      Helpers.formatterEnCFA(boisson.prix.last),
                       style: const TextStyle(
                         color: Colors.redAccent,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (vente.boisson.modele != null)
+                    if (boisson.modele != null)
                       Text(
-                        Helpers.getModeleToString(vente.boisson.modele)!,
+                        Helpers.getModeleToString(boisson.modele)!,
                         style: TextStyle(color: Colors.yellow.shade900),
                       ),
                     Text(
-                      "Quantité: ${vente.quantiteVendu.toString()}",
+                      "Stock: ${boisson.stock.toString()}",
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.inversePrimary),
                     ),
                     Text(
-                      "Total: ${Helpers.formatterEnCFA(vente.quantiteVendu * vente.boisson.prix.last)}",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary),
-                    ),
-                    Text(
-                      "Vendu le: ${Helpers.formatterDate(vente.dateVente)}",
+                      "Ajouté le: ${Helpers.formatterDate(boisson.dateAjout)}",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 13.0,
@@ -82,14 +76,6 @@ class VenteTile extends StatelessWidget {
                   ],
                 ),
               ],
-            ),
-          ),
-          IconButton(
-            onPressed: onDelete,
-            icon: const Icon(
-              Icons.delete_outlined,
-              color: Colors.red,
-              size: 30.0,
             ),
           ),
         ],

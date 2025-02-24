@@ -17,16 +17,16 @@ import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
-class BoissonPage extends StatefulWidget {
+class BoissonCongeleePage extends StatefulWidget {
   Boisson boisson;
 
-  BoissonPage({super.key, required this.boisson});
+  BoissonCongeleePage({super.key, required this.boisson});
 
   @override
-  State<BoissonPage> createState() => _BoissonPageState();
+  State<BoissonCongeleePage> createState() => _BoissonCongeleePageState();
 }
 
-class _BoissonPageState extends State<BoissonPage> {
+class _BoissonCongeleePageState extends State<BoissonCongeleePage> {
   int quantite = 0;
 
   void ajouterVente(Vente venteVente) {
@@ -415,9 +415,9 @@ class _BoissonPageState extends State<BoissonPage> {
               ),
               if (quantite > 0)
                 FreezeButton(
-                    text: "Congeler",
+                    text: "Décongeler",
                     onTap: () {
-                      bar.congelerBoisson(widget.boisson, quantite);
+                      bar.decongelerBoisson(widget.boisson, quantite);
 
                       setState(
                         () {

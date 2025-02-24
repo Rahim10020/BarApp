@@ -39,26 +39,60 @@ class Bar extends ChangeNotifier {
   Future<void> ajouterBoisson(Boisson boisson) async {
     if (!_boissonBox.containsKey(boisson.id)) {
       await _boissonBox.put(
-          boisson.id, boisson); // Utilisation de vetement.id comme clé
+          boisson.id, boisson); // Utilisation de boisson.id comme clé
 
       _boissons = _boissonBox.values.toList();
-
-      // _vetementsHistorique = _vetementHistoriqueBox.values.toList();
     } else {
       modifierBoisson(boisson);
     }
     notifyListeners();
   }
 
-  Future<void> congelerBoisson(Boisson boisson) async {
-    if (!_boissonCongeleeBox.containsKey(boisson.id)) {
+  Future<void> congelerBoisson(Boisson boisson, int quantite) async {
+    // Diminuer le stock et mettre à jour dans Hive
+    boisson.stock -= quantite;
+    await _boissonBox.put(boisson.id, boisson);
+
+    Boisson boissonCongele = Boisson(
+      id: DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF,
+      nom: boisson.nom,
+      prix: boisson.prix,
+      modele: boisson.modele,
+      stock: quantite,
+      description: boisson.description,
+      estFroid: true,
+      imagePath: boisson.imagePath,
+      dateAjout: boisson.dateAjout,
+      dateModification: boisson.dateModification,
+    );
+
+    if (!_boissonCongeleeBox.containsKey(boissonCongele.id)) {
       await _boissonCongeleeBox.put(
-          boisson.id, boisson); // Utilisation de vetement.id comme clé
+          boissonCongele.id, boisson); // Utilisation de vetement.id comme clé
 
       _boissonsCongelees = _boissonCongeleeBox.values.toList();
     } else {
-      modifierBoissonCongelee(boisson);
+      modifierBoissonCongelee(boissonCongele);
     }
+    notifyListeners();
+  }
+
+  Future<void> decongelerBoisson(Boisson boisson, int quantite) async {
+    // Diminuer le stock et mettre à jour dans Hive
+    boisson.stock -= quantite;
+    await _boissonCongeleeBox.put(boisson.id, boisson);
+    ajouterBoisson(Boisson(
+      id: DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF,
+      nom: boisson.nom,
+      prix: boisson.prix,
+      modele: boisson.modele,
+      stock: quantite,
+      description: boisson.description,
+      estFroid: false,
+      imagePath: boisson.imagePath,
+      dateAjout: boisson.dateAjout,
+      dateModification: boisson.dateModification,
+    ));
     notifyListeners();
   }
 
@@ -136,12 +170,8 @@ class Bar extends ChangeNotifier {
     if (_boissonBox.containsKey(boisson.id)) {
       _boissonBox.put(boisson.id, boisson); // Mise à jour directe via l'ID
 
-      // _boissonHistoriqueBox.put(
-      //     boisson.id, boisson); // Mise à jour directe via l'ID
-
       _boissons = _boissonBox.values.toList();
 
-      // _vetementsHistorique = _vetementHistoriqueBox.values.toList();
       notifyListeners();
     }
   }

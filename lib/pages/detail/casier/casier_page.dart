@@ -7,6 +7,7 @@ import 'package:projet7/models/vente.dart';
 import 'package:projet7/pages/detail/boisson/boisson_page.dart';
 import 'package:projet7/pages/detail/components/delete_box.dart';
 import 'package:projet7/pages/detail/components/edit_box.dart';
+import 'package:projet7/pages/detail/components/freeze_button.dart';
 import 'package:projet7/pages/detail/components/my_back_button.dart';
 import 'package:projet7/pages/detail/components/my_counter.dart';
 import 'package:projet7/pages/detail/components/sell_button.dart';
@@ -224,6 +225,21 @@ class _CasierPageState extends State<CasierPage> {
                   });
                 },
               ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              if (quantite > 0)
+                FreezeButton(
+                    text: "Congeler",
+                    onTap: () {
+                      bar.congelerBoisson(widget.casier.boisson, quantite);
+
+                      setState(
+                        () {
+                          quantite = 0;
+                        },
+                      );
+                    }),
               const SizedBox(
                 height: 8.0,
               ),
