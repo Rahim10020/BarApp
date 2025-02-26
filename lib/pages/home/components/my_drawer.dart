@@ -15,8 +15,8 @@ class MyDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 100),
             child: Icon(
-              Icons.shop,
-              size: 50,
+              Icons.water_drop_outlined,
+              size: 120,
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
           ),
@@ -29,13 +29,13 @@ class MyDrawer extends StatelessWidget {
           ),
           // ensuite home
           MyDrawerTile(
-            text: "HOME",
+            text: "Accueil",
             icon: Icons.home,
             onTap: () => Navigator.pop(context),
           ),
           // ensuite les parametres
           MyDrawerTile(
-            text: "PARAMETRES",
+            text: "Paramètres",
             icon: Icons.settings,
             onTap: () {
               Navigator.pop(context);

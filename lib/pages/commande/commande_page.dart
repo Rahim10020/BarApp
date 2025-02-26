@@ -63,6 +63,21 @@ class _CommandePageState extends State<CommandePage> {
               ],
             ),
           );
+        } else if (int.parse(_quantiteController.text.padLeft(2, "0")) == 0) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text(
+                "Veuillez spécifier un nombre de boisson supérieur à 0",
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Ok"),
+                ),
+              ],
+            ),
+          );
         } else {
           final monCasier = Casier(
             id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
@@ -103,129 +118,132 @@ class _CommandePageState extends State<CommandePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 16.0, bottom: 16.0),
-              child: Text(
-                "Passer une commande",
-                style: TextStyle(
-                  fontSize: 18.0,
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 16.0, bottom: 16.0),
+                child: Text(
+                  "Passer une commande",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
                 ),
               ),
-            ),
 
-            // Champ Stock
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: BuildTextField(
-                controller: _quantiteController,
-                label: "Total boisson",
-                hint: "Entrez le nombre de boisson",
-                icon: Icons.inventory,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Ce champ est obligatoire";
-                  }
-                  return null;
-                },
+              // Champ Stock
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: BuildTextField(
+                  controller: _quantiteController,
+                  label: "Total boisson",
+                  hint: "Entrez le nombre de boisson",
+                  icon: Icons.inventory,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Ce champ est obligatoire";
+                    }
+                    return null;
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, bottom: 8.0, right: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Choisir boisson",
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AjouterBoissonPage(),
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 16.0, bottom: 8.0, right: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Choisir boisson",
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AjouterBoissonPage(),
+                        ),
+                      ),
+                      icon: const Icon(Icons.add_box_outlined),
+                      color: Colors.red,
+                    )
+                  ],
+                ),
+              ),
+              Provider.of<Bar>(context).boissons.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.inbox,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 120.0,
+                          ),
+                          Text(
+                            "Aucune boisson disponible",
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ],
+                      ),
+                    )
+                  : SizedBox(
+                      height: 190,
+                      child: Expanded(
+                        child: ListView.builder(
+                          itemCount: Provider.of<Bar>(context).boissons.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final boisson =
+                                Provider.of<Bar>(context).boissons[index];
+                            return BoissonPicker(
+                              boisson: boisson,
+                              isSelected: selectedBoissonIndex == index,
+                              onTap: () {
+                                setState(() {
+                                  selectedBoissonIndex = index;
+                                  selectedBoisson = boisson;
+                                });
+                              },
+                            );
+                          },
+                        ),
                       ),
                     ),
-                    icon: const Icon(Icons.add_box_outlined),
-                    color: Colors.red,
-                  )
-                ],
+
+              const SizedBox(
+                height: 18.0,
               ),
-            ),
-            Provider.of<Bar>(context).boissons.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.inbox,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 120.0,
-                        ),
-                        Text(
-                          "Aucune boisson disponible",
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                      ],
-                    ),
-                  )
-                : SizedBox(
-                    height: 190,
-                    child: Expanded(
-                      child: ListView.builder(
-                        itemCount: Provider.of<Bar>(context).boissons.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          final boisson =
-                              Provider.of<Bar>(context).boissons[index];
-                          return BoissonPicker(
-                            boisson: boisson,
-                            isSelected: selectedBoissonIndex == index,
-                            onTap: () {
-                              setState(() {
-                                selectedBoissonIndex = index;
-                                selectedBoisson = boisson;
-                              });
-                            },
-                          );
-                        },
-                      ),
+
+              // Bouton Ajouter
+              Center(
+                child: ElevatedButton(
+                  onPressed: _ajouterCasier,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.inversePrimary,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-
-            const SizedBox(
-              height: 18.0,
-            ),
-
-            // Bouton Ajouter
-            Center(
-              child: ElevatedButton(
-                onPressed: _ajouterCasier,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 40.0, vertical: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                  child: const Text(
+                    "Ajouter",
+                    style: TextStyle(fontSize: 20.0, color: Colors.white),
                   ),
                 ),
-                child: const Text(
-                  "Ajouter",
-                  style: TextStyle(fontSize: 20.0, color: Colors.white),
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

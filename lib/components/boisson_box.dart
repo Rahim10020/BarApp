@@ -18,6 +18,7 @@ class BoissonBox extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: 60.0,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(12.0),
@@ -30,29 +31,40 @@ class BoissonBox extends StatelessWidget {
           ),
         ),
         margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-        child: Column(
-          children: [
-            Icon(
-              Icons.water_drop_outlined,
-              size: 36.0,
-              color: Theme.of(context).colorScheme.inversePrimary,
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              boisson.nom!.toUpperCase(),
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.inversePrimary),
-            ),
-            Text(boisson.getModele()!,
-                style: TextStyle(color: Colors.yellow.shade900)),
-            Text(
-              boisson.stock.toString(),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 72.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(12.0),
+                bottomRight: Radius.circular(12.0),
               ),
             ),
-          ],
+            child: Column(children: [
+              Text(
+                boisson.nom!.toUpperCase(),
+                style: TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.inversePrimary),
+              ),
+              Text(
+                boisson.getModele()!,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.0,
+                    color: Colors.yellow.shade900),
+              ),
+              Text(
+                boisson.stock.toString(),
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ]),
+          ),
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projet7/pages/detail/boisson/populaire/components/vente_populaire_container.dart';
@@ -19,7 +21,11 @@ class BoissonPopulairePage extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                const Icon(Icons.water_drop_outlined, size: 100),
+                Image.file(
+                  File(ventes.last.boisson.imagePath),
+                  height: 150.0,
+                  width: double.infinity,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8.0),
                   child: Row(

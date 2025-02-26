@@ -96,23 +96,25 @@ class _CasiersPageState extends State<CasiersPage> {
                       contentPadding: const EdgeInsets.symmetric(vertical: 2.0),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
+                            color:
+                                Theme.of(context).colorScheme.tertiaryContainer,
                             width: 2.0),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
+                            color:
+                                Theme.of(context).colorScheme.tertiaryContainer,
                             width: 2.0),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       hintText: "Rechercher par boisson...",
                       hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.tertiaryContainer,
                       ),
                       prefixIcon: Icon(
                         Icons.search,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.tertiaryContainer,
                       ),
                       fillColor: Theme.of(context).colorScheme.primary,
                       focusColor: Theme.of(context).colorScheme.primary,
@@ -187,8 +189,7 @@ class _CasiersPageState extends State<CasiersPage> {
                           "Aucun résultat",
                           style: TextStyle(
                               fontSize: 20.0,
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary),
+                              color: Theme.of(context).colorScheme.primary),
                         ),
                       ],
                     ),
@@ -200,7 +201,6 @@ class _CasiersPageState extends State<CasiersPage> {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.8,
                     ),
                     itemBuilder: (context, index) {
                       return CasierBox(

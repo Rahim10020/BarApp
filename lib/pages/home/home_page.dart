@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
             tabs: const [
               GButton(
                 icon: Icons.home,
-                text: "Home",
+                text: "Accueil",
               ),
               GButton(
                 icon: Icons.attach_money,
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
               ),
               GButton(
                 icon: Icons.shopping_cart,
-                text: "Cmd",
+                text: "Commandes",
               ),
               GButton(
                 icon: Icons.archive,

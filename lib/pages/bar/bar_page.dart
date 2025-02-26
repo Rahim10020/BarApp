@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/boisson_box.dart';
-import 'package:projet7/components/boisson_populaire_box.dart';
 import 'package:projet7/components/casier_box.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/pages/detail/boisson/boisson_page.dart';
@@ -50,7 +49,7 @@ class BarPage extends StatelessWidget {
                       child: Text(
                         "Voir tout",
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                     ),
@@ -106,8 +105,8 @@ class BarPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
+                  padding: const EdgeInsets.only(
+                      top: 8.0, left: 16.0, right: 16.0, bottom: 8.0),
                   child: Text(
                     "Casiers récemments ajoutés",
                     style: TextStyle(
@@ -128,7 +127,7 @@ class BarPage extends StatelessWidget {
                     child: Text(
                       "Voir tout",
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                     ),
                   ),
@@ -137,7 +136,7 @@ class BarPage extends StatelessWidget {
             ),
             bar.getRecentCasiers().isEmpty
                 ? SizedBox(
-                    height: 180.0,
+                    height: 160.0,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -157,28 +156,31 @@ class BarPage extends StatelessWidget {
                       ],
                     ),
                   )
-                : Expanded(
-                    child: ListView.builder(
-                      itemCount:
-                          bar.getRecentCasiers().take(10).toList().length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return CasierBox(
-                          casier:
-                              bar.getRecentCasiers().take(10).toList()[index],
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CasierPage(
-                                casier: bar
-                                    .getRecentCasiers()
-                                    .take(10)
-                                    .toList()[index],
+                : SizedBox(
+                    height: 160.0,
+                    child: Expanded(
+                      child: ListView.builder(
+                        itemCount:
+                            bar.getRecentCasiers().take(10).toList().length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return CasierBox(
+                            casier:
+                                bar.getRecentCasiers().take(10).toList()[index],
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CasierPage(
+                                  casier: bar
+                                      .getRecentCasiers()
+                                      .take(10)
+                                      .toList()[index],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
             Row(
@@ -206,7 +208,7 @@ class BarPage extends StatelessWidget {
                     child: Text(
                       "Voir tout",
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary),
+                          color: Theme.of(context).colorScheme.tertiary),
                     ),
                   ),
                 ),
@@ -235,24 +237,29 @@ class BarPage extends StatelessWidget {
                       ],
                     ),
                   )
-                : Expanded(
-                    child: ListView.builder(
-                      itemCount: bar.getVentesLesPlusVendues().length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return BoissonBox(
-                          boisson:
-                              bar.getVentesLesPlusVendues()[index].last.boisson,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BoissonPopulairePage(
-                                ventes: bar.getVentesLesPlusVendues()[index],
+                : SizedBox(
+                    height: 140.0,
+                    child: Expanded(
+                      child: ListView.builder(
+                        itemCount: bar.getVentesLesPlusVendues().length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return BoissonBox(
+                            boisson: bar
+                                .getVentesLesPlusVendues()[index]
+                                .last
+                                .boisson,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BoissonPopulairePage(
+                                  ventes: bar.getVentesLesPlusVendues()[index],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
           ],

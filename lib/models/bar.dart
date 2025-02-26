@@ -81,6 +81,39 @@ class Bar extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> congelerBoissonDansCasier(Casier casier, int quantite) async {
+    // Diminuer le stock et mettre à jour dans Hive
+    if (casier.quantiteBoisson > quantite) {
+      casier.quantiteBoisson -= quantite;
+      await _casierBox.put(casier.id, casier);
+    } else {
+      supprimerCasier(casier);
+    }
+
+    Boisson boissonCongele = Boisson(
+      id: DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF,
+      nom: casier.boisson.nom,
+      prix: casier.boisson.prix,
+      modele: casier.boisson.modele,
+      stock: quantite,
+      description: casier.boisson.description,
+      estFroid: true,
+      imagePath: casier.boisson.imagePath,
+      dateAjout: casier.boisson.dateAjout,
+      dateModification: casier.boisson.dateModification,
+    );
+
+    if (!_boissonCongeleeBox.containsKey(boissonCongele.id)) {
+      await _boissonCongeleeBox.put(boissonCongele.id,
+          boissonCongele); // Utilisation de boisson.id comme clé
+
+      _boissonsCongelees = _boissonCongeleeBox.values.toList();
+    } else {
+      modifierBoissonCongelee(boissonCongele);
+    }
+    notifyListeners();
+  }
+
   Future<void> decongelerBoisson(Boisson boisson, int quantite) async {
     ajouterBoisson(Boisson(
       id: DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF,
