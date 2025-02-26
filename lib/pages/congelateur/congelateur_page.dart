@@ -48,7 +48,6 @@ class CongelateurPage extends StatelessWidget {
                 : Expanded(
                     child: ListView.builder(
                       itemCount: bar.boissonsCongelees.length,
-                      scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         final boisson =
                             bar.boissonsCongelees.reversed.toList()[index];

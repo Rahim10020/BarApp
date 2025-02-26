@@ -240,7 +240,7 @@ class BarPage extends StatelessWidget {
                       itemCount: bar.getVentesLesPlusVendues().length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return BoissonPopulaireBox(
+                        return BoissonBox(
                           boisson:
                               bar.getVentesLesPlusVendues()[index].last.boisson,
                           onTap: () => Navigator.push(

@@ -53,7 +53,7 @@ class SellCounter extends StatelessWidget {
 
             // Bouton d'incrémentation
             GestureDetector(
-              onTap: onDecrement,
+              onTap: onIncrement,
               child: Icon(Icons.add,
                   size: 20.0,
                   color: Theme.of(context).colorScheme.inversePrimary),

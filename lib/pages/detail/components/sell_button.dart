@@ -21,7 +21,7 @@ class SellButton extends StatelessWidget {
             Text(
               "Vendre",
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.inversePrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0),
             ),
@@ -31,7 +31,8 @@ class SellButton extends StatelessWidget {
             ),
 
             // Icon
-            Icon(Icons.sell, color: Theme.of(context).colorScheme.tertiary),
+            Icon(Icons.sell,
+                color: Theme.of(context).colorScheme.inversePrimary),
           ],
         ),
       ),

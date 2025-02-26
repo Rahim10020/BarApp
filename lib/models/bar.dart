@@ -50,8 +50,12 @@ class Bar extends ChangeNotifier {
 
   Future<void> congelerBoisson(Boisson boisson, int quantite) async {
     // Diminuer le stock et mettre à jour dans Hive
-    boisson.stock -= quantite;
-    await _boissonBox.put(boisson.id, boisson);
+    if (boisson.stock > quantite) {
+      boisson.stock -= quantite;
+      await _boissonBox.put(boisson.id, boisson);
+    } else {
+      supprimerBoisson(boisson);
+    }
 
     Boisson boissonCongele = Boisson(
       id: DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF,
@@ -67,8 +71,8 @@ class Bar extends ChangeNotifier {
     );
 
     if (!_boissonCongeleeBox.containsKey(boissonCongele.id)) {
-      await _boissonCongeleeBox.put(
-          boissonCongele.id, boisson); // Utilisation de vetement.id comme clé
+      await _boissonCongeleeBox.put(boissonCongele.id,
+          boissonCongele); // Utilisation de boisson.id comme clé
 
       _boissonsCongelees = _boissonCongeleeBox.values.toList();
     } else {
@@ -78,9 +82,6 @@ class Bar extends ChangeNotifier {
   }
 
   Future<void> decongelerBoisson(Boisson boisson, int quantite) async {
-    // Diminuer le stock et mettre à jour dans Hive
-    boisson.stock -= quantite;
-    await _boissonCongeleeBox.put(boisson.id, boisson);
     ajouterBoisson(Boisson(
       id: DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF,
       nom: boisson.nom,
@@ -93,6 +94,16 @@ class Bar extends ChangeNotifier {
       dateAjout: boisson.dateAjout,
       dateModification: boisson.dateModification,
     ));
+
+    // Diminuer le stock et mettre à jour dans Hive
+
+    if (boisson.stock > quantite) {
+      boisson.stock -= quantite;
+      await _boissonCongeleeBox.put(boisson.id, boisson);
+    } else {
+      supprimerBoissonCongelee(boisson);
+    }
+
     notifyListeners();
   }
 
@@ -115,8 +126,12 @@ class Bar extends ChangeNotifier {
   Future<void> ajouterVente(Vente vente) async {
     if (vente.boisson.stock >= vente.quantiteVendu) {
       // Diminuer le stock et mettre à jour dans Hive
-      vente.boisson.stock -= vente.quantiteVendu;
-      await _boissonBox.put(vente.boisson.id, vente.boisson);
+      if (vente.boisson.stock > vente.quantiteVendu) {
+        vente.boisson.stock -= vente.quantiteVendu;
+        await _boissonBox.put(vente.boisson.id, vente.boisson);
+      } else {
+        supprimerBoisson(vente.boisson);
+      }
 
       // Ajouter la vente dans Hive
       await _venteBox.put(vente.id, vente);

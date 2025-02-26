@@ -13,7 +13,7 @@ class FreezeButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: Colors.green.shade300,
+          color: Colors.green.shade100,
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Text(text),

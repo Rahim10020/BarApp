@@ -3,7 +3,7 @@ import 'package:projet7/components/casier_box.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/vente.dart';
-import 'package:projet7/pages/ajout/ajouter_boisson_page.dart';
+import 'package:projet7/pages/ajout/modifier_boisson_congelee_page.dart';
 import 'package:projet7/pages/detail/casier/casier_page.dart';
 import 'package:projet7/pages/detail/components/delete_box.dart';
 import 'package:projet7/pages/detail/components/edit_box.dart';
@@ -40,7 +40,7 @@ class _BoissonCongeleePageState extends State<BoissonCongeleePage> {
     final bar = context.watch<Bar>();
 
     // Rechercher le vêtement mis à jour
-    final boissonMisAJour = bar.boissons.firstWhere(
+    final boissonMisAJour = bar.boissonsCongelees.firstWhere(
       (v) => v.id == widget.boisson.id,
       orElse: () => widget.boisson, // Garder l'ancien si non trouvé
     );
@@ -69,7 +69,7 @@ class _BoissonCongeleePageState extends State<BoissonCongeleePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AjouterBoissonPage(
+                          builder: (context) => ModifierBoissonCongeleePage(
                             boisson: widget.boisson,
                           ),
                         ),
@@ -90,7 +90,9 @@ class _BoissonCongeleePageState extends State<BoissonCongeleePage> {
                     cancelAction: () => Navigator.pop(context),
                     yesAction: () {
                       Navigator.pop(context);
-                      context.read<Bar>().supprimerBoisson(widget.boisson);
+                      context
+                          .read<Bar>()
+                          .supprimerBoissonCongelee(widget.boisson);
                       Navigator.pop(context);
                     },
                   ),
@@ -331,66 +333,6 @@ class _BoissonCongeleePageState extends State<BoissonCongeleePage> {
                   ],
                 ),
               ),
-              bar.casiers
-                      .where(
-                        (c) => c.boisson.id == widget.boisson.id,
-                      )
-                      .toList()
-                      .isEmpty
-                  ? SizedBox(
-                      height: 140.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Icon(
-                              Icons.inbox,
-                              size: 100.0,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          Text(
-                            "Aucun élément",
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                color: Theme.of(context).colorScheme.primary),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: bar.casiers
-                            .where(
-                              (c) => c.boisson.id == widget.boisson.id,
-                            )
-                            .toList()
-                            .length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return CasierBox(
-                            casier: bar.casiers
-                                .where(
-                                  (c) => c.boisson.id == widget.boisson.id,
-                                )
-                                .toList()[index],
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CasierPage(
-                                  casier: bar.casiers
-                                      .where(
-                                        (c) =>
-                                            c.boisson.id == widget.boisson.id,
-                                      )
-                                      .toList()[index],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
               SellCounter(
                 text: quantite.toString(),
                 onDecrement: () {
@@ -417,6 +359,10 @@ class _BoissonCongeleePageState extends State<BoissonCongeleePage> {
                 FreezeButton(
                     text: "Décongeler",
                     onTap: () {
+                      if (widget.boisson.stock - quantite == 0) {
+                        widget.boisson.stock -= quantite;
+                      }
+
                       bar.decongelerBoisson(widget.boisson, quantite);
 
                       setState(
@@ -424,14 +370,22 @@ class _BoissonCongeleePageState extends State<BoissonCongeleePage> {
                           quantite = 0;
                         },
                       );
+                      Fluttertoast.showToast(
+                          msg: "Boisson décongelée avec succès",
+                          backgroundColor: Colors.grey.shade100,
+                          textColor: Colors.grey.shade700);
+
+                      if (widget.boisson.stock == 0) {
+                        Navigator.pop(context);
+                      }
                     }),
               const SizedBox(
                 height: 8.0,
               ),
               SellButton(
                 couleur: quantite > 0
-                    ? Theme.of(context).colorScheme.inversePrimary
-                    : Theme.of(context).colorScheme.primary,
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.tertiary,
                 onTap: quantite > 0
                     ? () {
                         ajouterVente(

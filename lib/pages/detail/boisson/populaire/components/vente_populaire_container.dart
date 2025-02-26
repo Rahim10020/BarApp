@@ -26,50 +26,48 @@ class VentePopulaireContainer extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  vente.boisson.nom != ""
-                      ? SizedBox(
-                          width: 120.0,
-                          child: Text(
+              SizedBox(
+                width: 100,
+                child: Row(
+                  children: [
+                    vente.boisson.nom != ""
+                        ? Text(
                             vente.boisson.nom!,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color:
                                   Theme.of(context).colorScheme.inversePrimary,
                             ),
+                          )
+                        : Text(
+                            "Nom Inconnue",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                            ),
                           ),
-                        )
-                      : Text(
-                          "Nom Inconnue",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                          ),
-                        ),
-                  const Text(
-                    " - ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                    const Text(
+                      " - ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  vente.boisson.modele != null
-                      ? SizedBox(
-                          width: 40.0,
-                          child: Text(
+                    vente.boisson.modele != null
+                        ? Text(
                             vente.boisson.getModele()!,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.yellow.shade900),
+                          )
+                        : Text(
+                            "Modèle inconnue",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.yellow.shade900),
                           ),
-                        )
-                      : Text(
-                          "Modèle inconnue",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.yellow.shade900),
-                        ),
-                ],
+                  ],
+                ),
               ),
               Text(
                 "${vente.quantiteVendu} x ${NumberFormat.currency(locale: "fr_FR", symbol: "FCFA", decimalDigits: 0).format(vente.boisson.prix.last)} = ${NumberFormat.currency(locale: "fr_FR", symbol: "FCFA", decimalDigits: 0).format(vente.prixTotal)}",

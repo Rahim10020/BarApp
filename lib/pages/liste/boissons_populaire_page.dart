@@ -4,6 +4,7 @@ import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:projet7/pages/detail/boisson/boisson_page.dart';
 import 'package:projet7/models/modele.dart';
+import 'package:projet7/pages/detail/boisson/populaire/boisson_populaire_page.dart';
 import 'package:projet7/pages/liste/components/choice_filter_box.dart';
 import 'package:provider/provider.dart';
 
@@ -212,8 +213,8 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => BoissonPage(
-                              boisson: _ventesAffiches[index].last.boisson,
+                            builder: (context) => BoissonPopulairePage(
+                              ventes: _ventesAffiches[index],
                             ),
                           ),
                         ),

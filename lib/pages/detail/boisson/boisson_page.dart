@@ -417,6 +417,9 @@ class _BoissonPageState extends State<BoissonPage> {
                 FreezeButton(
                     text: "Congeler",
                     onTap: () {
+                      if (widget.boisson.stock - quantite == 0) {
+                        widget.boisson.stock -= quantite;
+                      }
                       bar.congelerBoisson(widget.boisson, quantite);
 
                       setState(
@@ -424,14 +427,22 @@ class _BoissonPageState extends State<BoissonPage> {
                           quantite = 0;
                         },
                       );
+                      Fluttertoast.showToast(
+                          msg: "Boisson congelée avec succès",
+                          backgroundColor: Colors.grey.shade100,
+                          textColor: Colors.grey.shade700);
+
+                      if (widget.boisson.stock == 0) {
+                        Navigator.pop(context);
+                      }
                     }),
               const SizedBox(
                 height: 8.0,
               ),
               SellButton(
                 couleur: quantite > 0
-                    ? Theme.of(context).colorScheme.inversePrimary
-                    : Theme.of(context).colorScheme.primary,
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.tertiary,
                 onTap: quantite > 0
                     ? () {
                         ajouterVente(

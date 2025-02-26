@@ -245,8 +245,8 @@ class _CasierPageState extends State<CasierPage> {
               ),
               SellButton(
                 couleur: quantite > 0
-                    ? Theme.of(context).colorScheme.inversePrimary
-                    : Theme.of(context).colorScheme.primary,
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.tertiary,
                 onTap: quantite > 0
                     ? () {
                         ajouterVente(

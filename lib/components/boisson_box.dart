@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:projet7/models/boisson.dart';
 
@@ -19,6 +21,13 @@ class BoissonBox extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(12.0),
+          image: DecorationImage(
+            image: FileImage(
+              File(
+                boisson.imagePath,
+              ),
+            ),
+          ),
         ),
         margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
