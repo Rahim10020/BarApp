@@ -98,20 +98,19 @@ class _VentePageState extends State<VentePage> {
               ),
               bar.ventes.isEmpty
                   ? Padding(
-                      padding: const EdgeInsets.only(top: 150.0, bottom: 8.0),
+                      padding: const EdgeInsets.only(top: 120.0, bottom: 8.0),
                       child: Center(
                         child: Column(
                           children: [
                             Icon(Icons.inbox,
                                 color: Theme.of(context).colorScheme.primary,
-                                size: 150.0),
+                                size: 120.0),
                             Text(
-                              "Aucune vente disponible",
+                              "Aucune vente",
                               style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary),
+                                fontSize: 20.0,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                             ),
                           ],
                         ),
