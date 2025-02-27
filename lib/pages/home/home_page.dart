@@ -41,10 +41,11 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CongelateurPage(),
-                )),
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CongelateurPage(),
+              ),
+            ),
             icon: const Icon(Icons.door_sliding),
           ),
         ],
@@ -53,7 +54,6 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
           color: Theme.of(context).colorScheme.secondary,
         ),
         child: Padding(

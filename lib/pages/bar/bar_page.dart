@@ -216,7 +216,7 @@ class BarPage extends StatelessWidget {
             ),
             bar.getVentesPopulaire().isEmpty
                 ? SizedBox(
-                    height: 140.0,
+                    height: 180.0,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

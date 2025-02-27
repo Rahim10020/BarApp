@@ -10,19 +10,21 @@ class MyTabBar extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: TabBar(
-          dividerColor: Colors.transparent,
-          controller: tabController,
-          tabs: const [
-            Tab(
-              text: "Vente",
-            ),
-            Tab(
-              text: "Casier",
-            ),
-            Tab(
-              text: "Boisson",
-            ),
-          ]),
+        dividerColor: Colors.transparent,
+        labelColor: Colors.blue,
+        controller: tabController,
+        tabs: const [
+          Tab(
+            text: "Vente",
+          ),
+          Tab(
+            text: "Casier",
+          ),
+          Tab(
+            text: "Boisson",
+          ),
+        ],
+      ),
     );
   }
 }
