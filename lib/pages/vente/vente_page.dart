@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/vente/components/build_indicator.dart';
 import 'package:projet7/pages/vente/components/vente_filter_box.dart';
 import 'package:projet7/pages/vente/components/vente_tile.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/vente.dart';
+import 'package:projet7/theme/my_Colors.dart';
 import 'package:provider/provider.dart';
 
 class VentePage extends StatefulWidget {
@@ -40,9 +42,7 @@ class _VentePageState extends State<VentePage> {
                       value: Provider.of<Bar>(context).getPrixTotal(),
                       icon: Icons.add_shopping_cart,
                     ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
+                    const SizedBox(height: 16.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -102,14 +102,17 @@ class _VentePageState extends State<VentePage> {
                       child: Center(
                         child: Column(
                           children: [
-                            Icon(Icons.inbox,
-                                color: Theme.of(context).colorScheme.primary,
-                                size: 120.0),
+                            Icon(
+                              Icons.inbox,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 120.0,
+                            ),
                             Text(
                               "Aucune vente",
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Theme.of(context).colorScheme.primary,
+                              style: GoogleFonts.lato(
+                                fontSize: 14.0,
+                                color: MyColors.vert,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],

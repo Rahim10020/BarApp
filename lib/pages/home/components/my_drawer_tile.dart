@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyDrawerTile extends StatelessWidget {
   final String text;
@@ -19,7 +20,7 @@ class MyDrawerTile extends StatelessWidget {
       child: ListTile(
         title: Text(
           text,
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 18,
             color: Theme.of(context).colorScheme.inversePrimary,
           ),

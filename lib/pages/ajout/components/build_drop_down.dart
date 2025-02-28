@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BuildDropDown extends StatelessWidget {
   final String label;
@@ -8,14 +9,15 @@ class BuildDropDown extends StatelessWidget {
   final Function(String?) onChanged;
   final String? Function(String?)? validator;
 
-  const BuildDropDown(
-      {super.key,
-      required this.label,
-      required this.value,
-      required this.items,
-      required this.icon,
-      required this.onChanged,
-      this.validator});
+  const BuildDropDown({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.items,
+    required this.icon,
+    required this.onChanged,
+    this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +26,11 @@ class BuildDropDown extends StatelessWidget {
       value: value,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon:
-            Icon(icon, color: Theme.of(context).colorScheme.inversePrimary),
+        labelStyle: GoogleFonts.poppins(),
+        prefixIcon: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -35,7 +40,10 @@ class BuildDropDown extends StatelessWidget {
       items: items.map((String item) {
         return DropdownMenuItem<String>(
           value: item,
-          child: Text(item),
+          child: Text(
+            item,
+            style: GoogleFonts.poppins(),
+          ),
         );
       }).toList(),
       onChanged: onChanged,

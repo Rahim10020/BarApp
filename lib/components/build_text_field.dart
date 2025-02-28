@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BuildTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -9,15 +10,16 @@ class BuildTextField extends StatelessWidget {
   final int? maxLines;
   final String? Function(String?)? validator;
 
-  const BuildTextField(
-      {super.key,
-      required this.controller,
-      required this.label,
-      required this.hint,
-      required this.icon,
-      this.keyboardType,
-      this.maxLines,
-      this.validator});
+  const BuildTextField({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.hint,
+    required this.icon,
+    this.keyboardType,
+    this.maxLines,
+    this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +30,12 @@ class BuildTextField extends StatelessWidget {
         fillColor: Theme.of(context).colorScheme.secondary,
         labelText: label,
         hintText: hint,
-        prefixIcon:
-            Icon(icon, color: Theme.of(context).colorScheme.inversePrimary),
+        labelStyle: GoogleFonts.poppins(),
+        hintStyle: GoogleFonts.poppins(),
+        prefixIcon: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),

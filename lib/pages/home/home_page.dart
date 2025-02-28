@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:projet7/pages/congelateur/congelateur_page.dart';
 import 'package:projet7/pages/home/components/my_drawer.dart';
@@ -6,6 +7,7 @@ import 'package:projet7/pages/archive/archive_page.dart';
 import 'package:projet7/pages/bar/bar_page.dart';
 import 'package:projet7/pages/commande/commande_page.dart';
 import 'package:projet7/pages/vente/vente_page.dart';
+import 'package:projet7/theme/my_colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,7 +39,14 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
-        title: const Text("Mon Bar"),
+        title: Text(
+          "-- Bar --",
+          style: GoogleFonts.jetBrainsMono(
+            fontSize: 18,
+            color: MyColors.vert,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () => Navigator.push(
@@ -46,7 +55,10 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => const CongelateurPage(),
               ),
             ),
-            icon: const Icon(Icons.door_sliding),
+            icon: Icon(
+              Icons.door_sliding,
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
           ),
         ],
       ),

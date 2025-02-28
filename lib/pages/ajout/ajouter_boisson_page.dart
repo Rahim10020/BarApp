@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/ajout/components/build_drop_down.dart';
 import 'package:projet7/components/build_text_field.dart';
 import 'package:projet7/pages/ajout/components/image_picker_widget.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/boisson.dart';
+import 'package:projet7/theme/my_Colors.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 
@@ -106,7 +108,12 @@ class _AjouterBoissonPageState extends State<AjouterBoissonPage> {
         elevation: 0.0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         centerTitle: true,
-        title: const Text("Ajouter une boisson"),
+        title: Text(
+          "Ajouter une boisson",
+          style: GoogleFonts.poppins(
+            fontSize: 17,
+          ),
+        ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(
@@ -216,24 +223,31 @@ class _AjouterBoissonPageState extends State<AjouterBoissonPage> {
                 child: ElevatedButton(
                   onPressed: _ajouterBoisson,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.inversePrimary,
+                    backgroundColor: MyColors.vert,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 40.0,
-                      vertical: 16.0,
+                      horizontal: 146.0,
+                      vertical: 14.0,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                   child: widget.boisson == null
-                      ? const Text(
+                      ? Text(
                           "Ajouter",
-                          style: TextStyle(fontSize: 18.0, color: Colors.white),
+                          style: GoogleFonts.poppins(
+                            fontSize: 16.0,
+                            color: MyColors.blanc,
+                            fontWeight: FontWeight.bold,
+                          ),
                         )
-                      : const Text(
+                      : Text(
                           "Modifier",
-                          style: TextStyle(fontSize: 18.0, color: Colors.white),
+                          style: GoogleFonts.poppins(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: MyColors.blanc,
+                          ),
                         ),
                 ),
               ),

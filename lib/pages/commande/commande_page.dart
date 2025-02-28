@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/commande/components/boisson_picker.dart';
 import 'package:projet7/components/build_text_field.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/pages/ajout/ajouter_boisson_page.dart';
+import 'package:projet7/theme/my_colors.dart';
 import 'package:provider/provider.dart';
 
 class CommandePage extends StatefulWidget {
@@ -124,12 +126,14 @@ class _CommandePageState extends State<CommandePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 16.0, bottom: 16.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
                 child: Text(
                   "Passer une commande",
-                  style: TextStyle(
-                    fontSize: 18.0,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16.0,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -159,9 +163,11 @@ class _CommandePageState extends State<CommandePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Choisir boisson",
-                      style: TextStyle(fontSize: 18.0),
+                    Text(
+                      "Choisir une boisson",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                      ),
                     ),
                     IconButton(
                       onPressed: () => Navigator.push(
@@ -171,11 +177,12 @@ class _CommandePageState extends State<CommandePage> {
                         ),
                       ),
                       icon: const Icon(Icons.add_box_outlined),
-                      color: Colors.red,
+                      color: MyColors.bleu,
                     )
                   ],
                 ),
               ),
+              const SizedBox(height: 80),
               Provider.of<Bar>(context).boissons.isEmpty
                   ? Center(
                       child: Column(
@@ -188,9 +195,11 @@ class _CommandePageState extends State<CommandePage> {
                           ),
                           Text(
                             "Aucune boisson disponible",
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                color: Theme.of(context).colorScheme.primary),
+                            style: GoogleFonts.lato(
+                              fontSize: 13.0,
+                              color: MyColors.vert,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
@@ -219,26 +228,29 @@ class _CommandePageState extends State<CommandePage> {
                       ),
                     ),
 
-              const SizedBox(
-                height: 18.0,
-              ),
+              const SizedBox(height: 100.0),
 
               // Bouton Ajouter
               Center(
                 child: ElevatedButton(
                   onPressed: _ajouterCasier,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.inversePrimary,
+                    backgroundColor: MyColors.vert,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 40.0, vertical: 16.0),
+                      horizontal: 40.0,
+                      vertical: 9.0,
+                    ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(6.0),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Ajouter",
-                    style: TextStyle(fontSize: 20.0, color: Colors.white),
+                    style: GoogleFonts.poppins(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/casier_box.dart';
 import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/pages/detail/casier/casier_page.dart';
 import 'package:projet7/pages/liste/components/choice_filter_box.dart';
+import 'package:projet7/theme/my_colors.dart';
 import 'package:provider/provider.dart';
 
 class CasiersPage extends StatefulWidget {
@@ -96,25 +98,25 @@ class _CasiersPageState extends State<CasiersPage> {
                       contentPadding: const EdgeInsets.symmetric(vertical: 2.0),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                            color:
-                                Theme.of(context).colorScheme.tertiaryContainer,
-                            width: 2.0),
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2.0,
+                        ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                            color:
-                                Theme.of(context).colorScheme.tertiaryContainer,
-                            width: 2.0),
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          width: 2.0,
+                        ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      hintText: "Rechercher par boisson...",
-                      hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiaryContainer,
+                      hintText: "Rechercher par casiers...",
+                      hintStyle: GoogleFonts.poppins(
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       prefixIcon: Icon(
                         Icons.search,
-                        color: Theme.of(context).colorScheme.tertiaryContainer,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       fillColor: Theme.of(context).colorScheme.primary,
                       focusColor: Theme.of(context).colorScheme.primary,
@@ -124,9 +126,7 @@ class _CasiersPageState extends State<CasiersPage> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 16.0,
-          ),
+          const SizedBox(height: 16.0),
           Padding(
             padding: const EdgeInsets.symmetric(
               vertical: 16.0,
@@ -142,8 +142,8 @@ class _CasiersPageState extends State<CasiersPage> {
                     _appliquerFiltres();
                   },
                   couleur: attributIndex == 0
-                      ? Theme.of(context).colorScheme.tertiary
-                      : Theme.of(context).colorScheme.secondary,
+                      ? MyColors.bleu
+                      : Theme.of(context).colorScheme.tertiary,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -154,8 +154,8 @@ class _CasiersPageState extends State<CasiersPage> {
                       _appliquerFiltres();
                     },
                     couleur: attributIndex == 1
-                        ? Theme.of(context).colorScheme.tertiary
-                        : Theme.of(context).colorScheme.secondary,
+                        ? MyColors.bleu
+                        : Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
                 ChoiceFilterBox(
@@ -165,15 +165,13 @@ class _CasiersPageState extends State<CasiersPage> {
                     _appliquerFiltres();
                   },
                   couleur: attributIndex == 2
-                      ? Theme.of(context).colorScheme.tertiary
-                      : Theme.of(context).colorScheme.secondary,
+                      ? MyColors.bleu
+                      : Theme.of(context).colorScheme.tertiary,
                 ),
               ],
             ),
           ),
-          const SizedBox(
-            height: 8.0,
-          ),
+          const SizedBox(height: 8.0),
           _casiersAffiches.isEmpty
               ? Expanded(
                   child: Center(
@@ -187,9 +185,11 @@ class _CasiersPageState extends State<CasiersPage> {
                         ),
                         Text(
                           "Aucun résultat",
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Theme.of(context).colorScheme.primary),
+                          style: GoogleFonts.lato(
+                            fontSize: 15.0,
+                            color: MyColors.vert,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),

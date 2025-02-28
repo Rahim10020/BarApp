@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import "package:path/path.dart" as path;
 import 'package:path_provider/path_provider.dart';
@@ -71,7 +72,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
           children: [
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text("Choisir depuis la galerie"),
+              title: Text(
+                "Choisir depuis la galerie",
+                style: GoogleFonts.poppins(),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(ImageSource.gallery);
@@ -79,7 +83,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             ),
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: const Text("Prendre une photo"),
+              title: Text(
+                "Prendre une photo",
+                style: GoogleFonts.poppins(),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(ImageSource.camera);
@@ -87,7 +94,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             ),
             ListTile(
               leading: const Icon(Icons.image_sharp),
-              title: const Text("Image par défaut"),
+              title: Text(
+                "Image par défaut",
+                style: GoogleFonts.poppins(),
+              ),
               onTap: () async {
                 Navigator.pop(context);
                 // final path = await getDefaultImagePath();
@@ -121,12 +131,14 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                width: 120.0,
-                height: 120.0,
+                width: 353.0,
+                height: 150.0,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.black),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
                   image: widget.imageFile != null
                       ? DecorationImage(
                           image: FileImage(widget.imageFile!),
