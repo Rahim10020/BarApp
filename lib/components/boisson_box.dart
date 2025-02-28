@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/boisson.dart';
 
 class BoissonBox extends StatelessWidget {
@@ -18,9 +19,9 @@ class BoissonBox extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 60.0,
+        width: 80.0,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
+          color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(12.0),
           image: DecorationImage(
             image: FileImage(
@@ -44,17 +45,19 @@ class BoissonBox extends StatelessWidget {
             child: Column(children: [
               Text(
                 boisson.nom!.toUpperCase(),
-                style: TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.inversePrimary),
+                style: GoogleFonts.poppins(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ),
               Text(
                 boisson.getModele()!,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12.0,
-                    color: Colors.yellow.shade900),
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.0,
+                  color: Colors.yellow.shade900,
+                ),
               ),
               Text(
                 boisson.stock.toString(),

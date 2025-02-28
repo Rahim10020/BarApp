@@ -131,7 +131,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                width: 353.0,
+                width: 345.0,
                 height: 150.0,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,

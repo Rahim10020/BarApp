@@ -55,12 +55,14 @@ class _CommandePageState extends State<CommandePage> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text(
-                  "Le nombre total de boisson dépasse le stock de boisson"),
+              title: Text(
+                "Le nombre total de boisson dépasse le stock de boisson",
+                style: GoogleFonts.poppins(),
+              ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text("Ok"),
+                  child: Text("Ok", style: GoogleFonts.poppins()),
                 ),
               ],
             ),
@@ -69,13 +71,17 @@ class _CommandePageState extends State<CommandePage> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text(
+              title: Text(
                 "Veuillez spécifier un nombre de boisson supérieur à 0",
+                style: GoogleFonts.poppins(),
               ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text("Ok"),
+                  child: Text(
+                    "Ok",
+                    style: GoogleFonts.poppins(),
+                  ),
                 ),
               ],
             ),
@@ -92,8 +98,11 @@ class _CommandePageState extends State<CommandePage> {
           context.read<Bar>().ajouterCasier(monCasier);
 
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Casier crée avec succès"),
+            SnackBar(
+              content: Text(
+                "Casier crée avec succès",
+                style: GoogleFonts.poppins(),
+              ),
             ),
           );
 
@@ -103,11 +112,17 @@ class _CommandePageState extends State<CommandePage> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text("Veuillez choisir une boisson"),
+            title: Text(
+              "Veuillez choisir une boisson",
+              style: GoogleFonts.poppins(),
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("Ok"),
+                child: Text(
+                  "Ok",
+                  style: GoogleFonts.poppins(),
+                ),
               ),
             ],
           ),
@@ -129,7 +144,7 @@ class _CommandePageState extends State<CommandePage> {
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
                 child: Text(
-                  "Passer une commande",
+                  "Enregistrer une commande",
                   style: GoogleFonts.poppins(
                     fontSize: 16.0,
                     color: Theme.of(context).colorScheme.inversePrimary,
@@ -144,7 +159,7 @@ class _CommandePageState extends State<CommandePage> {
                 child: BuildTextField(
                   controller: _quantiteController,
                   label: "Total boisson",
-                  hint: "Entrez le nombre de boisson",
+                  hint: "Nombre de boisson dans le casier",
                   icon: Icons.inventory,
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -228,7 +243,7 @@ class _CommandePageState extends State<CommandePage> {
                       ),
                     ),
 
-              const SizedBox(height: 100.0),
+              const SizedBox(height: 58.0),
 
               // Bouton Ajouter
               Center(
@@ -247,7 +262,7 @@ class _CommandePageState extends State<CommandePage> {
                   child: Text(
                     "Ajouter",
                     style: GoogleFonts.poppins(
-                      fontSize: 16.0,
+                      fontSize: 14.0,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),

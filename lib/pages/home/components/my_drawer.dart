@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/pages/a-propos/a_propos_page.dart';
-import 'package:projet7/pages/bar/bar_page.dart';
 import 'package:projet7/pages/home/components/my_drawer_tile.dart';
 import 'package:projet7/pages/home/home_page.dart';
 import 'package:projet7/pages/settings/settings_page.dart';
@@ -29,20 +28,6 @@ class MyDrawer extends StatelessWidget {
             child: Divider(
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
-          ),
-          // ensuite home
-          MyDrawerTile(
-            text: "Accueil",
-            icon: Icons.home,
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-              );
-            },
           ),
           // ensuite les parametres
           MyDrawerTile(

@@ -225,7 +225,7 @@ class _AjouterBoissonPageState extends State<AjouterBoissonPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: MyColors.vert,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 146.0,
+                      horizontal: 100.0,
                       vertical: 14.0,
                     ),
                     shape: RoundedRectangleBorder(
