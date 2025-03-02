@@ -61,18 +61,6 @@ class BoissonCongeleeTile extends StatelessWidget {
                         Helpers.getModeleToString(boisson.modele)!,
                         style: TextStyle(color: Colors.yellow.shade900),
                       ),
-                    Text(
-                      "Stock: ${boisson.stock.toString()}",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary),
-                    ),
-                    Text(
-                      "Ajouté le: ${Helpers.formatterDate(boisson.dateAjout)}",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 13.0,
-                      ),
-                    ),
                   ],
                 ),
               ],

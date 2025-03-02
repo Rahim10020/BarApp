@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part "modele.g.dart";
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 9)
 enum Modele {
   @HiveField(0)
   petit,

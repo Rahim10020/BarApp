@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/casier_box.dart';
-import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/pages/detail/casier/casier_page.dart';
 import 'package:projet7/pages/liste/components/choice_filter_box.dart';
+import 'package:projet7/provider/casier_provider.dart';
 import 'package:projet7/theme/my_colors.dart';
+import 'package:projet7/utils/casier_util.dart';
 import 'package:provider/provider.dart';
 
 class CasiersPage extends StatefulWidget {
@@ -22,31 +23,31 @@ class _CasiersPageState extends State<CasiersPage> {
   String _searchText = "";
 
   void _appliquerFiltres() {
-    final bar = Provider.of<Bar>(context, listen: false);
+    final casierProvider = Provider.of<CasierProvider>(context, listen: false);
     List<Casier> resultats = List.from(_casiersFiltres);
 
     switch (attributIndex) {
       case 0:
-        _casiersFiltres = bar.getRecentCasiers();
+        // _casiersFiltres = CasierUtil.getRecentCasiers(casierProvider.casiers);
         break;
       case 1:
-        resultats = bar.trierCasierParBoisson(resultats);
+        resultats = CasierUtil.trierCasierParBoisson(resultats);
         break;
       case 2:
-        resultats = bar.trierCasierParPrix(resultats);
+        resultats = CasierUtil.trierCasierParPrix(resultats);
         break;
       default:
         break;
     }
 
     if (_searchText.isNotEmpty) {
-      resultats = resultats
-          .where(
-            (c) => c.boisson.nom!
-                .toLowerCase()
-                .contains(_searchText.toLowerCase()),
-          )
-          .toList();
+      // resultats = resultats
+      //     .where(
+      //       (c) => c.boisson.nom!
+      //           .toLowerCase()
+      //           .contains(_searchText.toLowerCase()),
+      //     )
+      //     .toList();
     }
 
     setState(() {
@@ -56,9 +57,9 @@ class _CasiersPageState extends State<CasiersPage> {
 
   @override
   Widget build(BuildContext context) {
-    final bar = context.watch<Bar>();
+    // final casierProvider = context.watch<CasierProvider>();
 
-    _casiersFiltres = bar.getRecentCasiers();
+    // _casiersFiltres = CasierUtil.getRecentCasiers(casierProvider.casiers);
 
     _appliquerFiltres();
 

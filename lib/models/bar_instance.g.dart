@@ -1,41 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'vente.dart';
+part of 'bar_instance.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class VenteAdapter extends TypeAdapter<Vente> {
+class BarInstanceAdapter extends TypeAdapter<BarInstance> {
   @override
-  final int typeId = 4;
+  final int typeId = 6;
 
   @override
-  Vente read(BinaryReader reader) {
+  BarInstance read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Vente(
+    return BarInstance(
       id: fields[0] as int,
-      montantTotal: fields[1] as double,
-      dateVente: fields[2] as DateTime,
-      lignesVente: (fields[3] as List).cast<LigneVente>(),
+      nom: fields[1] as String,
+      adresse: fields[2] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Vente obj) {
+  void write(BinaryWriter writer, BarInstance obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.montantTotal)
+      ..write(obj.nom)
       ..writeByte(2)
-      ..write(obj.dateVente)
-      ..writeByte(3)
-      ..write(obj.lignesVente);
+      ..write(obj.adresse);
   }
 
   @override
@@ -44,7 +41,7 @@ class VenteAdapter extends TypeAdapter<Vente> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is VenteAdapter &&
+      other is BarInstanceAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

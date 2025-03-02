@@ -1,32 +1,42 @@
 import 'package:hive/hive.dart';
-
-import 'boisson.dart';
+import 'package:projet7/models/ligne_vente.dart';
 
 part 'vente.g.dart';
 
-@HiveType(typeId: 2)
+/// Modèle représentant un carnet de vente
+
+@HiveType(typeId: 4)
 class Vente {
   @HiveField(0)
   final int id;
 
   @HiveField(1)
-  final Boisson boisson;
+  final double montantTotal;
 
   @HiveField(2)
-  final int quantiteVendu;
-
-  @HiveField(3)
   final DateTime dateVente;
 
-  // Constructeur par défaut requis par Isar
+  @HiveField(3)
+  final List<LigneVente> lignesVente;
+
+  /// [id] : repésente l'identifiant de la ligne de vente
+  /// [montantTotal] : représente le montant total de la vente
+  /// [dateVente] : représente la date où l'opération de vente a été réalisée
+  /// [lignesVente] : représente les différentes lignes dans le carnet de vente
   Vente({
     required this.id,
-    required this.boisson,
-    required this.quantiteVendu,
+    required this.montantTotal,
     required this.dateVente,
+    required this.lignesVente,
   });
 
-  double get prixTotal {
-    return boisson.prix.last * quantiteVendu;
+  double getPrixTotal() {
+    double prixTotal = 0.0;
+
+    for (LigneVente ligneVente in lignesVente) {
+      prixTotal += ligneVente.montant;
+    }
+
+    return prixTotal;
   }
 }

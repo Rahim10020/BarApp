@@ -54,18 +54,6 @@ class BoissonArchive extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    "Stock: ${boisson.stock}",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary),
-                  ),
-                  Text(
-                    "Ajouté le: ${boisson.dateAjout.day.toString().padLeft(2, '0')}/${boisson.dateAjout.month.toString().padLeft(2, '0')}/${boisson.dateAjout.year.toString()} ${boisson.dateAjout.hour.toString().padLeft(2, '0')}:${boisson.dateAjout.minute.toString().padLeft(2, '0')}",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 13.0,
-                    ),
-                  ),
                 ],
               ),
             ],

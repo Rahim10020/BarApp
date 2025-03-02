@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/boisson_box.dart';
-import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/pages/detail/boisson/boisson_page.dart';
 import 'package:projet7/pages/liste/components/choice_filter_box.dart';
+import 'package:projet7/provider/boisson_provider.dart';
 import 'package:projet7/theme/my_colors.dart';
+import 'package:projet7/utils/boisson_util.dart';
 import 'package:provider/provider.dart';
 
 class BoissonsPage extends StatefulWidget {
@@ -22,18 +23,19 @@ class _BoissonsPageState extends State<BoissonsPage> {
   String _searchText = "";
 
   void _appliquerFiltres() {
-    final bar = Provider.of<Bar>(context, listen: false);
+    final boissonProvider =
+        Provider.of<BoissonProvider>(context, listen: false);
     List<Boisson> resultats = List.from(_boissonsFiltres);
 
     switch (attributIndex) {
       case 0:
-        _boissonsFiltres = bar.boissons;
+        _boissonsFiltres = boissonProvider.boissons;
         break;
       case 1:
-        resultats = bar.getPetitModele();
+        resultats = BoissonUtil.getPetitModele(boissonProvider.boissons);
         break;
       case 2:
-        resultats = bar.getGrandModele();
+        resultats = BoissonUtil.getGrandModele(boissonProvider.boissons);
         break;
       default:
         break;
@@ -54,9 +56,9 @@ class _BoissonsPageState extends State<BoissonsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final bar = context.watch<Bar>();
+    final boissonProvider = context.watch<BoissonProvider>();
 
-    _boissonsFiltres = bar.boissons;
+    _boissonsFiltres = boissonProvider.boissons;
 
     _appliquerFiltres();
 

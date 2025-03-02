@@ -22,18 +22,15 @@ class BoissonAdapter extends TypeAdapter<Boisson> {
       modele: fields[2] as Modele?,
       estFroid: fields[3] as bool,
       prix: (fields[4] as List).cast<double>(),
-      stock: fields[6] as int,
       description: fields[5] as String?,
-      imagePath: fields[7] as String,
-      dateAjout: fields[8] as DateTime,
-      dateModification: fields[9] as DateTime?,
+      imagePath: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Boisson obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,13 +44,7 @@ class BoissonAdapter extends TypeAdapter<Boisson> {
       ..writeByte(5)
       ..write(obj.description)
       ..writeByte(6)
-      ..write(obj.stock)
-      ..writeByte(7)
-      ..write(obj.imagePath)
-      ..writeByte(8)
-      ..write(obj.dateAjout)
-      ..writeByte(9)
-      ..write(obj.dateModification);
+      ..write(obj.imagePath);
   }
 
   @override

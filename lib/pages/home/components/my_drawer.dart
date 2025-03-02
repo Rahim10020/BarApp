@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/pages/a-propos/a_propos_page.dart';
 import 'package:projet7/pages/home/components/my_drawer_tile.dart';
-import 'package:projet7/pages/home/home_page.dart';
 import 'package:projet7/pages/settings/settings_page.dart';
 
 class MyDrawer extends StatelessWidget {

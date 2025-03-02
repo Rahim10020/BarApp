@@ -18,27 +18,24 @@ class CasierAdapter extends TypeAdapter<Casier> {
     };
     return Casier(
       id: fields[0] as int,
-      boisson: fields[1] as Boisson,
-      quantiteBoisson: fields[2] as int,
-      dateCreation: fields[3] as DateTime,
-      dateModification: fields[4] as DateTime?,
+      boissonTotal: fields[2] as int,
+      boissons: (fields[3] as List).cast<Boisson>(),
+      fournisseur: fields[4] as Fournisseur,
     );
   }
 
   @override
   void write(BinaryWriter writer, Casier obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.boisson)
       ..writeByte(2)
-      ..write(obj.quantiteBoisson)
+      ..write(obj.boissonTotal)
       ..writeByte(3)
-      ..write(obj.dateCreation)
+      ..write(obj.boissons)
       ..writeByte(4)
-      ..write(obj.dateModification);
+      ..write(obj.fournisseur);
   }
 
   @override

@@ -24,16 +24,7 @@ class Boisson {
   String? description;
 
   @HiveField(6)
-  int stock;
-
-  @HiveField(7)
   final String imagePath;
-
-  @HiveField(8)
-  final DateTime dateAjout;
-
-  @HiveField(9)
-  DateTime? dateModification;
 
   Boisson({
     required this.id,
@@ -41,11 +32,8 @@ class Boisson {
     this.modele,
     this.estFroid = false,
     required this.prix,
-    required this.stock,
     this.description,
     required this.imagePath,
-    required this.dateAjout,
-    this.dateModification,
   });
 
   String? getModele() {

@@ -42,36 +42,36 @@ class VenteTile extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (vente.boisson.nom != "")
-                      Text(
-                        vente.boisson.nom!,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
-                        ),
-                      ),
+                    // if (vente.boisson.nom != "")
+                    //   Text(
+                    //     vente.boisson.nom!,
+                    //     style: const TextStyle(
+                    //       fontWeight: FontWeight.bold,
+                    //       fontSize: 16.0,
+                    //     ),
+                    //   ),
+                    // Text(
+                    //   Helpers.formatterEnCFA(vente.boisson.prix.last),
+                    //   style: const TextStyle(
+                    //     color: Colors.redAccent,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
+                    // if (vente.boisson.modele != null)
+                    //   Text(
+                    //     Helpers.getModeleToString(vente.boisson.modele)!,
+                    //     style: TextStyle(color: Colors.yellow.shade900),
+                    //   ),
                     Text(
-                      Helpers.formatterEnCFA(vente.boisson.prix.last),
-                      style: const TextStyle(
-                        color: Colors.redAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (vente.boisson.modele != null)
-                      Text(
-                        Helpers.getModeleToString(vente.boisson.modele)!,
-                        style: TextStyle(color: Colors.yellow.shade900),
-                      ),
-                    Text(
-                      "Quantité: ${vente.quantiteVendu.toString()}",
+                      "Quantité: ${vente.lignesVente.length.toString()}",
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.inversePrimary),
                     ),
-                    Text(
-                      "Total: ${Helpers.formatterEnCFA(vente.quantiteVendu * vente.boisson.prix.last)}",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary),
-                    ),
+                    // Text(
+                    //   "Total: ${Helpers.formatterEnCFA(vente.quantiteVendu * vente.boisson.prix.last)}",
+                    //   style: TextStyle(
+                    //       color: Theme.of(context).colorScheme.inversePrimary),
+                    // ),
                     Text(
                       "Vendu le: ${Helpers.formatterDate(vente.dateVente)}",
                       style: TextStyle(

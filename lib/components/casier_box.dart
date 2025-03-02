@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:projet7/models/casier.dart';
+import 'package:projet7/utils/helpers.dart';
 
 class CasierBox extends StatelessWidget {
   final Casier casier;
@@ -49,17 +49,13 @@ class CasierBox extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        NumberFormat.currency(
-                                locale: "fr_FR",
-                                symbol: "FCFA",
-                                decimalDigits: 0)
-                            .format(casier.prixTotal),
+                        Helpers.formatterEnCFA(casier.getPrixTotal()),
                         style: const TextStyle(
                             color: Colors.redAccent,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        casier.quantiteBoisson.toString(),
+                        casier.boissonTotal.toString(),
                         style: TextStyle(
                             color: Colors.red.shade900,
                             fontWeight: FontWeight.bold),
@@ -69,24 +65,24 @@ class CasierBox extends StatelessWidget {
                   const SizedBox(
                     height: 8.0,
                   ),
-                  Row(
-                      mainAxisAlignment: casier.boisson.nom != null
-                          ? MainAxisAlignment.spaceBetween
-                          : MainAxisAlignment.start,
-                      children: [
-                        // Au lieu d'ajouter texte, ajoutez le logo même de la marque
-                        Text(
-                          casier.boisson.nom!,
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          casier.boisson.getModele()!,
-                          style: TextStyle(color: Colors.yellow.shade900),
-                        ),
-                      ]),
+                  // Row(
+                  //     mainAxisAlignment: casier.boisson.nom != null
+                  //         ? MainAxisAlignment.spaceBetween
+                  //         : MainAxisAlignment.start,
+                  //     children: [
+                  //       // Au lieu d'ajouter texte, ajoutez le logo même de la marque
+                  //       Text(
+                  //         casier.boisson.nom!,
+                  //         style: TextStyle(
+                  //             color:
+                  //                 Theme.of(context).colorScheme.inversePrimary,
+                  //             fontWeight: FontWeight.bold),
+                  //       ),
+                  //       Text(
+                  //         casier.boisson.getModele()!,
+                  //         style: TextStyle(color: Colors.yellow.shade900),
+                  //       ),
+                  //     ]),
                 ],
               ),
             ),

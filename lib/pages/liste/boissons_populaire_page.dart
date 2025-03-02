@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:projet7/components/boisson_box.dart';
-import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/vente.dart';
-import 'package:projet7/models/modele.dart';
-import 'package:projet7/pages/detail/boisson/populaire/boisson_populaire_page.dart';
 import 'package:projet7/pages/liste/components/choice_filter_box.dart';
+import 'package:projet7/provider/vente_provider.dart';
 import 'package:projet7/theme/my_colors.dart';
+import 'package:projet7/utils/vente_util.dart';
 import 'package:provider/provider.dart';
 
 class BoissonsPopulairePage extends StatefulWidget {
@@ -23,36 +21,37 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
   String _searchText = "";
 
   void _appliquerFiltres() {
-    final bar = Provider.of<Bar>(context, listen: false);
+    final venteProvider = Provider.of<VenteProvider>(context, listen: false);
     List<List<Vente>> resultats = List.from(_ventesFiltres);
 
     switch (attributIndex) {
       case 0:
-        _ventesFiltres = bar.getVentesLesPlusVendues();
+        _ventesFiltres =
+            VenteUtil.getVentesLesPlusVendues(venteProvider.ventes);
       case 1:
-        resultats = resultats
-            .where((b) => b.last.boisson.modele == Modele.petit)
-            .toList();
+        // resultats = resultats
+        //     .where((b) => b.last.boisson.modele == Modele.petit)
+        //     .toList();
         break;
       case 2:
-        resultats = resultats
-            .where((b) => b.last.boisson.modele == Modele.grand)
-            .toList();
+        // resultats = resultats
+        //     .where((b) => b.last.boisson.modele == Modele.grand)
+        //     .toList();
         break;
       default:
         break;
     }
 
     if (_searchText.isNotEmpty) {
-      resultats = resultats
-          .where(
-            (v) => v[0]
-                .boisson
-                .nom!
-                .toLowerCase()
-                .contains(_searchText.toLowerCase()),
-          )
-          .toList();
+      // resultats = resultats
+      //     .where(
+      //       (v) => v[0]
+      //           .boisson
+      //           .nom!
+      //           .toLowerCase()
+      //           .contains(_searchText.toLowerCase()),
+      //     )
+      //     .toList();
     }
 
     setState(() {
@@ -62,9 +61,9 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
 
   @override
   Widget build(BuildContext context) {
-    final bar = context.watch<Bar>();
+    final venteProvider = context.watch<VenteProvider>();
 
-    _ventesFiltres = bar.getVentesLesPlusVendues();
+    _ventesFiltres = VenteUtil.getVentesLesPlusVendues(venteProvider.ventes);
 
     _appliquerFiltres();
 
@@ -182,52 +181,52 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
               ],
             ),
           ),
-          _ventesAffiches.isEmpty
-              ? Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.inbox,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 120.0,
-                        ),
-                        Text(
-                          "Aucun résultat",
-                          style: GoogleFonts.lato(
-                            fontSize: 15.0,
-                            color: MyColors.vert,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : Expanded(
-                  child: GridView.builder(
-                    itemCount: _ventesAffiches.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      childAspectRatio: 0.6,
-                    ),
-                    itemBuilder: (context, index) {
-                      return BoissonBox(
-                        boisson: _ventesAffiches[index].last.boisson,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BoissonPopulairePage(
-                              ventes: _ventesAffiches[index],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+          // _ventesAffiches.isEmpty
+          //     ? Expanded(
+          //         child: Center(
+          //           child: Column(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             children: [
+          //               Icon(
+          //                 Icons.inbox,
+          //                 color: Theme.of(context).colorScheme.primary,
+          //                 size: 120.0,
+          //               ),
+          //               Text(
+          //                 "Aucun résultat",
+          //                 style: GoogleFonts.lato(
+          //                   fontSize: 15.0,
+          //                   color: MyColors.vert,
+          //                   fontWeight: FontWeight.bold,
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       )
+          //     : Expanded(
+          //         child: GridView.builder(
+          //           itemCount: _ventesAffiches.length,
+          //           gridDelegate:
+          //               const SliverGridDelegateWithFixedCrossAxisCount(
+          //             crossAxisCount: 4,
+          //             childAspectRatio: 0.6,
+          //           ),
+          //           itemBuilder: (context, index) {
+          //             return BoissonBox(
+          //               boisson: _ventesAffiches[index].last.boisson,
+          //               onTap: () => Navigator.push(
+          //                 context,
+          //                 MaterialPageRoute(
+          //                   builder: (context) => BoissonPopulairePage(
+          //                     ventes: _ventesAffiches[index],
+          //                   ),
+          //                 ),
+          //               ),
+          //             );
+          //           },
+          //         ),
+          //       ),
         ],
       ),
     );

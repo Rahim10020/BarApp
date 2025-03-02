@@ -1,41 +1,41 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'vente.dart';
+part of 'refrigerateur.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class VenteAdapter extends TypeAdapter<Vente> {
+class RefrigerateurAdapter extends TypeAdapter<Refrigerateur> {
   @override
-  final int typeId = 4;
+  final int typeId = 8;
 
   @override
-  Vente read(BinaryReader reader) {
+  Refrigerateur read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Vente(
+    return Refrigerateur(
       id: fields[0] as int,
-      montantTotal: fields[1] as double,
-      dateVente: fields[2] as DateTime,
-      lignesVente: (fields[3] as List).cast<LigneVente>(),
+      boissonTotal: fields[1] as double,
+      montantTotal: fields[2] as double,
+      boissons: (fields[3] as List).cast<Boisson>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, Vente obj) {
+  void write(BinaryWriter writer, Refrigerateur obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.montantTotal)
+      ..write(obj.boissonTotal)
       ..writeByte(2)
-      ..write(obj.dateVente)
+      ..write(obj.montantTotal)
       ..writeByte(3)
-      ..write(obj.lignesVente);
+      ..write(obj.boissons);
   }
 
   @override
@@ -44,7 +44,7 @@ class VenteAdapter extends TypeAdapter<Vente> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is VenteAdapter &&
+      other is RefrigerateurAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

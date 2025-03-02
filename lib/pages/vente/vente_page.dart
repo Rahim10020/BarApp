@@ -3,9 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/vente/components/build_indicator.dart';
 import 'package:projet7/pages/vente/components/vente_filter_box.dart';
 import 'package:projet7/pages/vente/components/vente_tile.dart';
-import 'package:projet7/models/bar.dart';
 import 'package:projet7/models/vente.dart';
+import 'package:projet7/provider/vente_provider.dart';
 import 'package:projet7/theme/my_Colors.dart';
+import 'package:projet7/utils/vente_util.dart';
 import 'package:provider/provider.dart';
 
 class VentePage extends StatefulWidget {
@@ -23,10 +24,10 @@ class _VentePageState extends State<VentePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Consumer<Bar>(
-        builder: (context, bar, child) {
+      body: Consumer<VenteProvider>(
+        builder: (context, venteProvider, child) {
           if (triIndex == 0) {
-            ventes = bar.ventes.reversed.toList();
+            ventes = venteProvider.ventes.reversed.toList();
           }
           return Column(
             children: [
@@ -37,9 +38,9 @@ class _VentePageState extends State<VentePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    BuildIndicator(
+                    const BuildIndicator(
                       title: "Total vendu",
-                      value: Provider.of<Bar>(context).getPrixTotal(),
+                      value: "2 000 FCFA",
                       icon: Icons.add_shopping_cart,
                     ),
                     const SizedBox(height: 16.0),
@@ -51,7 +52,7 @@ class _VentePageState extends State<VentePage> {
                           onTap: () {
                             setState(() {
                               triIndex = 0;
-                              ventes = bar.ventes.reversed.toList();
+                              ventes = venteProvider.ventes.reversed.toList();
                             });
                           },
                           fond: triIndex == 0
@@ -66,7 +67,8 @@ class _VentePageState extends State<VentePage> {
                           onTap: () {
                             setState(() {
                               triIndex = 1;
-                              ventes = bar.getGrandesVentes();
+                              ventes = VenteUtil.getGrandesVentes(
+                                  venteProvider.ventes);
                             });
                           },
                           fond: triIndex == 1
@@ -81,7 +83,8 @@ class _VentePageState extends State<VentePage> {
                           onTap: () {
                             setState(() {
                               triIndex = 2;
-                              ventes = bar.getPetitesVentes();
+                              ventes = VenteUtil.getPetitesVentes(
+                                  venteProvider.ventes);
                             });
                           },
                           fond: triIndex == 2
@@ -96,7 +99,7 @@ class _VentePageState extends State<VentePage> {
                   ],
                 ),
               ),
-              bar.ventes.isEmpty
+              venteProvider.ventes.isEmpty
                   ? Padding(
                       padding: const EdgeInsets.only(top: 120.0, bottom: 8.0),
                       child: Center(
@@ -139,15 +142,19 @@ class _VentePageState extends State<VentePage> {
                                   TextButton(
                                     onPressed: () {
                                       setState(() {
-                                        bar.supprimerVente(ventes![index].id);
+                                        venteProvider
+                                            .supprimer(ventes![index].id);
                                         setState(() {
                                           if (triIndex == 0) {
-                                            ventes =
-                                                bar.ventes.reversed.toList();
+                                            ventes = venteProvider
+                                                .ventes.reversed
+                                                .toList();
                                           } else if (triIndex == 1) {
-                                            ventes = bar.getGrandesVentes();
+                                            ventes = VenteUtil.getGrandesVentes(
+                                                venteProvider.ventes);
                                           } else if (triIndex == 2) {
-                                            ventes = bar.getPetitesVentes();
+                                            ventes = VenteUtil.getPetitesVentes(
+                                                venteProvider.ventes);
                                           }
                                         });
                                       });
