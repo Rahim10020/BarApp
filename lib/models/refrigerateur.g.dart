@@ -20,7 +20,7 @@ class RefrigerateurAdapter extends TypeAdapter<Refrigerateur> {
       id: fields[0] as int,
       boissonTotal: fields[1] as double,
       montantTotal: fields[2] as double,
-      boissons: (fields[3] as List).cast<Boisson>(),
+      boissons: (fields[3] as List?)?.cast<Boisson>(),
     );
   }
 

@@ -12,6 +12,7 @@ class RefrigerateurProvider extends ChangeNotifier {
   Future<void> init() async {
     _refrigerateurBox = await Hive.openBox<Refrigerateur>("refrigerateursBox");
     _refrigerateurs = _refrigerateurBox.values.toList();
+
     notifyListeners();
   }
 

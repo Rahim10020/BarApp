@@ -17,7 +17,7 @@ class Refrigerateur {
   final double montantTotal;
 
   @HiveField(3)
-  final List<Boisson> boissons;
+  List<Boisson>? boissons;
 
   /// [id] : repésente l'identifiant du réfrigérateur
   /// [boissonTotal] : représente la quantité total de `Boisson` dans le réfrigérateur
@@ -27,13 +27,13 @@ class Refrigerateur {
     required this.id,
     required this.boissonTotal,
     required this.montantTotal,
-    required this.boissons,
+    this.boissons,
   });
 
   double getPrixTotal() {
     double prixTotal = 0.0;
 
-    for (Boisson boisson in boissons) {
+    for (Boisson boisson in boissons!) {
       prixTotal += boisson.prix.last;
     }
 
