@@ -42,9 +42,9 @@ class RefrigerateurBox extends StatelessWidget {
                       "ID: ${refrigerateur.id}",
                       style: GoogleFonts.poppins(),
                     ),
-                    Text(refrigerateur.boissonTotal.toString()),
+                    Text(refrigerateur.getBoissonTotal().toString()),
                     Text(
-                      Helpers.formatterEnCFA(refrigerateur.montantTotal),
+                      Helpers.formatterEnCFA(refrigerateur.getPrixTotal()),
                       style: GoogleFonts.poppins(
                         color: MyColors.rouge,
                         fontWeight: FontWeight.bold,

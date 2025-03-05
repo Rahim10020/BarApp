@@ -16,7 +16,7 @@ class RefrigerateurBoissonBox extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,
@@ -25,16 +25,16 @@ class RefrigerateurBoissonBox extends StatelessWidget {
         child: Row(
           children: [
             const Icon(
-              Icons.kitchen,
-              size: 72.0,
+              Icons.water_drop_outlined,
+              size: 36.0,
             ),
             Column(
               children: [
-                Text(boisson.nom!),
-                Text(boisson.getModele()!),
+                if (boisson.nom != null) Text(boisson.nom!),
+                if (boisson.getModele() != null) Text(boisson.getModele()!),
                 Text(
                   Helpers.formatterEnCFA(boisson.prix.last),
-                  style: GoogleFonts.poppins(
+                  style: const TextStyle(
                     color: MyColors.rouge,
                     fontWeight: FontWeight.bold,
                   ),

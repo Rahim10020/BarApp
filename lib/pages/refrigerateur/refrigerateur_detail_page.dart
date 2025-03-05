@@ -31,7 +31,7 @@ class RefrigerateurDetailPage extends StatelessWidget {
             ),
             Text(
               refrigerateur.id.toString(),
-              style: GoogleFonts.lato(fontSize: 14.0),
+              style: const TextStyle(fontSize: 14.0),
             ),
           ],
         ),
@@ -69,9 +69,9 @@ class RefrigerateurDetailPage extends StatelessWidget {
                           color: Theme.of(context).colorScheme.primary,
                           size: 120.0,
                         ),
-                        Text(
+                        const Text(
                           "Aucune boisson disponible",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
                             fontSize: 15.0,
                             color: MyColors.vert,
                             fontWeight: FontWeight.bold,

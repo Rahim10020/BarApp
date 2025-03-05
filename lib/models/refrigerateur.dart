@@ -33,10 +33,19 @@ class Refrigerateur {
   double getPrixTotal() {
     double prixTotal = 0.0;
 
-    for (Boisson boisson in boissons!) {
-      prixTotal += boisson.prix.last;
+    if (boissons != null) {
+      for (Boisson boisson in boissons!) {
+        prixTotal += boisson.prix.last;
+      }
     }
 
     return prixTotal;
+  }
+
+  int getBoissonTotal() {
+    if (boissons != null) {
+      return boissons!.length;
+    }
+    return 0;
   }
 }
