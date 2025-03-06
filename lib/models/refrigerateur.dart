@@ -11,22 +11,22 @@ class Refrigerateur {
   final int id;
 
   @HiveField(1)
-  final double boissonTotal;
+  final String nom;
 
   @HiveField(2)
-  final double montantTotal;
+  double? temperature;
 
   @HiveField(3)
   List<Boisson>? boissons;
 
-  /// [id] : repésente l'identifiant du réfrigérateur
-  /// [boissonTotal] : représente la quantité total de `Boisson` dans le réfrigérateur
-  /// [montantTotal] : représente le montant total de `Boisson` dans le réfrigérateur
+  /// [id] : représente l'identifiant du réfrigérateur
+  /// [nom] : représente le nom du réfrigérateur
+  /// [temperature] : représente la température (en dégré Celsuis) du réfrigérateur
   /// [boissons] : représente la liste des `Boisson` dans le réfrigérateur
   Refrigerateur({
     required this.id,
-    required this.boissonTotal,
-    required this.montantTotal,
+    required this.nom,
+    this.temperature,
     this.boissons,
   });
 

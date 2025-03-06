@@ -33,8 +33,8 @@ class _RefrigerateurPageState extends State<RefrigerateurPage> {
               refrigerateurProvider.ajouter(
                 Refrigerateur(
                   id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
-                  boissonTotal: 0.0,
-                  montantTotal: 0.0,
+                  nom: "Réfri",
+                  temperature: 16.0,
                   boissons: [
                     Boisson(
                       id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),

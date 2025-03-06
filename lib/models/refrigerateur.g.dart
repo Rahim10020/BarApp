@@ -18,8 +18,8 @@ class RefrigerateurAdapter extends TypeAdapter<Refrigerateur> {
     };
     return Refrigerateur(
       id: fields[0] as int,
-      boissonTotal: fields[1] as double,
-      montantTotal: fields[2] as double,
+      nom: fields[1] as String,
+      temperature: fields[2] as double?,
       boissons: (fields[3] as List?)?.cast<Boisson>(),
     );
   }
@@ -31,9 +31,9 @@ class RefrigerateurAdapter extends TypeAdapter<Refrigerateur> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.boissonTotal)
+      ..write(obj.nom)
       ..writeByte(2)
-      ..write(obj.montantTotal)
+      ..write(obj.temperature)
       ..writeByte(3)
       ..write(obj.boissons);
   }
