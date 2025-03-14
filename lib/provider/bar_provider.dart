@@ -41,7 +41,7 @@ class BarProvider extends ChangeNotifier {
   List<BarInstance> get barInstances => _barInstances;
 
   /// Permet d'initialiser le provider
-  Future<void> init() async {
+  Future<void> initHive() async {
     _barInstanceBox = await Hive.openBox<BarInstance>("barInstancesBox");
     _barInstances = _barInstanceBox.values.toList();
     _boissonBox = await Hive.openBox<Boisson>("boissonsBox");
