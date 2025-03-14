@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:projet7/pages/liste/components/choice_filter_box.dart';
-import 'package:projet7/provider/vente_provider.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/theme/my_colors.dart';
 import 'package:projet7/utils/vente_util.dart';
 import 'package:provider/provider.dart';
@@ -21,13 +21,12 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
   String _searchText = "";
 
   void _appliquerFiltres() {
-    final venteProvider = Provider.of<VenteProvider>(context, listen: false);
+    final bar = Provider.of<BarProvider>(context, listen: false);
     List<List<Vente>> resultats = List.from(_ventesFiltres);
 
     switch (attributIndex) {
       case 0:
-        _ventesFiltres =
-            VenteUtil.getVentesLesPlusVendues(venteProvider.ventes);
+        _ventesFiltres = VenteUtil.getVentesLesPlusVendues(bar.ventes);
       case 1:
         // resultats = resultats
         //     .where((b) => b.last.boisson.modele == Modele.petit)
@@ -61,9 +60,9 @@ class _BoissonsPopulairePageState extends State<BoissonsPopulairePage> {
 
   @override
   Widget build(BuildContext context) {
-    final venteProvider = context.watch<VenteProvider>();
+    final bar = context.watch<BarProvider>();
 
-    _ventesFiltres = VenteUtil.getVentesLesPlusVendues(venteProvider.ventes);
+    _ventesFiltres = VenteUtil.getVentesLesPlusVendues(bar.ventes);
 
     _appliquerFiltres();
 

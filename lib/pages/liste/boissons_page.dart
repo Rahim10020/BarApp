@@ -4,7 +4,7 @@ import 'package:projet7/components/boisson_box.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/pages/detail/boisson/boisson_page.dart';
 import 'package:projet7/pages/liste/components/choice_filter_box.dart';
-import 'package:projet7/provider/boisson_provider.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/theme/my_colors.dart';
 import 'package:projet7/utils/boisson_util.dart';
 import 'package:provider/provider.dart';
@@ -23,19 +23,18 @@ class _BoissonsPageState extends State<BoissonsPage> {
   String _searchText = "";
 
   void _appliquerFiltres() {
-    final boissonProvider =
-        Provider.of<BoissonProvider>(context, listen: false);
+    final bar = Provider.of<BarProvider>(context, listen: false);
     List<Boisson> resultats = List.from(_boissonsFiltres);
 
     switch (attributIndex) {
       case 0:
-        _boissonsFiltres = boissonProvider.boissons;
+        _boissonsFiltres = bar.boissons;
         break;
       case 1:
-        resultats = BoissonUtil.getPetitModele(boissonProvider.boissons);
+        resultats = BoissonUtil.getPetitModele(bar.boissons);
         break;
       case 2:
-        resultats = BoissonUtil.getGrandModele(boissonProvider.boissons);
+        resultats = BoissonUtil.getGrandModele(bar.boissons);
         break;
       default:
         break;
@@ -56,9 +55,9 @@ class _BoissonsPageState extends State<BoissonsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final boissonProvider = context.watch<BoissonProvider>();
+    final bar = context.watch<BarProvider>();
 
-    _boissonsFiltres = boissonProvider.boissons;
+    _boissonsFiltres = bar.boissons;
 
     _appliquerFiltres();
 

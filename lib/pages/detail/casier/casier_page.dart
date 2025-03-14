@@ -6,8 +6,7 @@ import 'package:projet7/pages/detail/components/freeze_button.dart';
 import 'package:projet7/pages/detail/components/my_back_button.dart';
 import 'package:projet7/pages/detail/components/sell_button.dart';
 import 'package:projet7/pages/detail/components/sell_counter.dart';
-import 'package:projet7/provider/casier_provider.dart';
-import 'package:projet7/provider/vente_provider.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -25,15 +24,15 @@ class _CasierPageState extends State<CasierPage> {
   void ajouterVente(Vente vente) {
     Navigator.pop(context);
 
-    context.read<VenteProvider>().ajouter(vente);
+    context.read<BarProvider>().ajouterVente(vente);
   }
 
   @override
   Widget build(BuildContext context) {
-    final casierProvider = context.watch<CasierProvider>();
+    final bar = context.watch<BarProvider>();
 
     // Rechercher le casier mis à jour
-    final casierMisAJour = casierProvider.casiers.firstWhere(
+    final casierMisAJour = bar.casiers.firstWhere(
       (v) => v.id == widget.casier.id,
       orElse: () => widget.casier, // Garder l'ancien si non trouvé
     );
@@ -61,8 +60,8 @@ class _CasierPageState extends State<CasierPage> {
                       yesAction: () {
                         Navigator.pop(context);
                         context
-                            .read<CasierProvider>()
-                            .supprimer(widget.casier.id);
+                            .read<BarProvider>()
+                            .supprimerCasier(widget.casier.id);
                         Navigator.pop(context);
                       },
                     ),

@@ -4,7 +4,7 @@ import 'package:projet7/components/casier_box.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/pages/detail/casier/casier_page.dart';
 import 'package:projet7/pages/liste/components/choice_filter_box.dart';
-import 'package:projet7/provider/casier_provider.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/theme/my_colors.dart';
 import 'package:projet7/utils/casier_util.dart';
 import 'package:provider/provider.dart';
@@ -23,12 +23,12 @@ class _CasiersPageState extends State<CasiersPage> {
   String _searchText = "";
 
   void _appliquerFiltres() {
-    final casierProvider = Provider.of<CasierProvider>(context, listen: false);
+    final bar = Provider.of<BarProvider>(context, listen: false);
     List<Casier> resultats = List.from(_casiersFiltres);
 
     switch (attributIndex) {
       case 0:
-        // _casiersFiltres = CasierUtil.getRecentCasiers(casierProvider.casiers);
+        // _casiersFiltres = CasierUtil.getRecentCasiers(bar.casiers);
         break;
       case 1:
         resultats = CasierUtil.trierCasierParBoisson(resultats);
@@ -57,9 +57,9 @@ class _CasiersPageState extends State<CasiersPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final casierProvider = context.watch<CasierProvider>();
+    // final bar = context.watch<bar>();
 
-    // _casiersFiltres = CasierUtil.getRecentCasiers(casierProvider.casiers);
+    // _casiersFiltres = CasierUtil.getRecentCasiers(bar.casiers);
 
     _appliquerFiltres();
 

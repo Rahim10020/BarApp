@@ -8,10 +8,9 @@ import 'package:projet7/pages/detail/components/delete_box.dart';
 import 'package:projet7/pages/detail/components/edit_box.dart';
 import 'package:projet7/pages/detail/components/freeze_button.dart';
 import 'package:projet7/pages/detail/components/my_back_button.dart';
-import 'package:projet7/pages/detail/components/my_counter.dart';
 import 'package:projet7/pages/detail/components/sell_button.dart';
 import 'package:projet7/pages/detail/components/sell_counter.dart';
-import 'package:projet7/provider/vente_provider.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -32,7 +31,7 @@ class _BoissonCongeleePageState extends State<BoissonCongeleePage> {
   void ajouterVente(Vente vente) {
     Navigator.pop(context);
 
-    context.read<VenteProvider>().ajouter(vente);
+    context.read<BarProvider>().ajouterVente(vente);
   }
 
   @override

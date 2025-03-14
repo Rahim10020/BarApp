@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/refrigerateur.dart';
-import 'package:projet7/pages/detail/components/my_back_button.dart';
 import 'package:projet7/pages/refrigerateur/components/refrigerateur_boisson_box.dart';
-import 'package:projet7/pages/refrigerateur/components/refrigerateur_box.dart';
-import 'package:projet7/provider/refrigerateur_provider.dart';
 import 'package:projet7/theme/my_colors.dart';
-import 'package:provider/provider.dart';
 
 class RefrigerateurDetailPage extends StatelessWidget {
   final Refrigerateur refrigerateur;

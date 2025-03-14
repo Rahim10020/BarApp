@@ -4,7 +4,7 @@ import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/pages/refrigerateur/components/refrigerateur_box.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_detail_page.dart';
-import 'package:projet7/provider/refrigerateur_provider.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/theme/my_colors.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +17,7 @@ class RefrigerateurPage extends StatefulWidget {
 
 class _RefrigerateurPageState extends State<RefrigerateurPage> {
   void _ajouterRefrigerateur() {
-    final refrigerateurProvider =
-        Provider.of<RefrigerateurProvider>(context, listen: false);
+    final bar = Provider.of<BarProvider>(context, listen: false);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -30,7 +29,7 @@ class _RefrigerateurPageState extends State<RefrigerateurPage> {
           ),
           TextButton(
             onPressed: () {
-              refrigerateurProvider.ajouter(
+              bar.ajouterRefrigerateur(
                 Refrigerateur(
                   id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
                   nom: "Réfri",
@@ -60,7 +59,6 @@ class _RefrigerateurPageState extends State<RefrigerateurPage> {
 
   @override
   Widget build(BuildContext context) {
-    final refrigerateurProvider = context.watch<RefrigerateurProvider>();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -77,107 +75,108 @@ class _RefrigerateurPageState extends State<RefrigerateurPage> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              onChanged: (value) {
-                print(value);
-              },
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(vertical: 2.0),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+      body: Consumer<BarProvider>(
+        builder: (context, bar, child) => Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                onChanged: (value) {
+                  print(value);
+                },
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(vertical: 2.0),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  hintText: "Rechercher...",
+                  hintStyle: GoogleFonts.poppins(
                     color: Theme.of(context).colorScheme.primary,
-                    width: 2.0,
                   ),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    width: 2.0,
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  borderRadius: BorderRadius.circular(12.0),
+                  fillColor: Theme.of(context).colorScheme.primary,
+                  focusColor: Theme.of(context).colorScheme.primary,
                 ),
-                hintText: "Rechercher...",
-                hintStyle: GoogleFonts.poppins(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                fillColor: Theme.of(context).colorScheme.primary,
-                focusColor: Theme.of(context).colorScheme.primary,
               ),
             ),
-          ),
-          refrigerateurProvider.refrigerateurs.isEmpty
-              ? Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.inbox,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 120.0,
-                        ),
-                        Text(
-                          "Aucun réfrigérateur disponible",
-                          style: GoogleFonts.lato(
-                            fontSize: 15.0,
-                            color: MyColors.vert,
-                            fontWeight: FontWeight.bold,
+            bar.refrigerateurs.isEmpty
+                ? Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.inbox,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 120.0,
                           ),
-                        ),
-                      ],
+                          Text(
+                            "Aucun réfrigérateur disponible",
+                            style: GoogleFonts.lato(
+                              fontSize: 15.0,
+                              color: MyColors.vert,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: bar.refrigerateurs.length,
+                      itemBuilder: (context, index) {
+                        final refrigerateur = bar.refrigerateurs[index];
+                        return RefrigerateurBox(
+                          refrigerateur: refrigerateur,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RefrigerateurDetailPage(
+                                  refrigerateur: refrigerateur),
+                            ),
+                          ),
+                          onDelete: () => showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text(
+                                  "Voulez-vous supprimer ce réfrigérateur ?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("Annuler"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    bar.supprimerRefrigerateur(
+                                        refrigerateur.id);
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Oui"),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                )
-              : Expanded(
-                  child: ListView.builder(
-                    itemCount: refrigerateurProvider.refrigerateurs.length,
-                    itemBuilder: (context, index) {
-                      final refrigerateur =
-                          refrigerateurProvider.refrigerateurs[index];
-                      return RefrigerateurBox(
-                        refrigerateur: refrigerateur,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RefrigerateurDetailPage(
-                                refrigerateur: refrigerateur),
-                          ),
-                        ),
-                        onDelete: () => showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text(
-                                "Voulez-vous supprimer ce réfrigérateur ?"),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text("Annuler"),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  refrigerateurProvider
-                                      .supprimer(refrigerateur.id);
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("Oui"),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _ajouterRefrigerateur,

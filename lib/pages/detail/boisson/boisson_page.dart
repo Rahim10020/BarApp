@@ -9,8 +9,7 @@ import 'package:projet7/pages/detail/components/edit_box.dart';
 import 'package:projet7/pages/detail/components/freeze_button.dart';
 import 'package:projet7/pages/detail/components/my_back_button.dart';
 import 'package:projet7/pages/detail/components/sell_button.dart';
-import 'package:projet7/provider/boisson_provider.dart';
-import 'package:projet7/provider/vente_provider.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -31,15 +30,15 @@ class _BoissonPageState extends State<BoissonPage> {
   void ajouterVente(Vente vente) {
     Navigator.pop(context);
 
-    context.read<VenteProvider>().ajouter(vente);
+    context.read<BarProvider>().ajouterVente(vente);
   }
 
   @override
   Widget build(BuildContext context) {
-    final boissonProvider = context.watch<BoissonProvider>();
+    final bar = context.watch<BarProvider>();
 
     // Rechercher la boisson mise à jour
-    final boissonMisAJour = boissonProvider.boissons.firstWhere(
+    final boissonMisAJour = bar.boissons.firstWhere(
       (v) => v.id == widget.boisson.id,
       orElse: () => widget.boisson, // Garder l'ancien si non trouvé
     );
@@ -91,8 +90,8 @@ class _BoissonPageState extends State<BoissonPage> {
                       yesAction: () {
                         Navigator.pop(context);
                         context
-                            .read<BoissonProvider>()
-                            .supprimer(widget.boisson.id);
+                            .read<BarProvider>()
+                            .supprimerBoisson(widget.boisson.id);
                         Navigator.pop(context);
                       },
                     ),

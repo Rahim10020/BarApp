@@ -3,9 +3,7 @@ import 'package:projet7/pages/archive/components/boisson_archive.dart';
 import 'package:projet7/pages/archive/components/casier_archive.dart';
 import 'package:projet7/pages/archive/components/my_tab_bar.dart';
 import 'package:projet7/pages/archive/components/vente_tile_archive.dart';
-import 'package:projet7/provider/boisson_provider.dart';
-import 'package:projet7/provider/casier_provider.dart';
-import 'package:projet7/provider/vente_provider.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:provider/provider.dart';
 
 class ArchivePage extends StatefulWidget {
@@ -33,11 +31,6 @@ class _ArchivePageState extends State<ArchivePage>
 
   @override
   Widget build(BuildContext context) {
-    final venteProvider = context.watch<VenteProvider>();
-    final casierProvider = context.watch<CasierProvider>();
-
-    final boissonProvider = context.watch<BoissonProvider>();
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -49,34 +42,36 @@ class _ArchivePageState extends State<ArchivePage>
           child: MyTabBar(tabController: _tabController),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          ListView.builder(
-            itemCount: venteProvider.ventes.length,
-            itemBuilder: (context, index) {
-              return VenteTileArchive(
-                vente: venteProvider.ventes.reversed.toList()[index],
-              );
-            },
-          ),
-          ListView.builder(
-            itemCount: casierProvider.casiers.length,
-            itemBuilder: (context, index) {
-              return CasierArchive(
-                casier: casierProvider.casiers.reversed.toList()[index],
-              );
-            },
-          ),
-          ListView.builder(
-            itemCount: boissonProvider.boissons.length,
-            itemBuilder: (context, index) {
-              return BoissonArchive(
-                boisson: boissonProvider.boissons.reversed.toList()[index],
-              );
-            },
-          ),
-        ],
+      body: Consumer<BarProvider>(
+        builder: (context, bar, child) => TabBarView(
+          controller: _tabController,
+          children: [
+            ListView.builder(
+              itemCount: bar.ventes.length,
+              itemBuilder: (context, index) {
+                return VenteTileArchive(
+                  vente: bar.ventes.reversed.toList()[index],
+                );
+              },
+            ),
+            ListView.builder(
+              itemCount: bar.casiers.length,
+              itemBuilder: (context, index) {
+                return CasierArchive(
+                  casier: bar.casiers.reversed.toList()[index],
+                );
+              },
+            ),
+            ListView.builder(
+              itemCount: bar.boissons.length,
+              itemBuilder: (context, index) {
+                return BoissonArchive(
+                  boisson: bar.boissons.reversed.toList()[index],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
