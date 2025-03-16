@@ -31,7 +31,7 @@ class _BoissonCongeleePageState extends State<BoissonCongeleePage> {
   void ajouterVente(Vente vente) {
     Navigator.pop(context);
 
-    context.read<BarProvider>().ajouterVente(vente);
+    // context.read<BarProvider>().ajouterVente(vente);
   }
 
   @override

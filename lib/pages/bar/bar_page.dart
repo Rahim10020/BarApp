@@ -34,7 +34,7 @@ class BarPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Boissons",
+                      "Boissons populaires",
                       style: GoogleFonts.poppins(
                         color: Theme.of(context).colorScheme.inversePrimary,
                         fontSize: 15.0,
@@ -197,90 +197,6 @@ class BarPage extends StatelessWidget {
                         ),
                       ),
                     ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      "Boissons populaires",
-                      style: GoogleFonts.poppins(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const BoissonsPopulairePage(),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 12.0),
-                      child: Text(
-                        "Voir tout",
-                        style: GoogleFonts.lato(
-                          color: MyColors.bleu,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              // bar.getVentesPopulaire().isEmpty
-              //     ? SizedBox(
-              //         height: 160.0,
-              //         child: Column(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             Center(
-              //               child: Icon(
-              //                 Icons.inbox,
-              //                 size: 120.0,
-              //                 color: Theme.of(context).colorScheme.primary,
-              //               ),
-              //             ),
-              //             Text(
-              //               "Aucun élément",
-              //               style: GoogleFonts.lato(
-              //                 fontSize: 13,
-              //                 color: MyColors.vert,
-              //                 fontWeight: FontWeight.bold,
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       )
-              //     : SizedBox(
-              //         height: 140.0,
-              //         child: Expanded(
-              //           child: ListView.builder(
-              //             itemCount: bar.getVentesLesPlusVendues().length,
-              //             scrollDirection: Axis.horizontal,
-              //             itemBuilder: (context, index) {
-              //               return BoissonBox(
-              //                 boisson: bar
-              //                     .getVentesLesPlusVendues()[index]
-              //                     .last
-              //                     .boisson,
-              //                 onTap: () => Navigator.push(
-              //                   context,
-              //                   MaterialPageRoute(
-              //                     builder: (context) => BoissonPopulairePage(
-              //                       ventes:
-              //                           bar.getVentesLesPlusVendues()[index],
-              //                     ),
-              //                   ),
-              //                 ),
-              //               );
-              //             },
-              //           ),
-              //         ),
-              //       ),
             ],
           ),
         ),

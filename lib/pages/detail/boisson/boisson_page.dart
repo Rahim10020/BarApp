@@ -30,7 +30,7 @@ class _BoissonPageState extends State<BoissonPage> {
   void ajouterVente(Vente vente) {
     Navigator.pop(context);
 
-    context.read<BarProvider>().ajouterVente(vente);
+    // context.read<BarProvider>().ajouterVente(vente);
   }
 
   @override
@@ -89,9 +89,9 @@ class _BoissonPageState extends State<BoissonPage> {
                       cancelAction: () => Navigator.pop(context),
                       yesAction: () {
                         Navigator.pop(context);
-                        context
-                            .read<BarProvider>()
-                            .supprimerBoisson(widget.boisson.id);
+                        // context
+                        //     .read<BarProvider>()
+                        //     .supprimerBoisson(widget.boisson.id);
                         Navigator.pop(context);
                       },
                     ),

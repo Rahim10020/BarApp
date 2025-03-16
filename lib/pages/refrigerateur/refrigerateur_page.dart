@@ -29,25 +29,25 @@ class _RefrigerateurPageState extends State<RefrigerateurPage> {
           ),
           TextButton(
             onPressed: () {
-              bar.ajouterRefrigerateur(
-                Refrigerateur(
-                  id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
-                  nom: "Réfri",
-                  temperature: 16.0,
-                  boissons: [
-                    Boisson(
-                      id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
-                      prix: [500.0],
-                      imagePath: "",
-                    ),
-                    Boisson(
-                      id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
-                      prix: [550.0],
-                      imagePath: "",
-                    ),
-                  ],
-                ),
-              );
+              // bar.ajouterRefrigerateur(
+              //   Refrigerateur(
+              //     id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
+              //     nom: "Réfri",
+              //     temperature: 16.0,
+              //     boissons: [
+              //       Boisson(
+              //         id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
+              //         prix: [500.0],
+              //         imagePath: "",
+              //       ),
+              //       Boisson(
+              //         id: (DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF),
+              //         prix: [550.0],
+              //         imagePath: "",
+              //       ),
+              //     ],
+              //   ),
+              // );
               Navigator.pop(context);
             },
             child: const Text("Oui"),
@@ -162,8 +162,8 @@ class _RefrigerateurPageState extends State<RefrigerateurPage> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    bar.supprimerRefrigerateur(
-                                        refrigerateur.id);
+                                    // bar.supprimerRefrigerateur(
+                                    //     refrigerateur.id);
                                     Navigator.pop(context);
                                   },
                                   child: const Text("Oui"),

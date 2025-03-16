@@ -24,7 +24,7 @@ class _CasierPageState extends State<CasierPage> {
   void ajouterVente(Vente vente) {
     Navigator.pop(context);
 
-    context.read<BarProvider>().ajouterVente(vente);
+    // context.read<BarProvider>().ajouterVente(vente);
   }
 
   @override
@@ -59,9 +59,9 @@ class _CasierPageState extends State<CasierPage> {
                       cancelAction: () => Navigator.pop(context),
                       yesAction: () {
                         Navigator.pop(context);
-                        context
-                            .read<BarProvider>()
-                            .supprimerCasier(widget.casier.id);
+                        // context
+                        //     .read<BarProvider>()
+                        //     .supprimerCasier(widget.casier.id);
                         Navigator.pop(context);
                       },
                     ),

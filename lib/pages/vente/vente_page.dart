@@ -140,7 +140,7 @@ class _VentePageState extends State<VentePage> {
                                   TextButton(
                                     onPressed: () {
                                       setState(() {
-                                        bar.supprimerVente(ventes![index].id);
+                                        //bar.supprimerVente(ventes![index].id);
                                         setState(() {
                                           if (triIndex == 0) {
                                             ventes =
