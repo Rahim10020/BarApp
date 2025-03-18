@@ -25,9 +25,16 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       boissons: _boissonsSelectionnees,
     );
     provider.addRefrigerateur(refrigerateur);
-    _nomController.clear();
-    _tempController.clear();
-    setState(() => _boissonsSelectionnees.clear());
+    _resetForm();
+  }
+
+  void _modifierRefrigerateur(
+      BarProvider provider, Refrigerateur refrigerateur) {
+    refrigerateur.nom = _nomController.text;
+    refrigerateur.temperature = double.tryParse(_tempController.text);
+    refrigerateur.boissons = _boissonsSelectionnees;
+    provider.updateRefrigerateur(refrigerateur);
+    _resetForm();
   }
 
   void _ajouterBoissonsAuRefrigerateur(
@@ -35,6 +42,11 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
     refrigerateur.boissons ??= [];
     refrigerateur.boissons!.addAll(_boissonsSelectionnees);
     provider.updateRefrigerateur(refrigerateur);
+  }
+
+  void _resetForm() {
+    _nomController.clear();
+    _tempController.clear();
     setState(() => _boissonsSelectionnees.clear());
   }
 
@@ -47,12 +59,12 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
         children: [
           Card(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(12),
               child: Column(
                 children: [
                   Text('Nouveau Réfrigérateur',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   TextField(
                       controller: _nomController,
                       decoration: InputDecoration(labelText: 'Nom')),
@@ -94,29 +106,128 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                     title: Text(refrigerateur.nom),
                     subtitle: Text(
                         'Temp : ${refrigerateur.temperature}°C - ${refrigerateur.getBoissonTotal()} boissons'),
-                    trailing: IconButton(
-                      icon: Icon(Icons.add_circle, color: Colors.green),
-                      onPressed: () => showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: Text(
-                              'Ajouter des boissons à ${refrigerateur.nom}'),
-                          content: _buildBoissonSelector(provider),
-                          actions: [
-                            TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text('Annuler')),
-                            TextButton(
-                              onPressed: () {
-                                _ajouterBoissonsAuRefrigerateur(
-                                    provider, refrigerateur);
-                                Navigator.pop(context);
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.add_circle, color: Colors.green),
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (_) => StatefulBuilder(
+                              builder: (context, setDialogState) {
+                                List<Boisson> tempSelection =
+                                    List.from(_boissonsSelectionnees);
+                                return AlertDialog(
+                                  title: Text(
+                                      'Ajouter des boissons à ${refrigerateur.nom}'),
+                                  content: Container(
+                                    height: 50,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: provider.boissons.length,
+                                      itemBuilder: (context, index) {
+                                        var boisson = provider.boissons[index];
+                                        bool isSelected =
+                                            tempSelection.contains(boisson);
+                                        return GestureDetector(
+                                          onTap: () => setDialogState(() {
+                                            if (isSelected)
+                                              tempSelection.remove(boisson);
+                                            else
+                                              tempSelection.add(boisson);
+                                          }),
+                                          child: AnimatedContainer(
+                                            duration:
+                                                Duration(milliseconds: 200),
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 4),
+                                            padding: EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: isSelected
+                                                  ? Colors.brown[200]
+                                                  : Colors.grey[200],
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child:
+                                                Text(boisson.nom ?? 'Sans nom'),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text('Annuler')),
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() => _boissonsSelectionnees =
+                                            tempSelection);
+                                        _ajouterBoissonsAuRefrigerateur(
+                                            provider, refrigerateur);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Ajouter'),
+                                    ),
+                                  ],
+                                );
                               },
-                              child: Text('Ajouter'),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () {
+                            _nomController.text = refrigerateur.nom;
+                            _tempController.text =
+                                refrigerateur.temperature?.toString() ?? '';
+                            setState(() => _boissonsSelectionnees =
+                                List.from(refrigerateur.boissons ?? []));
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                title: Text(
+                                    'Modifier le réfrigérateur ${refrigerateur.nom}'),
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextField(
+                                          controller: _nomController,
+                                          decoration: InputDecoration(
+                                              labelText: 'Nom')),
+                                      TextField(
+                                          controller: _tempController,
+                                          decoration: InputDecoration(
+                                              labelText: 'Température (°C)'),
+                                          keyboardType: TextInputType.number),
+                                      _buildBoissonSelector(provider),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text('Annuler')),
+                                  TextButton(
+                                      onPressed: () {
+                                        _modifierRefrigerateur(
+                                            provider, refrigerateur);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Modifier')),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () =>
+                              provider.deleteRefrigerateur(refrigerateur),
+                        ),
+                      ],
                     ),
                     onTap: () => Navigator.push(
                         context,

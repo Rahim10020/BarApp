@@ -11,7 +11,7 @@ class Refrigerateur {
   final int id;
 
   @HiveField(1)
-  final String nom;
+  String nom;
 
   @HiveField(2)
   double? temperature;

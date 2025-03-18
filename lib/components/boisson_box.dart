@@ -23,13 +23,6 @@ class BoissonBox extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(12.0),
-          image: DecorationImage(
-            image: FileImage(
-              File(
-                boisson.imagePath,
-              ),
-            ),
-          ),
         ),
         margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Padding(

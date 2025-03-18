@@ -19,32 +19,29 @@ class BoissonAdapter extends TypeAdapter<Boisson> {
     return Boisson(
       id: fields[0] as int,
       nom: fields[1] as String?,
-      modele: fields[2] as Modele?,
+      prix: (fields[2] as List).cast<double>(),
       estFroid: fields[3] as bool,
-      prix: (fields[4] as List).cast<double>(),
+      modele: fields[4] as Modele?,
       description: fields[5] as String?,
-      imagePath: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Boisson obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.nom)
       ..writeByte(2)
-      ..write(obj.modele)
+      ..write(obj.prix)
       ..writeByte(3)
       ..write(obj.estFroid)
       ..writeByte(4)
-      ..write(obj.prix)
+      ..write(obj.modele)
       ..writeByte(5)
-      ..write(obj.description)
-      ..writeByte(6)
-      ..write(obj.imagePath);
+      ..write(obj.description);
   }
 
   @override

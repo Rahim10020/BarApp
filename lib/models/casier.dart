@@ -16,10 +16,10 @@ class Casier {
   late int boissonTotal;
 
   @HiveField(3)
-  final List<Boisson> boissons;
+  List<Boisson> boissons;
 
   @HiveField(4)
-  final Fournisseur fournisseur;
+  Fournisseur fournisseur;
 
   /// [id] : repésente l'identifiant du casier
   /// [boissonTotal] : représente la quantité de boisson dans le casier

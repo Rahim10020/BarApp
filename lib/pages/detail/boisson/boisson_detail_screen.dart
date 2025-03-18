@@ -23,7 +23,6 @@ class BoissonDetailScreen extends StatelessWidget {
             _buildInfoCard('Froide', boisson.estFroid ? 'Oui' : 'Non'),
             _buildInfoCard('Modèle', boisson.getModele() ?? 'N/A'),
             _buildInfoCard('Description', boisson.description ?? 'Aucune'),
-            _buildInfoCard('Image', boisson.imagePath),
           ],
         ),
       ),

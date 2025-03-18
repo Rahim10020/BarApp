@@ -23,12 +23,23 @@ class _CasierScreenState extends State<CasierScreen> {
       boissonTotal: int.tryParse(_boissonTotalController.text) ??
           _boissonsSelectionnees.length,
       boissons: _boissonsSelectionnees,
-      fournisseur: provider.fournisseurs.isNotEmpty
-          ? provider.fournisseurs[0]
-          : Fournisseur(
-              id: provider.generateUniqueId(), nom: 'Inconnu', adresse: 'N/A'),
+      fournisseur: Fournisseur(
+          id: provider.generateUniqueId(),
+          nom: 'Inconnu',
+          adresse: 'N/A'), // Fournisseur par défaut
     );
     provider.addCasier(casier);
+    setState(() {
+      _boissonsSelectionnees.clear();
+      _boissonTotalController.clear();
+    });
+  }
+
+  void _modifierCasier(BarProvider provider, Casier casier) {
+    casier.boissonTotal =
+        int.tryParse(_boissonTotalController.text) ?? casier.boissons.length;
+    casier.boissons = _boissonsSelectionnees;
+    provider.updateCasier(casier);
     setState(() {
       _boissonsSelectionnees.clear();
       _boissonTotalController.clear();
@@ -44,12 +55,12 @@ class _CasierScreenState extends State<CasierScreen> {
         children: [
           Card(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(12),
               child: Column(
                 children: [
                   Text('Nouveau Casier',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   TextField(
                       controller: _boissonTotalController,
                       decoration: InputDecoration(
@@ -88,6 +99,55 @@ class _CasierScreenState extends State<CasierScreen> {
                     title: Text('Casier #${casier.id}'),
                     subtitle: Text(
                         'Total : ${casier.getPrixTotal()}€ - ${casier.boissonTotal} boissons'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () {
+                            _boissonTotalController.text =
+                                casier.boissonTotal.toString();
+                            setState(() => _boissonsSelectionnees =
+                                List.from(casier.boissons));
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                title: Text('Modifier le casier #${casier.id}'),
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextField(
+                                          controller: _boissonTotalController,
+                                          decoration: InputDecoration(
+                                              labelText:
+                                                  'Nombre total de boissons'),
+                                          keyboardType: TextInputType.number),
+                                      _buildBoissonSelector(provider),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text('Annuler')),
+                                  TextButton(
+                                      onPressed: () {
+                                        _modifierCasier(provider, casier);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Modifier')),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => provider.deleteCasier(casier),
+                        ),
+                      ],
+                    ),
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(

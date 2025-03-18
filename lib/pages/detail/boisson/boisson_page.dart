@@ -52,11 +52,11 @@ class _BoissonPageState extends State<BoissonPage> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                Image.file(
-                  File(widget.boisson.imagePath),
-                  height: 150.0,
-                  width: double.infinity,
-                ),
+                // Image.file(
+                //   File(widget.boisson.imagePath),
+                //   height: 150.0,
+                //   width: double.infinity,
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

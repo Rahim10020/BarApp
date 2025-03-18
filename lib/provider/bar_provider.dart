@@ -442,6 +442,7 @@
 //     notifyListeners();
 //   }
 // }
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:projet7/models/bar_instance.dart';
@@ -484,7 +485,6 @@ class BarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Générer un ID unique basé sur le timestamp
   int generateUniqueId() => DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF;
 
   // BarInstance
@@ -503,6 +503,12 @@ class BarProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateBoisson(Boisson boisson) async {
+    await _boissonBox.putAt(
+        _boissonBox.values.toList().indexOf(boisson), boisson);
+    notifyListeners();
+  }
+
   Future<void> deleteBoisson(Boisson boisson) async {
     await _boissonBox.deleteAt(_boissonBox.values.toList().indexOf(boisson));
     notifyListeners();
@@ -512,6 +518,16 @@ class BarProvider with ChangeNotifier {
   List<Casier> get casiers => _casierBox.values.toList();
   Future<void> addCasier(Casier casier) async {
     await _casierBox.add(casier);
+    notifyListeners();
+  }
+
+  Future<void> updateCasier(Casier casier) async {
+    await _casierBox.putAt(_casierBox.values.toList().indexOf(casier), casier);
+    notifyListeners();
+  }
+
+  Future<void> deleteCasier(Casier casier) async {
+    await _casierBox.deleteAt(_casierBox.values.toList().indexOf(casier));
     notifyListeners();
   }
 
@@ -540,6 +556,12 @@ class BarProvider with ChangeNotifier {
     await _refrigerateurBox.putAt(
         _refrigerateurBox.values.toList().indexOf(refrigerateur),
         refrigerateur);
+    notifyListeners();
+  }
+
+  Future<void> deleteRefrigerateur(Refrigerateur refrigerateur) async {
+    await _refrigerateurBox
+        .deleteAt(_refrigerateurBox.values.toList().indexOf(refrigerateur));
     notifyListeners();
   }
 

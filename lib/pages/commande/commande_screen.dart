@@ -18,26 +18,28 @@ class _CommandeScreenState extends State<CommandeScreen> {
   List<Casier> _casiersSelectionnes = [];
   final _nomFournisseurController = TextEditingController();
   final _adresseFournisseurController = TextEditingController();
+  Fournisseur? _fournisseurSelectionne;
 
   void _ajouterCommande(BarProvider provider) {
-    var fournisseur = Fournisseur(
-      id: provider.fournisseurs.length,
-      nom: _nomFournisseurController.text.isNotEmpty
-          ? _nomFournisseurController.text
-          : 'Inconnu',
-      adresse: _adresseFournisseurController.text.isNotEmpty
-          ? _adresseFournisseurController.text
-          : 'N/A',
-    );
-    provider.addFournisseur(fournisseur);
-    var lignes = _casiersSelectionnes
-        .asMap()
-        .entries
-        .map((e) => LigneCommande(
-            id: e.key, montant: e.value.getPrixTotal(), casier: e.value))
-        .toList();
+    var fournisseur = _fournisseurSelectionne ??
+        Fournisseur(
+          id: provider.generateUniqueId(),
+          nom: _nomFournisseurController.text.isNotEmpty
+              ? _nomFournisseurController.text
+              : 'Inconnu',
+          adresse: _adresseFournisseurController.text.isNotEmpty
+              ? _adresseFournisseurController.text
+              : 'N/A',
+        );
+    if (_fournisseurSelectionne == null) provider.addFournisseur(fournisseur);
+    var lignes = _casiersSelectionnes.asMap().entries.map((e) {
+      var casier = e.value;
+      casier.fournisseur = fournisseur; // Associer le fournisseur aux casiers
+      return LigneCommande(
+          id: e.key, montant: casier.getPrixTotal(), casier: casier);
+    }).toList();
     var commande = Commande(
-      id: provider.commandes.length,
+      id: provider.generateUniqueId(),
       montantTotal: lignes.fold(0.0, (sum, ligne) => sum + ligne.montant),
       dateCommande: DateTime.now(),
       lignesCommande: lignes,
@@ -48,6 +50,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
       _casiersSelectionnes.clear();
       _nomFournisseurController.clear();
       _adresseFournisseurController.clear();
+      _fournisseurSelectionne = null;
     });
   }
 
@@ -60,16 +63,26 @@ class _CommandeScreenState extends State<CommandeScreen> {
         children: [
           Card(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(12),
               child: Column(
                 children: [
                   Text('Nouvelle Commande',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  DropdownButton<Fournisseur>(
+                    hint: Text('Choisir un fournisseur'),
+                    value: _fournisseurSelectionne,
+                    items: provider.fournisseurs
+                        .map((fournisseur) => DropdownMenuItem(
+                            value: fournisseur, child: Text(fournisseur.nom)))
+                        .toList(),
+                    onChanged: (value) =>
+                        setState(() => _fournisseurSelectionne = value),
+                  ),
                   TextField(
                       controller: _nomFournisseurController,
-                      decoration:
-                          InputDecoration(labelText: 'Nom du fournisseur')),
+                      decoration: InputDecoration(
+                          labelText: 'Nom du fournisseur (nouveau)')),
                   TextField(
                       controller: _adresseFournisseurController,
                       decoration:
