@@ -23,10 +23,6 @@ class _CasierScreenState extends State<CasierScreen> {
       boissonTotal: int.tryParse(_boissonTotalController.text) ??
           _boissonsSelectionnees.length,
       boissons: _boissonsSelectionnees,
-      fournisseur: Fournisseur(
-          id: provider.generateUniqueId(),
-          nom: 'Inconnu',
-          adresse: 'N/A'), // Fournisseur par défaut
     );
     provider.addCasier(casier);
     setState(() {

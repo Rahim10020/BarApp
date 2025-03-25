@@ -20,7 +20,6 @@ class CasierDetailScreen extends StatelessWidget {
             _buildInfoCard('ID', '${casier.id}'),
             _buildInfoCard('Total Boissons', '${casier.boissonTotal}'),
             _buildInfoCard('Prix Total', '${casier.getPrixTotal()}€'),
-            _buildInfoCard('Fournisseur', casier.fournisseur.nom),
             SizedBox(height: 16),
             Text('Boissons dans le casier:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

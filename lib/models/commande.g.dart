@@ -22,13 +22,14 @@ class CommandeAdapter extends TypeAdapter<Commande> {
       dateCommande: fields[2] as DateTime,
       lignesCommande: (fields[3] as List).cast<LigneCommande>(),
       barInstance: fields[4] as BarInstance,
+      fournisseur: fields[5] as Fournisseur,
     );
   }
 
   @override
   void write(BinaryWriter writer, Commande obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class CommandeAdapter extends TypeAdapter<Commande> {
       ..writeByte(3)
       ..write(obj.lignesCommande)
       ..writeByte(4)
-      ..write(obj.barInstance);
+      ..write(obj.barInstance)
+      ..writeByte(5)
+      ..write(obj.fournisseur);
   }
 
   @override

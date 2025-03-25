@@ -21,6 +21,7 @@ class CommandeDetailScreen extends StatelessWidget {
             _buildInfoCard('Montant Total', '${commande.montantTotal}€'),
             _buildInfoCard('Date', '${commande.dateCommande}'),
             _buildInfoCard('Bar', commande.barInstance.nom),
+            _buildInfoCard('Fournisseur', commande.fournisseur.nom),
             SizedBox(height: 16),
             Text('Lignes de commande:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -36,8 +37,6 @@ class CommandeDetailScreen extends StatelessWidget {
                       title: Text('Casier #${ligne.casier.id}'),
                       subtitle: Text(
                           'Montant: ${ligne.montant}€ - Boissons: ${ligne.casier.boissonTotal}'),
-                      trailing:
-                          Text('Fournisseur: ${ligne.casier.fournisseur.nom}'),
                     ),
                   );
                 },

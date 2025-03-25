@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:projet7/models/fournisseur.dart';
 
 import 'boisson.dart';
 
@@ -18,19 +17,14 @@ class Casier {
   @HiveField(3)
   List<Boisson> boissons;
 
-  @HiveField(4)
-  Fournisseur fournisseur;
-
   /// [id] : repésente l'identifiant du casier
   /// [boissonTotal] : représente la quantité de boisson dans le casier
   /// [boissons] : représente la liste des boissons dans le casier
-  /// [fournisseur] : représente le fournisseur du casier
 
   Casier({
     required this.id,
     required this.boissonTotal,
     required this.boissons,
-    required this.fournisseur,
   });
 
   double getPrixTotal() {

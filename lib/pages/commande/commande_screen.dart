@@ -34,7 +34,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
     if (_fournisseurSelectionne == null) provider.addFournisseur(fournisseur);
     var lignes = _casiersSelectionnes.asMap().entries.map((e) {
       var casier = e.value;
-      casier.fournisseur = fournisseur; // Associer le fournisseur aux casiers
+
       return LigneCommande(
           id: e.key, montant: casier.getPrixTotal(), casier: casier);
     }).toList();
@@ -44,6 +44,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
       dateCommande: DateTime.now(),
       lignesCommande: lignes,
       barInstance: provider.currentBar!,
+      fournisseur: fournisseur,
     );
     provider.addCommande(commande);
     setState(() {
