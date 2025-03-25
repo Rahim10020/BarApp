@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/pages/commande/commande_detail_screen.dart';
+import 'package:projet7/pages/commande/components/build_casier_selector.dart';
 import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:projet7/models/commande.dart';
 import 'package:projet7/models/ligne_commande.dart';
@@ -11,11 +13,11 @@ class CommandeScreen extends StatefulWidget {
   const CommandeScreen({super.key});
 
   @override
-  _CommandeScreenState createState() => _CommandeScreenState();
+  State<CommandeScreen> createState() => _CommandeScreenState();
 }
 
 class _CommandeScreenState extends State<CommandeScreen> {
-  List<Casier> _casiersSelectionnes = [];
+  final List<Casier> _casiersSelectionnes = [];
   final _nomFournisseurController = TextEditingController();
   final _adresseFournisseurController = TextEditingController();
   Fournisseur? _fournisseurSelectionne;
@@ -64,34 +66,81 @@ class _CommandeScreenState extends State<CommandeScreen> {
         children: [
           Card(
             child: Padding(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
-                  Text('Nouvelle Commande',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Nouvelle Commande',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   DropdownButton<Fournisseur>(
-                    hint: Text('Choisir un fournisseur'),
+                    hint: const Text('Choisir un fournisseur'),
                     value: _fournisseurSelectionne,
                     items: provider.fournisseurs
-                        .map((fournisseur) => DropdownMenuItem(
-                            value: fournisseur, child: Text(fournisseur.nom)))
+                        .map(
+                          (fournisseur) => DropdownMenuItem(
+                            value: fournisseur,
+                            child: Text(
+                              fournisseur.nom,
+                            ),
+                          ),
+                        )
                         .toList(),
                     onChanged: (value) =>
                         setState(() => _fournisseurSelectionne = value),
                   ),
                   TextField(
                       controller: _nomFournisseurController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'Nom du fournisseur (nouveau)')),
                   TextField(
-                      controller: _adresseFournisseurController,
-                      decoration:
-                          InputDecoration(labelText: 'Adresse du fournisseur')),
-                  _buildCasierSelector(provider),
+                    controller: _adresseFournisseurController,
+                    decoration: const InputDecoration(
+                      labelText: 'Adresse du fournisseur',
+                    ),
+                  ),
+                  BuildCasierSelector(
+                    itemCount: provider.casiers.length,
+                    itemBuilder: (context, index) {
+                      var casier = provider.casiers[index];
+                      bool isSelected = _casiersSelectionnes.contains(casier);
+                      return GestureDetector(
+                        onTap: () => setState(() {
+                          if (isSelected) {
+                            _casiersSelectionnes.remove(casier);
+                          } else {
+                            _casiersSelectionnes.add(casier);
+                          }
+                        }),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? Colors.brown[200]
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text('Casier #${casier.id}'),
+                        ),
+                      );
+                    },
+                  ),
                   ElevatedButton.icon(
-                    icon: Icon(Icons.receipt),
-                    label: Text('Passer Commande'),
+                    icon: const Icon(
+                      Icons.receipt,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      'Passer Commande',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.brown[600]),
                     onPressed: () => _ajouterCommande(provider),
@@ -106,13 +155,13 @@ class _CommandeScreenState extends State<CommandeScreen> {
               itemBuilder: (context, index) {
                 var commande = provider.commandes[index];
                 return AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  padding: EdgeInsets.all(12),
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
                     ],
                   ),
@@ -120,7 +169,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                     leading: Icon(Icons.receipt_long, color: Colors.brown[600]),
                     title: Text('Commande #${commande.id}'),
                     subtitle: Text(
-                        'Total : ${commande.montantTotal}€ - ${commande.dateCommande.day}/${commande.dateCommande.month}'),
+                        'Total : ${Helpers.formatterEnCFA(commande.montantTotal)} - ${commande.dateCommande.day}/${commande.dateCommande.month}'),
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -132,38 +181,6 @@ class _CommandeScreenState extends State<CommandeScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildCasierSelector(BarProvider provider) {
-    return Container(
-      height: 50,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: provider.casiers.length,
-        itemBuilder: (context, index) {
-          var casier = provider.casiers[index];
-          bool isSelected = _casiersSelectionnes.contains(casier);
-          return GestureDetector(
-            onTap: () => setState(() {
-              if (isSelected)
-                _casiersSelectionnes.remove(casier);
-              else
-                _casiersSelectionnes.add(casier);
-            }),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
-              margin: EdgeInsets.symmetric(horizontal: 4),
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isSelected ? Colors.brown[200] : Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text('Casier #${casier.id}'),
-            ),
-          );
-        },
       ),
     );
   }

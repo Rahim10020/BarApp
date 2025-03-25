@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/vente.dart';
+import 'package:projet7/utils/helpers.dart';
 
 class VenteDetailScreen extends StatelessWidget {
   final Vente vente;
@@ -10,17 +12,22 @@ class VenteDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Vente #${vente.id}'),
-          backgroundColor: Colors.brown[800]),
+        foregroundColor: Colors.white,
+        title: Text('Vente #${vente.id}'),
+        backgroundColor: Colors.brown[800],
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildInfoCard('Montant Total', '${vente.montantTotal}€'),
-            _buildInfoCard('Date', '${vente.dateVente}'),
-            SizedBox(height: 16),
-            Text('Boissons vendues:',
+            BuildInfoCard(
+                label: 'Montant Total',
+                value: Helpers.formatterEnCFA(vente.montantTotal)),
+            BuildInfoCard(
+                label: 'Date', value: Helpers.formatterDate(vente.dateVente)),
+            const SizedBox(height: 16),
+            const Text('Boissons vendues:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             Expanded(
               child: ListView.builder(
@@ -28,38 +35,24 @@ class VenteDetailScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   var ligne = vente.lignesVente[index];
                   return Card(
-                    margin: EdgeInsets.symmetric(vertical: 4),
+                    margin: const EdgeInsets.symmetric(vertical: 4),
                     child: ListTile(
                       leading: Icon(Icons.local_bar, color: Colors.brown[600]),
                       title: Text(ligne.boisson.nom ?? 'Sans nom'),
-                      subtitle: Text('Montant: ${ligne.montant}€'),
+                      subtitle: Text(
+                          'Montant: ${Helpers.formatterEnCFA(ligne.montant)}'),
                     ),
                   );
                 },
               ),
             ),
             ElevatedButton.icon(
-              icon: Icon(Icons.download),
-              label: Text('Télécharger (bientôt)'),
+              icon: const Icon(Icons.download),
+              label: const Text('Télécharger'),
               onPressed: () {}, // Placeholder pour future implémentation
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildInfoCard(String label, String value) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label),
-              Text(value, style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
       ),
     );
   }

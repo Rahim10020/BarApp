@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/models/boisson.dart';
+import 'package:projet7/components/build_info_card.dart';
+import 'package:projet7/utils/helpers.dart';
 
 class BoissonDetailScreen extends StatelessWidget {
   final Boisson boisson;
@@ -10,36 +12,41 @@ class BoissonDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(boisson.nom ?? 'Boisson'),
-          backgroundColor: Colors.brown[800]),
+        foregroundColor: Colors.white,
+        title: Text(boisson.nom ?? 'Boisson'),
+        backgroundColor: Colors.brown[800],
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildInfoCard('ID', '${boisson.id}'),
-            _buildInfoCard('Nom', boisson.nom ?? 'N/A'),
-            _buildInfoCard('Prix', '${boisson.prix.last}€'),
-            _buildInfoCard('Froide', boisson.estFroid ? 'Oui' : 'Non'),
-            _buildInfoCard('Modèle', boisson.getModele() ?? 'N/A'),
-            _buildInfoCard('Description', boisson.description ?? 'Aucune'),
+            BuildInfoCard(
+              label: 'ID',
+              value: '${boisson.id}',
+            ),
+            BuildInfoCard(
+              label: 'Nom',
+              value: boisson.nom ?? 'N/A',
+            ),
+            BuildInfoCard(
+              label: 'Prix',
+              value: Helpers.formatterEnCFA(boisson.prix.last),
+            ),
+            BuildInfoCard(
+              label: 'Froide',
+              value: boisson.estFroid ? 'Oui' : 'Non',
+            ),
+            BuildInfoCard(
+              label: 'Modèle',
+              value: boisson.getModele() ?? 'N/A',
+            ),
+            BuildInfoCard(
+              label: 'Description',
+              value: boisson.description ?? 'Aucune',
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildInfoCard(String label, String value) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label),
-              Text(value, style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
       ),
     );
   }

@@ -33,13 +33,6 @@ void main() async {
 
   final themeProvider = ThemeProvider();
   await themeProvider.initHive();
-  // final barProvider = BarProvider();
-  // await barProvider.initHive();
-
-  //await Hive.openBox<Boisson>("boissons");
-  //await Hive.openBox<Boisson>("casiers");
-  //await Hive.openBox<Boisson>("commandes");
-  //await Hive.openBox<Boisson>("refrigerateurs");
 
   runApp(
     MultiProvider(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/refrigerateur.dart';
+import 'package:projet7/utils/helpers.dart';
 
 class RefrigerateurDetailScreen extends StatelessWidget {
   final Refrigerateur refrigerateur;
@@ -10,20 +12,28 @@ class RefrigerateurDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(refrigerateur.nom), backgroundColor: Colors.brown[800]),
+        foregroundColor: Colors.white,
+        title: Text(refrigerateur.nom),
+        backgroundColor: Colors.brown[800],
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildInfoCard('ID', '${refrigerateur.id}'),
-            _buildInfoCard('Nom', refrigerateur.nom),
-            _buildInfoCard('Température', '${refrigerateur.temperature}°C'),
-            _buildInfoCard(
-                'Total Boissons', '${refrigerateur.getBoissonTotal()}'),
-            _buildInfoCard('Prix Total', '${refrigerateur.getPrixTotal()}€'),
-            SizedBox(height: 16),
-            Text('Boissons:',
+            BuildInfoCard(label: 'ID', value: '${refrigerateur.id}'),
+            BuildInfoCard(label: 'Nom', value: refrigerateur.nom),
+            BuildInfoCard(
+                label: 'Température', value: '${refrigerateur.temperature}°C'),
+            BuildInfoCard(
+                label: 'Total Boissons',
+                value: '${refrigerateur.getBoissonTotal()}'),
+            BuildInfoCard(
+              label: 'Prix Total',
+              value: Helpers.formatterEnCFA(refrigerateur.getPrixTotal()),
+            ),
+            const SizedBox(height: 16),
+            const Text('Boissons:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             Expanded(
               child: ListView.builder(
@@ -31,11 +41,13 @@ class RefrigerateurDetailScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   var boisson = refrigerateur.boissons![index];
                   return Card(
-                    margin: EdgeInsets.symmetric(vertical: 4),
+                    margin: const EdgeInsets.symmetric(vertical: 4),
                     child: ListTile(
                       leading: Icon(Icons.local_bar, color: Colors.brown[600]),
                       title: Text(boisson.nom ?? 'Sans nom'),
-                      subtitle: Text('${boisson.prix.last}€'),
+                      subtitle: Text(
+                        Helpers.formatterEnCFA(boisson.prix.last),
+                      ),
                     ),
                   );
                 },
@@ -43,21 +55,6 @@ class RefrigerateurDetailScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildInfoCard(String label, String value) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label),
-              Text(value, style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/pages/vente/vente_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:projet7/models/ligne_vente.dart';
@@ -10,12 +11,12 @@ class VenteScreen extends StatefulWidget {
   const VenteScreen({super.key});
 
   @override
-  _VenteScreenState createState() => _VenteScreenState();
+  State<VenteScreen> createState() => _VenteScreenState();
 }
 
 class _VenteScreenState extends State<VenteScreen> {
   List<Boisson> boissonsSelectionnees = [];
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   bool _isAdding = false;
 
   @override
@@ -48,13 +49,13 @@ class _VenteScreenState extends State<VenteScreen> {
             .removeWhere((b) => boissonsSelectionnees.contains(b));
         await provider.updateRefrigerateur(refrigerateur);
       }
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
       setState(() {
         boissonsSelectionnees.clear();
         _isAdding = false;
       });
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Vente enregistrée !')));
+          .showSnackBar(const SnackBar(content: Text('Vente enregistrée !')));
     }
   }
 
@@ -70,16 +71,18 @@ class _VenteScreenState extends State<VenteScreen> {
       child: Column(
         children: [
           AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             padding: EdgeInsets.all(_isAdding ? 20 : 16),
             decoration: BoxDecoration(
               color: _isAdding ? Colors.green[100] : Colors.white,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black26)],
+              boxShadow: const [
+                BoxShadow(blurRadius: 4, color: Colors.black26)
+              ],
             ),
             child: Column(
               children: [
-                Text('Ajouter une vente',
+                const Text('Ajouter une vente',
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 Container(
@@ -92,15 +95,16 @@ class _VenteScreenState extends State<VenteScreen> {
                       bool isSelected = boissonsSelectionnees.contains(boisson);
                       return GestureDetector(
                         onTap: () => setState(() {
-                          if (isSelected)
+                          if (isSelected) {
                             boissonsSelectionnees.remove(boisson);
-                          else
+                          } else {
                             boissonsSelectionnees.add(boisson);
+                          }
                         }),
                         child: AnimatedContainer(
-                          duration: Duration(milliseconds: 200),
-                          margin: EdgeInsets.symmetric(horizontal: 4),
-                          padding: EdgeInsets.all(8),
+                          duration: const Duration(milliseconds: 200),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? Colors.brown[200]
@@ -111,7 +115,7 @@ class _VenteScreenState extends State<VenteScreen> {
                             children: [
                               Icon(Icons.local_bar,
                                   size: 20, color: Colors.brown[800]),
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               Text(boisson.nom ?? 'Sans nom'),
                             ],
                           ),
@@ -121,8 +125,8 @@ class _VenteScreenState extends State<VenteScreen> {
                   ),
                 ),
                 ElevatedButton.icon(
-                  icon: Icon(Icons.local_drink),
-                  label: Text('Enregistrer'),
+                  icon: const Icon(Icons.local_drink),
+                  label: const Text('Enregistrer'),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.brown[600]),
                   onPressed: boissonsSelectionnees.isNotEmpty
@@ -132,12 +136,12 @@ class _VenteScreenState extends State<VenteScreen> {
               ],
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           TextField(
             controller: _searchController,
             decoration: InputDecoration(
               hintText: 'Rechercher (ID, date, boisson)',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               filled: true,
@@ -166,21 +170,22 @@ class _VenteScreenState extends State<VenteScreen> {
                             false))
                     .toList()[index];
                 return AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  padding: EdgeInsets.all(12),
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
                     ],
                   ),
                   child: ListTile(
                     leading: Icon(Icons.receipt_long, color: Colors.brown[600]),
-                    title: Text('Vente #${vente.id} - ${vente.montantTotal}€'),
+                    title: Text(
+                        'Vente #${vente.id} - ${Helpers.formatterEnCFA(vente.montantTotal)}'),
                     subtitle: Text(
-                        'Date : ${vente.dateVente.day}/${vente.dateVente.month}/${vente.dateVente.year}'),
+                        'Date : ${Helpers.formatterDate(vente.dateVente)}'),
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(

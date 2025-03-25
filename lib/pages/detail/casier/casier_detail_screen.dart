@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/casier.dart';
+import 'package:projet7/utils/helpers.dart';
 
 class CasierDetailScreen extends StatelessWidget {
   final Casier casier;
@@ -10,52 +12,40 @@ class CasierDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          foregroundColor: Colors.white,
           title: Text('Casier #${casier.id}'),
           backgroundColor: Colors.brown[800]),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildInfoCard('ID', '${casier.id}'),
-            _buildInfoCard('Total Boissons', '${casier.boissonTotal}'),
-            _buildInfoCard('Prix Total', '${casier.getPrixTotal()}€'),
-            SizedBox(height: 16),
-            Text('Boissons dans le casier:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Expanded(
-              child: ListView.builder(
-                itemCount: casier.boissons.length,
-                itemBuilder: (context, index) {
-                  var boisson = casier.boissons[index];
-                  return Card(
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    child: ListTile(
-                      leading: Icon(Icons.local_bar, color: Colors.brown[600]),
-                      title: Text(boisson.nom ?? 'Sans nom'),
-                      subtitle: Text('${boisson.prix.last}€'),
-                    ),
-                  );
-                },
+            BuildInfoCard(label: 'ID', value: '${casier.id}'),
+            BuildInfoCard(
+                label: 'Total Boissons', value: '${casier.boissonTotal}'),
+            BuildInfoCard(
+                label: 'Prix Total',
+                value: Helpers.formatterEnCFA(casier.getPrixTotal())),
+            const SizedBox(height: 16),
+            const Text(
+              'Boisson dans le casier:',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Card(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              child: ListTile(
+                leading: Icon(Icons.local_bar, color: Colors.brown[600]),
+                title: Text(casier.boissons[0].nom ?? 'Sans nom'),
+                subtitle: Text(
+                  Helpers.formatterEnCFA(casier.boissons[0].prix.last),
+                ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildInfoCard(String label, String value) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label),
-              Text(value, style: TextStyle(fontWeight: FontWeight.bold))
-            ]),
       ),
     );
   }

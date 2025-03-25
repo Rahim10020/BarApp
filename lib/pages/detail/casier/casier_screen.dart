@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/models/boisson.dart';
-import 'package:projet7/models/fournisseur.dart';
 import 'package:projet7/pages/detail/casier/casier_detail_screen.dart';
+import 'package:projet7/components/build_boisson_selector.dart';
 import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:projet7/models/casier.dart';
 
@@ -10,14 +11,20 @@ class CasierScreen extends StatefulWidget {
   const CasierScreen({super.key});
 
   @override
-  _CasierScreenState createState() => _CasierScreenState();
+  State<CasierScreen> createState() => _CasierScreenState();
 }
 
 class _CasierScreenState extends State<CasierScreen> {
   List<Boisson> _boissonsSelectionnees = [];
+  int selectedIndex = 0;
+  Boisson? boissonSelectionnee;
   final _boissonTotalController = TextEditingController();
 
   void _ajouterCasier(BarProvider provider) {
+    for (int i = 0; i < num.tryParse(_boissonTotalController.text)!; i++) {
+      _boissonsSelectionnees.add(boissonSelectionnee!);
+    }
+
     var casier = Casier(
       id: provider.generateUniqueId(),
       boissonTotal: int.tryParse(_boissonTotalController.text) ??
@@ -32,6 +39,10 @@ class _CasierScreenState extends State<CasierScreen> {
   }
 
   void _modifierCasier(BarProvider provider, Casier casier) {
+    for (int i = 0; i < num.tryParse(_boissonTotalController.text)!; i++) {
+      _boissonsSelectionnees.add(boissonSelectionnee!);
+    }
+
     casier.boissonTotal =
         int.tryParse(_boissonTotalController.text) ?? casier.boissons.length;
     casier.boissons = _boissonsSelectionnees;
@@ -51,24 +62,66 @@ class _CasierScreenState extends State<CasierScreen> {
         children: [
           Card(
             child: Padding(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
-                  Text('Nouveau Casier',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Nouveau Casier',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                   TextField(
-                      controller: _boissonTotalController,
-                      decoration: InputDecoration(
-                          labelText: 'Nombre total de boissons'),
-                      keyboardType: TextInputType.number),
-                  _buildBoissonSelector(provider),
+                    controller: _boissonTotalController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nombre total de boissons',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  BuildBoissonSelector(
+                    itemCount: provider.boissons.length,
+                    itemBuilder: (context, index) {
+                      var boisson = provider.boissons[index];
+                      bool isSelected =
+                          _boissonsSelectionnees.contains(boisson);
+                      return GestureDetector(
+                        onTap: () => setState(() {
+                          if (isSelected) {
+                            _boissonsSelectionnees.remove(boisson);
+                          } else {
+                            _boissonsSelectionnees.add(boisson);
+                          }
+                        }),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? Colors.brown[200]
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(boisson.nom ?? 'Sans nom'),
+                        ),
+                      );
+                    },
+                  ),
                   ElevatedButton.icon(
-                    icon: Icon(Icons.add_box),
-                    label: Text('Créer Casier'),
+                    icon: const Icon(
+                      Icons.add_box,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      'Créer Casier',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown[600]),
-                    onPressed: () => _ajouterCasier(provider),
+                      backgroundColor: Colors.brown[600],
+                    ),
+                    onPressed: () => _ajouterCasier(
+                      provider,
+                    ),
                   ),
                 ],
               ),
@@ -80,13 +133,13 @@ class _CasierScreenState extends State<CasierScreen> {
               itemBuilder: (context, index) {
                 var casier = provider.casiers[index];
                 return AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  padding: EdgeInsets.all(12),
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
                     ],
                   ),
@@ -94,12 +147,12 @@ class _CasierScreenState extends State<CasierScreen> {
                     leading: Icon(Icons.storage, color: Colors.brown[600]),
                     title: Text('Casier #${casier.id}'),
                     subtitle: Text(
-                        'Total : ${casier.getPrixTotal()}€ - ${casier.boissonTotal} boissons'),
+                        'Total : ${Helpers.formatterEnCFA(casier.getPrixTotal())} - ${casier.boissonTotal} boissons'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.edit, color: Colors.blue),
+                          icon: const Icon(Icons.edit, color: Colors.blue),
                           onPressed: () {
                             _boissonTotalController.text =
                                 casier.boissonTotal.toString();
@@ -115,31 +168,61 @@ class _CasierScreenState extends State<CasierScreen> {
                                     children: [
                                       TextField(
                                           controller: _boissonTotalController,
-                                          decoration: InputDecoration(
+                                          decoration: const InputDecoration(
                                               labelText:
                                                   'Nombre total de boissons'),
                                           keyboardType: TextInputType.number),
-                                      _buildBoissonSelector(provider),
+                                      BuildBoissonSelector(
+                                        itemCount: provider.boissons.length,
+                                        itemBuilder: (context, index) {
+                                          var boisson =
+                                              provider.boissons[index];
+
+                                          return GestureDetector(
+                                            onTap: () => setState(() {
+                                              selectedIndex = index;
+                                              boissonSelectionnee = boisson;
+                                            }),
+                                            child: AnimatedContainer(
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4),
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                color: selectedIndex == index
+                                                    ? Colors.brown[200]
+                                                    : Colors.grey[200],
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Text(
+                                                  boisson.nom ?? 'Sans nom'),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
                                 actions: [
                                   TextButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text('Annuler')),
+                                      child: const Text('Annuler')),
                                   TextButton(
                                       onPressed: () {
                                         _modifierCasier(provider, casier);
                                         Navigator.pop(context);
                                       },
-                                      child: Text('Modifier')),
+                                      child: const Text('Modifier')),
                                 ],
                               ),
                             );
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
+                          icon: const Icon(Icons.delete, color: Colors.red),
                           onPressed: () => provider.deleteCasier(casier),
                         ),
                       ],
@@ -155,38 +238,6 @@ class _CasierScreenState extends State<CasierScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBoissonSelector(BarProvider provider) {
-    return Container(
-      height: 50,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: provider.boissons.length,
-        itemBuilder: (context, index) {
-          var boisson = provider.boissons[index];
-          bool isSelected = _boissonsSelectionnees.contains(boisson);
-          return GestureDetector(
-            onTap: () => setState(() {
-              if (isSelected)
-                _boissonsSelectionnees.remove(boisson);
-              else
-                _boissonsSelectionnees.add(boisson);
-            }),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
-              margin: EdgeInsets.symmetric(horizontal: 4),
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isSelected ? Colors.brown[200] : Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(boisson.nom ?? 'Sans nom'),
-            ),
-          );
-        },
       ),
     );
   }

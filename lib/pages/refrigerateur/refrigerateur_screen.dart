@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projet7/components/build_boisson_selector.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,7 @@ class RefrigerateurScreen extends StatefulWidget {
   const RefrigerateurScreen({super.key});
 
   @override
-  _RefrigerateurScreenState createState() => _RefrigerateurScreenState();
+  State<RefrigerateurScreen> createState() => _RefrigerateurScreenState();
 }
 
 class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
@@ -59,24 +60,67 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
         children: [
           Card(
             child: Padding(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
-                  Text('Nouveau Réfrigérateur',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Nouveau Réfrigérateur',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   TextField(
-                      controller: _nomController,
-                      decoration: InputDecoration(labelText: 'Nom')),
+                    controller: _nomController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nom',
+                    ),
+                  ),
                   TextField(
                       controller: _tempController,
                       decoration:
-                          InputDecoration(labelText: 'Température (°C)'),
+                          const InputDecoration(labelText: 'Température (°C)'),
                       keyboardType: TextInputType.number),
-                  _buildBoissonSelector(provider),
+                  BuildBoissonSelector(
+                    itemCount: provider.boissons.length,
+                    itemBuilder: (context, index) {
+                      var boisson = provider.boissons[index];
+                      bool isSelected =
+                          _boissonsSelectionnees.contains(boisson);
+                      return GestureDetector(
+                        onTap: () => setState(() {
+                          if (isSelected) {
+                            _boissonsSelectionnees.remove(boisson);
+                          } else {
+                            _boissonsSelectionnees.add(boisson);
+                          }
+                        }),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? Colors.brown[200]
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(boisson.nom ?? 'Sans nom'),
+                        ),
+                      );
+                    },
+                  ),
                   ElevatedButton.icon(
-                    icon: Icon(Icons.kitchen),
-                    label: Text('Ajouter'),
+                    icon: const Icon(
+                      Icons.kitchen,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      'Ajouter',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.brown[600]),
                     onPressed: () => _ajouterRefrigerateur(provider),
@@ -91,26 +135,29 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
               itemBuilder: (context, index) {
                 var refrigerateur = provider.refrigerateurs[index];
                 return AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  padding: EdgeInsets.all(12),
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
                     ],
                   ),
                   child: ListTile(
                     leading: Icon(Icons.kitchen, color: Colors.brown[600]),
                     title: Text(refrigerateur.nom),
-                    subtitle: Text(
-                        'Temp : ${refrigerateur.temperature}°C - ${refrigerateur.getBoissonTotal()} boissons'),
+                    subtitle: refrigerateur.temperature != null
+                        ? Text(
+                            'Temp : ${refrigerateur.temperature}°C - ${refrigerateur.getBoissonTotal()} boissons')
+                        : Text('${refrigerateur.getBoissonTotal()} boissons'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.add_circle, color: Colors.green),
+                          icon:
+                              const Icon(Icons.add_circle, color: Colors.green),
                           onPressed: () => showDialog(
                             context: context,
                             builder: (_) => StatefulBuilder(
@@ -131,17 +178,18 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                             tempSelection.contains(boisson);
                                         return GestureDetector(
                                           onTap: () => setDialogState(() {
-                                            if (isSelected)
+                                            if (isSelected) {
                                               tempSelection.remove(boisson);
-                                            else
+                                            } else {
                                               tempSelection.add(boisson);
+                                            }
                                           }),
                                           child: AnimatedContainer(
-                                            duration:
-                                                Duration(milliseconds: 200),
-                                            margin: EdgeInsets.symmetric(
+                                            duration: const Duration(
+                                                milliseconds: 200),
+                                            margin: const EdgeInsets.symmetric(
                                                 horizontal: 4),
-                                            padding: EdgeInsets.all(8),
+                                            padding: const EdgeInsets.all(8),
                                             decoration: BoxDecoration(
                                               color: isSelected
                                                   ? Colors.brown[200]
@@ -159,7 +207,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                   actions: [
                                     TextButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: Text('Annuler')),
+                                        child: const Text('Annuler')),
                                     TextButton(
                                       onPressed: () {
                                         setState(() => _boissonsSelectionnees =
@@ -168,7 +216,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                             provider, refrigerateur);
                                         Navigator.pop(context);
                                       },
-                                      child: Text('Ajouter'),
+                                      child: const Text('Ajouter'),
                                     ),
                                   ],
                                 );
@@ -177,7 +225,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.edit, color: Colors.blue),
+                          icon: const Icon(Icons.edit, color: Colors.blue),
                           onPressed: () {
                             _nomController.text = refrigerateur.nom;
                             _tempController.text =
@@ -195,35 +243,72 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                     children: [
                                       TextField(
                                           controller: _nomController,
-                                          decoration: InputDecoration(
+                                          decoration: const InputDecoration(
                                               labelText: 'Nom')),
                                       TextField(
                                           controller: _tempController,
-                                          decoration: InputDecoration(
+                                          decoration: const InputDecoration(
                                               labelText: 'Température (°C)'),
                                           keyboardType: TextInputType.number),
-                                      _buildBoissonSelector(provider),
+                                      BuildBoissonSelector(
+                                        itemCount: provider.boissons.length,
+                                        itemBuilder: (context, index) {
+                                          var boisson =
+                                              provider.boissons[index];
+                                          bool isSelected =
+                                              _boissonsSelectionnees
+                                                  .contains(boisson);
+                                          return GestureDetector(
+                                            onTap: () => setState(() {
+                                              if (isSelected) {
+                                                _boissonsSelectionnees
+                                                    .remove(boisson);
+                                              } else {
+                                                _boissonsSelectionnees
+                                                    .add(boisson);
+                                              }
+                                            }),
+                                            child: AnimatedContainer(
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4),
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                color: isSelected
+                                                    ? Colors.brown[200]
+                                                    : Colors.grey[200],
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Text(
+                                                  boisson.nom ?? 'Sans nom'),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
                                 actions: [
                                   TextButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text('Annuler')),
+                                      child: const Text('Annuler')),
                                   TextButton(
                                       onPressed: () {
                                         _modifierRefrigerateur(
                                             provider, refrigerateur);
                                         Navigator.pop(context);
                                       },
-                                      child: Text('Modifier')),
+                                      child: const Text('Modifier')),
                                 ],
                               ),
                             );
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
+                          icon: const Icon(Icons.delete, color: Colors.red),
                           onPressed: () =>
                               provider.deleteRefrigerateur(refrigerateur),
                         ),
@@ -240,38 +325,6 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBoissonSelector(BarProvider provider) {
-    return Container(
-      height: 50,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: provider.boissons.length,
-        itemBuilder: (context, index) {
-          var boisson = provider.boissons[index];
-          bool isSelected = _boissonsSelectionnees.contains(boisson);
-          return GestureDetector(
-            onTap: () => setState(() {
-              if (isSelected)
-                _boissonsSelectionnees.remove(boisson);
-              else
-                _boissonsSelectionnees.add(boisson);
-            }),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
-              margin: EdgeInsets.symmetric(horizontal: 4),
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isSelected ? Colors.brown[200] : Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(boisson.nom ?? 'Sans nom'),
-            ),
-          );
-        },
       ),
     );
   }

@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:projet7/pages/commande/commande_screen.dart';
 import 'package:projet7/pages/detail/boisson/boisson_screen.dart';
 import 'package:projet7/pages/detail/casier/casier_screen.dart';
-import 'package:projet7/pages/refrigerateur/refrigerateur_page.dart';
 import 'package:projet7/pages/home/components/my_drawer.dart';
-import 'package:projet7/pages/archive/archive_page.dart';
-import 'package:projet7/pages/bar/bar_page.dart';
-import 'package:projet7/pages/commande/commande_page.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_screen.dart';
-import 'package:projet7/pages/vente/vente_page.dart';
 import 'package:projet7/pages/vente/vente_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
-import 'package:projet7/theme/my_colors.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -50,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           title: Text(
             bar.currentBar!.nom,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
