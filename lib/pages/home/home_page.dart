@@ -48,6 +48,12 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          actions: const [
+            IconButton(
+              onPressed: null,
+              icon: Icon(Icons.more_vert),
+            ),
+          ],
         ),
         drawer: const MyDrawer(),
         backgroundColor: Theme.of(context).colorScheme.surface,

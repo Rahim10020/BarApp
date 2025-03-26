@@ -84,7 +84,7 @@ class BarCreationScreen extends StatefulWidget {
   const BarCreationScreen({super.key});
 
   @override
-  _BarCreationScreenState createState() => _BarCreationScreenState();
+  State<BarCreationScreen> createState() => _BarCreationScreenState();
 }
 
 class _BarCreationScreenState extends State<BarCreationScreen> {
@@ -94,38 +94,48 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Configurer votre bar')),
+      appBar: AppBar(
+        title: const Text('Configurer votre bar'),
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Bienvenue ! Configurez votre bar pour commencer.',
-                style: TextStyle(fontSize: 18)),
-            SizedBox(height: 20),
-            TextField(
-                controller: _nomController,
-                decoration: InputDecoration(labelText: 'Nom du bar')),
-            TextField(
-                controller: _adresseController,
-                decoration:
-                    InputDecoration(labelText: 'Adresse (email/téléphone)')),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                if (_nomController.text.isNotEmpty &&
-                    _adresseController.text.isNotEmpty) {
-                  Provider.of<BarProvider>(context, listen: false)
-                      .createBar(_nomController.text, _adresseController.text);
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (_) => const HomePage()));
-                }
-              },
-              child: Text('Créer le bar'),
-              style:
-                  ElevatedButton.styleFrom(backgroundColor: Colors.brown[600]),
-            ),
-          ],
+        padding: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Bienvenue ! Configurez votre bar pour commencer.',
+                  style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 20),
+              TextField(
+                  controller: _nomController,
+                  decoration: const InputDecoration(labelText: 'Nom du bar')),
+              TextField(
+                  controller: _adresseController,
+                  decoration: const InputDecoration(
+                      labelText: 'Adresse (email/téléphone)')),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_nomController.text.isNotEmpty &&
+                      _adresseController.text.isNotEmpty) {
+                    Provider.of<BarProvider>(context, listen: false).createBar(
+                        _nomController.text, _adresseController.text);
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (_) => const HomePage()));
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown[600]),
+                child: const Text(
+                  'Créer le bar',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

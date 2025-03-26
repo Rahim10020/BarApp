@@ -23,38 +23,53 @@ class _CommandeScreenState extends State<CommandeScreen> {
   Fournisseur? _fournisseurSelectionne;
 
   void _ajouterCommande(BarProvider provider) {
-    var fournisseur = _fournisseurSelectionne ??
-        Fournisseur(
-          id: provider.generateUniqueId(),
-          nom: _nomFournisseurController.text.isNotEmpty
-              ? _nomFournisseurController.text
-              : 'Inconnu',
-          adresse: _adresseFournisseurController.text.isNotEmpty
-              ? _adresseFournisseurController.text
-              : 'N/A',
-        );
-    if (_fournisseurSelectionne == null) provider.addFournisseur(fournisseur);
-    var lignes = _casiersSelectionnes.asMap().entries.map((e) {
-      var casier = e.value;
+    if (_casiersSelectionnes.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("La commande doit concerner au moins un casier"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("ok"),
+            ),
+          ],
+        ),
+      );
+    } else {
+      var fournisseur = _fournisseurSelectionne ??
+          Fournisseur(
+            id: provider.generateUniqueId(),
+            nom: _nomFournisseurController.text.isNotEmpty
+                ? _nomFournisseurController.text
+                : 'Inconnu',
+            adresse: _adresseFournisseurController.text.isNotEmpty
+                ? _adresseFournisseurController.text
+                : 'N/A',
+          );
+      if (_fournisseurSelectionne == null) provider.addFournisseur(fournisseur);
+      var lignes = _casiersSelectionnes.asMap().entries.map((e) {
+        var casier = e.value;
 
-      return LigneCommande(
-          id: e.key, montant: casier.getPrixTotal(), casier: casier);
-    }).toList();
-    var commande = Commande(
-      id: provider.generateUniqueId(),
-      montantTotal: lignes.fold(0.0, (sum, ligne) => sum + ligne.montant),
-      dateCommande: DateTime.now(),
-      lignesCommande: lignes,
-      barInstance: provider.currentBar!,
-      fournisseur: fournisseur,
-    );
-    provider.addCommande(commande);
-    setState(() {
-      _casiersSelectionnes.clear();
-      _nomFournisseurController.clear();
-      _adresseFournisseurController.clear();
-      _fournisseurSelectionne = null;
-    });
+        return LigneCommande(
+            id: e.key, montant: casier.getPrixTotal(), casier: casier);
+      }).toList();
+      var commande = Commande(
+        id: provider.generateUniqueId(),
+        montantTotal: lignes.fold(0.0, (sum, ligne) => sum + ligne.montant),
+        dateCommande: DateTime.now(),
+        lignesCommande: lignes,
+        barInstance: provider.currentBar!,
+        fournisseur: fournisseur,
+      );
+      provider.addCommande(commande);
+      setState(() {
+        _casiersSelectionnes.clear();
+        _nomFournisseurController.clear();
+        _adresseFournisseurController.clear();
+        _fournisseurSelectionne = null;
+      });
+    }
   }
 
   @override
@@ -102,6 +117,9 @@ class _CommandeScreenState extends State<CommandeScreen> {
                       labelText: 'Adresse du fournisseur',
                     ),
                   ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
                   BuildCasierSelector(
                     itemCount: provider.casiers.length,
                     itemBuilder: (context, index) {
@@ -129,6 +147,9 @@ class _CommandeScreenState extends State<CommandeScreen> {
                         ),
                       );
                     },
+                  ),
+                  const SizedBox(
+                    height: 4.0,
                   ),
                   ElevatedButton.icon(
                     icon: const Icon(
@@ -169,7 +190,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                     leading: Icon(Icons.receipt_long, color: Colors.brown[600]),
                     title: Text('Commande #${commande.id}'),
                     subtitle: Text(
-                        'Total : ${Helpers.formatterEnCFA(commande.montantTotal)} - ${commande.dateCommande.day}/${commande.dateCommande.month}'),
+                        'Total : ${Helpers.formatterEnCFA(commande.montantTotal)} - ${Helpers.formatterDate(commande.dateCommande)}'),
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(

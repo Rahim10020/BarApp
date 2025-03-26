@@ -13,7 +13,12 @@ class RefrigerateurDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text(refrigerateur.nom),
+        title: Text(
+          refrigerateur.nom,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.brown[800],
       ),
       body: Padding(
@@ -23,8 +28,10 @@ class RefrigerateurDetailScreen extends StatelessWidget {
           children: [
             BuildInfoCard(label: 'ID', value: '${refrigerateur.id}'),
             BuildInfoCard(label: 'Nom', value: refrigerateur.nom),
-            BuildInfoCard(
-                label: 'Température', value: '${refrigerateur.temperature}°C'),
+            if (refrigerateur.temperature != null)
+              BuildInfoCard(
+                  label: 'Température',
+                  value: '${refrigerateur.temperature}°C'),
             BuildInfoCard(
                 label: 'Total Boissons',
                 value: '${refrigerateur.getBoissonTotal()}'),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
+import 'package:projet7/pages/detail/boisson/modifier_boisson_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
@@ -20,29 +21,64 @@ class _BoissonScreenState extends State<BoissonScreen> {
   Modele? _modele;
 
   void _ajouterBoisson(BarProvider provider) {
-    var boisson = Boisson(
-      id: provider.generateUniqueId(),
-      nom: _nomController.text,
-      prix: [double.parse(_prixController.text)],
-      estFroid: false,
-      modele: _modele,
-      description: _descriptionController.text.isNotEmpty
-          ? _descriptionController.text
-          : null,
-    );
-    provider.addBoisson(boisson);
-    _resetForm();
-  }
-
-  void _modifierBoisson(BarProvider provider, Boisson boisson) {
-    boisson.nom = _nomController.text;
-    boisson.prix = [double.parse(_prixController.text)];
-    boisson.modele = _modele;
-    boisson.description = _descriptionController.text.isNotEmpty
-        ? _descriptionController.text
-        : null;
-    provider.updateBoisson(boisson);
-    _resetForm();
+    if (_nomController.text.isEmpty || _nomController.text == "") {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Veuillez renseigner le nom"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("ok"),
+            ),
+          ],
+        ),
+      );
+    } else if (_prixController.text.isEmpty || _prixController.text == "") {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Veuillez renseigner le prix"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("ok"),
+            ),
+          ],
+        ),
+      );
+    } else if (_modele == null) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Veuillez choisir le modèle"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("ok"),
+            ),
+          ],
+        ),
+      );
+    } else {
+      var boisson = Boisson(
+        id: provider.generateUniqueId(),
+        nom: _nomController.text,
+        prix: [double.parse(_prixController.text)],
+        estFroid: false,
+        modele: _modele,
+        description: _descriptionController.text.isNotEmpty
+            ? _descriptionController.text
+            : null,
+      );
+      provider.addBoisson(boisson);
+      _resetForm();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${boisson.nom} ajouté avec succès!'),
+        ),
+      );
+    }
   }
 
   void _resetForm() {
@@ -167,73 +203,45 @@ class _BoissonScreenState extends State<BoissonScreen> {
                         IconButton(
                           icon: const Icon(Icons.edit, color: Colors.blue),
                           onPressed: () {
-                            _nomController.text = boisson.nom ?? '';
-                            _prixController.text = boisson.prix.last.toString();
-                            _descriptionController.text =
-                                boisson.description ?? '';
-                            setState(() {
-                              _modele = boisson.modele;
-                            });
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: const Text('Modifier la boisson'),
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextField(
-                                          controller: _nomController,
-                                          decoration: const InputDecoration(
-                                              labelText: 'Nom')),
-                                      TextField(
-                                          controller: _prixController,
-                                          decoration: const InputDecoration(
-                                              labelText: 'Prix'),
-                                          keyboardType: TextInputType.number),
-                                      TextField(
-                                          controller: _descriptionController,
-                                          decoration: const InputDecoration(
-                                              labelText: 'Description')),
-                                      DropdownButton<Modele>(
-                                        hint: const Text('Modèle'),
-                                        value: _modele,
-                                        items: Modele.values
-                                            .map(
-                                              (modele) => DropdownMenuItem(
-                                                value: modele,
-                                                child: Text(
-                                                  modele == Modele.petit
-                                                      ? 'Petit'
-                                                      : 'Grand',
-                                                ),
-                                              ),
-                                            )
-                                            .toList(),
-                                        onChanged: (value) =>
-                                            setState(() => _modele = value),
-                                      ),
-                                    ],
-                                  ),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ModifierBoissonScreen(
+                                  boisson: boisson,
                                 ),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text('Annuler')),
-                                  TextButton(
-                                      onPressed: () {
-                                        _modifierBoisson(provider, boisson);
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Modifier')),
-                                ],
                               ),
                             );
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => provider.deleteBoisson(boisson),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                    "Voulez-vous supprimer ${boisson.nom} ?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("Annuler"),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        provider.deleteBoisson(boisson);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                '${boisson.nom} supprimé avec succès!'),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text("Oui"))
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
