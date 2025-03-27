@@ -29,8 +29,8 @@ class _AjouterBoissonRefrigerateurScreenState
     casierSelectionne = provider.casiers[0];
   }
 
-  void _ajouterBoissonsAuRefrigerateur(
-      BarProvider provider, Refrigerateur refrigerateur) {
+  Future<void> _ajouterBoissonsAuRefrigerateur(
+      BarProvider provider, Refrigerateur refrigerateur) async {
     if (_boissonAAjouterController.text.isEmpty) {
       showDialog(
         context: context,
@@ -45,35 +45,31 @@ class _AjouterBoissonRefrigerateurScreenState
           ],
         ),
       );
-    } else if (int.tryParse(_boissonAAjouterController.text)! >
-        casierSelectionne!.boissonTotal) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("Pas assez de boissons dans le casier"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
-            ),
-          ],
-        ),
-      );
     } else {
-      for (int i = 0; i < int.tryParse(_boissonAAjouterController.text)!; i++) {
-        refrigerateur.boissons!.add(casierSelectionne!.boissons[i]);
-        casierSelectionne!.boissons.removeAt(i);
+      try {
+        await provider.ajouterBoissonsAuRefrigerateur(casierSelectionne!.id,
+            refrigerateur.id, int.tryParse(_boissonAAjouterController.text)!);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Boisson ajoutée avec succès!"),
+          ),
+        );
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("$e"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("ok"),
+              ),
+            ],
+          ),
+        );
       }
-      provider.updateRefrigerateur(refrigerateur);
-      provider.updateCasier(casierSelectionne!);
 
       _boissonAAjouterController.clear();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Boisson ajoutée avec succès!"),
-        ),
-      );
     }
   }
 
@@ -148,7 +144,6 @@ class _AjouterBoissonRefrigerateurScreenState
                         onPressed: () {
                           _ajouterBoissonsAuRefrigerateur(
                               provider, widget.refrigerateur);
-                          Navigator.pop(context);
                         },
                       ),
                     ],

@@ -42,6 +42,43 @@ class BarProvider with ChangeNotifier {
 
   int generateUniqueId() => DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF;
 
+  Future<void> ajouterBoissonsAuRefrigerateur(
+      int casierId, int refrigerateurId, int nombre) async {
+    // Récupérer le casier et le réfrigérateur depuis Hive
+    var casier = _casierBox.values.firstWhere((c) => c.id == casierId,
+        orElse: () => throw Exception('Casier non trouvé'));
+    var refrigerateur = _refrigerateurBox.values.firstWhere(
+        (r) => r.id == refrigerateurId,
+        orElse: () => throw Exception('Réfrigérateur non trouvé'));
+
+    // Vérifier qu'il y a assez de boissons dans le casier
+    if (casier.boissons.length < nombre || nombre <= 0) {
+      throw Exception(
+          'Nombre de boissons invalide ou insuffisant dans le casier');
+    }
+
+    // Initialiser la liste des boissons du réfrigérateur si elle est null
+    refrigerateur.boissons ??= [];
+
+    // Transférer les boissons (prendre les "nombre" premières boissons du casier)
+    List<Boisson> boissonsATransferer = casier.boissons.sublist(0, nombre);
+    refrigerateur.boissons!.addAll(boissonsATransferer);
+    casier.boissons.removeRange(0, nombre);
+
+    // Mettre à jour le nombre total de boissons dans le casier
+    casier.boissonTotal = casier.boissons.length;
+
+    // Sauvegarder les modifications dans Hive
+    int casierIndex = _casierBox.values.toList().indexOf(casier);
+    int refrigerateurIndex =
+        _refrigerateurBox.values.toList().indexOf(refrigerateur);
+    await _casierBox.putAt(casierIndex, casier);
+    await _refrigerateurBox.putAt(refrigerateurIndex, refrigerateur);
+
+    // Notifier les écouteurs pour mettre à jour l'UI
+    notifyListeners();
+  }
+
   // BarInstance
   BarInstance? get currentBar => _currentBar;
   Future<void> createBar(String nom, String adresse) async {

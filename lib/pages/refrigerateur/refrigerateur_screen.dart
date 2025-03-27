@@ -202,8 +202,6 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                             _nomController.text = refrigerateur.nom;
                             _tempController.text =
                                 refrigerateur.temperature?.toString() ?? '';
-                            // setState(() => _boissonsSelectionnees =
-                            //     List.from(refrigerateur.boissons ?? []));
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/vente.dart';
+import 'package:projet7/pages/vente/ligne_vente_detail_screen.dart';
 import 'package:projet7/utils/helpers.dart';
 
 class VenteDetailScreen extends StatelessWidget {
@@ -41,6 +42,13 @@ class VenteDetailScreen extends StatelessWidget {
                       title: Text(ligne.boisson.nom ?? 'Sans nom'),
                       subtitle: Text(
                           'Montant: ${Helpers.formatterEnCFA(ligne.montant)}'),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LigneVenteDetailScreen(
+                              ligneVente: vente.lignesVente[index]),
+                        ),
+                      ),
                     ),
                   );
                 },

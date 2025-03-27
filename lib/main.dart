@@ -74,7 +74,7 @@ class BarSetupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<BarProvider>(context);
     if (provider.currentBar == null) {
-      return BarCreationScreen();
+      return const BarCreationScreen();
     }
     return const HomePage();
   }

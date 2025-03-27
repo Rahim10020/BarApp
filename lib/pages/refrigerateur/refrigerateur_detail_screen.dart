@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/refrigerateur.dart';
+import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
 import 'package:projet7/utils/helpers.dart';
 
 class RefrigerateurDetailScreen extends StatelessWidget {
@@ -54,6 +55,13 @@ class RefrigerateurDetailScreen extends StatelessWidget {
                       title: Text(boisson.nom ?? 'Sans nom'),
                       subtitle: Text(
                         Helpers.formatterEnCFA(boisson.prix.last),
+                      ),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              BoissonDetailScreen(boisson: boisson),
+                        ),
                       ),
                     ),
                   );

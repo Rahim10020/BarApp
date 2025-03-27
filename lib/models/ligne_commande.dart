@@ -24,4 +24,8 @@ class LigneCommande {
     required this.montant,
     required this.casier,
   });
+
+  double getMontant() {
+    return casier.getPrixTotal();
+  }
 }

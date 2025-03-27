@@ -85,6 +85,9 @@ class _VenteScreenState extends State<VenteScreen> {
                 const Text('Ajouter une vente',
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(
+                  height: 8.0,
+                ),
                 Container(
                   height: 50,
                   child: ListView.builder(
@@ -124,9 +127,18 @@ class _VenteScreenState extends State<VenteScreen> {
                     },
                   ),
                 ),
+                const SizedBox(
+                  height: 8.0,
+                ),
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.local_drink),
-                  label: const Text('Enregistrer'),
+                  icon: const Icon(
+                    Icons.local_drink,
+                    color: Colors.white,
+                  ),
+                  label: const Text(
+                    'Enregistrer',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.brown[600]),
                   onPressed: boissonsSelectionnees.isNotEmpty

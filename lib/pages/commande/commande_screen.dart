@@ -202,7 +202,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text(
-                                "Voulez-vous supprimer Commande ${commande.id} ?"),
+                                "Voulez-vous supprimer Commande #${commande.id} ?"),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),

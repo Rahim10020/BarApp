@@ -22,10 +22,6 @@ class BoissonDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BuildInfoCard(
-              label: 'ID',
-              value: '${boisson.id}',
-            ),
-            BuildInfoCard(
               label: 'Nom',
               value: boisson.nom ?? 'N/A',
             ),

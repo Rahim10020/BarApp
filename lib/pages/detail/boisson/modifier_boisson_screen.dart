@@ -73,6 +73,12 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
           ? _descriptionController.text
           : null;
       provider.updateBoisson(boisson);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("${boisson.nom} modifié avec succès!"),
+        ),
+      );
     }
   }
 

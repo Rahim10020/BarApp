@@ -24,4 +24,8 @@ class LigneVente {
     required this.montant,
     required this.boisson,
   });
+
+  double getMontant() {
+    return boisson.prix.last;
+  }
 }

@@ -25,13 +25,16 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
     _boissonTotalController.text = widget.casier.boissonTotal.toString();
     final provider = Provider.of<BarProvider>(context, listen: false);
     for (int i = 0; i < provider.boissons.length; i++) {
-      if (widget.casier.boissons[0] == provider.boissons[i]) {
-        setState(() {
-          selectedIndex = i;
-        });
-        break;
+      if (widget.casier.boissons.isNotEmpty) {
+        if (widget.casier.boissons[0] == provider.boissons[i]) {
+          setState(() {
+            selectedIndex = i;
+          });
+          break;
+        }
       }
     }
+    boissonSelectionnee = provider.boissons[0];
   }
 
   @override
@@ -75,6 +78,12 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
       setState(() {
         _boissonTotalController.clear();
       });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Casier #${casier.id} modifié avec succès!"),
+        ),
+      );
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/commande.dart';
+import 'package:projet7/pages/commande/ligne_commande_detail_screen.dart';
 import 'package:projet7/utils/helpers.dart';
 
 class CommandeDetailScreen extends StatelessWidget {
@@ -56,6 +57,13 @@ class CommandeDetailScreen extends StatelessWidget {
                       ),
                       subtitle: Text(
                         'Montant: ${Helpers.formatterEnCFA(ligne.montant)} - Boissons: ${ligne.casier.boissonTotal}',
+                      ),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LigneCommandeDetailScreen(
+                              ligneCommande: commande.lignesCommande[index]),
+                        ),
                       ),
                     ),
                   );
