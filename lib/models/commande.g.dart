@@ -22,7 +22,7 @@ class CommandeAdapter extends TypeAdapter<Commande> {
       dateCommande: fields[2] as DateTime,
       lignesCommande: (fields[3] as List).cast<LigneCommande>(),
       barInstance: fields[4] as BarInstance,
-      fournisseur: fields[5] as Fournisseur,
+      fournisseur: fields[5] as Fournisseur?,
     );
   }
 

@@ -19,7 +19,7 @@ class FournisseurAdapter extends TypeAdapter<Fournisseur> {
     return Fournisseur(
       id: fields[0] as int,
       nom: fields[1] as String,
-      adresse: fields[2] as String,
+      adresse: fields[2] as String?,
     );
   }
 

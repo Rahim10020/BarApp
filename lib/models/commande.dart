@@ -25,7 +25,7 @@ class Commande {
   final BarInstance barInstance;
 
   @HiveField(5)
-  final Fournisseur fournisseur;
+  Fournisseur? fournisseur;
 
   /// [id] : repésente la référence de la commande
   /// [montantTotal] : représente le montant total de la commande
@@ -39,7 +39,7 @@ class Commande {
     required this.dateCommande,
     required this.lignesCommande,
     required this.barInstance,
-    required this.fournisseur,
+    this.fournisseur,
   });
 
   double getPrixTotal() {

@@ -24,10 +24,16 @@ class CommandeDetailScreen extends StatelessWidget {
             BuildInfoCard(
                 label: 'Montant Total',
                 value: Helpers.formatterEnCFA(commande.montantTotal)),
-            BuildInfoCard(label: 'Date', value: '${commande.dateCommande}'),
+            BuildInfoCard(
+              label: 'Date',
+              value: Helpers.formatterDate(commande.dateCommande),
+            ),
             BuildInfoCard(label: 'Bar', value: commande.barInstance.nom),
             BuildInfoCard(
-                label: 'Fournisseur', value: commande.fournisseur.nom),
+                label: 'Fournisseur',
+                value: commande.fournisseur != null
+                    ? commande.fournisseur!.nom
+                    : "Inconnu"),
             const SizedBox(height: 16),
             const Text(
               'Lignes de commande:',

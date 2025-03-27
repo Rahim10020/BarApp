@@ -15,7 +15,6 @@ class ModifierCasierScreen extends StatefulWidget {
 }
 
 class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
-  final List<Boisson> _boissonsSelectionnees = [];
   int selectedIndex = 0;
   Boisson? boissonSelectionnee;
   final _boissonTotalController = TextEditingController();
@@ -57,16 +56,23 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
         ),
       );
     } else {
-      for (int i = 0; i < num.tryParse(_boissonTotalController.text)!; i++) {
-        _boissonsSelectionnees.add(boissonSelectionnee!);
-      }
+      List<Boisson> boissons = List.generate(
+        int.tryParse(_boissonTotalController.text)!,
+        (_) => Boisson(
+          id: provider.generateUniqueId(),
+          nom: boissonSelectionnee!.nom,
+          prix: List.from(boissonSelectionnee!.prix),
+          estFroid: boissonSelectionnee!.estFroid,
+          modele: boissonSelectionnee!.modele,
+          description: boissonSelectionnee!.description,
+        ),
+      );
 
       casier.boissonTotal =
           int.tryParse(_boissonTotalController.text) ?? casier.boissons.length;
-      casier.boissons = _boissonsSelectionnees;
+      casier.boissons = boissons;
       provider.updateCasier(casier);
       setState(() {
-        _boissonsSelectionnees.clear();
         _boissonTotalController.clear();
       });
     }

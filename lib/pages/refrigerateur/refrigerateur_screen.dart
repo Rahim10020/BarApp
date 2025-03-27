@@ -260,6 +260,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                     onPressed: () {
                                       provider
                                           .deleteRefrigerateur(refrigerateur);
+                                      Navigator.pop(context);
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(

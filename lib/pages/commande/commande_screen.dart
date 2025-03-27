@@ -37,17 +37,16 @@ class _CommandeScreenState extends State<CommandeScreen> {
         ),
       );
     } else {
-      var fournisseur = _fournisseurSelectionne ??
-          Fournisseur(
+      Fournisseur? fournisseur;
+      if (_nomFournisseurController.text.isNotEmpty) {
+        fournisseur = Fournisseur(
             id: provider.generateUniqueId(),
-            nom: _nomFournisseurController.text.isNotEmpty
-                ? _nomFournisseurController.text
-                : 'Inconnu',
-            adresse: _adresseFournisseurController.text.isNotEmpty
-                ? _adresseFournisseurController.text
-                : 'N/A',
-          );
-      if (_fournisseurSelectionne == null) provider.addFournisseur(fournisseur);
+            nom: _nomFournisseurController.text,
+            adresse: _adresseFournisseurController.text);
+        provider.addFournisseur(fournisseur);
+      } else {
+        fournisseur = _fournisseurSelectionne;
+      }
       var lignes = _casiersSelectionnes.asMap().entries.map((e) {
         var casier = e.value;
 
@@ -69,6 +68,11 @@ class _CommandeScreenState extends State<CommandeScreen> {
         _adresseFournisseurController.clear();
         _fournisseurSelectionne = null;
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Commande créée avec succès!'),
+        ),
+      );
     }
   }
 
@@ -157,7 +161,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                       color: Colors.white,
                     ),
                     label: const Text(
-                      'Passer Commande',
+                      'Créer Commande',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -191,6 +195,36 @@ class _CommandeScreenState extends State<CommandeScreen> {
                     title: Text('Commande #${commande.id}'),
                     subtitle: Text(
                         'Total : ${Helpers.formatterEnCFA(commande.montantTotal)} - ${Helpers.formatterDate(commande.dateCommande)}'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                                "Voulez-vous supprimer Commande ${commande.id} ?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("Annuler"),
+                              ),
+                              TextButton(
+                                  onPressed: () {
+                                    provider.deleteCommande(commande);
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            'Commande #${commande.id} supprimé avec succès!'),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text("Oui"))
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(

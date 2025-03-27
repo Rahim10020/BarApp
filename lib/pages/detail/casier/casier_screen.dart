@@ -16,7 +16,6 @@ class CasierScreen extends StatefulWidget {
 }
 
 class _CasierScreenState extends State<CasierScreen> {
-  final List<Boisson> _boissonsSelectionnees = [];
   int selectedIndex = 0;
   Boisson? boissonSelectionnee;
   final _boissonTotalController = TextEditingController();
@@ -25,7 +24,9 @@ class _CasierScreenState extends State<CasierScreen> {
   void initState() {
     super.initState();
     final provider = Provider.of<BarProvider>(context, listen: false);
-    boissonSelectionnee = provider.boissons[0];
+    if (provider.boissons.isNotEmpty) {
+      boissonSelectionnee = provider.boissons[0];
+    }
   }
 
   void _ajouterCasier(BarProvider provider) {
@@ -44,19 +45,27 @@ class _CasierScreenState extends State<CasierScreen> {
         ),
       );
     } else {
-      for (int i = 0; i < num.tryParse(_boissonTotalController.text)!; i++) {
-        _boissonsSelectionnees.add(boissonSelectionnee!);
-      }
+      List<Boisson> boissons = List.generate(
+        int.tryParse(_boissonTotalController.text)!,
+        (_) => Boisson(
+          id: provider.generateUniqueId(),
+          nom: boissonSelectionnee!.nom,
+          prix: List.from(boissonSelectionnee!.prix),
+          estFroid: boissonSelectionnee!.estFroid,
+          modele: boissonSelectionnee!.modele,
+          description: boissonSelectionnee!.description,
+        ),
+      );
 
       var casier = Casier(
         id: provider.generateUniqueId(),
-        boissonTotal: int.tryParse(_boissonTotalController.text) ??
-            _boissonsSelectionnees.length,
-        boissons: _boissonsSelectionnees,
+        boissonTotal:
+            int.tryParse(_boissonTotalController.text) ?? boissons.length,
+        boissons: boissons,
       );
+
       provider.addCasier(casier);
       setState(() {
-        _boissonsSelectionnees.clear();
         _boissonTotalController.clear();
       });
     }
@@ -186,6 +195,7 @@ class _CasierScreenState extends State<CasierScreen> {
                                   TextButton(
                                       onPressed: () {
                                         provider.deleteCasier(casier);
+                                        Navigator.pop(context);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(

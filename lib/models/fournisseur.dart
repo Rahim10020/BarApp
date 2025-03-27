@@ -13,7 +13,7 @@ class Fournisseur {
   final String nom;
 
   @HiveField(2)
-  final String adresse;
+  String? adresse;
 
   /// [id] : repésente l'identifiant du fournisseur
   /// [nom] : représente le nom du fournisseur
@@ -21,6 +21,6 @@ class Fournisseur {
   Fournisseur({
     required this.id,
     required this.nom,
-    required this.adresse,
+    this.adresse,
   });
 }

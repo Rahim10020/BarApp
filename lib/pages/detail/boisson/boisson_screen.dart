@@ -229,6 +229,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
                                   TextButton(
                                       onPressed: () {
                                         provider.deleteBoisson(boisson);
+                                        Navigator.pop(context);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
