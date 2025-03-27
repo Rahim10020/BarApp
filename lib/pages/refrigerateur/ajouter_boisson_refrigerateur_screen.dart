@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/refrigerateur.dart';
-import 'package:projet7/pages/commande/components/build_casier_selector.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +25,14 @@ class _AjouterBoissonRefrigerateurScreenState
   void initState() {
     super.initState();
     final provider = Provider.of<BarProvider>(context, listen: false);
-    casierSelectionne = provider.casiers[0];
+    // Sélectionner le premier casier des lignes de commande s’il existe
+    var casiersCommandes = provider.commandes
+        .expand((commande) => commande.lignesCommande)
+        .map((ligne) => ligne.casier)
+        .toList();
+    if (casiersCommandes.isNotEmpty) {
+      casierSelectionne = casiersCommandes[0];
+    }
   }
 
   Future<void> _ajouterBoissonsAuRefrigerateur(
@@ -45,15 +51,29 @@ class _AjouterBoissonRefrigerateurScreenState
           ],
         ),
       );
+    } else if (casierSelectionne == null) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Aucun casier de commande sélectionné"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("ok"),
+            ),
+          ],
+        ),
+      );
     } else {
       try {
-        await provider.ajouterBoissonsAuRefrigerateur(casierSelectionne!.id,
-            refrigerateur.id, int.tryParse(_boissonAAjouterController.text)!);
+        int nombre = int.tryParse(_boissonAAjouterController.text) ?? 0;
+        await provider.ajouterBoissonsAuRefrigerateur(
+            casierSelectionne!.id, refrigerateur.id, nombre);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Boisson ajoutée avec succès!"),
-          ),
+          const SnackBar(content: Text("Boissons ajoutées avec succès !")),
         );
+        _boissonAAjouterController.clear();
+        Navigator.pop(context); // Retourner à l’écran précédent après succès
       } catch (e) {
         showDialog(
           context: context,
@@ -68,20 +88,22 @@ class _AjouterBoissonRefrigerateurScreenState
           ),
         );
       }
-
-      _boissonAAjouterController.clear();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<BarProvider>(context);
+    // Récupérer les casiers des lignes de commande uniquement
+    var casiersCommandes = provider.commandes
+        .expand((commande) => commande.lignesCommande)
+        .map((ligne) => ligne.casier)
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text(
-          " Ajout de boissons à ${widget.refrigerateur.nom}",
-        ),
+        title: Text("Ajout de boissons à ${widget.refrigerateur.nom}"),
         backgroundColor: Colors.brown[800],
       ),
       body: SingleChildScrollView(
@@ -89,30 +111,49 @@ class _AjouterBoissonRefrigerateurScreenState
           padding: const EdgeInsets.all(32.0),
           child: Column(
             children: [
-              BuildCasierSelector(
-                itemCount: provider.casiers.length,
-                itemBuilder: (context, index) {
-                  var casier = provider.casiers[index];
-                  return GestureDetector(
-                    onTap: () => setState(() {
-                      selectedIndex = index;
-                      casierSelectionne = casier;
-                    }),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: selectedIndex == index
-                            ? Colors.brown[200]
-                            : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text('Casier #${casier.id}'),
-                    ),
-                  );
-                },
+              const Row(
+                children: [
+                  Text(
+                    "Casiers commandés",
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
+              const SizedBox(
+                height: 16.0,
+              ),
+              if (casiersCommandes.isEmpty)
+                const Text("Aucun casier disponible dans les commandes")
+              else
+                Container(
+                  height: 50,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: casiersCommandes.length,
+                    itemBuilder: (context, index) {
+                      var casier = casiersCommandes[index];
+                      return GestureDetector(
+                        onTap: () => setState(() {
+                          selectedIndex = index;
+                          casierSelectionne = casier;
+                        }),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: selectedIndex == index
+                                ? Colors.brown[200]
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text('Casier #${casier.id}'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               if (casierSelectionne != null)
                 Container(
                   padding: const EdgeInsets.all(16.0),
@@ -121,30 +162,18 @@ class _AjouterBoissonRefrigerateurScreenState
                       TextField(
                         controller: _boissonAAjouterController,
                         decoration: const InputDecoration(
-                          labelText: 'Nombre total de boissons',
-                        ),
+                            labelText: 'Nombre total de boissons'),
                         keyboardType: TextInputType.number,
                       ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
+                      const SizedBox(height: 8.0),
                       ElevatedButton.icon(
-                        icon: const Icon(
-                          Icons.kitchen,
-                          color: Colors.white,
-                        ),
-                        label: const Text(
-                          'Ajouter',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                        icon: const Icon(Icons.kitchen, color: Colors.white),
+                        label: const Text('Ajouter',
+                            style: TextStyle(color: Colors.white)),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.brown[600]),
-                        onPressed: () {
-                          _ajouterBoissonsAuRefrigerateur(
-                              provider, widget.refrigerateur);
-                        },
+                        onPressed: () => _ajouterBoissonsAuRefrigerateur(
+                            provider, widget.refrigerateur),
                       ),
                     ],
                   ),

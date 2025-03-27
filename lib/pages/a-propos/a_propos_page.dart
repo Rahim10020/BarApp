@@ -11,17 +11,12 @@ class AProposPage extends StatelessWidget {
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         backgroundColor: Colors.transparent,
-        title: Text(
+        title: const Text(
           "A Propos",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
             fontSize: 17,
           ),
         ),
-      ),
-      body: Column(
-        children: [
-          //
-        ],
       ),
     );
   }

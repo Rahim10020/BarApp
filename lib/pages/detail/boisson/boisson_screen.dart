@@ -20,7 +20,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
   final _descriptionController = TextEditingController();
   Modele? _modele;
 
-  void _ajouterBoisson(BarProvider provider) {
+  void _ajouterBoisson(BarProvider provider) async {
     if (_nomController.text.isEmpty || _nomController.text == "") {
       showDialog(
         context: context,
@@ -62,7 +62,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
       );
     } else {
       var boisson = Boisson(
-        id: provider.generateUniqueId(),
+        id: await provider.generateUniqueId("Boisson"),
         nom: _nomController.text,
         prix: [double.parse(_prixController.text)],
         estFroid: false,

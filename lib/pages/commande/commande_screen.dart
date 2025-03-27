@@ -22,7 +22,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
   final _adresseFournisseurController = TextEditingController();
   Fournisseur? _fournisseurSelectionne;
 
-  void _ajouterCommande(BarProvider provider) {
+  void _ajouterCommande(BarProvider provider) async {
     if (_casiersSelectionnes.isEmpty) {
       showDialog(
         context: context,
@@ -40,7 +40,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
       Fournisseur? fournisseur;
       if (_nomFournisseurController.text.isNotEmpty) {
         fournisseur = Fournisseur(
-            id: provider.generateUniqueId(),
+            id: await provider.generateUniqueId("Fournisseur"),
             nom: _nomFournisseurController.text,
             adresse: _adresseFournisseurController.text);
         provider.addFournisseur(fournisseur);
@@ -54,7 +54,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
             id: e.key, montant: casier.getPrixTotal(), casier: casier);
       }).toList();
       var commande = Commande(
-        id: provider.generateUniqueId(),
+        id: await provider.generateUniqueId("Commande"),
         montantTotal: lignes.fold(0.0, (sum, ligne) => sum + ligne.montant),
         dateCommande: DateTime.now(),
         lignesCommande: lignes,
@@ -80,12 +80,14 @@ class _CommandeScreenState extends State<CommandeScreen> {
   Widget build(BuildContext context) {
     final provider = Provider.of<BarProvider>(context);
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(
+          left: 16.0, right: 16.0, bottom: 16.0, top: 8.0),
       child: Column(
         children: [
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding:
+                  const EdgeInsets.only(left: 12, right: 12.0, bottom: 12.0),
               child: Column(
                 children: [
                   const Text(
@@ -122,7 +124,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 8.0,
+                    height: 4.0,
                   ),
                   BuildCasierSelector(
                     itemCount: provider.casiers.length,
@@ -153,7 +155,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                     },
                   ),
                   const SizedBox(
-                    height: 4.0,
+                    height: 2.0,
                   ),
                   ElevatedButton.icon(
                     icon: const Icon(

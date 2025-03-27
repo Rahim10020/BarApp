@@ -6,6 +6,7 @@ import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/commande.dart';
 import 'package:projet7/models/fournisseur.dart';
+import 'package:projet7/models/id_counter.dart';
 import 'package:projet7/models/ligne_commande.dart';
 import 'package:projet7/models/ligne_vente.dart';
 import 'package:projet7/models/refrigerateur.dart';
@@ -30,6 +31,7 @@ void main() async {
   Hive.registerAdapter(BarInstanceAdapter());
   Hive.registerAdapter(RefrigerateurAdapter());
   Hive.registerAdapter(ModeleAdapter());
+  Hive.registerAdapter(IdCounterAdapter());
 
   final themeProvider = ThemeProvider();
   await themeProvider.initHive();
@@ -116,11 +118,12 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
                       labelText: 'Adresse (email/téléphone)')),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_nomController.text.isNotEmpty &&
                       _adresseController.text.isNotEmpty) {
-                    Provider.of<BarProvider>(context, listen: false).createBar(
-                        _nomController.text, _adresseController.text);
+                    await Provider.of<BarProvider>(context, listen: false)
+                        .createBar(
+                            _nomController.text, _adresseController.text);
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (_) => const HomePage()));
                   }

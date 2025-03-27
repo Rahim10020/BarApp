@@ -18,9 +18,9 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(
+        title: const Text(
           "Paramètres",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
             fontSize: 17,
           ),
         ),
@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 Text(
                   "Mode sombre",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.inversePrimary,

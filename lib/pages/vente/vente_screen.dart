@@ -25,6 +25,40 @@ class _VenteScreenState extends State<VenteScreen> {
     _searchController.addListener(() => setState(() {}));
   }
 
+  // void _ajouterVente(BarProvider provider) async {
+  //   if (boissonsSelectionnees.isNotEmpty) {
+  //     setState(() => _isAdding = true);
+  //     var lignes = boissonsSelectionnees
+  //         .asMap()
+  //         .entries
+  //         .map((e) => LigneVente(
+  //             id: e.key, montant: e.value.prix.last, boisson: e.value))
+  //         .toList();
+  //     var vente = Vente(
+  //       id: provider.generateUniqueId(),
+  //       montantTotal: lignes.fold(0.0, (sum, ligne) => sum + ligne.montant),
+  //       dateVente: DateTime.now(),
+  //       lignesVente: lignes,
+  //     );
+  //     await provider.addVente(vente);
+  //     var refrigerateur = provider.refrigerateurs.isNotEmpty
+  //         ? provider.refrigerateurs[0]
+  //         : null;
+  //     if (refrigerateur != null && refrigerateur.boissons != null) {
+  //       refrigerateur.boissons!
+  //           .removeWhere((b) => boissonsSelectionnees.contains(b));
+  //       await provider.updateRefrigerateur(refrigerateur);
+  //     }
+  //     await Future.delayed(const Duration(milliseconds: 500));
+  //     setState(() {
+  //       boissonsSelectionnees.clear();
+  //       _isAdding = false;
+  //     });
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(const SnackBar(content: Text('Vente enregistrée !')));
+  //   }
+  // }
+
   void _ajouterVente(BarProvider provider) async {
     if (boissonsSelectionnees.isNotEmpty) {
       setState(() => _isAdding = true);
@@ -35,18 +69,16 @@ class _VenteScreenState extends State<VenteScreen> {
               id: e.key, montant: e.value.prix.last, boisson: e.value))
           .toList();
       var vente = Vente(
-        id: provider.generateUniqueId(),
+        id: await provider.generateUniqueId("Vente"),
         montantTotal: lignes.fold(0.0, (sum, ligne) => sum + ligne.montant),
         dateVente: DateTime.now(),
         lignesVente: lignes,
       );
       await provider.addVente(vente);
-      var refrigerateur = provider.refrigerateurs.isNotEmpty
-          ? provider.refrigerateurs[0]
-          : null;
-      if (refrigerateur != null && refrigerateur.boissons != null) {
-        refrigerateur.boissons!
-            .removeWhere((b) => boissonsSelectionnees.contains(b));
+      // Retirer les boissons vendues des réfrigérateurs
+      for (var refrigerateur in provider.refrigerateurs) {
+        refrigerateur.boissons
+            ?.removeWhere((b) => boissonsSelectionnees.contains(b));
         await provider.updateRefrigerateur(refrigerateur);
       }
       await Future.delayed(const Duration(milliseconds: 500));
@@ -62,10 +94,10 @@ class _VenteScreenState extends State<VenteScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<BarProvider>(context);
-    var boissonsDisponibles = provider.refrigerateurs.isNotEmpty &&
-            provider.refrigerateurs[0].boissons != null
-        ? provider.refrigerateurs[0].boissons!
-        : provider.boissons;
+    // Limiter les boissons disponibles à celles des réfrigérateurs
+    var boissonsDisponibles =
+        provider.refrigerateurs.expand((r) => r.boissons ?? []).toList();
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(

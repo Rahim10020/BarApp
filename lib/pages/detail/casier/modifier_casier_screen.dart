@@ -43,7 +43,7 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
     _boissonTotalController.dispose();
   }
 
-  void _modifierCasier(BarProvider provider, Casier casier) {
+  void _modifierCasier(BarProvider provider, Casier casier) async {
     if (_boissonTotalController.text.isEmpty ||
         _boissonTotalController.text == "") {
       showDialog(
@@ -59,17 +59,31 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
         ),
       );
     } else {
-      List<Boisson> boissons = List.generate(
-        int.tryParse(_boissonTotalController.text)!,
-        (_) => Boisson(
-          id: provider.generateUniqueId(),
+      // List<Boisson> boissons = List.generate(
+      //   int.tryParse(_boissonTotalController.text)!,
+      //   (_) => Boisson(
+      //     id: await provider.generateUniqueId("Boisson"),
+      //     nom: boissonSelectionnee!.nom,
+      //     prix: List.from(boissonSelectionnee!.prix),
+      //     estFroid: boissonSelectionnee!.estFroid,
+      //     modele: boissonSelectionnee!.modele,
+      //     description: boissonSelectionnee!.description,
+      //   ),
+      // );
+
+      List<Boisson> boissons = [];
+      int quantite = int.tryParse(_boissonTotalController.text) ?? 1;
+      for (int i = 0; i < quantite; i++) {
+        int newId = await provider.generateUniqueId("Boisson");
+        boissons.add(Boisson(
+          id: newId,
           nom: boissonSelectionnee!.nom,
           prix: List.from(boissonSelectionnee!.prix),
           estFroid: boissonSelectionnee!.estFroid,
           modele: boissonSelectionnee!.modele,
           description: boissonSelectionnee!.description,
-        ),
-      );
+        ));
+      }
 
       casier.boissonTotal =
           int.tryParse(_boissonTotalController.text) ?? casier.boissons.length;

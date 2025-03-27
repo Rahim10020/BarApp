@@ -16,7 +16,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
   final _nomController = TextEditingController();
   final _tempController = TextEditingController();
 
-  void _ajouterRefrigerateur(BarProvider provider) {
+  void _ajouterRefrigerateur(BarProvider provider) async {
     if (_nomController.text.isEmpty || _nomController.text == "") {
       showDialog(
         context: context,
@@ -45,7 +45,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       );
     } else {
       var refrigerateur = Refrigerateur(
-        id: provider.generateUniqueId(),
+        id: await provider.generateUniqueId("Refrigerateur"),
         nom: _nomController.text,
         temperature: double.tryParse(_tempController.text),
       );

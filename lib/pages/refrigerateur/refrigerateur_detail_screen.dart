@@ -27,7 +27,6 @@ class RefrigerateurDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BuildInfoCard(label: 'ID', value: '${refrigerateur.id}'),
             BuildInfoCard(label: 'Nom', value: refrigerateur.nom),
             if (refrigerateur.temperature != null)
               BuildInfoCard(
