@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:projet7/models/bar_instance.dart';
@@ -8,6 +10,10 @@ import 'package:projet7/models/fournisseur.dart';
 import 'package:projet7/models/id_counter.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/models/vente.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:projet7/utils/helpers.dart';
 
 class BarProvider with ChangeNotifier {
   late Box<BarInstance> _barBox;
@@ -67,42 +73,258 @@ class BarProvider with ChangeNotifier {
     return counter.lastId;
   }
 
-  // Future<void> ajouterBoissonsAuRefrigerateur(
-  //     int casierId, int refrigerateurId, int nombre) async {
-  //   // Récupérer le casier et le réfrigérateur depuis Hive
-  //   var casier = _casierBox.values.firstWhere((c) => c.id == casierId,
-  //       orElse: () => throw Exception('Casier non trouvé'));
-  //   var refrigerateur = _refrigerateurBox.values.firstWhere(
-  //       (r) => r.id == refrigerateurId,
-  //       orElse: () => throw Exception('Réfrigérateur non trouvé'));
+  Future<String> generateCommandePdf(Commande commande) async {
+    final pdf = pw.Document();
 
-  //   // Vérifier qu'il y a assez de boissons dans le casier
-  //   if (casier.boissons.length < nombre || nombre <= 0) {
-  //     throw Exception(
-  //         'Nombre de boissons invalide ou insuffisant dans le casier');
-  //   }
+    // Définir les styles
+    final headerStyle = pw.TextStyle(
+      fontSize: 24,
+      fontWeight: pw.FontWeight.bold,
+      color: PdfColors.brown800,
+    );
+    final subHeaderStyle = pw.TextStyle(
+      fontSize: 18,
+      fontWeight: pw.FontWeight.bold,
+      color: PdfColors.brown600,
+    );
+    final infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
+    final tableHeaderStyle = pw.TextStyle(
+      fontSize: 12,
+      fontWeight: pw.FontWeight.bold,
+      color: PdfColors.white,
+    );
+    final tableCellStyle = pw.TextStyle(fontSize: 12, color: PdfColors.black);
 
-  //   // Initialiser la liste des boissons du réfrigérateur si elle est null
-  //   refrigerateur.boissons ??= [];
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) => pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            // En-tête avec le nom du bar
+            pw.Container(
+              padding: const pw.EdgeInsets.all(10),
+              decoration: const pw.BoxDecoration(
+                color: PdfColors.brown100,
+                border: pw.Border(
+                    bottom: pw.BorderSide(color: PdfColors.brown600, width: 2)),
+              ),
+              child: pw.Text(
+                'Bar: ${commande.barInstance.nom}',
+                style: headerStyle,
+              ),
+            ),
+            pw.SizedBox(height: 20),
 
-  //   // Transférer les boissons (prendre les "nombre" premières boissons du casier)
-  //   List<Boisson> boissonsATransferer = casier.boissons.sublist(0, nombre);
-  //   refrigerateur.boissons!.addAll(boissonsATransferer);
-  //   casier.boissons.removeRange(0, nombre);
+            // Titre de la commande
+            pw.Text('Commande #${commande.id}', style: subHeaderStyle),
+            pw.SizedBox(height: 10),
 
-  //   // Mettre à jour le nombre total de boissons dans le casier
-  //   casier.boissonTotal = casier.boissons.length;
+            // Informations générales
+            pw.Text('Date: ${Helpers.formatterDate(commande.dateCommande)}',
+                style: infoStyle),
+            pw.Text(
+                'Montant Total: ${Helpers.formatterEnCFA(commande.getPrixTotal())}',
+                style: infoStyle),
+            pw.Text(
+              'Fournisseur: ${commande.fournisseur != null ? commande.fournisseur!.nom : "Inconnu"}',
+              style: infoStyle,
+            ),
+            pw.SizedBox(height: 20),
 
-  //   // Sauvegarder les modifications dans Hive
-  //   int casierIndex = _casierBox.values.toList().indexOf(casier);
-  //   int refrigerateurIndex =
-  //       _refrigerateurBox.values.toList().indexOf(refrigerateur);
-  //   await _casierBox.putAt(casierIndex, casier);
-  //   await _refrigerateurBox.putAt(refrigerateurIndex, refrigerateur);
+            // Section des lignes de commande
+            pw.Text('Lignes de Commande:', style: subHeaderStyle),
+            pw.SizedBox(height: 10),
+            pw.Table(
+              border: pw.TableBorder.all(color: PdfColors.brown400),
+              children: [
+                // En-tête du tableau
+                pw.TableRow(
+                  decoration: const pw.BoxDecoration(color: PdfColors.brown600),
+                  children: [
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(5),
+                      child: pw.Text('Casier ID', style: tableHeaderStyle),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(5),
+                      child: pw.Text('Boisson', style: tableHeaderStyle),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(5),
+                      child: pw.Text('Nombre de Boissons',
+                          style: tableHeaderStyle),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(5),
+                      child: pw.Text('Montant', style: tableHeaderStyle),
+                    ),
+                  ],
+                ),
+                // Lignes de commande
+                ...commande.lignesCommande.map((ligne) => pw.TableRow(
+                      children: [
+                        pw.Padding(
+                          padding: const pw.EdgeInsets.all(5),
+                          child: pw.Text('Casier #${ligne.casier.id}',
+                              style: tableCellStyle),
+                        ),
+                        pw.Padding(
+                          padding: const pw.EdgeInsets.all(5),
+                          child: pw.Text(
+                            ligne.casier.boissons.isNotEmpty
+                                ? ligne.casier.boissons[0].nom ?? 'Sans nom'
+                                : 'Aucune boisson',
+                            style: tableCellStyle,
+                          ),
+                        ),
+                        pw.Padding(
+                          padding: const pw.EdgeInsets.all(5),
+                          child: pw.Text('${ligne.casier.boissonTotal}',
+                              style: tableCellStyle),
+                        ),
+                        pw.Padding(
+                          padding: const pw.EdgeInsets.all(5),
+                          child: pw.Text(
+                              Helpers.formatterEnCFA(ligne.getMontant()),
+                              style: tableCellStyle),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
 
-  //   // Notifier les écouteurs pour mettre à jour l'UI
-  //   notifyListeners();
-  // }
+    // Sauvegarder dans le répertoire "Téléchargements"
+    final directory = await getDownloadsDirectory();
+    final filePath = '${directory!.path}/commande_${commande.id}.pdf';
+    final file = File(filePath);
+
+    // Supprimer l'ancien PDF s'il existe
+    if (await file.exists()) {
+      await file.delete();
+    }
+
+    // Sauvegarder le nouveau PDF
+    await file.writeAsBytes(await pdf.save());
+
+    return filePath;
+  }
+
+  Future<String> generateVentePdf(Vente vente) async {
+    final pdf = pw.Document();
+
+    // Définir les styles
+    final headerStyle = pw.TextStyle(
+      fontSize: 24,
+      fontWeight: pw.FontWeight.bold,
+      color: PdfColors.brown800,
+    );
+    final subHeaderStyle = pw.TextStyle(
+      fontSize: 18,
+      fontWeight: pw.FontWeight.bold,
+      color: PdfColors.brown600,
+    );
+    final infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
+    final tableHeaderStyle = pw.TextStyle(
+      fontSize: 12,
+      fontWeight: pw.FontWeight.bold,
+      color: PdfColors.white,
+    );
+    final tableCellStyle = pw.TextStyle(fontSize: 12, color: PdfColors.black);
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) => pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            // En-tête avec le nom du bar
+            pw.Container(
+              padding: const pw.EdgeInsets.all(10),
+              decoration: const pw.BoxDecoration(
+                color: PdfColors.brown100,
+                border: pw.Border(
+                    bottom: pw.BorderSide(color: PdfColors.brown600, width: 2)),
+              ),
+              child: pw.Text(
+                'Bar: ${_currentBar?.nom ?? "Bar Inconnu"}',
+                style: headerStyle,
+              ),
+            ),
+            pw.SizedBox(height: 20),
+
+            // Titre de la vente
+            pw.Text('Vente #${vente.id}', style: subHeaderStyle),
+            pw.SizedBox(height: 10),
+
+            // Informations générales
+            pw.Text('Date: ${Helpers.formatterDate(vente.dateVente)}',
+                style: infoStyle),
+            pw.Text(
+                'Montant Total: ${Helpers.formatterEnCFA(vente.getPrixTotal())}',
+                style: infoStyle),
+            pw.SizedBox(height: 20),
+
+            // Section des lignes de vente
+            pw.Text('Lignes de Vente:', style: subHeaderStyle),
+            pw.SizedBox(height: 10),
+            pw.Table(
+              border: pw.TableBorder.all(color: PdfColors.brown400),
+              children: [
+                // En-tête du tableau
+                pw.TableRow(
+                  decoration: const pw.BoxDecoration(color: PdfColors.brown600),
+                  children: [
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(5),
+                      child: pw.Text('Boisson', style: tableHeaderStyle),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(5),
+                      child: pw.Text('Montant', style: tableHeaderStyle),
+                    ),
+                  ],
+                ),
+                // Lignes de vente
+                ...vente.lignesVente.map((ligne) => pw.TableRow(
+                      children: [
+                        pw.Padding(
+                          padding: const pw.EdgeInsets.all(5),
+                          child: pw.Text(ligne.boisson.nom ?? 'Sans nom',
+                              style: tableCellStyle),
+                        ),
+                        pw.Padding(
+                          padding: const pw.EdgeInsets.all(5),
+                          child: pw.Text(
+                              Helpers.formatterEnCFA(ligne.getMontant()),
+                              style: tableCellStyle),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+
+    // Sauvegarder dans le répertoire "Téléchargements"
+    final directory = await getDownloadsDirectory();
+    final filePath = '${directory!.path}/vente_${vente.id}.pdf';
+    final file = File(filePath);
+
+    // Supprimer l'ancien PDF s'il existe
+    if (await file.exists()) {
+      await file.delete();
+    }
+
+    // Sauvegarder le nouveau PDF
+    await file.writeAsBytes(await pdf.save());
+
+    return filePath;
+  }
 
   Future<void> ajouterBoissonsAuRefrigerateur(
       int casierId, int refrigerateurId, int nombre) async {
@@ -128,17 +350,6 @@ class BarProvider with ChangeNotifier {
     refrigerateur.boissons ??= [];
 
     // Transférer les boissons et mettre estFroid à true
-    // List<Boisson> boissonsATransferer = casier.boissons
-    //     .sublist(0, nombre)
-    //     .map((b) => Boisson(
-    //           id: await generateUniqueId("Boisson"), // Nouvel ID pour éviter les conflits
-    //           nom: b.nom,
-    //           prix: List.from(b.prix),
-    //           estFroid: true, // Les boissons transférées deviennent froides
-    //           modele: b.modele,
-    //           description: b.description,
-    //         ))
-    //     .toList();
 
     List<Boisson> boissonsATransferer = [];
     for (var b in casier.boissons.sublist(0, nombre)) {
@@ -250,6 +461,11 @@ class BarProvider with ChangeNotifier {
   List<Vente> get ventes => _venteBox.values.toList();
   Future<void> addVente(Vente vente) async {
     await _venteBox.add(vente);
+    notifyListeners();
+  }
+
+  Future<void> deleteVente(Vente vente) async {
+    await _venteBox.deleteAt(_venteBox.values.toList().indexOf(vente));
     notifyListeners();
   }
 }
