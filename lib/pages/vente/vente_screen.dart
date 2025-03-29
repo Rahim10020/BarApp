@@ -55,7 +55,10 @@ class _VenteScreenState extends State<VenteScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Vente enregistrée !', style: GoogleFonts.montserrat()),
+          content: Text(
+            'Vente enregistrée !',
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -86,10 +89,10 @@ class _VenteScreenState extends State<VenteScreen> {
               children: [
                 Text('Ajouter une vente', style: GoogleFonts.montserrat()),
                 const SizedBox(
-                  height: 8.0,
+                  height: 24.0,
                 ),
                 Container(
-                  height: 50,
+                  height: 65,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: boissonsDisponibles.length,
@@ -107,20 +110,37 @@ class _VenteScreenState extends State<VenteScreen> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           margin: const EdgeInsets.symmetric(horizontal: 4),
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.only(
+                            left: 9,
+                            right: 9,
+                            top: 6,
+                            bottom: 3,
+                          ),
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? Colors.brown[200]
                                 : Colors.grey[200],
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Row(
+                          child: Column(
                             children: [
-                              Icon(Icons.local_bar,
-                                  size: 20, color: Colors.brown[800]),
-                              const SizedBox(width: 4),
-                              Text(boisson.nom ?? 'Sans nom',
-                                  style: GoogleFonts.montserrat()),
+                              Row(
+                                children: [
+                                  Icon(Icons.local_bar,
+                                      size: 20, color: Colors.brown[800]),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    boisson.nom ?? 'Sans nom',
+                                    style: GoogleFonts.montserrat(),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                ' (${boisson.getModele()})',
+                                style: GoogleFonts.montserrat(
+                                  color: Colors.blue,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -129,7 +149,7 @@ class _VenteScreenState extends State<VenteScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 8.0,
+                  height: 14.0,
                 ),
                 ElevatedButton.icon(
                   icon: const Icon(

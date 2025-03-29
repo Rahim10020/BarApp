@@ -116,7 +116,7 @@ class _AjouterBoissonRefrigerateurScreenState
         foregroundColor: Colors.white,
         title: Text(
           "Ajout de boissons à ${widget.refrigerateur.nom}",
-          style: GoogleFonts.montserrat(),
+          style: GoogleFonts.montserrat(fontSize: 16),
         ),
         backgroundColor: Colors.brown[800],
       ),
@@ -146,7 +146,7 @@ class _AjouterBoissonRefrigerateurScreenState
                 )
               else
                 Container(
-                  height: 50,
+                  height: 90,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: casiersCommandes.length,
@@ -160,16 +160,34 @@ class _AjouterBoissonRefrigerateurScreenState
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           margin: const EdgeInsets.symmetric(horizontal: 4),
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.only(
+                            left: 12,
+                            right: 12,
+                            top: 8,
+                            bottom: 8,
+                          ),
                           decoration: BoxDecoration(
                             color: selectedIndex == index
                                 ? Colors.brown[200]
                                 : Colors.grey[200],
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text(
-                            'Casier #${casier.id}',
-                            style: GoogleFonts.montserrat(),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Casier #${casier.id}',
+                                style: GoogleFonts.montserrat(),
+                              ),
+                              Text(
+                                '${casier.boissons.first.nom}',
+                                style: GoogleFonts.montserrat(fontSize: 14),
+                              ),
+                              Text(
+                                '${casier.boissons.first.modele?.name}',
+                                style: GoogleFonts.montserrat(
+                                    color: Colors.blue, fontSize: 13),
+                              ),
+                            ],
                           ),
                         ),
                       );

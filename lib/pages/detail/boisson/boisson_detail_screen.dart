@@ -16,7 +16,7 @@ class BoissonDetailScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         title: Text(
           boisson.nom ?? 'Boisson',
-          style: GoogleFonts.montserrat(),
+          style: GoogleFonts.montserrat(fontSize: 16),
         ),
         backgroundColor: Colors.brown[800],
       ),

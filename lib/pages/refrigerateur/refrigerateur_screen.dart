@@ -195,8 +195,10 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon:
-                              const Icon(Icons.add_circle, color: Colors.green),
+                          icon: const Icon(
+                            Icons.add_circle,
+                            color: Colors.green,
+                          ),
                           onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -216,7 +218,12 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
-                                title: Text('Modifier ${refrigerateur.nom}'),
+                                title: Text(
+                                  'Modifier ${refrigerateur.nom}',
+                                  style: GoogleFonts.montserrat(
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 content: SingleChildScrollView(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -224,12 +231,14 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                       TextField(
                                         controller: _nomController,
                                         decoration: const InputDecoration(
-                                            labelText: 'Nom'),
+                                          labelText: 'Nom',
+                                        ),
                                       ),
                                       TextField(
                                           controller: _tempController,
                                           decoration: const InputDecoration(
-                                              labelText: 'Température (°C)'),
+                                            labelText: 'Température (°C)',
+                                          ),
                                           keyboardType: TextInputType.number),
                                     ],
                                   ),
@@ -304,10 +313,13 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       ],
                     ),
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => RefrigerateurDetailScreen(
-                                refrigerateur: refrigerateur))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RefrigerateurDetailScreen(
+                          refrigerateur: refrigerateur,
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },

@@ -53,14 +53,16 @@ class _CasierScreenState extends State<CasierScreen> {
       int quantite = int.tryParse(_boissonTotalController.text) ?? 1;
       for (int i = 0; i < quantite; i++) {
         int newId = await provider.generateUniqueId("Boisson");
-        boissons.add(Boisson(
-          id: newId,
-          nom: boissonSelectionnee!.nom,
-          prix: List.from(boissonSelectionnee!.prix),
-          estFroid: boissonSelectionnee!.estFroid,
-          modele: boissonSelectionnee!.modele,
-          description: boissonSelectionnee!.description,
-        ));
+        boissons.add(
+          Boisson(
+            id: newId,
+            nom: boissonSelectionnee!.nom,
+            prix: List.from(boissonSelectionnee!.prix),
+            estFroid: boissonSelectionnee!.estFroid,
+            modele: boissonSelectionnee!.modele,
+            description: boissonSelectionnee!.description,
+          ),
+        );
       }
 
       var casier = Casier(
@@ -104,7 +106,7 @@ class _CasierScreenState extends State<CasierScreen> {
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(
-                    height: 8.0,
+                    height: 20.0,
                   ),
                   BuildBoissonSelector(
                     itemCount: provider.boissons.length,
@@ -118,21 +120,32 @@ class _CasierScreenState extends State<CasierScreen> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           margin: const EdgeInsets.symmetric(horizontal: 4),
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: selectedIndex == index
                                 ? Colors.brown[200]
                                 : Colors.grey[200],
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text(
-                            boisson.nom ?? 'Sans nom',
-                            style: GoogleFonts.montserrat(),
+                          child: Column(
+                            children: [
+                              Text(
+                                boisson.nom ?? 'Sans nom',
+                                style: GoogleFonts.montserrat(),
+                              ),
+                              Text(
+                                boisson.modele?.name ?? '',
+                                style: GoogleFonts.montserrat(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
                     },
                   ),
+                  const SizedBox(height: 18),
                   ElevatedButton.icon(
                     icon: const Icon(
                       Icons.add_box,
@@ -171,9 +184,14 @@ class _CasierScreenState extends State<CasierScreen> {
                   ),
                   child: ListTile(
                     leading: Icon(Icons.storage, color: Colors.brown[600]),
-                    title: Text('Casier #${casier.id}'),
+                    title: Text(
+                      'Casier ${casier.id} - ${casier.boissons.first.nom} (${casier.boissons.first.modele?.name})',
+                      style: GoogleFonts.montserrat(),
+                    ),
                     subtitle: Text(
-                        'Total : ${Helpers.formatterEnCFA(casier.getPrixTotal())} - ${casier.boissonTotal} boissons'),
+                      'Total : ${Helpers.formatterEnCFA(casier.getPrixTotal())} - ${casier.boissonTotal} boissons',
+                      style: GoogleFonts.montserrat(),
+                    ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

@@ -26,8 +26,10 @@ class _BoissonScreenState extends State<BoissonScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Veuillez renseigner le nom",
-              style: GoogleFonts.montserrat(),),
+          title: Text(
+            "Veuillez renseigner le nom",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -83,7 +85,10 @@ class _BoissonScreenState extends State<BoissonScreen> {
       _resetForm();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${boisson.nom} ajouté avec succès!'),
+          content: Text(
+            '${boisson.nom} ajouté avec succès!',
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -121,31 +126,41 @@ class _BoissonScreenState extends State<BoissonScreen> {
                   Row(
                     children: [
                       Expanded(
-                          child: TextField(
-                              controller: _nomController,
-                              decoration: const InputDecoration(
-                                  labelText: 'Nom',
-                                  contentPadding: EdgeInsets.all(8)))),
+                        child: TextField(
+                          controller: _nomController,
+                          decoration: const InputDecoration(
+                            labelText: 'Nom',
+                            contentPadding: EdgeInsets.all(8),
+                          ),
+                        ),
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
-                          child: TextField(
-                              controller: _prixController,
-                              decoration: const InputDecoration(
-                                  labelText: 'Prix',
-                                  contentPadding: EdgeInsets.all(8)),
-                              keyboardType: TextInputType.number)),
+                        child: TextField(
+                            controller: _prixController,
+                            decoration: const InputDecoration(
+                              labelText: 'Prix',
+                              contentPadding: EdgeInsets.all(8),
+                            ),
+                            keyboardType: TextInputType.number),
+                      ),
                     ],
                   ),
                   TextField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                          labelText: 'Description',
-                          contentPadding: EdgeInsets.all(8))),
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Description',
+                      contentPadding: EdgeInsets.all(8),
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(
                         child: DropdownButton<Modele>(
-                          hint: Text('Modèle', style: GoogleFonts.montserrat()),
+                          hint: Text(
+                            'Modèle',
+                            style: GoogleFonts.montserrat(),
+                          ),
                           value: _modele,
                           items: Modele.values
                               .map(
@@ -171,12 +186,15 @@ class _BoissonScreenState extends State<BoissonScreen> {
                         size: 18,
                         color: Colors.white,
                       ),
-                      label: Text('Ajouter',
-                          style: GoogleFonts.montserrat(color: Colors.white)),
+                      label: Text(
+                        'Ajouter',
+                        style: GoogleFonts.montserrat(color: Colors.white),
+                      ),
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.brown[600],
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8)),
+                        backgroundColor: Colors.brown[600],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                      ),
                       onPressed: () => _ajouterBoisson(provider),
                     ),
                   ),
@@ -204,8 +222,18 @@ class _BoissonScreenState extends State<BoissonScreen> {
                     leading: Icon(
                         boisson.estFroid ? Icons.ac_unit : Icons.local_bar,
                         color: Colors.brown[600]),
-                    title: Text(boisson.nom ?? 'Sans nom',
-                        style: GoogleFonts.montserrat()),
+                    title: Row(
+                      children: [
+                        Text(
+                          boisson.nom ?? 'Sans nom',
+                          style: GoogleFonts.montserrat(),
+                        ),
+                        Text(
+                          ' (${boisson.modele?.name})',
+                          style: GoogleFonts.montserrat(color: Colors.blue),
+                        ),
+                      ],
+                    ),
                     subtitle: Text(Helpers.formatterEnCFA(boisson.prix.last)),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -230,13 +258,16 @@ class _BoissonScreenState extends State<BoissonScreen> {
                               context: context,
                               builder: (context) => AlertDialog(
                                 title: Text(
-                                    "Voulez-vous supprimer ${boisson.nom} ?",
-                                    style: GoogleFonts.montserrat()),
+                                  "Voulez-vous supprimer ${boisson.nom} ?",
+                                  style: GoogleFonts.montserrat(),
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: Text("Annuler",
-                                        style: GoogleFonts.montserrat()),
+                                    child: Text(
+                                      "Annuler",
+                                      style: GoogleFonts.montserrat(),
+                                    ),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -246,8 +277,9 @@ class _BoissonScreenState extends State<BoissonScreen> {
                                           .showSnackBar(
                                         SnackBar(
                                           content: Text(
-                                              '${boisson.nom} supprimé avec succès!',
-                                              style: GoogleFonts.montserrat()),
+                                            '${boisson.nom} supprimé avec succès!',
+                                            style: GoogleFonts.montserrat(),
+                                          ),
                                         ),
                                       );
                                     },
@@ -264,10 +296,11 @@ class _BoissonScreenState extends State<BoissonScreen> {
                       ],
                     ),
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) =>
-                                BoissonDetailScreen(boisson: boisson))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BoissonDetailScreen(boisson: boisson),
+                      ),
+                    ),
                   ),
                 );
               },
