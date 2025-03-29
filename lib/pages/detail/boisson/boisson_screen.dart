@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
 import 'package:projet7/pages/detail/boisson/modifier_boisson_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -25,11 +26,12 @@ class _BoissonScreenState extends State<BoissonScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner le nom"),
+          title: Text("Veuillez renseigner le nom",
+              style: GoogleFonts.montserrat(),),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -38,11 +40,14 @@ class _BoissonScreenState extends State<BoissonScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner le prix"),
+          title: Text(
+            "Veuillez renseigner le prix",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -51,11 +56,14 @@ class _BoissonScreenState extends State<BoissonScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez choisir le modèle"),
+          title: Text(
+            "Veuillez choisir le modèle",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -103,9 +111,13 @@ class _BoissonScreenState extends State<BoissonScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Ajouter une boisson',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Ajouter une boisson',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -133,7 +145,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
                     children: [
                       Expanded(
                         child: DropdownButton<Modele>(
-                          hint: const Text('Modèle'),
+                          hint: Text('Modèle', style: GoogleFonts.montserrat()),
                           value: _modele,
                           items: Modele.values
                               .map(
@@ -141,6 +153,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
                                   value: modele,
                                   child: Text(
                                     modele == Modele.petit ? 'Petit' : 'Grand',
+                                    style: GoogleFonts.montserrat(),
                                   ),
                                 ),
                               )
@@ -158,12 +171,8 @@ class _BoissonScreenState extends State<BoissonScreen> {
                         size: 18,
                         color: Colors.white,
                       ),
-                      label: const Text(
-                        'Ajouter',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
+                      label: Text('Ajouter',
+                          style: GoogleFonts.montserrat(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.brown[600],
                           padding: const EdgeInsets.symmetric(
@@ -195,7 +204,8 @@ class _BoissonScreenState extends State<BoissonScreen> {
                     leading: Icon(
                         boisson.estFroid ? Icons.ac_unit : Icons.local_bar,
                         color: Colors.brown[600]),
-                    title: Text(boisson.nom ?? 'Sans nom'),
+                    title: Text(boisson.nom ?? 'Sans nom',
+                        style: GoogleFonts.montserrat()),
                     subtitle: Text(Helpers.formatterEnCFA(boisson.prix.last)),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -220,25 +230,32 @@ class _BoissonScreenState extends State<BoissonScreen> {
                               context: context,
                               builder: (context) => AlertDialog(
                                 title: Text(
-                                    "Voulez-vous supprimer ${boisson.nom} ?"),
+                                    "Voulez-vous supprimer ${boisson.nom} ?",
+                                    style: GoogleFonts.montserrat()),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text("Annuler"),
+                                    child: Text("Annuler",
+                                        style: GoogleFonts.montserrat()),
                                   ),
                                   TextButton(
-                                      onPressed: () {
-                                        provider.deleteBoisson(boisson);
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                '${boisson.nom} supprimé avec succès!'),
-                                          ),
-                                        );
-                                      },
-                                      child: const Text("Oui"))
+                                    onPressed: () {
+                                      provider.deleteBoisson(boisson);
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              '${boisson.nom} supprimé avec succès!',
+                                              style: GoogleFonts.montserrat()),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "Oui",
+                                      style: GoogleFonts.montserrat(),
+                                    ),
+                                  )
                                 ],
                               ),
                             );

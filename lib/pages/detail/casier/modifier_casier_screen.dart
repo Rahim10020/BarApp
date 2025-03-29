@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/build_boisson_selector.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
@@ -49,28 +50,17 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez préciser le nombre total de boissons"),
+          title: Text("Veuillez préciser le nombre total de boissons",
+              style: GoogleFonts.montserrat()),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
       );
     } else {
-      // List<Boisson> boissons = List.generate(
-      //   int.tryParse(_boissonTotalController.text)!,
-      //   (_) => Boisson(
-      //     id: await provider.generateUniqueId("Boisson"),
-      //     nom: boissonSelectionnee!.nom,
-      //     prix: List.from(boissonSelectionnee!.prix),
-      //     estFroid: boissonSelectionnee!.estFroid,
-      //     modele: boissonSelectionnee!.modele,
-      //     description: boissonSelectionnee!.description,
-      //   ),
-      // );
-
       List<Boisson> boissons = [];
       int quantite = int.tryParse(_boissonTotalController.text) ?? 1;
       for (int i = 0; i < quantite; i++) {
@@ -95,7 +85,10 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Casier #${casier.id} modifié avec succès!"),
+          content: Text(
+            "Casier #${casier.id} modifié avec succès!",
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -107,7 +100,10 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text(" Modification de Casier #${widget.casier.id} "),
+        title: Text(
+          " Modification de Casier #${widget.casier.id} ",
+          style: GoogleFonts.montserrat(),
+        ),
         backgroundColor: Colors.brown[800],
       ),
       body: SingleChildScrollView(
@@ -119,7 +115,8 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
               TextField(
                   controller: _boissonTotalController,
                   decoration: const InputDecoration(
-                      labelText: 'Nombre total de boissons'),
+                    labelText: 'Nombre total de boissons',
+                  ),
                   keyboardType: TextInputType.number),
               const SizedBox(
                 height: 8.0,
@@ -144,7 +141,10 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
                             : Colors.grey[200],
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(boisson.nom ?? 'Sans nom'),
+                      child: Text(
+                        boisson.nom ?? 'Sans nom',
+                        style: GoogleFonts.montserrat(),
+                      ),
                     ),
                   );
                 },
@@ -158,11 +158,9 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
                   size: 18,
                   color: Colors.white,
                 ),
-                label: const Text(
+                label: Text(
                   'Modifier',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: GoogleFonts.montserrat(),
                 ),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[600],

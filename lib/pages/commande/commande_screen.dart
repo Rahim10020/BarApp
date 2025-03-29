@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/commande/commande_detail_screen.dart';
 import 'package:projet7/pages/commande/components/build_casier_selector.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -27,11 +28,14 @@ class _CommandeScreenState extends State<CommandeScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("La commande doit concerner au moins un casier"),
+          title: Text(
+            "La commande doit concerner au moins un casier",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -69,8 +73,11 @@ class _CommandeScreenState extends State<CommandeScreen> {
         _fournisseurSelectionne = null;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Commande créée avec succès!'),
+        SnackBar(
+          content: Text(
+            'Commande créée avec succès!',
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -98,7 +105,10 @@ class _CommandeScreenState extends State<CommandeScreen> {
                     ),
                   ),
                   DropdownButton<Fournisseur>(
-                    hint: const Text('Choisir un fournisseur'),
+                    hint: Text(
+                      'Choisir un fournisseur',
+                      style: GoogleFonts.montserrat(),
+                    ),
                     value: _fournisseurSelectionne,
                     items: provider.fournisseurs
                         .map(
@@ -162,12 +172,8 @@ class _CommandeScreenState extends State<CommandeScreen> {
                       Icons.receipt,
                       color: Colors.white,
                     ),
-                    label: const Text(
-                      'Créer Commande',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
+                    label: Text('Créer Commande',
+                        style: GoogleFonts.montserrat(color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.brown[600]),
                     onPressed: () => _ajouterCommande(provider),
@@ -208,20 +214,27 @@ class _CommandeScreenState extends State<CommandeScreen> {
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text("Annuler"),
+                                child: Text(
+                                  "Annuler",
+                                  style: GoogleFonts.montserrat(),
+                                ),
                               ),
                               TextButton(
-                                  onPressed: () {
-                                    provider.deleteCommande(commande);
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            'Commande #${commande.id} supprimé avec succès!'),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text("Oui"))
+                                onPressed: () {
+                                  provider.deleteCommande(commande);
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Commande #${commande.id} supprimé avec succès!'),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "Oui",
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              )
                             ],
                           ),
                         );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
@@ -40,8 +41,13 @@ class RefrigerateurDetailScreen extends StatelessWidget {
               value: Helpers.formatterEnCFA(refrigerateur.getPrixTotal()),
             ),
             const SizedBox(height: 16),
-            const Text('Boissons:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              'Boissons:',
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: refrigerateur.boissons?.length ?? 0,
@@ -51,7 +57,10 @@ class RefrigerateurDetailScreen extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     child: ListTile(
                       leading: Icon(Icons.local_bar, color: Colors.brown[600]),
-                      title: Text(boisson.nom ?? 'Sans nom'),
+                      title: Text(
+                        boisson.nom ?? 'Sans nom',
+                        style: GoogleFonts.montserrat(),
+                      ),
                       subtitle: Text(
                         Helpers.formatterEnCFA(boisson.prix.last),
                       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:projet7/models/bar_instance.dart';
 import 'package:projet7/models/boisson.dart';
@@ -97,7 +98,11 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Configurer votre bar'),
+        title: Text(
+          'Configurer votre bar',
+          style: GoogleFonts.montserrat(),
+        ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -106,16 +111,19 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Bienvenue ! Configurez votre bar pour commencer.',
-                  style: TextStyle(fontSize: 18)),
+              Text(
+                'Bienvenue ! Configurez votre bar pour commencer.',
+                style: GoogleFonts.montserrat(fontSize: 18),
+              ),
               const SizedBox(height: 20),
               TextField(
                   controller: _nomController,
                   decoration: const InputDecoration(labelText: 'Nom du bar')),
               TextField(
-                  controller: _adresseController,
-                  decoration: const InputDecoration(
-                      labelText: 'Adresse (email/téléphone)')),
+                controller: _adresseController,
+                decoration: const InputDecoration(
+                    labelText: 'Adresse (email/téléphone)'),
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
@@ -130,11 +138,9 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[600]),
-                child: const Text(
+                child: Text(
                   'Créer le bar',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: GoogleFonts.montserrat(color: Colors.white),
                 ),
               ),
             ],

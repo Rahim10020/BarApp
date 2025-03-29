@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/vente/vente_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
@@ -52,8 +53,11 @@ class _VenteScreenState extends State<VenteScreen> {
         boissonsSelectionnees.clear();
         _isAdding = false;
       });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Vente enregistrée !')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Vente enregistrée !', style: GoogleFonts.montserrat()),
+        ),
+      );
     }
   }
 
@@ -80,9 +84,7 @@ class _VenteScreenState extends State<VenteScreen> {
             ),
             child: Column(
               children: [
-                const Text('Ajouter une vente',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text('Ajouter une vente', style: GoogleFonts.montserrat()),
                 const SizedBox(
                   height: 8.0,
                 ),
@@ -117,7 +119,8 @@ class _VenteScreenState extends State<VenteScreen> {
                               Icon(Icons.local_bar,
                                   size: 20, color: Colors.brown[800]),
                               const SizedBox(width: 4),
-                              Text(boisson.nom ?? 'Sans nom'),
+                              Text(boisson.nom ?? 'Sans nom',
+                                  style: GoogleFonts.montserrat()),
                             ],
                           ),
                         ),
@@ -133,9 +136,9 @@ class _VenteScreenState extends State<VenteScreen> {
                     Icons.local_drink,
                     color: Colors.white,
                   ),
-                  label: const Text(
+                  label: Text(
                     'Enregistrer',
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.montserrat(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.brown[600]),
@@ -207,24 +210,35 @@ class _VenteScreenState extends State<VenteScreen> {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text(
-                                "Voulez-vous supprimer Vente #${vente.id} ?"),
+                              "Voulez-vous supprimer Vente #${vente.id} ?",
+                              style: GoogleFonts.montserrat(),
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text("Annuler"),
+                                child: Text(
+                                  "Annuler",
+                                  style: GoogleFonts.montserrat(),
+                                ),
                               ),
                               TextButton(
-                                  onPressed: () {
-                                    provider.deleteVente(vente);
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            'Vente #${vente.id} supprimé avec succès!'),
+                                onPressed: () {
+                                  provider.deleteVente(vente);
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Vente #${vente.id} supprimé avec succès!',
+                                        style: GoogleFonts.montserrat(),
                                       ),
-                                    );
-                                  },
-                                  child: const Text("Oui"))
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "Oui",
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              )
                             ],
                           ),
                         );

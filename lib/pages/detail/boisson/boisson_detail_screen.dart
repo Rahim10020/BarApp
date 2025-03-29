@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/utils/helpers.dart';
@@ -13,7 +14,10 @@ class BoissonDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text(boisson.nom ?? 'Boisson'),
+        title: Text(
+          boisson.nom ?? 'Boisson',
+          style: GoogleFonts.montserrat(),
+        ),
         backgroundColor: Colors.brown[800],
       ),
       body: Padding(

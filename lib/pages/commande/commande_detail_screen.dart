@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:open_file/open_file.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/commande.dart';
@@ -29,17 +30,29 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
       final result = await OpenFile.open(filePath);
       if (result.type == ResultType.done) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('PDF ouvert avec succès !')),
+          SnackBar(
+              content: Text(
+            'PDF ouvert avec succès !',
+            style: GoogleFonts.montserrat(),
+          )),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('Impossible d\'ouvrir le PDF : ${result.message}')),
+              content: Text(
+            'Impossible d\'ouvrir le PDF : ${result.message}',
+            style: GoogleFonts.montserrat(),
+          )),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors de la génération du PDF : $e')),
+        SnackBar(
+          content: Text(
+            'Erreur lors de la génération du PDF : $e',
+            style: GoogleFonts.montserrat(),
+          ),
+        ),
       );
     }
   }
@@ -47,7 +60,12 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
   Future<void> _sharePdf() async {
     if (_pdfPath == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez d\'abord générer le PDF')),
+        SnackBar(
+          content: Text(
+            'Veuillez d\'abord générer le PDF',
+            style: GoogleFonts.montserrat(),
+          ),
+        ),
       );
       return;
     }
@@ -58,7 +76,12 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors du partage : $e')),
+        SnackBar(
+          content: Text(
+            'Erreur lors du partage : $e',
+            style: GoogleFonts.montserrat(),
+          ),
+        ),
       );
     }
   }
@@ -70,7 +93,10 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
     return Scaffold(
       appBar: AppBar(
           foregroundColor: Colors.white,
-          title: Text('Commande #${widget.commande.id}'),
+          title: Text(
+            'Commande #${widget.commande.id}',
+            style: GoogleFonts.montserrat(),
+          ),
           backgroundColor: Colors.brown[800]),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -92,9 +118,9 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
                     ? widget.commande.fournisseur!.nom
                     : "Inconnu"),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Lignes de commande:',
-              style: TextStyle(
+              style: GoogleFonts.montserrat(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -132,9 +158,9 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
               children: [
                 ElevatedButton.icon(
                   icon: const Icon(Icons.download, color: Colors.white),
-                  label: const Text(
+                  label: Text(
                     'Télécharger',
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.montserrat(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[600],
@@ -143,9 +169,9 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
                 ),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.share, color: Colors.white),
-                  label: const Text(
+                  label: Text(
                     'Partager',
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.montserrat(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[600],

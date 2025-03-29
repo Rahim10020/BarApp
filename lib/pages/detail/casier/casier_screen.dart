@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/pages/detail/casier/casier_detail_screen.dart';
 import 'package:projet7/components/build_boisson_selector.dart';
@@ -35,28 +36,19 @@ class _CasierScreenState extends State<CasierScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez préciser le nombre total de boissons"),
+          title: Text(
+            "Veuillez préciser le nombre total de boissons",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
       );
     } else {
-      // List<Boisson> boissons = List.generate(
-      //   int.tryParse(_boissonTotalController.text)!,
-      //   (_) => Boisson(
-      //     id: await provider.generateUniqueId("Boisson"),
-      //     nom: boissonSelectionnee!.nom,
-      //     prix: List.from(boissonSelectionnee!.prix),
-      //     estFroid: boissonSelectionnee!.estFroid,
-      //     modele: boissonSelectionnee!.modele,
-      //     description: boissonSelectionnee!.description,
-      //   ),
-      // );
-
       List<Boisson> boissons = [];
       int quantite = int.tryParse(_boissonTotalController.text) ?? 1;
       for (int i = 0; i < quantite; i++) {
@@ -97,9 +89,12 @@ class _CasierScreenState extends State<CasierScreen> {
               padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'Nouveau Casier',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   TextField(
                     controller: _boissonTotalController,
@@ -130,7 +125,10 @@ class _CasierScreenState extends State<CasierScreen> {
                                 : Colors.grey[200],
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text(boisson.nom ?? 'Sans nom'),
+                          child: Text(
+                            boisson.nom ?? 'Sans nom',
+                            style: GoogleFonts.montserrat(),
+                          ),
                         ),
                       );
                     },
@@ -140,11 +138,9 @@ class _CasierScreenState extends State<CasierScreen> {
                       Icons.add_box,
                       color: Colors.white,
                     ),
-                    label: const Text(
+                    label: Text(
                       'Créer Casier',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                      style: GoogleFonts.montserrat(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.brown[600],
@@ -199,26 +195,37 @@ class _CasierScreenState extends State<CasierScreen> {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: const Text(
-                                    "Voulez-vous supprimer ce casier ?"),
+                                title: Text(
+                                  "Voulez-vous supprimer ce casier ?",
+                                  style: GoogleFonts.montserrat(),
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text("Annuler"),
+                                    child: Text(
+                                      "Annuler",
+                                      style: GoogleFonts.montserrat(),
+                                    ),
                                   ),
                                   TextButton(
-                                      onPressed: () {
-                                        provider.deleteCasier(casier);
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'Casier #${casier.id} supprimé avec succès!'),
+                                    onPressed: () {
+                                      provider.deleteCasier(casier);
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Casier #${casier.id} supprimé avec succès!',
+                                            style: GoogleFonts.montserrat(),
                                           ),
-                                        );
-                                      },
-                                      child: const Text("Oui"))
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "Oui",
+                                      style: GoogleFonts.montserrat(),
+                                    ),
+                                  )
                                 ],
                               ),
                             );
