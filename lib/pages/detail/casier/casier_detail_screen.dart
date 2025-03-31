@@ -15,7 +15,10 @@ class CasierDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           foregroundColor: Colors.white,
-          title: Text('Casier #${casier.id}'),
+          title: Text(
+            'Casier #${casier.id}',
+            style: GoogleFonts.montserrat(fontSize: 16),
+          ),
           backgroundColor: Colors.brown[800]),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -32,19 +35,23 @@ class CasierDetailScreen extends StatelessWidget {
             Text(
               'Boisson dans le casier:',
               style: GoogleFonts.montserrat(
-                  fontSize: 18, fontWeight: FontWeight.bold),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            const SizedBox(height: 10),
             if (casier.boissons.isNotEmpty)
               Card(
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 child: ListTile(
                   leading: Icon(Icons.local_bar, color: Colors.brown[600]),
                   title: Text(
-                    casier.boissons[0].nom ?? 'Sans nom',
+                    '${casier.boissons[0].nom} (${casier.boissons[0].modele?.name})',
                     style: GoogleFonts.montserrat(),
                   ),
                   subtitle: Text(
                     Helpers.formatterEnCFA(casier.boissons[0].prix.last),
+                    style: GoogleFonts.montserrat(),
                   ),
                   onTap: () => Navigator.push(
                     context,

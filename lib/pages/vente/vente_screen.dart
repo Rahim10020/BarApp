@@ -32,8 +32,10 @@ class _VenteScreenState extends State<VenteScreen> {
       var lignes = boissonsSelectionnees
           .asMap()
           .entries
-          .map((e) => LigneVente(
-              id: e.key, montant: e.value.prix.last, boisson: e.value))
+          .map(
+            (e) => LigneVente(
+                id: e.key, montant: e.value.prix.last, boisson: e.value),
+          )
           .toList();
       var vente = Vente(
         id: await provider.generateUniqueId("Vente"),
@@ -79,15 +81,23 @@ class _VenteScreenState extends State<VenteScreen> {
             duration: const Duration(milliseconds: 300),
             padding: EdgeInsets.all(_isAdding ? 20 : 16),
             decoration: BoxDecoration(
-              color: _isAdding ? Colors.green[100] : Colors.white,
+              color: _isAdding
+                  ? Colors.green[200]
+                  : Theme.of(context).colorScheme.secondary,
               borderRadius: BorderRadius.circular(12),
               boxShadow: const [
-                BoxShadow(blurRadius: 4, color: Colors.black26)
+                BoxShadow(
+                  blurRadius: 4,
+                  color: Colors.black26,
+                )
               ],
             ),
             child: Column(
               children: [
-                Text('Ajouter une vente', style: GoogleFonts.montserrat()),
+                Text(
+                  'Ajouter une vente',
+                  style: GoogleFonts.montserrat(),
+                ),
                 const SizedBox(
                   height: 24.0,
                 ),
@@ -118,20 +128,27 @@ class _VenteScreenState extends State<VenteScreen> {
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? Colors.brown[200]
-                                : Colors.grey[200],
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.tertiary,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Column(
                             children: [
                               Row(
                                 children: [
-                                  Icon(Icons.local_bar,
-                                      size: 20, color: Colors.brown[800]),
+                                  Icon(
+                                    Icons.local_bar,
+                                    size: 20,
+                                    color: Colors.brown[600],
+                                  ),
                                   const SizedBox(width: 4),
                                   Text(
                                     boisson.nom ?? 'Sans nom',
-                                    style: GoogleFonts.montserrat(),
+                                    style: GoogleFonts.montserrat(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -174,11 +191,15 @@ class _VenteScreenState extends State<VenteScreen> {
             controller: _searchController,
             decoration: InputDecoration(
               hintText: 'Rechercher (ID, date, boisson)',
+              hintStyle: GoogleFonts.montserrat(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
               prefixIcon: const Icon(Icons.search),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               filled: true,
-              fillColor: Colors.white,
+              fillColor: Theme.of(context).colorScheme.secondary,
             ),
           ),
           Expanded(
@@ -207,7 +228,7 @@ class _VenteScreenState extends State<VenteScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
@@ -216,13 +237,23 @@ class _VenteScreenState extends State<VenteScreen> {
                   child: ListTile(
                     leading: Icon(Icons.receipt_long, color: Colors.brown[600]),
                     title: Text(
-                        'Vente #${vente.id} - ${Helpers.formatterEnCFA(vente.montantTotal)}'),
+                      'Vente #${vente.id} - ${Helpers.formatterEnCFA(vente.montantTotal)}',
+                      style: GoogleFonts.montserrat(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
                     subtitle: Text(
-                        'Date : ${Helpers.formatterDate(vente.dateVente)}'),
+                      'Date : ${Helpers.formatterDate(vente.dateVente)}',
+                      style: GoogleFonts.montserrat(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => VenteDetailScreen(vente: vente))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => VenteDetailScreen(vente: vente),
+                      ),
+                    ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () {

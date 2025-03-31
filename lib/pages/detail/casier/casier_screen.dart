@@ -100,13 +100,14 @@ class _CasierScreenState extends State<CasierScreen> {
                   ),
                   TextField(
                     controller: _boissonTotalController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Nombre total de boissons',
+                      labelStyle: GoogleFonts.montserrat(),
                     ),
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(
-                    height: 20.0,
+                    height: 15.0,
                   ),
                   BuildBoissonSelector(
                     itemCount: provider.boissons.length,
@@ -123,15 +124,19 @@ class _CasierScreenState extends State<CasierScreen> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: selectedIndex == index
-                                ? Colors.brown[200]
-                                : Colors.grey[200],
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.tertiary,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Column(
                             children: [
                               Text(
                                 boisson.nom ?? 'Sans nom',
-                                style: GoogleFonts.montserrat(),
+                                style: GoogleFonts.montserrat(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
                               ),
                               Text(
                                 boisson.modele?.name ?? '',
@@ -176,7 +181,7 @@ class _CasierScreenState extends State<CasierScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
@@ -186,11 +191,15 @@ class _CasierScreenState extends State<CasierScreen> {
                     leading: Icon(Icons.storage, color: Colors.brown[600]),
                     title: Text(
                       'Casier ${casier.id} - ${casier.boissons.first.nom} (${casier.boissons.first.modele?.name})',
-                      style: GoogleFonts.montserrat(),
+                      style: GoogleFonts.montserrat(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                     ),
                     subtitle: Text(
                       'Total : ${Helpers.formatterEnCFA(casier.getPrixTotal())} - ${casier.boissonTotal} boissons',
-                      style: GoogleFonts.montserrat(),
+                      style: GoogleFonts.montserrat(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -252,10 +261,11 @@ class _CasierScreenState extends State<CasierScreen> {
                       ],
                     ),
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) =>
-                                CasierDetailScreen(casier: casier))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CasierDetailScreen(casier: casier),
+                      ),
+                    ),
                   ),
                 );
               },

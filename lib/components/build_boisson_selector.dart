@@ -4,8 +4,11 @@ class BuildBoissonSelector extends StatelessWidget {
   final int? itemCount;
   final Widget? Function(BuildContext, int) itemBuilder;
 
-  const BuildBoissonSelector(
-      {super.key, required this.itemCount, required this.itemBuilder});
+  const BuildBoissonSelector({
+    super.key,
+    required this.itemCount,
+    required this.itemBuilder,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -17,7 +17,9 @@ class LigneCommandeDetailScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         title: Text(
           "Ligne de commande #${ligneCommande.id}",
-          style: GoogleFonts.montserrat(),
+          style: GoogleFonts.montserrat(
+            fontSize: 16,
+          ),
         ),
         backgroundColor: Colors.brown[800],
       ),
@@ -35,11 +37,13 @@ class LigneCommandeDetailScreen extends StatelessWidget {
               value: Helpers.formatterEnCFA(ligneCommande.getMontant()),
             ),
             const SizedBox(height: 16),
-            Text(
-              'Casier #${ligneCommande.casier.id}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                'Casier #${ligneCommande.casier.id}',
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             if (ligneCommande.casier.boissons.isNotEmpty)
@@ -48,18 +52,20 @@ class LigneCommandeDetailScreen extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(Icons.local_bar, color: Colors.brown[600]),
                   title: Text(
-                    ligneCommande.casier.boissons[0].nom ?? 'Sans nom',
+                    '${ligneCommande.casier.boissons[0].nom} (${ligneCommande.casier.boissons[0].modele?.name})',
                     style: GoogleFonts.montserrat(),
                   ),
                   subtitle: Text(
                     Helpers.formatterEnCFA(
                         ligneCommande.casier.boissons[0].prix.last),
+                    style: GoogleFonts.montserrat(),
                   ),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => BoissonDetailScreen(
-                          boisson: ligneCommande.casier.boissons[0]),
+                        boisson: ligneCommande.casier.boissons[0],
+                      ),
                     ),
                   ),
                 ),

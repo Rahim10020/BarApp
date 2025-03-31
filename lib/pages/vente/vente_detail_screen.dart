@@ -62,9 +62,10 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
   Future<void> _sharePdf() async {
     if (_pdfPath == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
             'Veuillez d\'abord générer le PDF',
+            style: GoogleFonts.montserrat(),
           ),
         ),
       );
@@ -96,7 +97,9 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
         foregroundColor: Colors.white,
         title: Text(
           'Vente #${widget.vente.id}',
-          style: GoogleFonts.montserrat(),
+          style: GoogleFonts.montserrat(
+            fontSize: 16,
+          ),
         ),
         backgroundColor: Colors.brown[800],
       ),
@@ -106,19 +109,22 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BuildInfoCard(
-                label: 'Montant Total',
-                value: Helpers.formatterEnCFA(widget.vente.montantTotal)),
+              label: 'Montant Total',
+              value: Helpers.formatterEnCFA(widget.vente.montantTotal),
+            ),
             BuildInfoCard(
-                label: 'Date',
-                value: Helpers.formatterDate(widget.vente.dateVente)),
+              label: 'Date',
+              value: Helpers.formatterDate(widget.vente.dateVente),
+            ),
             const SizedBox(height: 16),
             Text(
               'Boissons vendues:',
               style: GoogleFonts.montserrat(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
                 itemCount: widget.vente.lignesVente.length,
@@ -129,7 +135,7 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                     child: ListTile(
                       leading: Icon(Icons.local_bar, color: Colors.brown[600]),
                       title: Text(
-                        ligne.boisson.nom ?? 'Sans nom',
+                        '${ligne.boisson.nom} (${ligne.boisson.modele?.name})',
                         style: GoogleFonts.montserrat(),
                       ),
                       subtitle: Text(

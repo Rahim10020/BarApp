@@ -128,9 +128,10 @@ class _BoissonScreenState extends State<BoissonScreen> {
                       Expanded(
                         child: TextField(
                           controller: _nomController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Nom',
-                            contentPadding: EdgeInsets.all(8),
+                            labelStyle: GoogleFonts.montserrat(),
+                            contentPadding: const EdgeInsets.all(8),
                           ),
                         ),
                       ),
@@ -138,9 +139,10 @@ class _BoissonScreenState extends State<BoissonScreen> {
                       Expanded(
                         child: TextField(
                             controller: _prixController,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText: 'Prix',
-                              contentPadding: EdgeInsets.all(8),
+                              labelStyle: GoogleFonts.montserrat(),
+                              contentPadding: const EdgeInsets.all(8),
                             ),
                             keyboardType: TextInputType.number),
                       ),
@@ -148,9 +150,10 @@ class _BoissonScreenState extends State<BoissonScreen> {
                   ),
                   TextField(
                     controller: _descriptionController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Description',
-                      contentPadding: EdgeInsets.all(8),
+                      labelStyle: GoogleFonts.montserrat(),
+                      contentPadding: const EdgeInsets.all(8),
                     ),
                   ),
                   Row(
@@ -212,7 +215,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
@@ -220,13 +223,16 @@ class _BoissonScreenState extends State<BoissonScreen> {
                   ),
                   child: ListTile(
                     leading: Icon(
-                        boisson.estFroid ? Icons.ac_unit : Icons.local_bar,
-                        color: Colors.brown[600]),
+                      boisson.estFroid ? Icons.ac_unit : Icons.local_bar,
+                      color: Colors.brown[600],
+                    ),
                     title: Row(
                       children: [
                         Text(
                           boisson.nom ?? 'Sans nom',
-                          style: GoogleFonts.montserrat(),
+                          style: GoogleFonts.montserrat(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
                         ),
                         Text(
                           ' (${boisson.modele?.name})',

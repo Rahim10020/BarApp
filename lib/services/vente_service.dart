@@ -6,12 +6,12 @@ import 'package:projet7/models/vente.dart';
 
 class VenteService {
   final String _venteBoxName = 'ventes';
-  final String _boissonBoxName = 'boissons';
+  // final String _boissonBoxName = 'boissons';
   final String _refrigerateurBoxName = 'refrigerateurs';
 
   Future<void> ajouterVente(List<Boisson> boissonsVendues) async {
     var venteBox = await Hive.openBox<Vente>(_venteBoxName);
-    var boissonBox = await Hive.openBox<Boisson>(_boissonBoxName);
+    // var boissonBox = await Hive.openBox<Boisson>(_boissonBoxName);
     var refrigerateurBox =
         await Hive.openBox<Refrigerateur>(_refrigerateurBoxName);
 

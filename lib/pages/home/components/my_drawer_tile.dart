@@ -20,7 +20,7 @@ class MyDrawerTile extends StatelessWidget {
       child: ListTile(
         title: Text(
           text,
-          style: TextStyle(
+          style: GoogleFonts.montserrat(
             fontSize: 18,
             color: Theme.of(context).colorScheme.inversePrimary,
           ),

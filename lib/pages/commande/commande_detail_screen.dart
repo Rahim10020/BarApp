@@ -92,39 +92,51 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          foregroundColor: Colors.white,
-          title: Text(
-            'Commande #${widget.commande.id}',
-            style: GoogleFonts.montserrat(),
+        foregroundColor: Colors.white,
+        title: Text(
+          'Commande #${widget.commande.id}',
+          style: GoogleFonts.montserrat(
+            fontSize: 16,
           ),
-          backgroundColor: Colors.brown[800]),
+        ),
+        backgroundColor: Colors.brown[800],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BuildInfoCard(label: 'ID', value: '${widget.commande.id}'),
             BuildInfoCard(
-                label: 'Montant Total',
-                value: Helpers.formatterEnCFA(widget.commande.montantTotal)),
+              label: 'ID',
+              value: '${widget.commande.id}',
+            ),
+            BuildInfoCard(
+              label: 'Montant Total',
+              value: Helpers.formatterEnCFA(widget.commande.montantTotal),
+            ),
             BuildInfoCard(
               label: 'Date',
               value: Helpers.formatterDate(widget.commande.dateCommande),
             ),
-            BuildInfoCard(label: 'Bar', value: widget.commande.barInstance.nom),
             BuildInfoCard(
-                label: 'Fournisseur',
-                value: widget.commande.fournisseur != null
-                    ? widget.commande.fournisseur!.nom
-                    : "Inconnu"),
+              label: 'Bar',
+              value: widget.commande.barInstance.nom,
+            ),
+            BuildInfoCard(
+              label: 'Fournisseur',
+              value: widget.commande.fournisseur != null
+                  ? widget.commande.fournisseur!.nom
+                  : "Inconnu",
+            ),
             const SizedBox(height: 16),
             Text(
               'Lignes de commande:',
               style: GoogleFonts.montserrat(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
                 itemCount: widget.commande.lignesCommande.length,
@@ -135,10 +147,12 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
                     child: ListTile(
                       leading: Icon(Icons.storage, color: Colors.brown[600]),
                       title: Text(
-                        'Casier #${ligne.casier.id}',
+                        'Casier #${ligne.casier.id} - ${ligne.casier.boissons.first.nom} (${ligne.casier.boissons.first.modele?.name})',
+                        style: GoogleFonts.montserrat(),
                       ),
                       subtitle: Text(
                         'Montant: ${Helpers.formatterEnCFA(ligne.montant)} - Boissons: ${ligne.casier.boissonTotal}',
+                        style: GoogleFonts.montserrat(),
                       ),
                       onTap: () => Navigator.push(
                         context,
@@ -157,10 +171,15 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.download, color: Colors.white),
+                  icon: const Icon(
+                    Icons.download,
+                    color: Colors.white,
+                  ),
                   label: Text(
                     'Télécharger',
-                    style: GoogleFonts.montserrat(color: Colors.white),
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                    ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[600],
@@ -168,10 +187,15 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
                   onPressed: () => _downloadAndOpenPdf(provider),
                 ),
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.share, color: Colors.white),
+                  icon: const Icon(
+                    Icons.share,
+                    color: Colors.white,
+                  ),
                   label: Text(
                     'Partager',
-                    style: GoogleFonts.montserrat(color: Colors.white),
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                    ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[600],

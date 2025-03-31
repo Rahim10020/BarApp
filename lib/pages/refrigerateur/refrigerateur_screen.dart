@@ -60,7 +60,10 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       _resetForm();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${refrigerateur.nom} ajouté avec succès!'),
+          content: Text(
+            '${refrigerateur.nom} ajouté avec succès!',
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -107,7 +110,10 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       _resetForm();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${refrigerateur.nom} modifié avec succès!'),
+          content: Text(
+            '${refrigerateur.nom} modifié avec succès!',
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -130,24 +136,28 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
               padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'Nouveau Réfrigérateur',
-                    style: TextStyle(
+                    style: GoogleFonts.montserrat(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   TextField(
                     controller: _nomController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Nom',
+                      labelStyle: GoogleFonts.montserrat(),
                     ),
                   ),
                   TextField(
-                      controller: _tempController,
-                      decoration:
-                          const InputDecoration(labelText: 'Température (°C)'),
-                      keyboardType: TextInputType.number),
+                    controller: _tempController,
+                    decoration: InputDecoration(
+                      labelText: 'Température (°C)',
+                      labelStyle: GoogleFonts.montserrat(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
                   const SizedBox(
                     height: 16.0,
                   ),
@@ -161,7 +171,8 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       style: GoogleFonts.montserrat(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown[600]),
+                      backgroundColor: Colors.brown[600],
+                    ),
                     onPressed: () => _ajouterRefrigerateur(provider),
                   ),
                 ],
@@ -178,7 +189,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
@@ -189,8 +200,13 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                     title: Text(refrigerateur.nom),
                     subtitle: refrigerateur.temperature != null
                         ? Text(
-                            'Temp : ${refrigerateur.temperature}°C - ${refrigerateur.getBoissonTotal()} boissons')
-                        : Text('${refrigerateur.getBoissonTotal()} boissons'),
+                            'Temp : ${refrigerateur.temperature}°C - ${refrigerateur.getBoissonTotal()} boissons',
+                            style: GoogleFonts.montserrat(),
+                          )
+                        : Text(
+                            '${refrigerateur.getBoissonTotal()} boissons',
+                            style: GoogleFonts.montserrat(),
+                          ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -230,16 +246,19 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                     children: [
                                       TextField(
                                         controller: _nomController,
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           labelText: 'Nom',
+                                          labelStyle: GoogleFonts.montserrat(),
                                         ),
                                       ),
                                       TextField(
-                                          controller: _tempController,
-                                          decoration: const InputDecoration(
-                                            labelText: 'Température (°C)',
-                                          ),
-                                          keyboardType: TextInputType.number),
+                                        controller: _tempController,
+                                        decoration: InputDecoration(
+                                          labelText: 'Température (°C)',
+                                          labelStyle: GoogleFonts.montserrat(),
+                                        ),
+                                        keyboardType: TextInputType.number,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -277,7 +296,9 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                               context: context,
                               builder: (context) => AlertDialog(
                                 title: Text(
-                                    "Voulez-vous supprimer ${refrigerateur.nom} ?"),
+                                  "Voulez-vous supprimer ${refrigerateur.nom} ?",
+                                  style: GoogleFonts.montserrat(),
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
@@ -296,6 +317,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                         SnackBar(
                                           content: Text(
                                             '${refrigerateur.nom} supprimé avec succès!',
+                                            style: GoogleFonts.montserrat(),
                                           ),
                                         ),
                                       );

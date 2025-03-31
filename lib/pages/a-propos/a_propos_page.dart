@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AProposPage extends StatelessWidget {
   const AProposPage({super.key});
@@ -10,13 +11,12 @@ class AProposPage extends StatelessWidget {
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         backgroundColor: Colors.transparent,
-        title: const Text(
-          "A Propos",
-          style: TextStyle(
-            fontSize: 17,
-          ),
+        title: Text(
+          "A propos",
+          style: GoogleFonts.montserrat(fontSize: 16),
         ),
       ),
+      body: Column(children: [Text("")]),
     );
   }
 }
