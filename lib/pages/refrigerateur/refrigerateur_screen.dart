@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/refrigerateur/ajouter_boisson_refrigerateur_screen.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -21,11 +22,14 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner le nom"),
+          title: Text(
+            "Veuillez renseigner le nom",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -34,11 +38,14 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner la température"),
+          title: Text(
+            "Veuillez renseigner la température",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -53,7 +60,10 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       _resetForm();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${refrigerateur.nom} ajouté avec succès!'),
+          content: Text(
+            '${refrigerateur.nom} ajouté avec succès!',
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -65,11 +75,14 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner le nom"),
+          title: Text(
+            "Veuillez renseigner le nom",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -78,11 +91,14 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner la température"),
+          title: Text(
+            "Veuillez renseigner la température",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -94,7 +110,10 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       _resetForm();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${refrigerateur.nom} modifié avec succès!'),
+          content: Text(
+            '${refrigerateur.nom} modifié avec succès!',
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -117,24 +136,28 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
               padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'Nouveau Réfrigérateur',
-                    style: TextStyle(
+                    style: GoogleFonts.montserrat(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   TextField(
                     controller: _nomController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Nom',
+                      labelStyle: GoogleFonts.montserrat(),
                     ),
                   ),
                   TextField(
-                      controller: _tempController,
-                      decoration:
-                          const InputDecoration(labelText: 'Température (°C)'),
-                      keyboardType: TextInputType.number),
+                    controller: _tempController,
+                    decoration: InputDecoration(
+                      labelText: 'Température (°C)',
+                      labelStyle: GoogleFonts.montserrat(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
                   const SizedBox(
                     height: 16.0,
                   ),
@@ -143,14 +166,13 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       Icons.kitchen,
                       color: Colors.white,
                     ),
-                    label: const Text(
+                    label: Text(
                       'Ajouter',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                      style: GoogleFonts.montserrat(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown[600]),
+                      backgroundColor: Colors.brown[600],
+                    ),
                     onPressed: () => _ajouterRefrigerateur(provider),
                   ),
                 ],
@@ -167,7 +189,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
@@ -178,14 +200,21 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                     title: Text(refrigerateur.nom),
                     subtitle: refrigerateur.temperature != null
                         ? Text(
-                            'Temp : ${refrigerateur.temperature}°C - ${refrigerateur.getBoissonTotal()} boissons')
-                        : Text('${refrigerateur.getBoissonTotal()} boissons'),
+                            'Temp : ${refrigerateur.temperature}°C - ${refrigerateur.getBoissonTotal()} boissons',
+                            style: GoogleFonts.montserrat(),
+                          )
+                        : Text(
+                            '${refrigerateur.getBoissonTotal()} boissons',
+                            style: GoogleFonts.montserrat(),
+                          ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon:
-                              const Icon(Icons.add_circle, color: Colors.green),
+                          icon: const Icon(
+                            Icons.add_circle,
+                            color: Colors.green,
+                          ),
                           onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -205,37 +234,56 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
-                                title: Text('Modifier ${refrigerateur.nom}'),
+                                title: Text(
+                                  'Modifier ${refrigerateur.nom}',
+                                  style: GoogleFonts.montserrat(
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 content: SingleChildScrollView(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       TextField(
-                                          controller: _nomController,
-                                          decoration: const InputDecoration(
-                                              labelText: 'Nom')),
+                                        controller: _nomController,
+                                        decoration: InputDecoration(
+                                          labelText: 'Nom',
+                                          labelStyle: GoogleFonts.montserrat(),
+                                        ),
+                                      ),
                                       TextField(
-                                          controller: _tempController,
-                                          decoration: const InputDecoration(
-                                              labelText: 'Température (°C)'),
-                                          keyboardType: TextInputType.number),
+                                        controller: _tempController,
+                                        decoration: InputDecoration(
+                                          labelText: 'Température (°C)',
+                                          labelStyle: GoogleFonts.montserrat(),
+                                        ),
+                                        keyboardType: TextInputType.number,
+                                      ),
                                     ],
                                   ),
                                 ),
                                 actions: [
                                   TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        _resetForm();
-                                      },
-                                      child: const Text('Annuler')),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      _resetForm();
+                                    },
+                                    child: Text(
+                                      'Annuler',
+                                      style: GoogleFonts.montserrat(),
+                                    ),
+                                  ),
                                   TextButton(
-                                      onPressed: () {
-                                        _modifierRefrigerateur(
-                                            provider, refrigerateur);
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Modifier')),
+                                    onPressed: () {
+                                      _modifierRefrigerateur(
+                                          provider, refrigerateur);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'Modifier',
+                                      style: GoogleFonts.montserrat(),
+                                    ),
+                                  ),
                                 ],
                               ),
                             );
@@ -248,11 +296,16 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                               context: context,
                               builder: (context) => AlertDialog(
                                 title: Text(
-                                    "Voulez-vous supprimer ${refrigerateur.nom} ?"),
+                                  "Voulez-vous supprimer ${refrigerateur.nom} ?",
+                                  style: GoogleFonts.montserrat(),
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text("Annuler"),
+                                    child: Text(
+                                      "Annuler",
+                                      style: GoogleFonts.montserrat(),
+                                    ),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -264,11 +317,15 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                         SnackBar(
                                           content: Text(
                                             '${refrigerateur.nom} supprimé avec succès!',
+                                            style: GoogleFonts.montserrat(),
                                           ),
                                         ),
                                       );
                                     },
-                                    child: const Text("Oui"),
+                                    child: Text(
+                                      "Oui",
+                                      style: GoogleFonts.montserrat(),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -278,10 +335,13 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       ],
                     ),
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => RefrigerateurDetailScreen(
-                                refrigerateur: refrigerateur))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RefrigerateurDetailScreen(
+                          refrigerateur: refrigerateur,
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },

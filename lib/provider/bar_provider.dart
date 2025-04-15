@@ -87,13 +87,13 @@ class BarProvider with ChangeNotifier {
       fontWeight: pw.FontWeight.bold,
       color: PdfColors.brown600,
     );
-    final infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
+    const infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
     final tableHeaderStyle = pw.TextStyle(
       fontSize: 12,
       fontWeight: pw.FontWeight.bold,
       color: PdfColors.white,
     );
-    final tableCellStyle = pw.TextStyle(fontSize: 12, color: PdfColors.black);
+    const tableCellStyle = pw.TextStyle(fontSize: 12, color: PdfColors.black);
 
     pdf.addPage(
       pw.Page(
@@ -227,13 +227,13 @@ class BarProvider with ChangeNotifier {
       fontWeight: pw.FontWeight.bold,
       color: PdfColors.brown600,
     );
-    final infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
+    const infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
     final tableHeaderStyle = pw.TextStyle(
       fontSize: 12,
       fontWeight: pw.FontWeight.bold,
       color: PdfColors.white,
     );
-    final tableCellStyle = pw.TextStyle(fontSize: 12, color: PdfColors.black);
+    const tableCellStyle = pw.TextStyle(fontSize: 12, color: PdfColors.black);
 
     pdf.addPage(
       pw.Page(

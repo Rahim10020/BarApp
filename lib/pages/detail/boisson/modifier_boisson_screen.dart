@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/modele.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -43,11 +44,14 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner le nom"),
+          title: Text(
+            "Veuillez renseigner le nom",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -56,11 +60,17 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner le prix"),
+          title: Text(
+            "Veuillez renseigner le prix",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text(
+                "ok",
+                style: GoogleFonts.montserrat(),
+              ),
             ),
           ],
         ),
@@ -76,7 +86,10 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("${boisson.nom} modifié avec succès!"),
+          content: Text(
+            "${boisson.nom} modifié avec succès!",
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -88,7 +101,10 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text(" Modification de ${widget.boisson.nom ?? "Boisson"} "),
+        title: Text(
+          " Modification de ${widget.boisson.nom ?? "Boisson"} ",
+          style: GoogleFonts.montserrat(),
+        ),
         backgroundColor: Colors.brown[800],
       ),
       body: SingleChildScrollView(
@@ -119,7 +135,7 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
               Row(
                 children: [
                   DropdownButton<Modele>(
-                    hint: const Text('Modèle'),
+                    hint: Text('Modèle', style: GoogleFonts.montserrat()),
                     value: _modele,
                     items: Modele.values
                         .map(
@@ -127,6 +143,7 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
                             value: modele,
                             child: Text(
                               modele == Modele.petit ? 'Petit' : 'Grand',
+                              style: GoogleFonts.montserrat(),
                             ),
                           ),
                         )
@@ -144,11 +161,9 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
                   size: 18,
                   color: Colors.white,
                 ),
-                label: const Text(
+                label: Text(
                   'Modifier',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: GoogleFonts.montserrat(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[600],

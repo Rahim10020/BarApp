@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/ligne_commande.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
@@ -14,7 +15,12 @@ class LigneCommandeDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text("Ligne de commande #${ligneCommande.id}"),
+        title: Text(
+          "Ligne de commande #${ligneCommande.id}",
+          style: GoogleFonts.montserrat(
+            fontSize: 16,
+          ),
+        ),
         backgroundColor: Colors.brown[800],
       ),
       body: Padding(
@@ -31,11 +37,13 @@ class LigneCommandeDetailScreen extends StatelessWidget {
               value: Helpers.formatterEnCFA(ligneCommande.getMontant()),
             ),
             const SizedBox(height: 16),
-            Text(
-              'Casier #${ligneCommande.casier.id}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                'Casier #${ligneCommande.casier.id}',
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             if (ligneCommande.casier.boissons.isNotEmpty)
@@ -43,17 +51,21 @@ class LigneCommandeDetailScreen extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 child: ListTile(
                   leading: Icon(Icons.local_bar, color: Colors.brown[600]),
-                  title:
-                      Text(ligneCommande.casier.boissons[0].nom ?? 'Sans nom'),
+                  title: Text(
+                    '${ligneCommande.casier.boissons[0].nom} (${ligneCommande.casier.boissons[0].modele?.name})',
+                    style: GoogleFonts.montserrat(),
+                  ),
                   subtitle: Text(
                     Helpers.formatterEnCFA(
                         ligneCommande.casier.boissons[0].prix.last),
+                    style: GoogleFonts.montserrat(),
                   ),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => BoissonDetailScreen(
-                          boisson: ligneCommande.casier.boissons[0]),
+                        boisson: ligneCommande.casier.boissons[0],
+                      ),
                     ),
                   ),
                 ),

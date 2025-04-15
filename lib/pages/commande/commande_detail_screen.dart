@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:open_file/open_file.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/commande.dart';
@@ -29,17 +30,29 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
       final result = await OpenFile.open(filePath);
       if (result.type == ResultType.done) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('PDF ouvert avec succès !')),
+          SnackBar(
+              content: Text(
+            'PDF ouvert avec succès !',
+            style: GoogleFonts.montserrat(),
+          )),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('Impossible d\'ouvrir le PDF : ${result.message}')),
+              content: Text(
+            'Impossible d\'ouvrir le PDF : ${result.message}',
+            style: GoogleFonts.montserrat(),
+          )),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors de la génération du PDF : $e')),
+        SnackBar(
+          content: Text(
+            'Erreur lors de la génération du PDF : $e',
+            style: GoogleFonts.montserrat(),
+          ),
+        ),
       );
     }
   }
@@ -47,7 +60,12 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
   Future<void> _sharePdf() async {
     if (_pdfPath == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez d\'abord générer le PDF')),
+        SnackBar(
+          content: Text(
+            'Veuillez d\'abord générer le PDF',
+            style: GoogleFonts.montserrat(),
+          ),
+        ),
       );
       return;
     }
@@ -58,7 +76,12 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur lors du partage : $e')),
+        SnackBar(
+          content: Text(
+            'Erreur lors du partage : $e',
+            style: GoogleFonts.montserrat(),
+          ),
+        ),
       );
     }
   }
@@ -69,36 +92,51 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          foregroundColor: Colors.white,
-          title: Text('Commande #${widget.commande.id}'),
-          backgroundColor: Colors.brown[800]),
+        foregroundColor: Colors.white,
+        title: Text(
+          'Commande #${widget.commande.id}',
+          style: GoogleFonts.montserrat(
+            fontSize: 16,
+          ),
+        ),
+        backgroundColor: Colors.brown[800],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BuildInfoCard(label: 'ID', value: '${widget.commande.id}'),
             BuildInfoCard(
-                label: 'Montant Total',
-                value: Helpers.formatterEnCFA(widget.commande.montantTotal)),
+              label: 'ID',
+              value: '${widget.commande.id}',
+            ),
+            BuildInfoCard(
+              label: 'Montant Total',
+              value: Helpers.formatterEnCFA(widget.commande.montantTotal),
+            ),
             BuildInfoCard(
               label: 'Date',
               value: Helpers.formatterDate(widget.commande.dateCommande),
             ),
-            BuildInfoCard(label: 'Bar', value: widget.commande.barInstance.nom),
             BuildInfoCard(
-                label: 'Fournisseur',
-                value: widget.commande.fournisseur != null
-                    ? widget.commande.fournisseur!.nom
-                    : "Inconnu"),
+              label: 'Bar',
+              value: widget.commande.barInstance.nom,
+            ),
+            BuildInfoCard(
+              label: 'Fournisseur',
+              value: widget.commande.fournisseur != null
+                  ? widget.commande.fournisseur!.nom
+                  : "Inconnu",
+            ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Lignes de commande:',
-              style: TextStyle(
-                fontSize: 18,
+              style: GoogleFonts.montserrat(
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
                 itemCount: widget.commande.lignesCommande.length,
@@ -109,10 +147,12 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
                     child: ListTile(
                       leading: Icon(Icons.storage, color: Colors.brown[600]),
                       title: Text(
-                        'Casier #${ligne.casier.id}',
+                        'Casier #${ligne.casier.id} - ${ligne.casier.boissons.first.nom} (${ligne.casier.boissons.first.modele?.name})',
+                        style: GoogleFonts.montserrat(),
                       ),
                       subtitle: Text(
                         'Montant: ${Helpers.formatterEnCFA(ligne.montant)} - Boissons: ${ligne.casier.boissonTotal}',
+                        style: GoogleFonts.montserrat(),
                       ),
                       onTap: () => Navigator.push(
                         context,
@@ -131,10 +171,15 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.download, color: Colors.white),
-                  label: const Text(
+                  icon: const Icon(
+                    Icons.download,
+                    color: Colors.white,
+                  ),
+                  label: Text(
                     'Télécharger',
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                    ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[600],
@@ -142,10 +187,15 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
                   onPressed: () => _downloadAndOpenPdf(provider),
                 ),
                 ElevatedButton.icon(
-                  icon: const Icon(Icons.share, color: Colors.white),
-                  label: const Text(
+                  icon: const Icon(
+                    Icons.share,
+                    color: Colors.white,
+                  ),
+                  label: Text(
                     'Partager',
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                    ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[600],

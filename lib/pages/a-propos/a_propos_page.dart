@@ -11,11 +11,49 @@ class AProposPage extends StatelessWidget {
         elevation: 0,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         backgroundColor: Colors.transparent,
-        title: const Text(
-          "A Propos",
-          style: TextStyle(
-            fontSize: 17,
-          ),
+        title: Text(
+          "A propos",
+          style: GoogleFonts.montserrat(fontSize: 16),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Column(
+          children: [
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "BarApp",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        "Version",
+                        style: GoogleFonts.montserrat(),
+                      ),
+                      Text(
+                        "1.0.0",
+                        style: GoogleFonts.montserrat(),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    "Application mobile permettant de gerer les commandes, les ventes pour un bar",
+                    style: GoogleFonts.montserrat(),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

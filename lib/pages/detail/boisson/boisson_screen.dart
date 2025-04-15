@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
 import 'package:projet7/pages/detail/boisson/modifier_boisson_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -25,11 +26,14 @@ class _BoissonScreenState extends State<BoissonScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner le nom"),
+          title: Text(
+            "Veuillez renseigner le nom",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -38,11 +42,14 @@ class _BoissonScreenState extends State<BoissonScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez renseigner le prix"),
+          title: Text(
+            "Veuillez renseigner le prix",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -51,11 +58,14 @@ class _BoissonScreenState extends State<BoissonScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Veuillez choisir le modèle"),
+          title: Text(
+            "Veuillez choisir le modèle",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -75,7 +85,10 @@ class _BoissonScreenState extends State<BoissonScreen> {
       _resetForm();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${boisson.nom} ajouté avec succès!'),
+          content: Text(
+            '${boisson.nom} ajouté avec succès!',
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -103,37 +116,54 @@ class _BoissonScreenState extends State<BoissonScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Ajouter une boisson',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Ajouter une boisson',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(
-                          child: TextField(
-                              controller: _nomController,
-                              decoration: const InputDecoration(
-                                  labelText: 'Nom',
-                                  contentPadding: EdgeInsets.all(8)))),
+                        child: TextField(
+                          controller: _nomController,
+                          decoration: InputDecoration(
+                            labelText: 'Nom',
+                            labelStyle: GoogleFonts.montserrat(),
+                            contentPadding: const EdgeInsets.all(8),
+                          ),
+                        ),
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
-                          child: TextField(
-                              controller: _prixController,
-                              decoration: const InputDecoration(
-                                  labelText: 'Prix',
-                                  contentPadding: EdgeInsets.all(8)),
-                              keyboardType: TextInputType.number)),
+                        child: TextField(
+                            controller: _prixController,
+                            decoration: InputDecoration(
+                              labelText: 'Prix',
+                              labelStyle: GoogleFonts.montserrat(),
+                              contentPadding: const EdgeInsets.all(8),
+                            ),
+                            keyboardType: TextInputType.number),
+                      ),
                     ],
                   ),
                   TextField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                          labelText: 'Description',
-                          contentPadding: EdgeInsets.all(8))),
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                      labelText: 'Description',
+                      labelStyle: GoogleFonts.montserrat(),
+                      contentPadding: const EdgeInsets.all(8),
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(
                         child: DropdownButton<Modele>(
-                          hint: const Text('Modèle'),
+                          hint: Text(
+                            'Modèle',
+                            style: GoogleFonts.montserrat(),
+                          ),
                           value: _modele,
                           items: Modele.values
                               .map(
@@ -141,6 +171,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
                                   value: modele,
                                   child: Text(
                                     modele == Modele.petit ? 'Petit' : 'Grand',
+                                    style: GoogleFonts.montserrat(),
                                   ),
                                 ),
                               )
@@ -158,16 +189,15 @@ class _BoissonScreenState extends State<BoissonScreen> {
                         size: 18,
                         color: Colors.white,
                       ),
-                      label: const Text(
+                      label: Text(
                         'Ajouter',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                        style: GoogleFonts.montserrat(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.brown[600],
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8)),
+                        backgroundColor: Colors.brown[600],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                      ),
                       onPressed: () => _ajouterBoisson(provider),
                     ),
                   ),
@@ -185,7 +215,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
@@ -193,9 +223,23 @@ class _BoissonScreenState extends State<BoissonScreen> {
                   ),
                   child: ListTile(
                     leading: Icon(
-                        boisson.estFroid ? Icons.ac_unit : Icons.local_bar,
-                        color: Colors.brown[600]),
-                    title: Text(boisson.nom ?? 'Sans nom'),
+                      boisson.estFroid ? Icons.ac_unit : Icons.local_bar,
+                      color: Colors.brown[600],
+                    ),
+                    title: Row(
+                      children: [
+                        Text(
+                          boisson.nom ?? 'Sans nom',
+                          style: GoogleFonts.montserrat(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                        Text(
+                          ' (${boisson.modele?.name})',
+                          style: GoogleFonts.montserrat(color: Colors.blue),
+                        ),
+                      ],
+                    ),
                     subtitle: Text(Helpers.formatterEnCFA(boisson.prix.last)),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -220,25 +264,36 @@ class _BoissonScreenState extends State<BoissonScreen> {
                               context: context,
                               builder: (context) => AlertDialog(
                                 title: Text(
-                                    "Voulez-vous supprimer ${boisson.nom} ?"),
+                                  "Voulez-vous supprimer ${boisson.nom} ?",
+                                  style: GoogleFonts.montserrat(),
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text("Annuler"),
+                                    child: Text(
+                                      "Annuler",
+                                      style: GoogleFonts.montserrat(),
+                                    ),
                                   ),
                                   TextButton(
-                                      onPressed: () {
-                                        provider.deleteBoisson(boisson);
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                '${boisson.nom} supprimé avec succès!'),
+                                    onPressed: () {
+                                      provider.deleteBoisson(boisson);
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            '${boisson.nom} supprimé avec succès!',
+                                            style: GoogleFonts.montserrat(),
                                           ),
-                                        );
-                                      },
-                                      child: const Text("Oui"))
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "Oui",
+                                      style: GoogleFonts.montserrat(),
+                                    ),
+                                  )
                                 ],
                               ),
                             );
@@ -247,10 +302,11 @@ class _BoissonScreenState extends State<BoissonScreen> {
                       ],
                     ),
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) =>
-                                BoissonDetailScreen(boisson: boisson))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BoissonDetailScreen(boisson: boisson),
+                      ),
+                    ),
                   ),
                 );
               },

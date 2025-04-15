@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/ligne_vente.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
@@ -14,7 +15,10 @@ class LigneVenteDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text("Ligne de vente #${ligneVente.id}"),
+        title: Text(
+          "Ligne de vente #${ligneVente.id}",
+          style: GoogleFonts.montserrat(),
+        ),
         backgroundColor: Colors.brown[800],
       ),
       body: Padding(
@@ -31,18 +35,19 @@ class LigneVenteDetailScreen extends StatelessWidget {
               value: Helpers.formatterEnCFA(ligneVente.getMontant()),
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Boisson',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: GoogleFonts.montserrat(
+                  fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Card(
               margin: const EdgeInsets.symmetric(vertical: 4),
               child: ListTile(
                 leading: Icon(Icons.local_bar, color: Colors.brown[600]),
-                title: Text(ligneVente.boisson.nom ?? 'Sans nom'),
+                title: Text(
+                  ligneVente.boisson.nom ?? 'Sans nom',
+                  style: GoogleFonts.montserrat(),
+                ),
                 subtitle: Text(
                   Helpers.formatterEnCFA(ligneVente.boisson.prix.last),
                 ),

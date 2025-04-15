@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/vente/vente_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
@@ -31,8 +32,10 @@ class _VenteScreenState extends State<VenteScreen> {
       var lignes = boissonsSelectionnees
           .asMap()
           .entries
-          .map((e) => LigneVente(
-              id: e.key, montant: e.value.prix.last, boisson: e.value))
+          .map(
+            (e) => LigneVente(
+                id: e.key, montant: e.value.prix.last, boisson: e.value),
+          )
           .toList();
       var vente = Vente(
         id: await provider.generateUniqueId("Vente"),
@@ -52,8 +55,14 @@ class _VenteScreenState extends State<VenteScreen> {
         boissonsSelectionnees.clear();
         _isAdding = false;
       });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Vente enregistrée !')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Vente enregistrée !',
+            style: GoogleFonts.montserrat(),
+          ),
+        ),
+      );
     }
   }
 
@@ -72,22 +81,28 @@ class _VenteScreenState extends State<VenteScreen> {
             duration: const Duration(milliseconds: 300),
             padding: EdgeInsets.all(_isAdding ? 20 : 16),
             decoration: BoxDecoration(
-              color: _isAdding ? Colors.green[100] : Colors.white,
+              color: _isAdding
+                  ? Colors.green[200]
+                  : Theme.of(context).colorScheme.secondary,
               borderRadius: BorderRadius.circular(12),
               boxShadow: const [
-                BoxShadow(blurRadius: 4, color: Colors.black26)
+                BoxShadow(
+                  blurRadius: 4,
+                  color: Colors.black26,
+                )
               ],
             ),
             child: Column(
               children: [
-                const Text('Ajouter une vente',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(
+                  'Ajouter une vente',
+                  style: GoogleFonts.montserrat(),
+                ),
                 const SizedBox(
-                  height: 8.0,
+                  height: 24.0,
                 ),
                 Container(
-                  height: 50,
+                  height: 65,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: boissonsDisponibles.length,
@@ -105,19 +120,44 @@ class _VenteScreenState extends State<VenteScreen> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           margin: const EdgeInsets.symmetric(horizontal: 4),
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.only(
+                            left: 9,
+                            right: 9,
+                            top: 6,
+                            bottom: 3,
+                          ),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? Colors.brown[200]
-                                : Colors.grey[200],
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.tertiary,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Row(
+                          child: Column(
                             children: [
-                              Icon(Icons.local_bar,
-                                  size: 20, color: Colors.brown[800]),
-                              const SizedBox(width: 4),
-                              Text(boisson.nom ?? 'Sans nom'),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.local_bar,
+                                    size: 20,
+                                    color: Colors.brown[600],
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    boisson.nom ?? 'Sans nom',
+                                    style: GoogleFonts.montserrat(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                ' (${boisson.getModele()})',
+                                style: GoogleFonts.montserrat(
+                                  color: Colors.blue,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -126,16 +166,16 @@ class _VenteScreenState extends State<VenteScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 8.0,
+                  height: 14.0,
                 ),
                 ElevatedButton.icon(
                   icon: const Icon(
                     Icons.local_drink,
                     color: Colors.white,
                   ),
-                  label: const Text(
+                  label: Text(
                     'Enregistrer',
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.montserrat(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.brown[600]),
@@ -151,11 +191,15 @@ class _VenteScreenState extends State<VenteScreen> {
             controller: _searchController,
             decoration: InputDecoration(
               hintText: 'Rechercher (ID, date, boisson)',
+              hintStyle: GoogleFonts.montserrat(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
               prefixIcon: const Icon(Icons.search),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               filled: true,
-              fillColor: Colors.white,
+              fillColor: Theme.of(context).colorScheme.secondary,
             ),
           ),
           Expanded(
@@ -184,7 +228,7 @@ class _VenteScreenState extends State<VenteScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
@@ -193,13 +237,23 @@ class _VenteScreenState extends State<VenteScreen> {
                   child: ListTile(
                     leading: Icon(Icons.receipt_long, color: Colors.brown[600]),
                     title: Text(
-                        'Vente #${vente.id} - ${Helpers.formatterEnCFA(vente.montantTotal)}'),
+                      'Vente #${vente.id} - ${Helpers.formatterEnCFA(vente.montantTotal)}',
+                      style: GoogleFonts.montserrat(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
                     subtitle: Text(
-                        'Date : ${Helpers.formatterDate(vente.dateVente)}'),
+                      'Date : ${Helpers.formatterDate(vente.dateVente)}',
+                      style: GoogleFonts.montserrat(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => VenteDetailScreen(vente: vente))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => VenteDetailScreen(vente: vente),
+                      ),
+                    ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () {
@@ -207,24 +261,35 @@ class _VenteScreenState extends State<VenteScreen> {
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text(
-                                "Voulez-vous supprimer Vente #${vente.id} ?"),
+                              "Voulez-vous supprimer Vente #${vente.id} ?",
+                              style: GoogleFonts.montserrat(),
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text("Annuler"),
+                                child: Text(
+                                  "Annuler",
+                                  style: GoogleFonts.montserrat(),
+                                ),
                               ),
                               TextButton(
-                                  onPressed: () {
-                                    provider.deleteVente(vente);
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            'Vente #${vente.id} supprimé avec succès!'),
+                                onPressed: () {
+                                  provider.deleteVente(vente);
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Vente #${vente.id} supprimé avec succès!',
+                                        style: GoogleFonts.montserrat(),
                                       ),
-                                    );
-                                  },
-                                  child: const Text("Oui"))
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "Oui",
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              )
                             ],
                           ),
                         );

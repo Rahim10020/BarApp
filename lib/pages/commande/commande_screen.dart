@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/commande/commande_detail_screen.dart';
 import 'package:projet7/pages/commande/components/build_casier_selector.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -27,11 +28,14 @@ class _CommandeScreenState extends State<CommandeScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("La commande doit concerner au moins un casier"),
+          title: Text(
+            "La commande doit concerner au moins un casier",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -69,8 +73,11 @@ class _CommandeScreenState extends State<CommandeScreen> {
         _fournisseurSelectionne = null;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Commande créée avec succès!'),
+        SnackBar(
+          content: Text(
+            'Commande créée avec succès!',
+            style: GoogleFonts.montserrat(),
+          ),
         ),
       );
     }
@@ -81,7 +88,11 @@ class _CommandeScreenState extends State<CommandeScreen> {
     final provider = Provider.of<BarProvider>(context);
     return Padding(
       padding: const EdgeInsets.only(
-          left: 16.0, right: 16.0, bottom: 16.0, top: 8.0),
+        left: 16.0,
+        right: 16.0,
+        bottom: 16.0,
+        top: 8.0,
+      ),
       child: Column(
         children: [
           Card(
@@ -90,15 +101,18 @@ class _CommandeScreenState extends State<CommandeScreen> {
                   const EdgeInsets.only(left: 12, right: 12.0, bottom: 12.0),
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'Nouvelle Commande',
-                    style: TextStyle(
+                    style: GoogleFonts.montserrat(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   DropdownButton<Fournisseur>(
-                    hint: const Text('Choisir un fournisseur'),
+                    hint: Text(
+                      'Choisir un fournisseur',
+                      style: GoogleFonts.montserrat(),
+                    ),
                     value: _fournisseurSelectionne,
                     items: provider.fournisseurs
                         .map(
@@ -114,17 +128,21 @@ class _CommandeScreenState extends State<CommandeScreen> {
                         setState(() => _fournisseurSelectionne = value),
                   ),
                   TextField(
-                      controller: _nomFournisseurController,
-                      decoration: const InputDecoration(
-                          labelText: 'Nom du fournisseur (nouveau)')),
+                    controller: _nomFournisseurController,
+                    decoration: InputDecoration(
+                      labelText: 'Nom du fournisseur (nouveau)',
+                      labelStyle: GoogleFonts.montserrat(),
+                    ),
+                  ),
                   TextField(
                     controller: _adresseFournisseurController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Adresse du fournisseur',
+                      labelStyle: GoogleFonts.montserrat(),
                     ),
                   ),
                   const SizedBox(
-                    height: 4.0,
+                    height: 12,
                   ),
                   BuildCasierSelector(
                     itemCount: provider.casiers.length,
@@ -145,26 +163,32 @@ class _CommandeScreenState extends State<CommandeScreen> {
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? Colors.brown[200]
-                                : Colors.grey[200],
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.tertiary,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text('Casier #${casier.id}'),
+                          child: Text(
+                            'Casier #${casier.id}',
+                            style: GoogleFonts.montserrat(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                            ),
+                          ),
                         ),
                       );
                     },
                   ),
                   const SizedBox(
-                    height: 2.0,
+                    height: 10,
                   ),
                   ElevatedButton.icon(
                     icon: const Icon(
                       Icons.receipt,
                       color: Colors.white,
                     ),
-                    label: const Text(
+                    label: Text(
                       'Créer Commande',
-                      style: TextStyle(
+                      style: GoogleFonts.montserrat(
                         color: Colors.white,
                       ),
                     ),
@@ -186,7 +210,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(blurRadius: 4, color: Colors.black12)
@@ -194,44 +218,70 @@ class _CommandeScreenState extends State<CommandeScreen> {
                   ),
                   child: ListTile(
                     leading: Icon(Icons.receipt_long, color: Colors.brown[600]),
-                    title: Text('Commande #${commande.id}'),
+                    title: Text(
+                      'Commande #${commande.id}',
+                      style: GoogleFonts.montserrat(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
                     subtitle: Text(
-                        'Total : ${Helpers.formatterEnCFA(commande.montantTotal)} - ${Helpers.formatterDate(commande.dateCommande)}'),
+                      'Total : ${Helpers.formatterEnCFA(commande.montantTotal)} - ${Helpers.formatterDate(commande.dateCommande)}',
+                      style: GoogleFonts.montserrat(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
                     trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
                       onPressed: () {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text(
-                                "Voulez-vous supprimer Commande #${commande.id} ?"),
+                              "Voulez-vous supprimer Commande #${commande.id} ?",
+                              style: GoogleFonts.montserrat(),
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text("Annuler"),
+                                child: Text(
+                                  "Annuler",
+                                  style: GoogleFonts.montserrat(),
+                                ),
                               ),
                               TextButton(
-                                  onPressed: () {
-                                    provider.deleteCommande(commande);
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            'Commande #${commande.id} supprimé avec succès!'),
+                                onPressed: () {
+                                  provider.deleteCommande(commande);
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Commande #${commande.id} supprimé avec succès!',
+                                        style: GoogleFonts.montserrat(),
                                       ),
-                                    );
-                                  },
-                                  child: const Text("Oui"))
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "Oui",
+                                  style: GoogleFonts.montserrat(),
+                                ),
+                              )
                             ],
                           ),
                         );
                       },
                     ),
                     onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) =>
-                                CommandeDetailScreen(commande: commande))),
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CommandeDetailScreen(
+                          commande: commande,
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },

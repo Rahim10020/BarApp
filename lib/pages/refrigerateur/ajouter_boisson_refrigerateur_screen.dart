@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -41,12 +42,14 @@ class _AjouterBoissonRefrigerateurScreenState
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title:
-              const Text("Veuillez préciser le nombre de boissons à ajouter"),
+          title: Text(
+            "Veuillez préciser le nombre de boissons à ajouter",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -55,11 +58,14 @@ class _AjouterBoissonRefrigerateurScreenState
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Aucun casier de commande sélectionné"),
+          title: Text(
+            "Aucun casier de commande sélectionné",
+            style: GoogleFonts.montserrat(),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("ok"),
+              child: Text("ok", style: GoogleFonts.montserrat()),
             ),
           ],
         ),
@@ -70,7 +76,12 @@ class _AjouterBoissonRefrigerateurScreenState
         await provider.ajouterBoissonsAuRefrigerateur(
             casierSelectionne!.id, refrigerateur.id, nombre);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Boissons ajoutées avec succès !")),
+          SnackBar(
+            content: Text(
+              "Boissons ajoutées avec succès !",
+              style: GoogleFonts.montserrat(),
+            ),
+          ),
         );
         _boissonAAjouterController.clear();
         Navigator.pop(context); // Retourner à l’écran précédent après succès
@@ -82,7 +93,7 @@ class _AjouterBoissonRefrigerateurScreenState
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("ok"),
+                child: Text("ok", style: GoogleFonts.montserrat()),
               ),
             ],
           ),
@@ -103,7 +114,10 @@ class _AjouterBoissonRefrigerateurScreenState
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: Text("Ajout de boissons à ${widget.refrigerateur.nom}"),
+        title: Text(
+          "Ajout de boissons à ${widget.refrigerateur.nom}",
+          style: GoogleFonts.montserrat(fontSize: 16),
+        ),
         backgroundColor: Colors.brown[800],
       ),
       body: SingleChildScrollView(
@@ -111,12 +125,14 @@ class _AjouterBoissonRefrigerateurScreenState
           padding: const EdgeInsets.all(32.0),
           child: Column(
             children: [
-              const Row(
+              Row(
                 children: [
                   Text(
                     "Casiers commandés",
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.montserrat(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -124,10 +140,13 @@ class _AjouterBoissonRefrigerateurScreenState
                 height: 16.0,
               ),
               if (casiersCommandes.isEmpty)
-                const Text("Aucun casier disponible dans les commandes")
+                Text(
+                  "Aucun casier disponible dans les commandes",
+                  style: GoogleFonts.montserrat(),
+                )
               else
                 Container(
-                  height: 50,
+                  height: 90,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: casiersCommandes.length,
@@ -141,14 +160,35 @@ class _AjouterBoissonRefrigerateurScreenState
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           margin: const EdgeInsets.symmetric(horizontal: 4),
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.only(
+                            left: 12,
+                            right: 12,
+                            top: 8,
+                            bottom: 8,
+                          ),
                           decoration: BoxDecoration(
                             color: selectedIndex == index
                                 ? Colors.brown[200]
                                 : Colors.grey[200],
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text('Casier #${casier.id}'),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Casier #${casier.id}',
+                                style: GoogleFonts.montserrat(),
+                              ),
+                              Text(
+                                '${casier.boissons.first.nom}',
+                                style: GoogleFonts.montserrat(fontSize: 14),
+                              ),
+                              Text(
+                                '${casier.boissons.first.modele?.name}',
+                                style: GoogleFonts.montserrat(
+                                    color: Colors.blue, fontSize: 13),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -162,14 +202,17 @@ class _AjouterBoissonRefrigerateurScreenState
                       TextField(
                         controller: _boissonAAjouterController,
                         decoration: const InputDecoration(
-                            labelText: 'Nombre total de boissons'),
+                          labelText: 'Nombre total de boissons',
+                        ),
                         keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: 8.0),
                       ElevatedButton.icon(
                         icon: const Icon(Icons.kitchen, color: Colors.white),
-                        label: const Text('Ajouter',
-                            style: TextStyle(color: Colors.white)),
+                        label: Text(
+                          'Ajouter',
+                          style: GoogleFonts.montserrat(),
+                        ),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.brown[600]),
                         onPressed: () => _ajouterBoissonsAuRefrigerateur(

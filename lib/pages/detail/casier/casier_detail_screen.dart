@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
@@ -14,7 +15,10 @@ class CasierDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           foregroundColor: Colors.white,
-          title: Text('Casier #${casier.id}'),
+          title: Text(
+            'Casier #${casier.id}',
+            style: GoogleFonts.montserrat(fontSize: 16),
+          ),
           backgroundColor: Colors.brown[800]),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -28,21 +32,26 @@ class CasierDetailScreen extends StatelessWidget {
                 label: 'Prix Total',
                 value: Helpers.formatterEnCFA(casier.getPrixTotal())),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Boisson dans le casier:',
-              style: TextStyle(
-                fontSize: 18,
+              style: GoogleFonts.montserrat(
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 10),
             if (casier.boissons.isNotEmpty)
               Card(
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 child: ListTile(
                   leading: Icon(Icons.local_bar, color: Colors.brown[600]),
-                  title: Text(casier.boissons[0].nom ?? 'Sans nom'),
+                  title: Text(
+                    '${casier.boissons[0].nom} (${casier.boissons[0].modele?.name})',
+                    style: GoogleFonts.montserrat(),
+                  ),
                   subtitle: Text(
                     Helpers.formatterEnCFA(casier.boissons[0].prix.last),
+                    style: GoogleFonts.montserrat(),
                   ),
                   onTap: () => Navigator.push(
                     context,

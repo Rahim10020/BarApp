@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BuildInfoCard extends StatelessWidget {
   final String label;
   final String value;
 
-  const BuildInfoCard({super.key, required this.label, required this.value});
+  const BuildInfoCard({
+    super.key,
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +20,15 @@ class BuildInfoCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label),
+            Text(
+              label,
+              style: GoogleFonts.montserrat(),
+            ),
             Text(
               value,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

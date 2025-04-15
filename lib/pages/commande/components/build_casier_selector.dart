@@ -4,8 +4,11 @@ class BuildCasierSelector extends StatelessWidget {
   final int? itemCount;
   final Widget? Function(BuildContext, int) itemBuilder;
 
-  const BuildCasierSelector(
-      {super.key, required this.itemCount, required this.itemBuilder});
+  const BuildCasierSelector({
+    super.key,
+    required this.itemCount,
+    required this.itemBuilder,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:projet7/pages/commande/commande_screen.dart';
 import 'package:projet7/pages/detail/boisson/boisson_screen.dart';
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           title: Text(
             bar.currentBar!.nom,
-            style: const TextStyle(
+            style: GoogleFonts.montserrat(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),

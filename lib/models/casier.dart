@@ -18,7 +18,7 @@ class Casier {
   List<Boisson> boissons;
 
   /// [id] : repésente l'identifiant du casier
-  /// [boissonTotal] : représente la quantité de boisson dans le casier
+  /// [boissonTotal] : représente la quantité totale de boissons dans le casier
   /// [boissons] : représente la liste des boissons dans le casier
 
   Casier({
