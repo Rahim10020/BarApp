@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
 import 'package:projet7/pages/detail/boisson/modifier_boisson_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -22,54 +21,12 @@ class _BoissonScreenState extends State<BoissonScreen> {
   Modele? _modele;
 
   void _ajouterBoisson(BarProvider provider) async {
-    if (_nomController.text.isEmpty || _nomController.text == "") {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Veuillez renseigner le nom",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
-    } else if (_prixController.text.isEmpty || _prixController.text == "") {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Veuillez renseigner le prix",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
+    if (_nomController.text.isEmpty) {
+      _showErrorDialog(context, "Veuillez renseigner le nom");
+    } else if (_prixController.text.isEmpty) {
+      _showErrorDialog(context, "Veuillez renseigner le prix");
     } else if (_modele == null) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Veuillez choisir le modèle",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
+      _showErrorDialog(context, "Veuillez choisir le modèle");
     } else {
       var boisson = Boisson(
         id: await provider.generateUniqueId("Boisson"),
@@ -87,11 +44,35 @@ class _BoissonScreenState extends State<BoissonScreen> {
         SnackBar(
           content: Text(
             '${boisson.nom} ajouté avec succès!',
-            style: GoogleFonts.montserrat(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
           ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
       );
     }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          message,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              "OK",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _resetForm() {
@@ -111,206 +92,267 @@ class _BoissonScreenState extends State<BoissonScreen> {
       child: Column(
         children: [
           Card(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Ajouter une boisson',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _nomController,
-                          decoration: InputDecoration(
-                            labelText: 'Nom',
-                            labelStyle: GoogleFonts.montserrat(),
-                            contentPadding: const EdgeInsets.all(8),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: TextField(
-                            controller: _prixController,
-                            decoration: InputDecoration(
-                              labelText: 'Prix',
-                              labelStyle: GoogleFonts.montserrat(),
-                              contentPadding: const EdgeInsets.all(8),
-                            ),
-                            keyboardType: TextInputType.number),
-                      ),
-                    ],
-                  ),
-                  TextField(
-                    controller: _descriptionController,
-                    decoration: InputDecoration(
-                      labelText: 'Description',
-                      labelStyle: GoogleFonts.montserrat(),
-                      contentPadding: const EdgeInsets.all(8),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DropdownButton<Modele>(
-                          hint: Text(
-                            'Modèle',
-                            style: GoogleFonts.montserrat(),
-                          ),
-                          value: _modele,
-                          items: Modele.values
-                              .map(
-                                (modele) => DropdownMenuItem(
-                                  value: modele,
-                                  child: Text(
-                                    modele == Modele.petit ? 'Petit' : 'Grand',
-                                    style: GoogleFonts.montserrat(),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) => setState(() => _modele = value),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Center(
-                    child: ElevatedButton.icon(
-                      icon: const Icon(
-                        Icons.add,
-                        size: 18,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        'Ajouter',
-                        style: GoogleFonts.montserrat(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown[600],
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                      ),
-                      onPressed: () => _ajouterBoisson(provider),
-                    ),
-                  ),
-                ],
+            elevation: 6,
+            child: ExpansionTile(
+              title: Text(
+                'Ajouter une boisson',
+                style: Theme.of(context).textTheme.titleMedium,
               ),
+              leading: Icon(
+                Icons.add_circle,
+                color: Theme.of(context).colorScheme.primaryContainer,
+              ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _nomController,
+                              decoration: InputDecoration(
+                                labelText: 'Nom',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                filled: true,
+                                fillColor:
+                                    Theme.of(context).colorScheme.tertiary,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              controller: _prixController,
+                              decoration: InputDecoration(
+                                labelText: 'Prix',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                filled: true,
+                                fillColor:
+                                    Theme.of(context).colorScheme.tertiary,
+                              ),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _descriptionController,
+                        decoration: InputDecoration(
+                          labelText: 'Description',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      DropdownButton<Modele>(
+                        hint: Text(
+                          'Modèle',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        value: _modele,
+                        items: Modele.values
+                            .map(
+                              (modele) => DropdownMenuItem(
+                                value: modele,
+                                child: Text(
+                                  modele == Modele.petit ? 'Petit' : 'Grand',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) => setState(() => _modele = value),
+                        isExpanded: true,
+                      ),
+                      const SizedBox(height: 12),
+                      Center(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.add, size: 18),
+                          label: const Text('Ajouter'),
+                          onPressed: () => _ajouterBoisson(provider),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
+          const SizedBox(height: 16),
           Expanded(
-            child: ListView.builder(
-              itemCount: provider.boissons.length,
-              itemBuilder: (context, index) {
-                var boisson = provider.boissons[index];
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(blurRadius: 4, color: Colors.black12)
-                    ],
-                  ),
-                  child: ListTile(
-                    leading: Icon(
-                      boisson.estFroid ? Icons.ac_unit : Icons.local_bar,
-                      color: Colors.brown[600],
-                    ),
-                    title: Row(
-                      children: [
-                        Text(
-                          boisson.nom ?? 'Sans nom',
-                          style: GoogleFonts.montserrat(
+            child: provider.boissons.isEmpty
+                ? Center(
+                    child: Text(
+                      'Aucune boisson disponible',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context).colorScheme.inversePrimary,
                           ),
-                        ),
-                        Text(
-                          ' (${boisson.modele?.name})',
-                          style: GoogleFonts.montserrat(color: Colors.blue),
-                        ),
-                      ],
                     ),
-                    subtitle: Text(Helpers.formatterEnCFA(boisson.prix.last)),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.blue),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ModifierBoissonScreen(
-                                  boisson: boisson,
-                                ),
-                              ),
-                            );
-                          },
+                  )
+                : ListView.builder(
+                    itemCount: provider.boissons.length,
+                    itemBuilder: (context, index) {
+                      var boisson = provider.boissons[index];
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Theme.of(context).colorScheme.secondary,
+                              Theme.of(context).colorScheme.tertiary,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(blurRadius: 6, color: Colors.black26),
+                          ],
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text(
-                                  "Voulez-vous supprimer ${boisson.nom} ?",
-                                  style: GoogleFonts.montserrat(),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text(
-                                      "Annuler",
-                                      style: GoogleFonts.montserrat(),
+                        child: ListTile(
+                          leading: Icon(
+                            boisson.estFroid ? Icons.ac_unit : Icons.local_bar,
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                          ),
+                          title: Row(
+                            children: [
+                              Text(
+                                boisson.nom ?? 'Sans nom',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
                                     ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      provider.deleteBoisson(boisson);
-                                      Navigator.pop(context);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            '${boisson.nom} supprimé avec succès!',
-                                            style: GoogleFonts.montserrat(),
+                              ),
+                              Text(
+                                ' (${boisson.modele?.name})',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          subtitle: Text(
+                            Helpers.formatterEnCFA(boisson.prix.last),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                    ),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.blue),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ModifierBoissonScreen(
+                                        boisson: boisson,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text(
+                                        "Voulez-vous supprimer ${boisson.nom} ?",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Text(
+                                            "Annuler",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
                                           ),
                                         ),
-                                      );
-                                    },
-                                    child: Text(
-                                      "Oui",
-                                      style: GoogleFonts.montserrat(),
+                                        TextButton(
+                                          onPressed: () {
+                                            provider.deleteBoisson(boisson);
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  '${boisson.nom} supprimé avec succès!',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .inversePrimary,
+                                                      ),
+                                                ),
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .primaryContainer,
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            "Oui",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  )
-                                ],
+                                  );
+                                },
                               ),
-                            );
-                          },
+                            ],
+                          ),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  BoissonDetailScreen(boisson: boisson),
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BoissonDetailScreen(boisson: boisson),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),

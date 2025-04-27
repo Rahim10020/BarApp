@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/build_boisson_selector.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
@@ -15,10 +14,13 @@ class ModifierCasierScreen extends StatefulWidget {
   State<ModifierCasierScreen> createState() => _ModifierCasierScreenState();
 }
 
-class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
+class _ModifierCasierScreenState extends State<ModifierCasierScreen>
+    with SingleTickerProviderStateMixin {
   int selectedIndex = 0;
   Boisson? boissonSelectionnee;
   final _boissonTotalController = TextEditingController();
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
@@ -36,26 +38,40 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
       }
     }
     boissonSelectionnee = provider.boissons[0];
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+    _animationController.forward();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _boissonTotalController.dispose();
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _modifierCasier(BarProvider provider, Casier casier) async {
-    if (_boissonTotalController.text.isEmpty ||
-        _boissonTotalController.text == "") {
+    if (_boissonTotalController.text.isEmpty) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Veuillez préciser le nombre total de boissons",
-              style: GoogleFonts.montserrat()),
+          title: Text(
+            "Veuillez préciser le nombre total de boissons",
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
+              child: Text(
+                "OK",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           ],
         ),
@@ -87,10 +103,14 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
         SnackBar(
           content: Text(
             "Casier #${casier.id} modifié avec succès!",
-            style: GoogleFonts.montserrat(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
           ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
       );
+      Navigator.pop(context);
     }
   }
 
@@ -99,79 +119,83 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
     final provider = Provider.of<BarProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.white,
         title: Text(
-          " Modification de Casier #${widget.casier.id} ",
-          style: GoogleFonts.montserrat(),
+          "Modification de Casier #${widget.casier.id}",
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
         ),
-        backgroundColor: Colors.brown[800],
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                  controller: _boissonTotalController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nombre total de boissons',
-                  ),
-                  keyboardType: TextInputType.number),
-              const SizedBox(
-                height: 8.0,
-              ),
-              BuildBoissonSelector(
-                itemCount: provider.boissons.length,
-                itemBuilder: (context, index) {
-                  var boisson = provider.boissons[index];
-
-                  return GestureDetector(
-                    onTap: () => setState(() {
-                      selectedIndex = index;
-                      boissonSelectionnee = boisson;
-                    }),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: selectedIndex == index
-                            ? Colors.brown[200]
-                            : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Card(
+              elevation: 6,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: _boissonTotalController,
+                      decoration: InputDecoration(
+                        labelText: 'Nombre total de boissons',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.tertiary,
                       ),
-                      child: Text(
-                        boisson.nom ?? 'Sans nom',
-                        style: GoogleFonts.montserrat(),
-                      ),
+                      keyboardType: TextInputType.number,
                     ),
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.update,
-                  size: 18,
-                  color: Colors.white,
+                    const SizedBox(height: 16),
+                    BuildBoissonSelector(
+                      itemCount: provider.boissons.length,
+                      itemBuilder: (context, index) {
+                        var boisson = provider.boissons[index];
+                        return GestureDetector(
+                          onTap: () => setState(() {
+                            selectedIndex = index;
+                            boissonSelectionnee = boisson;
+                          }),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: selectedIndex == index
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.tertiary,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 4,
+                                  color: Colors.black26,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              boisson.nom ?? 'Sans nom',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.update, size: 18),
+                      label: const Text('Modifier'),
+                      onPressed: () => _modifierCasier(provider, widget.casier),
+                    ),
+                  ],
                 ),
-                label: Text(
-                  'Modifier',
-                  style: GoogleFonts.montserrat(),
-                ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600],
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 8)),
-                onPressed: () {
-                  _modifierCasier(provider, widget.casier);
-                  Navigator.pop(context);
-                },
               ),
-            ],
+            ),
           ),
         ),
       ),

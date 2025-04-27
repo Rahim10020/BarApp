@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -17,16 +16,18 @@ class AjouterBoissonRefrigerateurScreen extends StatefulWidget {
 }
 
 class _AjouterBoissonRefrigerateurScreenState
-    extends State<AjouterBoissonRefrigerateurScreen> {
+    extends State<AjouterBoissonRefrigerateurScreen>
+    with SingleTickerProviderStateMixin {
   final _boissonAAjouterController = TextEditingController();
   Casier? casierSelectionne;
   int selectedIndex = 0;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
     final provider = Provider.of<BarProvider>(context, listen: false);
-    // Sélectionner le premier casier des lignes de commande s’il existe
     var casiersCommandes = provider.commandes
         .expand((commande) => commande.lignesCommande)
         .map((ligne) => ligne.casier)
@@ -34,6 +35,22 @@ class _AjouterBoissonRefrigerateurScreenState
     if (casiersCommandes.isNotEmpty) {
       casierSelectionne = casiersCommandes[0];
     }
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _boissonAAjouterController.dispose();
+    _animationController.dispose();
+    super.dispose();
   }
 
   Future<void> _ajouterBoissonsAuRefrigerateur(
@@ -44,12 +61,15 @@ class _AjouterBoissonRefrigerateurScreenState
         builder: (context) => AlertDialog(
           title: Text(
             "Veuillez préciser le nombre de boissons à ajouter",
-            style: GoogleFonts.montserrat(),
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
+              child: Text(
+                "OK",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           ],
         ),
@@ -60,12 +80,15 @@ class _AjouterBoissonRefrigerateurScreenState
         builder: (context) => AlertDialog(
           title: Text(
             "Aucun casier de commande sélectionné",
-            style: GoogleFonts.montserrat(),
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
+              child: Text(
+                "OK",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           ],
         ),
@@ -79,21 +102,30 @@ class _AjouterBoissonRefrigerateurScreenState
           SnackBar(
             content: Text(
               "Boissons ajoutées avec succès !",
-              style: GoogleFonts.montserrat(),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
             ),
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           ),
         );
         _boissonAAjouterController.clear();
-        Navigator.pop(context); // Retourner à l’écran précédent après succès
+        Navigator.pop(context);
       } catch (e) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("$e"),
+            title: Text(
+              "$e",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text("ok", style: GoogleFonts.montserrat()),
+                child: Text(
+                  "OK",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             ],
           ),
@@ -105,7 +137,6 @@ class _AjouterBoissonRefrigerateurScreenState
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<BarProvider>(context);
-    // Récupérer les casiers des lignes de commande uniquement
     var casiersCommandes = provider.commandes
         .expand((commande) => commande.lignesCommande)
         .map((ligne) => ligne.casier)
@@ -113,115 +144,146 @@ class _AjouterBoissonRefrigerateurScreenState
 
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.white,
         title: Text(
           "Ajout de boissons à ${widget.refrigerateur.nom}",
-          style: GoogleFonts.montserrat(fontSize: 16),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
         ),
-        backgroundColor: Colors.brown[800],
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "Casiers commandés",
-                    style: GoogleFonts.montserrat(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Casiers commandés",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 16),
+                casiersCommandes.isEmpty
+                    ? Center(
+                        child: Text(
+                          "Aucun casier disponible dans les commandes",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                                  ),
+                        ),
+                      )
+                    : Container(
+                        height: 100,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: casiersCommandes.length,
+                          itemBuilder: (context, index) {
+                            var casier = casiersCommandes[index];
+                            return GestureDetector(
+                              onTap: () => setState(() {
+                                selectedIndex = index;
+                                casierSelectionne = casier;
+                              }),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: selectedIndex == index
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.tertiary,
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 4,
+                                      color: Colors.black26,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Casier #${casier.id}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                          ),
+                                    ),
+                                    Text(
+                                      '${casier.boissons.first.nom}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                          ),
+                                    ),
+                                    Text(
+                                      '${casier.boissons.first.modele?.name}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                if (casierSelectionne != null) ...[
+                  const SizedBox(height: 16),
+                  Card(
+                    elevation: 6,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: _boissonAAjouterController,
+                            decoration: InputDecoration(
+                              labelText: 'Nombre total de boissons',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              filled: true,
+                              fillColor: Theme.of(context).colorScheme.tertiary,
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            icon: const Icon(Icons.kitchen),
+                            label: const Text('Ajouter'),
+                            onPressed: () => _ajouterBoissonsAuRefrigerateur(
+                                provider, widget.refrigerateur),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(
-                height: 16.0,
-              ),
-              if (casiersCommandes.isEmpty)
-                Text(
-                  "Aucun casier disponible dans les commandes",
-                  style: GoogleFonts.montserrat(),
-                )
-              else
-                Container(
-                  height: 90,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: casiersCommandes.length,
-                    itemBuilder: (context, index) {
-                      var casier = casiersCommandes[index];
-                      return GestureDetector(
-                        onTap: () => setState(() {
-                          selectedIndex = index;
-                          casierSelectionne = casier;
-                        }),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          padding: const EdgeInsets.only(
-                            left: 12,
-                            right: 12,
-                            top: 8,
-                            bottom: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: selectedIndex == index
-                                ? Colors.brown[200]
-                                : Colors.grey[200],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Casier #${casier.id}',
-                                style: GoogleFonts.montserrat(),
-                              ),
-                              Text(
-                                '${casier.boissons.first.nom}',
-                                style: GoogleFonts.montserrat(fontSize: 14),
-                              ),
-                              Text(
-                                '${casier.boissons.first.modele?.name}',
-                                style: GoogleFonts.montserrat(
-                                    color: Colors.blue, fontSize: 13),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              if (casierSelectionne != null)
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      TextField(
-                        controller: _boissonAAjouterController,
-                        decoration: const InputDecoration(
-                          labelText: 'Nombre total de boissons',
-                        ),
-                        keyboardType: TextInputType.number,
-                      ),
-                      const SizedBox(height: 8.0),
-                      ElevatedButton.icon(
-                        icon: const Icon(Icons.kitchen, color: Colors.white),
-                        label: Text(
-                          'Ajouter',
-                          style: GoogleFonts.montserrat(),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.brown[600]),
-                        onPressed: () => _ajouterBoissonsAuRefrigerateur(
-                            provider, widget.refrigerateur),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

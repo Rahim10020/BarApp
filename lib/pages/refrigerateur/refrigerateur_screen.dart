@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/pages/refrigerateur/ajouter_boisson_refrigerateur_screen.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
@@ -18,38 +17,10 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
   final _tempController = TextEditingController();
 
   void _ajouterRefrigerateur(BarProvider provider) async {
-    if (_nomController.text.isEmpty || _nomController.text == "") {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Veuillez renseigner le nom",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
-    } else if (_tempController.text.isEmpty || _tempController.text == "") {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Veuillez renseigner la température",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
+    if (_nomController.text.isEmpty) {
+      _showErrorDialog(context, "Veuillez renseigner le nom");
+    } else if (_tempController.text.isEmpty) {
+      _showErrorDialog(context, "Veuillez renseigner la température");
     } else {
       var refrigerateur = Refrigerateur(
         id: await provider.generateUniqueId("Refrigerateur"),
@@ -62,8 +33,11 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
         SnackBar(
           content: Text(
             '${refrigerateur.nom} ajouté avec succès!',
-            style: GoogleFonts.montserrat(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
           ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
       );
     }
@@ -71,38 +45,10 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
 
   void _modifierRefrigerateur(
       BarProvider provider, Refrigerateur refrigerateur) {
-    if (_nomController.text.isEmpty || _nomController.text == "") {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Veuillez renseigner le nom",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
-    } else if (_tempController.text.isEmpty || _tempController.text == "") {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Veuillez renseigner la température",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
+    if (_nomController.text.isEmpty) {
+      _showErrorDialog(context, "Veuillez renseigner le nom");
+    } else if (_tempController.text.isEmpty) {
+      _showErrorDialog(context, "Veuillez renseigner la température");
     } else {
       refrigerateur.nom = _nomController.text;
       refrigerateur.temperature = double.tryParse(_tempController.text);
@@ -112,11 +58,35 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
         SnackBar(
           content: Text(
             '${refrigerateur.nom} modifié avec succès!',
-            style: GoogleFonts.montserrat(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
           ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
       );
     }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          message,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              "OK",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _resetForm() {
@@ -132,220 +102,332 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       child: Column(
         children: [
           Card(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                children: [
-                  Text(
-                    'Nouveau Réfrigérateur',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextField(
-                    controller: _nomController,
-                    decoration: InputDecoration(
-                      labelText: 'Nom',
-                      labelStyle: GoogleFonts.montserrat(),
-                    ),
-                  ),
-                  TextField(
-                    controller: _tempController,
-                    decoration: InputDecoration(
-                      labelText: 'Température (°C)',
-                      labelStyle: GoogleFonts.montserrat(),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                  ElevatedButton.icon(
-                    icon: const Icon(
-                      Icons.kitchen,
-                      color: Colors.white,
-                    ),
-                    label: Text(
-                      'Ajouter',
-                      style: GoogleFonts.montserrat(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.brown[600],
-                    ),
-                    onPressed: () => _ajouterRefrigerateur(provider),
-                  ),
-                ],
+            elevation: 6,
+            child: ExpansionTile(
+              title: Text(
+                'Nouveau Réfrigérateur',
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: provider.refrigerateurs.length,
-              itemBuilder: (context, index) {
-                var refrigerateur = provider.refrigerateurs[index];
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(blurRadius: 4, color: Colors.black12)
+              leading: Icon(
+                Icons.kitchen,
+                color: Theme.of(context).colorScheme.primaryContainer,
+              ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _nomController,
+                        decoration: InputDecoration(
+                          labelText: 'Nom',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: _tempController,
+                        decoration: InputDecoration(
+                          labelText: 'Température (°C)',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor: Theme.of(context).colorScheme.tertiary,
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        icon: const Icon(Icons.kitchen),
+                        label: const Text('Ajouter'),
+                        onPressed: () => _ajouterRefrigerateur(provider),
+                      ),
                     ],
                   ),
-                  child: ListTile(
-                    leading: Icon(Icons.kitchen, color: Colors.brown[600]),
-                    title: Text(refrigerateur.nom),
-                    subtitle: refrigerateur.temperature != null
-                        ? Text(
-                            'Temp : ${refrigerateur.temperature}°C - ${refrigerateur.getBoissonTotal()} boissons',
-                            style: GoogleFonts.montserrat(),
-                          )
-                        : Text(
-                            '${refrigerateur.getBoissonTotal()} boissons',
-                            style: GoogleFonts.montserrat(),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: provider.refrigerateurs.isEmpty
+                ? Center(
+                    child: Text(
+                      'Aucun réfrigérateur disponible',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.inversePrimary,
                           ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.add_circle,
-                            color: Colors.green,
+                    ),
+                  )
+                : GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      childAspectRatio: 1.2,
+                    ),
+                    itemCount: provider.refrigerateurs.length,
+                    itemBuilder: (context, index) {
+                      var refrigerateur = provider.refrigerateurs[index];
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Theme.of(context).colorScheme.secondary,
+                              Theme.of(context).colorScheme.tertiary,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          onPressed: () => Navigator.push(
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(blurRadius: 6, color: Colors.black26),
+                          ],
+                        ),
+                        child: InkWell(
+                          onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  AjouterBoissonRefrigerateurScreen(
-                                refrigerateur: refrigerateur,
-                              ),
+                              builder: (_) => RefrigerateurDetailScreen(
+                                  refrigerateur: refrigerateur),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.kitchen,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                  size: 40,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  refrigerateur.nom,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
+                                      ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  refrigerateur.temperature != null
+                                      ? 'Temp: ${refrigerateur.temperature}°C'
+                                      : 'N/A',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
+                                      ),
+                                ),
+                                Text(
+                                  '${refrigerateur.getBoissonTotal()} boissons',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                ),
+                                const Spacer(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.add_circle,
+                                          color: Colors.green),
+                                      onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AjouterBoissonRefrigerateurScreen(
+                                                  refrigerateur: refrigerateur),
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.edit,
+                                          color: Colors.blue),
+                                      onPressed: () {
+                                        _nomController.text = refrigerateur.nom;
+                                        _tempController.text = refrigerateur
+                                                .temperature
+                                                ?.toString() ??
+                                            '';
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            title: Text(
+                                              'Modifier ${refrigerateur.nom}',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium,
+                                            ),
+                                            content: SingleChildScrollView(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  TextField(
+                                                    controller: _nomController,
+                                                    decoration: InputDecoration(
+                                                      labelText: 'Nom',
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                      filled: true,
+                                                      fillColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .tertiary,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 12),
+                                                  TextField(
+                                                    controller: _tempController,
+                                                    decoration: InputDecoration(
+                                                      labelText:
+                                                          'Température (°C)',
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                      filled: true,
+                                                      fillColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .tertiary,
+                                                    ),
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: Text(
+                                                  'Annuler',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  _modifierRefrigerateur(
+                                                      provider, refrigerateur);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text(
+                                                  'Modifier',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete,
+                                          color: Colors.red),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text(
+                                              'Voulez-vous supprimer ${refrigerateur.nom} ?',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium,
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: Text(
+                                                  'Annuler',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  provider.deleteRefrigerateur(
+                                                      refrigerateur);
+                                                  Navigator.pop(context);
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        '${refrigerateur.nom} supprimé avec succès!',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .inversePrimary,
+                                                            ),
+                                                      ),
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .primaryContainer,
+                                                    ),
+                                                  );
+                                                },
+                                                child: Text(
+                                                  'Oui',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.blue),
-                          onPressed: () {
-                            _nomController.text = refrigerateur.nom;
-                            _tempController.text =
-                                refrigerateur.temperature?.toString() ?? '';
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: Text(
-                                  'Modifier ${refrigerateur.nom}',
-                                  style: GoogleFonts.montserrat(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextField(
-                                        controller: _nomController,
-                                        decoration: InputDecoration(
-                                          labelText: 'Nom',
-                                          labelStyle: GoogleFonts.montserrat(),
-                                        ),
-                                      ),
-                                      TextField(
-                                        controller: _tempController,
-                                        decoration: InputDecoration(
-                                          labelText: 'Température (°C)',
-                                          labelStyle: GoogleFonts.montserrat(),
-                                        ),
-                                        keyboardType: TextInputType.number,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      _resetForm();
-                                    },
-                                    child: Text(
-                                      'Annuler',
-                                      style: GoogleFonts.montserrat(),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      _modifierRefrigerateur(
-                                          provider, refrigerateur);
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      'Modifier',
-                                      style: GoogleFonts.montserrat(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text(
-                                  "Voulez-vous supprimer ${refrigerateur.nom} ?",
-                                  style: GoogleFonts.montserrat(),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text(
-                                      "Annuler",
-                                      style: GoogleFonts.montserrat(),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      provider
-                                          .deleteRefrigerateur(refrigerateur);
-                                      Navigator.pop(context);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            '${refrigerateur.nom} supprimé avec succès!',
-                                            style: GoogleFonts.montserrat(),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      "Oui",
-                                      style: GoogleFonts.montserrat(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RefrigerateurDetailScreen(
-                          refrigerateur: refrigerateur,
-                        ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
