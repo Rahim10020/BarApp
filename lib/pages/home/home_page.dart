@@ -27,11 +27,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List _pages = [
-    const VenteScreen(),
     const BoissonScreen(),
     const CasierScreen(),
     const CommandeScreen(),
     const RefrigerateurScreen(),
+    const VenteScreen(),
   ];
 
   @override
@@ -68,11 +68,11 @@ class _HomePageState extends State<HomePage> {
                 navigateBottomBar(index);
               },
               tabs: const [
-                GButton(icon: Icons.local_drink, text: 'Ventes'),
                 GButton(icon: Icons.wine_bar, text: 'Boissons'),
                 GButton(icon: Icons.storage, text: 'Casiers'),
                 GButton(icon: Icons.receipt, text: 'Commandes'),
                 GButton(icon: Icons.kitchen, text: 'Réfrigérateurs'),
+                GButton(icon: Icons.local_drink, text: 'Ventes'),
               ],
             ),
           ),
