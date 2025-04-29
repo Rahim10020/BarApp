@@ -1,48 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:projet7/models/boisson.dart';
-import 'package:projet7/models/modele.dart';
-import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
+import 'package:projet7/models/fournisseur.dart';
+import 'package:projet7/pages/fournisseur/fournisseur_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:provider/provider.dart';
 
-class BoissonScreen extends StatefulWidget {
-  const BoissonScreen({super.key});
+class FournisseurScreen extends StatefulWidget {
+  const FournisseurScreen({super.key});
 
   @override
-  State<BoissonScreen> createState() => _BoissonScreenState();
+  State<FournisseurScreen> createState() => _FournisseurScreenState();
 }
 
-class _BoissonScreenState extends State<BoissonScreen> {
+class _FournisseurScreenState extends State<FournisseurScreen> {
   final _nomController = TextEditingController();
-  final _prixController = TextEditingController();
-  Modele? _modeleSelectionne;
+  final _adresseController = TextEditingController();
 
-  void _ajouterBoisson(BarProvider provider) async {
+  void _ajouterFournisseur(BarProvider provider) async {
     if (_nomController.text.isEmpty) {
-      _showErrorDialog(context, "Veuillez renseigner le nom");
-    } else if (_prixController.text.isEmpty) {
-      _showErrorDialog(context, "Veuillez renseigner le prix");
-    } else if (_modeleSelectionne == null) {
-      _showErrorDialog(context, "Veuillez sélectionner un modèle");
+      _showErrorDialog(context, "Veuillez renseigner le nom du fournisseur");
     } else {
       try {
-        var boisson = Boisson(
-          id: await provider.generateUniqueId("Boisson"),
+        var fournisseur = Fournisseur(
+          id: await provider.generateUniqueId("Fournisseur"),
           nom: _nomController.text,
-          prix: [double.parse(_prixController.text)],
-          estFroid: false,
-          modele: _modeleSelectionne,
+          adresse:
+              _adresseController.text.isEmpty ? null : _adresseController.text,
         );
-        await provider.addBoisson(boisson);
+        await provider.addFournisseur(fournisseur);
         _nomController.clear();
-        _prixController.clear();
-        setState(() {
-          _modeleSelectionne = null;
-        });
+        _adresseController.clear();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Boisson ajoutée avec succès!',
+              'Fournisseur ajouté avec succès!',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
@@ -88,11 +78,11 @@ class _BoissonScreenState extends State<BoissonScreen> {
             elevation: 6,
             child: ExpansionTile(
               title: Text(
-                'Nouvelle Boisson',
+                'Nouveau Fournisseur',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               leading: Icon(
-                Icons.wine_bar,
+                Icons.store,
                 color: Theme.of(context).colorScheme.primary,
               ),
               children: [
@@ -114,9 +104,9 @@ class _BoissonScreenState extends State<BoissonScreen> {
                       ),
                       const SizedBox(height: 12),
                       TextField(
-                        controller: _prixController,
+                        controller: _adresseController,
                         decoration: InputDecoration(
-                          labelText: 'Prix (CFA)',
+                          labelText: 'Adresse (facultatif)',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -124,39 +114,12 @@ class _BoissonScreenState extends State<BoissonScreen> {
                           fillColor:
                               Theme.of(context).colorScheme.surfaceVariant,
                         ),
-                        keyboardType: TextInputType.number,
-                      ),
-                      const SizedBox(height: 12),
-                      DropdownButtonFormField<Modele>(
-                        value: _modeleSelectionne,
-                        decoration: InputDecoration(
-                          labelText: 'Modèle',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).colorScheme.surfaceVariant,
-                        ),
-                        items: Modele.values
-                            .map((modele) => DropdownMenuItem<Modele>(
-                                  value: modele,
-                                  child: Text(modele == Modele.petit
-                                      ? 'Petit'
-                                      : 'Grand'),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _modeleSelectionne = value;
-                          });
-                        },
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
-                        icon: const Icon(Icons.wine_bar),
+                        icon: const Icon(Icons.store),
                         label: const Text('Ajouter'),
-                        onPressed: () => _ajouterBoisson(provider),
+                        onPressed: () => _ajouterFournisseur(provider),
                       ),
                     ],
                   ),
@@ -166,10 +129,10 @@ class _BoissonScreenState extends State<BoissonScreen> {
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: provider.boissons.isEmpty
+            child: provider.fournisseurs.isEmpty
                 ? Center(
                     child: Text(
-                      'Aucune boisson disponible',
+                      'Aucun fournisseur disponible',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
@@ -183,9 +146,9 @@ class _BoissonScreenState extends State<BoissonScreen> {
                       mainAxisSpacing: 8,
                       childAspectRatio: 1.2,
                     ),
-                    itemCount: provider.boissons.length,
+                    itemCount: provider.fournisseurs.length,
                     itemBuilder: (context, index) {
-                      var boisson = provider.boissons[index];
+                      var fournisseur = provider.fournisseurs[index];
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
@@ -206,8 +169,8 @@ class _BoissonScreenState extends State<BoissonScreen> {
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  BoissonDetailScreen(boisson: boisson),
+                              builder: (_) => FournisseurDetailScreen(
+                                  fournisseur: fournisseur),
                             ),
                           ),
                           child: Padding(
@@ -216,13 +179,13 @@ class _BoissonScreenState extends State<BoissonScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Icons.wine_bar,
+                                  Icons.store,
                                   color: Theme.of(context).colorScheme.primary,
                                   size: 40,
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  boisson.nom ?? 'Sans nom',
+                                  fournisseur.nom,
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium
@@ -232,17 +195,6 @@ class _BoissonScreenState extends State<BoissonScreen> {
                                             .onSurface,
                                       ),
                                   textAlign: TextAlign.center,
-                                ),
-                                Text(
-                                  'Prix: ${boisson.prix.last} CFA',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
                                 ),
                               ],
                             ),

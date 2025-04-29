@@ -1,210 +1,159 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:open_file/open_file.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/commande.dart';
-import 'package:projet7/pages/commande/ligne_commande_detail_screen.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/pages/detail/casier/casier_detail_screen.dart';
 import 'package:projet7/utils/helpers.dart';
-import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
-class CommandeDetailScreen extends StatefulWidget {
+class CommandeDetailScreen extends StatelessWidget {
   final Commande commande;
 
   const CommandeDetailScreen({super.key, required this.commande});
 
   @override
-  State<CommandeDetailScreen> createState() => _CommandeDetailScreenState();
-}
-
-class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
-  String? _pdfPath; // Stocker le chemin du PDF généré
-
-  Future<void> _downloadAndOpenPdf(BarProvider provider) async {
-    try {
-      String filePath = await provider.generateCommandePdf(widget.commande);
-      setState(() {
-        _pdfPath = filePath; // Stocker le chemin du PDF
-      });
-      final result = await OpenFile.open(filePath);
-      if (result.type == ResultType.done) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-            'PDF ouvert avec succès !',
-            style: GoogleFonts.montserrat(),
-          )),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-            'Impossible d\'ouvrir le PDF : ${result.message}',
-            style: GoogleFonts.montserrat(),
-          )),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Erreur lors de la génération du PDF : $e',
-            style: GoogleFonts.montserrat(),
-          ),
-        ),
-      );
-    }
-  }
-
-  Future<void> _sharePdf() async {
-    if (_pdfPath == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Veuillez d\'abord générer le PDF',
-            style: GoogleFonts.montserrat(),
-          ),
-        ),
-      );
-      return;
-    }
-    try {
-      await Share.shareXFiles(
-        [XFile(_pdfPath!)],
-        text: 'Voici la commande #${widget.commande.id}',
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Erreur lors du partage : $e',
-            style: GoogleFonts.montserrat(),
-          ),
-        ),
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.white,
         title: Text(
-          'Commande #${widget.commande.id}',
-          style: GoogleFonts.montserrat(
-            fontSize: 16,
-          ),
+          'Commande #${commande.id}',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
         ),
-        backgroundColor: Colors.brown[800],
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BuildInfoCard(
-              label: 'ID',
-              value: '${widget.commande.id}',
-            ),
-            BuildInfoCard(
-              label: 'Montant Total',
-              value: Helpers.formatterEnCFA(widget.commande.montantTotal),
-            ),
-            BuildInfoCard(
-              label: 'Date',
-              value: Helpers.formatterDate(widget.commande.dateCommande),
-            ),
-            BuildInfoCard(
-              label: 'Bar',
-              value: widget.commande.barInstance.nom,
-            ),
-            BuildInfoCard(
-              label: 'Fournisseur',
-              value: widget.commande.fournisseur != null
-                  ? widget.commande.fournisseur!.nom
-                  : "Inconnu",
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Lignes de commande:',
-              style: GoogleFonts.montserrat(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.commande.lignesCommande.length,
-                itemBuilder: (context, index) {
-                  var ligne = widget.commande.lignesCommande[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    child: ListTile(
-                      leading: Icon(Icons.storage, color: Colors.brown[600]),
-                      title: Text(
-                        'Casier #${ligne.casier.id} - ${ligne.casier.boissons.first.nom} (${ligne.casier.boissons.first.modele?.name})',
-                        style: GoogleFonts.montserrat(),
-                      ),
-                      subtitle: Text(
-                        'Montant: ${Helpers.formatterEnCFA(ligne.montant)} - Boissons: ${ligne.casier.boissonTotal}',
-                        style: GoogleFonts.montserrat(),
-                      ),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LigneCommandeDetailScreen(
-                              ligneCommande:
-                                  widget.commande.lignesCommande[index]),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            elevation: 6,
+            child: Column(
               children: [
-                ElevatedButton.icon(
-                  icon: const Icon(
-                    Icons.download,
-                    color: Colors.white,
-                  ),
-                  label: Text(
-                    'Télécharger',
-                    style: GoogleFonts.montserrat(
-                      color: Colors.white,
+                Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
                     ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600],
+                  child: Center(
+                    child: Icon(
+                      Icons.receipt,
+                      size: 80,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
-                  onPressed: () => _downloadAndOpenPdf(provider),
                 ),
-                ElevatedButton.icon(
-                  icon: const Icon(
-                    Icons.share,
-                    color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BuildInfoCard(
+                        label: 'ID',
+                        value: '${commande.id}',
+                      ),
+                      BuildInfoCard(
+                        label: 'Bar',
+                        value: commande.barInstance.nom,
+                      ),
+                      BuildInfoCard(
+                        label: 'Prix Total',
+                        value: Helpers.formatterEnCFA(commande.montantTotal),
+                      ),
+                      BuildInfoCard(
+                        label: 'Date',
+                        value: Helpers.formatterDate(commande.dateCommande),
+                      ),
+                      BuildInfoCard(
+                        label: 'Fournisseur',
+                        value: commande.fournisseur?.nom ?? 'Inconnu',
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Casiers commandés:',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 10),
+                      commande.lignesCommande.isEmpty
+                          ? Center(
+                              child: Text(
+                                'Aucun casier dans cette commande',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                    ),
+                              ),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: commande.lignesCommande.length,
+                              itemBuilder: (context, index) {
+                                var ligne = commande.lignesCommande[index];
+                                return Card(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 4),
+                                  child: ListTile(
+                                    leading: Icon(
+                                      Icons.storage,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    title: Text(
+                                      'Casier #${ligne.casier.id}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          ligne.casier.boissons.isNotEmpty
+                                              ? '${ligne.casier.boissons.first.nom} (${ligne.casier.boissons.first.modele?.name})'
+                                              : 'Aucune boisson',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                        Text(
+                                          'Quantité: ${ligne.casier.boissonTotal}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                        Text(
+                                          'Montant: ${Helpers.formatterEnCFA(ligne.montant)}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CasierDetailScreen(
+                                                casier: ligne.casier),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                    ],
                   ),
-                  label: Text(
-                    'Partager',
-                    style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600],
-                  ),
-                  onPressed: _pdfPath != null ? _sharePdf : null,
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

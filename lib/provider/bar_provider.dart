@@ -8,6 +8,8 @@ import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/commande.dart';
 import 'package:projet7/models/fournisseur.dart';
 import 'package:projet7/models/id_counter.dart';
+import 'package:projet7/models/ligne_commande.dart';
+import 'package:projet7/models/ligne_vente.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:path_provider/path_provider.dart';
@@ -49,8 +51,6 @@ class BarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // int generateUniqueId() => DateTime.now().millisecondsSinceEpoch % 0xFFFFFFFF;
-
   Future<int> generateUniqueId(String entityType) async {
     IdCounter? counter = _idCounterBox.values.firstWhere(
       (c) => c.entityType == entityType,
@@ -59,12 +59,10 @@ class BarProvider with ChangeNotifier {
 
     counter.lastId += 1;
 
-    if (_idCounterBox.values.any(
-      (c) => c.entityType == entityType,
-    )) {
-      int index = _idCounterBox.values.toList().indexWhere(
-            (c) => c.entityType == entityType,
-          );
+    if (_idCounterBox.values.any((c) => c.entityType == entityType)) {
+      int index = _idCounterBox.values
+          .toList()
+          .indexWhere((c) => c.entityType == entityType);
       await _idCounterBox.putAt(index, counter);
     } else {
       await _idCounterBox.add(counter);
@@ -80,12 +78,12 @@ class BarProvider with ChangeNotifier {
     final headerStyle = pw.TextStyle(
       fontSize: 24,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColors.brown800,
+      color: PdfColors.black,
     );
     final subHeaderStyle = pw.TextStyle(
       fontSize: 18,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColors.brown600,
+      color: PdfColors.grey800,
     );
     final infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
     final tableHeaderStyle = pw.TextStyle(
@@ -104,9 +102,9 @@ class BarProvider with ChangeNotifier {
             pw.Container(
               padding: const pw.EdgeInsets.all(10),
               decoration: const pw.BoxDecoration(
-                color: PdfColors.brown100,
+                color: PdfColors.grey100,
                 border: pw.Border(
-                    bottom: pw.BorderSide(color: PdfColors.brown600, width: 2)),
+                    bottom: pw.BorderSide(color: PdfColors.grey800, width: 2)),
               ),
               child: pw.Text(
                 'Bar: ${commande.barInstance.nom}',
@@ -123,7 +121,7 @@ class BarProvider with ChangeNotifier {
             pw.Text('Date: ${Helpers.formatterDate(commande.dateCommande)}',
                 style: infoStyle),
             pw.Text(
-                'Montant Total: ${Helpers.formatterEnCFA(commande.getPrixTotal())}',
+                'Montant Total: ${Helpers.formatterEnCFA(commande.montantTotal)}',
                 style: infoStyle),
             pw.Text(
               'Fournisseur: ${commande.fournisseur != null ? commande.fournisseur!.nom : "Inconnu"}',
@@ -135,11 +133,11 @@ class BarProvider with ChangeNotifier {
             pw.Text('Lignes de Commande:', style: subHeaderStyle),
             pw.SizedBox(height: 10),
             pw.Table(
-              border: pw.TableBorder.all(color: PdfColors.brown400),
+              border: pw.TableBorder.all(color: PdfColors.grey400),
               children: [
                 // En-tête du tableau
                 pw.TableRow(
-                  decoration: const pw.BoxDecoration(color: PdfColors.brown600),
+                  decoration: const pw.BoxDecoration(color: PdfColors.grey800),
                   children: [
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
@@ -184,8 +182,7 @@ class BarProvider with ChangeNotifier {
                         ),
                         pw.Padding(
                           padding: const pw.EdgeInsets.all(5),
-                          child: pw.Text(
-                              Helpers.formatterEnCFA(ligne.getMontant()),
+                          child: pw.Text(Helpers.formatterEnCFA(ligne.montant),
                               style: tableCellStyle),
                         ),
                       ],
@@ -220,12 +217,12 @@ class BarProvider with ChangeNotifier {
     final headerStyle = pw.TextStyle(
       fontSize: 24,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColors.brown800,
+      color: PdfColors.black,
     );
     final subHeaderStyle = pw.TextStyle(
       fontSize: 18,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColors.brown600,
+      color: PdfColors.grey800,
     );
     final infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
     final tableHeaderStyle = pw.TextStyle(
@@ -244,9 +241,9 @@ class BarProvider with ChangeNotifier {
             pw.Container(
               padding: const pw.EdgeInsets.all(10),
               decoration: const pw.BoxDecoration(
-                color: PdfColors.brown100,
+                color: PdfColors.grey100,
                 border: pw.Border(
-                    bottom: pw.BorderSide(color: PdfColors.brown600, width: 2)),
+                    bottom: pw.BorderSide(color: PdfColors.grey800, width: 2)),
               ),
               child: pw.Text(
                 'Bar: ${_currentBar?.nom ?? "Bar Inconnu"}',
@@ -263,7 +260,7 @@ class BarProvider with ChangeNotifier {
             pw.Text('Date: ${Helpers.formatterDate(vente.dateVente)}',
                 style: infoStyle),
             pw.Text(
-                'Montant Total: ${Helpers.formatterEnCFA(vente.getPrixTotal())}',
+                'Montant Total: ${Helpers.formatterEnCFA(vente.montantTotal)}',
                 style: infoStyle),
             pw.SizedBox(height: 20),
 
@@ -271,11 +268,11 @@ class BarProvider with ChangeNotifier {
             pw.Text('Lignes de Vente:', style: subHeaderStyle),
             pw.SizedBox(height: 10),
             pw.Table(
-              border: pw.TableBorder.all(color: PdfColors.brown400),
+              border: pw.TableBorder.all(color: PdfColors.grey400),
               children: [
                 // En-tête du tableau
                 pw.TableRow(
-                  decoration: const pw.BoxDecoration(color: PdfColors.brown600),
+                  decoration: const pw.BoxDecoration(color: PdfColors.grey800),
                   children: [
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
@@ -297,8 +294,7 @@ class BarProvider with ChangeNotifier {
                         ),
                         pw.Padding(
                           padding: const pw.EdgeInsets.all(5),
-                          child: pw.Text(
-                              Helpers.formatterEnCFA(ligne.getMontant()),
+                          child: pw.Text(Helpers.formatterEnCFA(ligne.montant),
                               style: tableCellStyle),
                         ),
                       ],
@@ -328,19 +324,16 @@ class BarProvider with ChangeNotifier {
 
   Future<void> ajouterBoissonsAuRefrigerateur(
       int casierId, int refrigerateurId, int nombre) async {
-    // Trouver le casier dans les lignes de commande
-    Casier? casier;
-    for (var commande in _commandeBox.values) {
-      casier = commande.lignesCommande
-          .map((ligne) => ligne.casier)
-          .firstWhere((c) => c.id == casierId, orElse: () => null as Casier);
-      if (casier != null) break;
-    }
-    if (casier == null) throw Exception('Casier non trouvé dans les commandes');
+    // Trouver le casier
+    Casier? casier = _casierBox.values.firstWhere(
+      (c) => c.id == casierId,
+      orElse: () => throw Exception('Casier non trouvé'),
+    );
 
     var refrigerateur = _refrigerateurBox.values.firstWhere(
-        (r) => r.id == refrigerateurId,
-        orElse: () => throw Exception('Réfrigérateur non trouvé'));
+      (r) => r.id == refrigerateurId,
+      orElse: () => throw Exception('Réfrigérateur non trouvé'),
+    );
 
     if (casier.boissons.length < nombre || nombre <= 0) {
       throw Exception(
@@ -350,7 +343,6 @@ class BarProvider with ChangeNotifier {
     refrigerateur.boissons ??= [];
 
     // Transférer les boissons et mettre estFroid à true
-
     List<Boisson> boissonsATransferer = [];
     for (var b in casier.boissons.sublist(0, nombre)) {
       int newId = await generateUniqueId("Boisson");
@@ -366,7 +358,14 @@ class BarProvider with ChangeNotifier {
 
     refrigerateur.boissons!.addAll(boissonsATransferer);
 
-    // Ne pas modifier le casier d’origine dans _casierBox, juste le réfrigérateur
+    // Mettre à jour le casier en supprimant les boissons transférées
+    casier.boissons.removeRange(0, nombre);
+    casier.boissonTotal = casier.boissons.length;
+
+    // Sauvegarder les modifications
+    int casierIndex = _casierBox.values.toList().indexOf(casier);
+    await _casierBox.putAt(casierIndex, casier);
+
     int refrigerateurIndex =
         _refrigerateurBox.values.toList().indexOf(refrigerateur);
     await _refrigerateurBox.putAt(refrigerateurIndex, refrigerateur);
@@ -376,9 +375,18 @@ class BarProvider with ChangeNotifier {
 
   // BarInstance
   BarInstance? get currentBar => _currentBar;
+  List<BarInstance> get bars => _barBox.values.toList();
+  set currentBar(BarInstance? bar) {
+    _currentBar = bar;
+    notifyListeners();
+  }
+
   Future<void> createBar(String nom, String adresse) async {
     _currentBar = BarInstance(
-        id: await generateUniqueId("BarInstance"), nom: nom, adresse: adresse);
+      id: await generateUniqueId("BarInstance"),
+      nom: nom,
+      adresse: adresse,
+    );
     await _barBox.add(_currentBar!);
     notifyListeners();
   }
@@ -434,6 +442,12 @@ class BarProvider with ChangeNotifier {
   List<Fournisseur> get fournisseurs => _fournisseurBox.values.toList();
   Future<void> addFournisseur(Fournisseur fournisseur) async {
     await _fournisseurBox.add(fournisseur);
+    notifyListeners();
+  }
+
+  Future<void> deleteFournisseur(Fournisseur fournisseur) async {
+    await _fournisseurBox
+        .deleteAt(_fournisseurBox.values.toList().indexOf(fournisseur));
     notifyListeners();
   }
 
