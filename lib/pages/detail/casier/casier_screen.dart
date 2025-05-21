@@ -13,21 +13,38 @@ class CasierScreen extends StatefulWidget {
 }
 
 class _CasierScreenState extends State<CasierScreen> {
-  final _nomController = TextEditingController();
+  final _quantiteController = TextEditingController();
   Boisson? _boissonSelectionnee;
 
   void _ajouterCasier(BarProvider provider) async {
     if (_boissonSelectionnee == null) {
       _showErrorDialog(context, "Veuillez sélectionner une boisson");
+    } else if (_quantiteController.text.isEmpty) {
+      _showErrorDialog(context, "Veuillez préciser la quantité");
     } else {
       try {
+        final quantite = int.parse(_quantiteController.text);
+        if (quantite <= 0) {
+          throw Exception("La quantité doit être positive");
+        }
+        var boissons = List<Boisson>.generate(
+          quantite,
+          (_) => Boisson(
+            id: _boissonSelectionnee!.id,
+            nom: _boissonSelectionnee!.nom,
+            prix: List.from(_boissonSelectionnee!.prix),
+            estFroid: _boissonSelectionnee!.estFroid,
+            modele: _boissonSelectionnee!.modele,
+            description: _boissonSelectionnee!.description,
+          ),
+        );
         var casier = Casier(
           id: await provider.generateUniqueId("Casier"),
-          boissonTotal: 1,
-          boissons: [_boissonSelectionnee!],
+          boissonTotal: quantite,
+          boissons: boissons,
         );
         await provider.addCasier(casier);
-        _nomController.clear();
+        _quantiteController.clear();
         setState(() {
           _boissonSelectionnee = null;
         });
@@ -115,6 +132,20 @@ class _CasierScreenState extends State<CasierScreen> {
                           });
                         },
                       ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: _quantiteController,
+                        decoration: InputDecoration(
+                          labelText: 'Quantité',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor:
+                              Theme.of(context).colorScheme.surfaceVariant,
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
                         icon: const Icon(Icons.storage),
@@ -197,7 +228,7 @@ class _CasierScreenState extends State<CasierScreen> {
                                 ),
                                 Text(
                                   casier.boissons.isNotEmpty
-                                      ? casier.boissons.first.nom ?? 'Sans nom'
+                                      ? '${casier.boissonTotal} x ${casier.boissons.first.nom ?? 'Sans nom'}'
                                       : 'Vide',
                                   style: Theme.of(context)
                                       .textTheme

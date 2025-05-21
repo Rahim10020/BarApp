@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:projet7/pages/refrigerateur/ajouter_boisson_refrigerateur_screen.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:projet7/models/refrigerateur.dart';
+import 'package:provider/provider.dart';
 
 class RefrigerateurScreen extends StatefulWidget {
   const RefrigerateurScreen({super.key});
@@ -27,14 +27,14 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
         nom: _nomController.text,
         temperature: double.tryParse(_tempController.text),
       );
-      provider.addRefrigerateur(refrigerateur);
+      await provider.addRefrigerateur(refrigerateur);
       _resetForm();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
             '${refrigerateur.nom} ajouté avec succès!',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
           ),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -44,7 +44,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
   }
 
   void _modifierRefrigerateur(
-      BarProvider provider, Refrigerateur refrigerateur) {
+      BarProvider provider, Refrigerateur refrigerateur) async {
     if (_nomController.text.isEmpty) {
       _showErrorDialog(context, "Veuillez renseigner le nom");
     } else if (_tempController.text.isEmpty) {
@@ -52,14 +52,14 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
     } else {
       refrigerateur.nom = _nomController.text;
       refrigerateur.temperature = double.tryParse(_tempController.text);
-      provider.updateRefrigerateur(refrigerateur);
+      await provider.updateRefrigerateur(refrigerateur);
       _resetForm();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
             '${refrigerateur.nom} modifié avec succès!',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
           ),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -110,7 +110,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
               ),
               leading: Icon(
                 Icons.kitchen,
-                color: Theme.of(context).colorScheme.primaryContainer,
+                color: Theme.of(context).colorScheme.primary,
               ),
               children: [
                 Padding(
@@ -125,7 +125,8 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           filled: true,
-                          fillColor: Theme.of(context).colorScheme.tertiary,
+                          fillColor:
+                              Theme.of(context).colorScheme.surfaceVariant,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -137,7 +138,8 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           filled: true,
-                          fillColor: Theme.of(context).colorScheme.tertiary,
+                          fillColor:
+                              Theme.of(context).colorScheme.surfaceVariant,
                         ),
                         keyboardType: TextInputType.number,
                       ),
@@ -160,7 +162,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                     child: Text(
                       'Aucun réfrigérateur disponible',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.inversePrimary,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                     ),
                   )
@@ -170,7 +172,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
-                      childAspectRatio: 1.2,
+                      childAspectRatio: 0.7, // Ajusté pour plus d'espace
                     ),
                     itemCount: provider.refrigerateurs.length,
                     itemBuilder: (context, index) {
@@ -180,8 +182,8 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              Theme.of(context).colorScheme.secondary,
-                              Theme.of(context).colorScheme.tertiary,
+                              Theme.of(context).colorScheme.primaryContainer,
+                              Theme.of(context).colorScheme.surfaceVariant,
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -206,9 +208,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                               children: [
                                 Icon(
                                   Icons.kitchen,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer,
+                                  color: Theme.of(context).colorScheme.primary,
                                   size: 40,
                                 ),
                                 const SizedBox(height: 8),
@@ -220,9 +220,11 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                       ?.copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .inversePrimary,
+                                            .onSurface,
                                       ),
                                   textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
                                   refrigerateur.temperature != null
@@ -234,7 +236,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                       ?.copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .inversePrimary,
+                                            .onSurface,
                                       ),
                                 ),
                                 Text(
@@ -250,11 +252,11 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                 ),
                                 const Spacer(),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     IconButton(
                                       icon: const Icon(Icons.add_circle,
                                           color: Colors.green),
+                                      iconSize: 20,
                                       onPressed: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -267,6 +269,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                     IconButton(
                                       icon: const Icon(Icons.edit,
                                           color: Colors.blue),
+                                      iconSize: 20,
                                       onPressed: () {
                                         _nomController.text = refrigerateur.nom;
                                         _tempController.text = refrigerateur
@@ -300,7 +303,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                                       fillColor:
                                                           Theme.of(context)
                                                               .colorScheme
-                                                              .tertiary,
+                                                              .surfaceVariant,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 12),
@@ -319,7 +322,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                                       fillColor:
                                                           Theme.of(context)
                                                               .colorScheme
-                                                              .tertiary,
+                                                              .surfaceVariant,
                                                     ),
                                                     keyboardType:
                                                         TextInputType.number,
@@ -359,6 +362,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                     IconButton(
                                       icon: const Icon(Icons.delete,
                                           color: Colors.red),
+                                      iconSize: 20,
                                       onPressed: () {
                                         showDialog(
                                           context: context,
@@ -397,7 +401,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                                               color: Theme.of(
                                                                       context)
                                                                   .colorScheme
-                                                                  .inversePrimary,
+                                                                  .onPrimaryContainer,
                                                             ),
                                                       ),
                                                       backgroundColor:

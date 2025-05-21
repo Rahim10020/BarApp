@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/custom_bottom_nav_bar.dart';
-import 'package:projet7/pages/detail/boisson/boisson_screen.dart';
-import 'package:projet7/pages/detail/casier/casier_screen.dart';
+import 'package:projet7/pages/a-propos/a_propos_page.dart';
 import 'package:projet7/pages/commande/commande_screen.dart';
 import 'package:projet7/pages/fournisseur/fournisseur_screen.dart';
-import 'package:projet7/pages/home/components/my_drawer.dart';
+import 'package:projet7/pages/detail/boisson/boisson_screen.dart';
+import 'package:projet7/pages/detail/casier/casier_screen.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_screen.dart';
+import 'package:projet7/pages/settings/settings_page.dart';
 import 'package:projet7/pages/vente/vente_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage>
   late Animation<double> _fadeAnimation;
 
   final List<Widget> _screens = [
-    const Center(child: Text('Accueil')), // Placeholder pour la page d'accueil
+    const Center(child: Text('Accueil')),
     const RefrigerateurScreen(),
     const CommandeScreen(),
     const VenteScreen(),
@@ -63,15 +64,78 @@ class _HomePageState extends State<HomePage>
     final provider = Provider.of<BarProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          provider.currentBar?.nom ?? 'Bar',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
+        title: Row(
+          children: [
+            Image.asset("lib/assets/logo.png", height: 32.0),
+            Text(
+              provider.currentBar?.nom ?? 'Bar',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+            ),
+          ],
         ),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        actions: [
+          PopupMenuButton<String>(
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+            onSelected: (value) {
+              if (value == 'settings') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
+                );
+              } else if (value == "about") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AProposPage()),
+                );
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: 'about',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    SizedBox(width: 8.0),
+                    Text(
+                      "À Propos",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'settings',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.settings,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    SizedBox(width: 8.0),
+                    Text(
+                      "Paramètres",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
-      drawer: const MyDrawer(),
       body: provider.currentBar == null
           ? Center(
               child: Column(

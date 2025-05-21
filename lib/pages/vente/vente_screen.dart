@@ -23,9 +23,21 @@ class _VenteScreenState extends State<VenteScreen> {
   void initState() {
     super.initState();
     final provider = Provider.of<BarProvider>(context, listen: false);
-    if (provider.boissons.isNotEmpty) {
-      boissonSelectionnee = provider.boissons[0];
+    var boissonsCommandees = _getBoissonsCommandees(provider);
+    if (boissonsCommandees.isNotEmpty) {
+      boissonSelectionnee = boissonsCommandees[0];
     }
+  }
+
+  List<Boisson> _getBoissonsCommandees(BarProvider provider) {
+    var casiersCommandes = provider.commandes
+        .expand((commande) => commande.lignesCommande)
+        .map((ligne) => ligne.casier)
+        .toList();
+    return casiersCommandes
+        .expand((casier) => casier.boissons)
+        .toSet()
+        .toList();
   }
 
   void _enregistrerVente(BarProvider provider) async {
@@ -93,6 +105,7 @@ class _VenteScreenState extends State<VenteScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<BarProvider>(context);
+    final boissonsCommandees = _getBoissonsCommandees(provider);
     final totalVentes = provider.ventes.fold<double>(
       0,
       (sum, vente) => sum + vente.montantTotal,
@@ -118,72 +131,85 @@ class _VenteScreenState extends State<VenteScreen> {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: [
-                      Container(
-                        height: 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: provider.boissons.length,
-                          itemBuilder: (context, index) {
-                            var boisson = provider.boissons[index];
-                            return GestureDetector(
-                              onTap: () => setState(() {
-                                selectedIndex = index;
-                                boissonSelectionnee = boisson;
-                              }),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: selectedIndex == index
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .primaryContainer
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .surfaceVariant,
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 4,
-                                      color: Colors.black26,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      boisson.nom ?? 'Sans nom',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color: Theme.of(context)
+                      boissonsCommandees.isEmpty
+                          ? Text(
+                              'Aucune boisson disponible dans les commandes',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                            )
+                          : Container(
+                              height: 100,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: boissonsCommandees.length,
+                                itemBuilder: (context, index) {
+                                  var boisson = boissonsCommandees[index];
+                                  return GestureDetector(
+                                    onTap: () => setState(() {
+                                      selectedIndex = index;
+                                      boissonSelectionnee = boisson;
+                                    }),
+                                    child: AnimatedContainer(
+                                      duration:
+                                          const Duration(milliseconds: 200),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: selectedIndex == index
+                                            ? Theme.of(context)
                                                 .colorScheme
-                                                .onSurface,
-                                          ),
-                                    ),
-                                    Text(
-                                      boisson.modele?.name ?? '',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(context)
+                                                .primaryContainer
+                                            : Theme.of(context)
                                                 .colorScheme
-                                                .primary,
+                                                .surfaceVariant,
+                                        borderRadius: BorderRadius.circular(8),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 4,
+                                            color: Colors.black26,
+                                            offset: Offset(0, 2),
                                           ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            boisson.nom ?? 'Sans nom',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                          ),
+                                          Text(
+                                            boisson.modele?.name ?? '',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            ),
                       const SizedBox(height: 12),
                       TextField(
                         controller: _quantiteController,
@@ -202,7 +228,9 @@ class _VenteScreenState extends State<VenteScreen> {
                       ElevatedButton.icon(
                         icon: const Icon(Icons.local_drink),
                         label: const Text('Enregistrer'),
-                        onPressed: () => _enregistrerVente(provider),
+                        onPressed: boissonsCommandees.isEmpty
+                            ? null
+                            : () => _enregistrerVente(provider),
                       ),
                     ],
                   ),
