@@ -13,10 +13,11 @@ class RefrigerateurDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         title: Text(
           refrigerateur.nom,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.inversePrimary,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,

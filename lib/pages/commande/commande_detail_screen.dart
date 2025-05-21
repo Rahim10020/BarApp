@@ -40,7 +40,7 @@ class CommandeDetailScreen extends StatelessWidget {
                     child: Icon(
                       Icons.receipt,
                       size: 80,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primaryContainer,
                     ),
                   ),
                 ),
@@ -50,7 +50,7 @@ class CommandeDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       BuildInfoCard(
-                        label: 'ID',
+                        label: 'Numéro',
                         value: '${commande.id}',
                       ),
                       BuildInfoCard(

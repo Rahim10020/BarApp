@@ -94,7 +94,7 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen>
       casier.boissonTotal =
           int.tryParse(_boissonTotalController.text) ?? casier.boissons.length;
       casier.boissons = boissons;
-      provider.updateCasier(casier);
+      // provider.updateCasier(casier);
       setState(() {
         _boissonTotalController.clear();
       });

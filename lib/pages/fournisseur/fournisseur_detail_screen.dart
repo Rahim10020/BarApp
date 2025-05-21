@@ -36,12 +36,17 @@ class _FournisseurDetailScreenState extends State<FournisseurDetailScreen> {
           adresse:
               _adresseController.text.isEmpty ? null : _adresseController.text,
         );
-        await provider.addFournisseur(
-            fournisseurModifie); // Hive remplace l'entrée existante
+        final fournisseurIndex = provider.fournisseurs
+            .indexWhere((f) => f.id == widget.fournisseur.id);
+        if (fournisseurIndex != -1) {
+          await provider.updateFournisseur(fournisseurModifie);
+        } else {
+          await provider.addFournisseur(fournisseurModifie);
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Fournisseur modifié avec succès!',
+              'Fournisseur modifié avec succès !',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
@@ -51,7 +56,7 @@ class _FournisseurDetailScreenState extends State<FournisseurDetailScreen> {
         );
         Navigator.pop(context);
       } catch (e) {
-        _showErrorDialog(context, e.toString());
+        _showErrorDialog(context, "Erreur : $e");
       }
     }
   }
@@ -84,7 +89,7 @@ class _FournisseurDetailScreenState extends State<FournisseurDetailScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Fournisseur supprimé avec succès!',
+                    'Fournisseur supprimé avec succès !',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color:
                               Theme.of(context).colorScheme.onPrimaryContainer,
@@ -119,7 +124,7 @@ class _FournisseurDetailScreenState extends State<FournisseurDetailScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              "OK",
+              'OK',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
@@ -133,6 +138,7 @@ class _FournisseurDetailScreenState extends State<FournisseurDetailScreen> {
     final provider = Provider.of<BarProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         title: Text(
           widget.fournisseur.nom,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -160,7 +166,7 @@ class _FournisseurDetailScreenState extends State<FournisseurDetailScreen> {
                     child: Icon(
                       Icons.store,
                       size: 80,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.primaryContainer,
                     ),
                   ),
                 ),
@@ -170,7 +176,7 @@ class _FournisseurDetailScreenState extends State<FournisseurDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       BuildInfoCard(
-                        label: 'ID',
+                        label: 'Numéro',
                         value: '${widget.fournisseur.id}',
                       ),
                       BuildInfoCard(
@@ -217,8 +223,20 @@ class _FournisseurDetailScreenState extends State<FournisseurDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButton.icon(
-                            icon: const Icon(Icons.edit),
-                            label: const Text('Modifier'),
+                            icon: Icon(
+                              Icons.edit,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                            ),
+                            label: Text(
+                              'Modifier',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
+                              ),
+                            ),
                             onPressed: () => _modifierFournisseur(provider),
                           ),
                           ElevatedButton.icon(
@@ -244,5 +262,12 @@ class _FournisseurDetailScreenState extends State<FournisseurDetailScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nomController.dispose();
+    _adresseController.dispose();
+    super.dispose();
   }
 }

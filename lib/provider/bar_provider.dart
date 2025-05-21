@@ -74,7 +74,6 @@ class BarProvider with ChangeNotifier {
   Future<String> generateCommandePdf(Commande commande) async {
     final pdf = pw.Document();
 
-    // Définir les styles
     final headerStyle = pw.TextStyle(
       fontSize: 24,
       fontWeight: pw.FontWeight.bold,
@@ -98,7 +97,6 @@ class BarProvider with ChangeNotifier {
         build: (pw.Context context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            // En-tête avec le nom du bar
             pw.Container(
               padding: const pw.EdgeInsets.all(10),
               decoration: const pw.BoxDecoration(
@@ -112,12 +110,8 @@ class BarProvider with ChangeNotifier {
               ),
             ),
             pw.SizedBox(height: 20),
-
-            // Titre de la commande
             pw.Text('Commande #${commande.id}', style: subHeaderStyle),
             pw.SizedBox(height: 10),
-
-            // Informations générales
             pw.Text('Date: ${Helpers.formatterDate(commande.dateCommande)}',
                 style: infoStyle),
             pw.Text(
@@ -128,14 +122,11 @@ class BarProvider with ChangeNotifier {
               style: infoStyle,
             ),
             pw.SizedBox(height: 20),
-
-            // Section des lignes de commande
             pw.Text('Lignes de Commande:', style: subHeaderStyle),
             pw.SizedBox(height: 10),
             pw.Table(
               border: pw.TableBorder.all(color: PdfColors.grey400),
               children: [
-                // En-tête du tableau
                 pw.TableRow(
                   decoration: const pw.BoxDecoration(color: PdfColors.grey800),
                   children: [
@@ -158,7 +149,6 @@ class BarProvider with ChangeNotifier {
                     ),
                   ],
                 ),
-                // Lignes de commande
                 ...commande.lignesCommande.map((ligne) => pw.TableRow(
                       children: [
                         pw.Padding(
@@ -194,17 +184,14 @@ class BarProvider with ChangeNotifier {
       ),
     );
 
-    // Sauvegarder dans le répertoire "Téléchargements"
     final directory = await getDownloadsDirectory();
     final filePath = '${directory!.path}/commande_${commande.id}.pdf';
     final file = File(filePath);
 
-    // Supprimer l'ancien PDF s'il existe
     if (await file.exists()) {
       await file.delete();
     }
 
-    // Sauvegarder le nouveau PDF
     await file.writeAsBytes(await pdf.save());
 
     return filePath;
@@ -213,7 +200,6 @@ class BarProvider with ChangeNotifier {
   Future<String> generateVentePdf(Vente vente) async {
     final pdf = pw.Document();
 
-    // Définir les styles
     final headerStyle = pw.TextStyle(
       fontSize: 24,
       fontWeight: pw.FontWeight.bold,
@@ -237,7 +223,6 @@ class BarProvider with ChangeNotifier {
         build: (pw.Context context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            // En-tête avec le nom du bar
             pw.Container(
               padding: const pw.EdgeInsets.all(10),
               decoration: const pw.BoxDecoration(
@@ -251,26 +236,19 @@ class BarProvider with ChangeNotifier {
               ),
             ),
             pw.SizedBox(height: 20),
-
-            // Titre de la vente
             pw.Text('Vente #${vente.id}', style: subHeaderStyle),
             pw.SizedBox(height: 10),
-
-            // Informations générales
             pw.Text('Date: ${Helpers.formatterDate(vente.dateVente)}',
                 style: infoStyle),
             pw.Text(
                 'Montant Total: ${Helpers.formatterEnCFA(vente.montantTotal)}',
                 style: infoStyle),
             pw.SizedBox(height: 20),
-
-            // Section des lignes de vente
             pw.Text('Lignes de Vente:', style: subHeaderStyle),
             pw.SizedBox(height: 10),
             pw.Table(
               border: pw.TableBorder.all(color: PdfColors.grey400),
               children: [
-                // En-tête du tableau
                 pw.TableRow(
                   decoration: const pw.BoxDecoration(color: PdfColors.grey800),
                   children: [
@@ -284,7 +262,6 @@ class BarProvider with ChangeNotifier {
                     ),
                   ],
                 ),
-                // Lignes de vente
                 ...vente.lignesVente.map((ligne) => pw.TableRow(
                       children: [
                         pw.Padding(
@@ -306,17 +283,14 @@ class BarProvider with ChangeNotifier {
       ),
     );
 
-    // Sauvegarder dans le répertoire "Téléchargements"
     final directory = await getDownloadsDirectory();
     final filePath = '${directory!.path}/vente_${vente.id}.pdf';
     final file = File(filePath);
 
-    // Supprimer l'ancien PDF s'il existe
     if (await file.exists()) {
       await file.delete();
     }
 
-    // Sauvegarder le nouveau PDF
     await file.writeAsBytes(await pdf.save());
 
     return filePath;
@@ -324,7 +298,6 @@ class BarProvider with ChangeNotifier {
 
   Future<void> ajouterBoissonsAuRefrigerateur(
       int casierId, int refrigerateurId, int nombre) async {
-    // Trouver le casier
     Casier? casier = _casierBox.values.firstWhere(
       (c) => c.id == casierId,
       orElse: () => throw Exception('Casier non trouvé'),
@@ -342,7 +315,6 @@ class BarProvider with ChangeNotifier {
 
     refrigerateur.boissons ??= [];
 
-    // Transférer les boissons et mettre estFroid à true
     List<Boisson> boissonsATransferer = [];
     for (var b in casier.boissons.sublist(0, nombre)) {
       int newId = await generateUniqueId("Boisson");
@@ -358,11 +330,9 @@ class BarProvider with ChangeNotifier {
 
     refrigerateur.boissons!.addAll(boissonsATransferer);
 
-    // Mettre à jour le casier en supprimant les boissons transférées
     casier.boissons.removeRange(0, nombre);
     casier.boissonTotal = casier.boissons.length;
 
-    // Sauvegarder les modifications
     int casierIndex = _casierBox.values.toList().indexOf(casier);
     await _casierBox.putAt(casierIndex, casier);
 
@@ -399,9 +369,14 @@ class BarProvider with ChangeNotifier {
   }
 
   Future<void> updateBoisson(Boisson boisson) async {
-    await _boissonBox.putAt(
-        _boissonBox.values.toList().indexOf(boisson), boisson);
-    notifyListeners();
+    int index =
+        _boissonBox.values.toList().indexWhere((b) => b.id == boisson.id);
+    if (index != -1) {
+      await _boissonBox.putAt(index, boisson);
+      notifyListeners();
+    } else {
+      throw Exception('Boisson non trouvée pour mise à jour');
+    }
   }
 
   Future<void> deleteBoisson(Boisson boisson) async {
@@ -416,8 +391,11 @@ class BarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateCasier(Casier casier) async {
-    await _casierBox.putAt(_casierBox.values.toList().indexOf(casier), casier);
+  Future<void> updateCasier(Casier casier, int index) async {
+    if (index < 0 || index >= _casierBox.length) {
+      throw Exception('Index invalide pour mise à jour du casier');
+    }
+    await _casierBox.putAt(index, casier);
     notifyListeners();
   }
 
@@ -443,6 +421,18 @@ class BarProvider with ChangeNotifier {
   Future<void> addFournisseur(Fournisseur fournisseur) async {
     await _fournisseurBox.add(fournisseur);
     notifyListeners();
+  }
+
+  Future<void> updateFournisseur(Fournisseur fournisseur) async {
+    int index = _fournisseurBox.values
+        .toList()
+        .indexWhere((f) => f.id == fournisseur.id);
+    if (index != -1) {
+      await _fournisseurBox.putAt(index, fournisseur);
+      notifyListeners();
+    } else {
+      throw Exception('Fournisseur non trouvé pour mise à jour');
+    }
   }
 
   Future<void> deleteFournisseur(Fournisseur fournisseur) async {

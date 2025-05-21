@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/custom_bottom_nav_bar.dart';
 import 'package:projet7/pages/a-propos/a_propos_page.dart';
+import 'package:projet7/pages/accueil_screen.dart';
 import 'package:projet7/pages/commande/commande_screen.dart';
-import 'package:projet7/pages/fournisseur/fournisseur_screen.dart';
-import 'package:projet7/pages/detail/boisson/boisson_screen.dart';
-import 'package:projet7/pages/detail/casier/casier_screen.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_screen.dart';
 import 'package:projet7/pages/settings/settings_page.dart';
 import 'package:projet7/pages/vente/vente_screen.dart';
@@ -21,42 +19,48 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
+  late PageController _pageController;
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
 
   final List<Widget> _screens = [
-    const Center(child: Text('Accueil')),
-    const RefrigerateurScreen(),
+    const AccueilScreen(),
     const CommandeScreen(),
     const VenteScreen(),
-    const FournisseurScreen(),
-    const BoissonScreen(),
-    const CasierScreen(),
+    const RefrigerateurScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(initialPage: _currentIndex);
     _controller = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+    _pageController.addListener(() {
+      final newIndex = _pageController.page?.round() ?? _currentIndex;
+      if (newIndex != _currentIndex) {
+        setState(() {
+          _currentIndex = newIndex;
+          _controller.reset();
+          _controller.forward();
+        });
+      }
+    });
     _controller.forward();
   }
 
   @override
   void dispose() {
+    _pageController.dispose();
     _controller.dispose();
     super.dispose();
   }
 
   void _changeScreen(int index) {
-    setState(() {
-      _currentIndex = index;
-      _controller.reset();
-      _controller.forward();
-    });
+    _pageController.jumpToPage(index);
   }
 
   @override
@@ -66,7 +70,13 @@ class _HomePageState extends State<HomePage>
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset("lib/assets/logo.png", height: 32.0),
+            Image.asset(
+              "lib/assets/logo.png",
+              height: 32.0,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.local_drink),
+            ),
             Text(
               provider.currentBar?.nom ?? 'Bar',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -88,7 +98,7 @@ class _HomePageState extends State<HomePage>
                   context,
                   MaterialPageRoute(builder: (context) => const SettingsPage()),
                 );
-              } else if (value == "about") {
+              } else if (value == 'about') {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const AProposPage()),
@@ -104,7 +114,7 @@ class _HomePageState extends State<HomePage>
                       Icons.info,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
-                    SizedBox(width: 8.0),
+                    const SizedBox(width: 8.0),
                     Text(
                       "À Propos",
                       style: TextStyle(
@@ -122,7 +132,7 @@ class _HomePageState extends State<HomePage>
                       Icons.settings,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
-                    SizedBox(width: 8.0),
+                    const SizedBox(width: 8.0),
                     Text(
                       "Paramètres",
                       style: TextStyle(
@@ -188,9 +198,16 @@ class _HomePageState extends State<HomePage>
                 ],
               ),
             )
-          : FadeTransition(
-              opacity: _fadeAnimation,
-              child: _screens[_currentIndex],
+          : PageView(
+              controller: _pageController,
+              children: _screens,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                  _controller.reset();
+                  _controller.forward();
+                });
+              },
             ),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _currentIndex,
