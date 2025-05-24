@@ -1,26 +1,306 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/build_info_card.dart';
+import 'package:projet7/models/boisson.dart';
+import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/refrigerateur.dart';
+import 'package:projet7/pages/detail/boisson/boisson_detail_sans_modif_screen.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
+import 'package:provider/provider.dart';
 
-class RefrigerateurDetailScreen extends StatelessWidget {
+class RefrigerateurDetailScreen extends StatefulWidget {
   final Refrigerateur refrigerateur;
 
   const RefrigerateurDetailScreen({super.key, required this.refrigerateur});
 
   @override
+  State<RefrigerateurDetailScreen> createState() =>
+      _RefrigerateurDetailScreenState();
+}
+
+class _RefrigerateurDetailScreenState extends State<RefrigerateurDetailScreen> {
+  final _nomController = TextEditingController();
+  final _tempController = TextEditingController();
+  final _quantiteController = TextEditingController();
+  Casier? _selectedCasier;
+  Boisson? _selectedBoisson;
+
+  @override
+  void initState() {
+    super.initState();
+    _nomController.text = widget.refrigerateur.nom;
+    _tempController.text = widget.refrigerateur.temperature?.toString() ?? '';
+  }
+
+  void _showModifyDialog(BuildContext context, BarProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Modifier le réfrigérateur',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _nomController,
+              decoration: InputDecoration(
+                labelText: 'Nom',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.surfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _tempController,
+              decoration: InputDecoration(
+                labelText: 'Température (°C)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.surfaceVariant,
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (_nomController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Veuillez renseigner le nom',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                    ),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                );
+                return;
+              }
+              if (_tempController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Veuillez renseigner la température',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                    ),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                );
+                return;
+              }
+              widget.refrigerateur.nom = _nomController.text;
+              widget.refrigerateur.temperature =
+                  double.tryParse(_tempController.text);
+              await provider.updateRefrigerateur(widget.refrigerateur);
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Réfrigérateur modifié avec succès',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
+                  ),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                ),
+              );
+              setState(() {});
+            },
+            child: Text('Modifier'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, BarProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Supprimer le réfrigérateur',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        content: Text(
+            'Voulez-vous vraiment supprimer ${widget.refrigerateur.nom} ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await provider.deleteRefrigerateur(widget.refrigerateur);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Réfrigérateur supprimé avec succès',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
+                  ),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                ),
+              );
+            },
+            child: Text('Supprimer'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _ajouterBoissons(BuildContext context, BarProvider provider) async {
+    if (_selectedCasier == null || _quantiteController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Veuillez sélectionner un casier et une quantité',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        ),
+      );
+      return;
+    }
+    int quantite = int.tryParse(_quantiteController.text) ?? 0;
+    if (quantite <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Veuillez entrer une quantité valide',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        ),
+      );
+      return;
+    }
+    try {
+      await provider.ajouterBoissonsAuRefrigerateur(
+        _selectedCasier!.id,
+        widget.refrigerateur.id,
+        quantite,
+      );
+      _quantiteController.clear();
+      _selectedCasier = null;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Boissons ajoutées avec succès',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        ),
+      );
+      setState(() {});
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        ),
+      );
+    }
+  }
+
+  void _retirerBoisson(
+      BuildContext context, BarProvider provider, Boisson boisson) async {
+    try {
+      await provider.retirerBoissonsDuRefrigerateur(
+        widget.refrigerateur.id,
+        boisson,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Boisson retirée avec succès',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        ),
+      );
+      setState(() {});
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<BarProvider>(context);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         title: Text(
-          refrigerateur.nom,
+          widget.refrigerateur.nom,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () => _showModifyDialog(context, provider),
+          ),
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => _showDeleteDialog(context, provider),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -50,20 +330,103 @@ class RefrigerateurDetailScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BuildInfoCard(label: 'Nom', value: refrigerateur.nom),
-                      if (refrigerateur.temperature != null)
+                      BuildInfoCard(
+                          label: 'Nom', value: widget.refrigerateur.nom),
+                      if (widget.refrigerateur.temperature != null)
                         BuildInfoCard(
                           label: 'Température',
-                          value: '${refrigerateur.temperature}°C',
+                          value: '${widget.refrigerateur.temperature}°C',
                         ),
                       BuildInfoCard(
                         label: 'Total Boissons',
-                        value: '${refrigerateur.getBoissonTotal()}',
+                        value: '${widget.refrigerateur.getBoissonTotal()}',
                       ),
                       BuildInfoCard(
                         label: 'Prix Total',
                         value: Helpers.formatterEnCFA(
-                            refrigerateur.getPrixTotal()),
+                            widget.refrigerateur.getPrixTotal()),
+                      ),
+                      const SizedBox(height: 16),
+                      ExpansionTile(
+                        title: Text(
+                          'Ajouter des boissons',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        leading: Icon(
+                          Icons.add,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12.0),
+                            child: Column(
+                              children: [
+                                DropdownButtonFormField<Casier>(
+                                  value: _selectedCasier,
+                                  decoration: InputDecoration(
+                                    labelText: 'Casier',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    filled: true,
+                                    fillColor: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceVariant,
+                                  ),
+                                  items: provider.casiers
+                                      .where((casier) =>
+                                          casier.boissons.isNotEmpty)
+                                      .map((casier) => DropdownMenuItem<Casier>(
+                                            value: casier,
+                                            child: Text(
+                                              '#${casier.id} (${casier.boissons.first.nom ?? 'Sans nom'} (${casier.boissons.first.getModele()}) : ${casier.boissonTotal})',
+                                            ),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedCasier = value;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 12),
+                                TextField(
+                                  controller: _quantiteController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Quantité',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    filled: true,
+                                    fillColor: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceVariant,
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton.icon(
+                                  icon: Icon(
+                                    Icons.add,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                  ),
+                                  label: Text(
+                                    'Ajouter',
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryContainer,
+                                    ),
+                                  ),
+                                  onPressed: () =>
+                                      _ajouterBoissons(context, provider),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       Text(
@@ -71,7 +434,7 @@ class RefrigerateurDetailScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 10),
-                      refrigerateur.boissons?.isEmpty ?? true
+                      widget.refrigerateur.boissons?.isEmpty ?? true
                           ? Center(
                               child: Text(
                                 'Aucune boisson dans ce réfrigérateur',
@@ -88,9 +451,11 @@ class RefrigerateurDetailScreen extends StatelessWidget {
                           : ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: refrigerateur.boissons?.length ?? 0,
+                              itemCount:
+                                  widget.refrigerateur.boissons?.length ?? 0,
                               itemBuilder: (context, index) {
-                                var boisson = refrigerateur.boissons![index];
+                                var boisson =
+                                    widget.refrigerateur.boissons![index];
                                 return Card(
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 4),
@@ -107,10 +472,13 @@ class RefrigerateurDetailScreen extends StatelessWidget {
                                           boisson.nom ?? 'Sans nom',
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyMedium,
+                                              .bodyMedium!
+                                              .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                         Text(
-                                          ' (${boisson.modele?.name})',
+                                          ' (${boisson.getModele() ?? 'Inconnu'})',
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall
@@ -127,11 +495,20 @@ class RefrigerateurDetailScreen extends StatelessWidget {
                                       style:
                                           Theme.of(context).textTheme.bodySmall,
                                     ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.remove_circle,
+                                        color:
+                                            Theme.of(context).colorScheme.error,
+                                      ),
+                                      onPressed: () => _retirerBoisson(
+                                          context, provider, boisson),
+                                    ),
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            BoissonDetailScreen(
+                                            BoissonDetailSansModifScreen(
                                                 boisson: boisson),
                                       ),
                                     ),

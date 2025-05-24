@@ -149,7 +149,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                                           .colorScheme
                                           .surfaceVariant,
                                   borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
+                                  boxShadow: const [
                                     BoxShadow(
                                       blurRadius: 4,
                                       color: Colors.black26,
@@ -295,7 +295,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                           borderRadius: BorderRadius.circular(12),
                           color:
                               Theme.of(context).colorScheme.onPrimaryContainer,
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               blurRadius: 4,
                               color: Colors.black26,

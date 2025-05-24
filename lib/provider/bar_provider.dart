@@ -16,6 +16,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:projet7/utils/helpers.dart';
+import 'package:collection/collection.dart'; // Ajouté pour firstWhereOrNull
 
 class BarProvider with ChangeNotifier {
   late Box<BarInstance> _barBox;
@@ -335,6 +336,65 @@ class BarProvider with ChangeNotifier {
 
     int casierIndex = _casierBox.values.toList().indexOf(casier);
     await _casierBox.putAt(casierIndex, casier);
+
+    int refrigerateurIndex =
+        _refrigerateurBox.values.toList().indexOf(refrigerateur);
+    await _refrigerateurBox.putAt(refrigerateurIndex, refrigerateur);
+
+    notifyListeners();
+  }
+
+  Future<void> retirerBoissonsDuRefrigerateur(
+      int refrigerateurId, Boisson boisson) async {
+    var refrigerateur = _refrigerateurBox.values.firstWhere(
+      (r) => r.id == refrigerateurId,
+      orElse: () => throw Exception('Réfrigérateur non trouvé'),
+    );
+
+    if (refrigerateur.boissons == null ||
+        !refrigerateur.boissons!.contains(boisson)) {
+      throw Exception('Boisson non trouvée dans le réfrigérateur');
+    }
+
+    // Trouver un casier correspondant (même nom et modèle)
+    Casier? casier = _casierBox.values.firstWhereOrNull(
+      (c) =>
+          c.boissons.isNotEmpty &&
+          c.boissons.first.nom == boisson.nom &&
+          c.boissons.first.modele == boisson.modele,
+    );
+
+    // Si aucun casier n'existe, créer un nouveau
+    if (casier == null) {
+      int newId = await generateUniqueId("Casier");
+      casier = Casier(
+        id: newId,
+        boissonTotal: 0,
+        boissons: [],
+      );
+    }
+
+    // Ajouter la boisson au casier
+    casier.boissons.add(Boisson(
+      id: await generateUniqueId("Boisson"),
+      nom: boisson.nom,
+      prix: List.from(boisson.prix),
+      estFroid: boisson.estFroid,
+      modele: boisson.modele,
+      description: boisson.description,
+    ));
+    casier.boissonTotal = casier.boissons.length;
+
+    // Mettre à jour ou ajouter le casier
+    if (_casierBox.values.contains(casier)) {
+      int casierIndex = _casierBox.values.toList().indexOf(casier);
+      await _casierBox.putAt(casierIndex, casier);
+    } else {
+      await _casierBox.add(casier);
+    }
+
+    // Retirer la boisson du réfrigérateur
+    refrigerateur.boissons!.remove(boisson);
 
     int refrigerateurIndex =
         _refrigerateurBox.values.toList().indexOf(refrigerateur);

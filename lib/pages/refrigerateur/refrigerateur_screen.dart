@@ -145,8 +145,19 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
-                        icon: const Icon(Icons.kitchen),
-                        label: const Text('Ajouter'),
+                        icon: Icon(
+                          Icons.kitchen,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
+                        label: Text(
+                          'Ajouter',
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                        ),
                         onPressed: () => _ajouterRefrigerateur(provider),
                       ),
                     ],
@@ -172,7 +183,6 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
-                      childAspectRatio: 0.7, // Ajusté pour plus d'espace
                     ),
                     itemCount: provider.refrigerateurs.length,
                     itemBuilder: (context, index) {
@@ -180,14 +190,8 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Theme.of(context).colorScheme.primaryContainer,
-                              Theme.of(context).colorScheme.surfaceVariant,
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: const [
                             BoxShadow(blurRadius: 6, color: Colors.black26),
@@ -220,7 +224,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                       ?.copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onSurface,
+                                            .primaryContainer,
                                       ),
                                   textAlign: TextAlign.center,
                                   maxLines: 1,
@@ -236,7 +240,8 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                       ?.copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onSurface,
+                                            .primary,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                 ),
                                 Text(
@@ -247,183 +252,8 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                       ?.copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .primary,
+                                            .onSurface,
                                       ),
-                                ),
-                                const Spacer(),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.add_circle,
-                                          color: Colors.green),
-                                      iconSize: 20,
-                                      onPressed: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              AjouterBoissonRefrigerateurScreen(
-                                                  refrigerateur: refrigerateur),
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit,
-                                          color: Colors.blue),
-                                      iconSize: 20,
-                                      onPressed: () {
-                                        _nomController.text = refrigerateur.nom;
-                                        _tempController.text = refrigerateur
-                                                .temperature
-                                                ?.toString() ??
-                                            '';
-                                        showDialog(
-                                          context: context,
-                                          builder: (_) => AlertDialog(
-                                            title: Text(
-                                              'Modifier ${refrigerateur.nom}',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium,
-                                            ),
-                                            content: SingleChildScrollView(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  TextField(
-                                                    controller: _nomController,
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Nom',
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      filled: true,
-                                                      fillColor:
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .surfaceVariant,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 12),
-                                                  TextField(
-                                                    controller: _tempController,
-                                                    decoration: InputDecoration(
-                                                      labelText:
-                                                          'Température (°C)',
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      filled: true,
-                                                      fillColor:
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .surfaceVariant,
-                                                    ),
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                                child: Text(
-                                                  'Annuler',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium,
-                                                ),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  _modifierRefrigerateur(
-                                                      provider, refrigerateur);
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text(
-                                                  'Modifier',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete,
-                                          color: Colors.red),
-                                      iconSize: 20,
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                            title: Text(
-                                              'Voulez-vous supprimer ${refrigerateur.nom} ?',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium,
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                                child: Text(
-                                                  'Annuler',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium,
-                                                ),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  provider.deleteRefrigerateur(
-                                                      refrigerateur);
-                                                  Navigator.pop(context);
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        '${refrigerateur.nom} supprimé avec succès!',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyMedium
-                                                            ?.copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .onPrimaryContainer,
-                                                            ),
-                                                      ),
-                                                      backgroundColor:
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .primaryContainer,
-                                                    ),
-                                                  );
-                                                },
-                                                child: Text(
-                                                  'Oui',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
                                 ),
                               ],
                             ),

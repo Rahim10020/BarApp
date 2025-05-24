@@ -1,16 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/commande.dart';
+import 'package:projet7/pages/detail/casier/casier_detail_sans_modif_screen.dart';
 import 'package:projet7/pages/detail/casier/casier_detail_screen.dart';
+import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
+import 'package:provider/provider.dart';
 
 class CommandeDetailScreen extends StatelessWidget {
   final Commande commande;
 
   const CommandeDetailScreen({super.key, required this.commande});
 
+  void _showDeleteDialog(BuildContext context, BarProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Supprimer la commande',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        content: Text(
+            'Voulez-vous vraiment supprimer la commande #${commande.id} ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () async {
+              try {
+                await provider.deleteCommande(commande);
+                Navigator.pop(context); // Ferme le dialogue
+                Navigator.pop(context); // Retourne à l'écran précédent
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Commande supprimée avec succès',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                    ),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                );
+              } catch (e) {
+                Navigator.pop(context); // Ferme le dialogue
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(
+                      'Erreur',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    content: Text('Erreur lors de la suppression : $e'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            child: Text('Supprimer'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<BarProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -21,6 +87,12 @@ class CommandeDetailScreen extends StatelessWidget {
         ),
         foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => _showDeleteDialog(context, provider),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -109,7 +181,10 @@ class CommandeDetailScreen extends StatelessWidget {
                                       'Casier #${ligne.casier.id}',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium,
+                                          .bodyMedium!
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                     subtitle: Column(
                                       crossAxisAlignment:
@@ -121,7 +196,10 @@ class CommandeDetailScreen extends StatelessWidget {
                                               : 'Aucune boisson',
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodySmall,
+                                              .bodySmall!
+                                              .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                         ),
                                         Text(
                                           'Quantité: ${ligne.casier.boissonTotal}',
@@ -141,7 +219,7 @@ class CommandeDetailScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            CasierDetailScreen(
+                                            CasierDetailSansModifScreen(
                                                 casier: ligne.casier),
                                       ),
                                     ),

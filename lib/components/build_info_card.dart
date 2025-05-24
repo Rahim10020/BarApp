@@ -32,7 +32,7 @@ class BuildInfoCard extends StatelessWidget {
           Text(
             label,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.inversePrimary,
+                  color: Theme.of(context).colorScheme.primaryContainer,
                   fontWeight: FontWeight.w600,
                 ),
           ),
@@ -41,6 +41,7 @@ class BuildInfoCard extends StatelessWidget {
               value,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.inversePrimary,
+                    fontWeight: FontWeight.bold,
                   ),
               textAlign: TextAlign.right,
             ),
