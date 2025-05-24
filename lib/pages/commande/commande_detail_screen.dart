@@ -19,6 +19,7 @@ class CommandeDetailScreen extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
         ),
+        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
       body: SingleChildScrollView(

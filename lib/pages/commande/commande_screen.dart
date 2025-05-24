@@ -168,7 +168,8 @@ class _CommandeScreenState extends State<CommandeScreen> {
                                           ?.copyWith(
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .onSurface,
+                                                .onPrimaryContainer,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                     ),
                                     Text(
@@ -181,7 +182,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                                           ?.copyWith(
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .onSurfaceVariant,
+                                                .onPrimaryContainer,
                                           ),
                                     ),
                                     Text(
@@ -245,8 +246,19 @@ class _CommandeScreenState extends State<CommandeScreen> {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
-                        icon: const Icon(Icons.receipt),
-                        label: const Text('Ajouter'),
+                        icon: Icon(
+                          Icons.receipt,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
+                        label: Text(
+                          'Ajouter',
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                        ),
                         onPressed: () => _ajouterCommande(provider),
                       ),
                     ],
@@ -280,17 +292,15 @@ class _CommandeScreenState extends State<CommandeScreen> {
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Theme.of(context).colorScheme.primaryContainer,
-                              Theme.of(context).colorScheme.surfaceVariant,
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(blurRadius: 6, color: Colors.black26),
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 4,
+                              color: Colors.black26,
+                              offset: Offset(0, 2),
+                            ),
                           ],
                         ),
                         child: InkWell(
@@ -320,7 +330,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                                       ?.copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onSurface,
+                                            .primaryContainer,
                                       ),
                                 ),
                                 Text(
@@ -332,6 +342,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .primary,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                 ),
                                 Text(
