@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "BAR",
+      title: "Baristo",
       supportedLocales: const [
         Locale("fr", "FR"),
       ],
@@ -75,11 +75,26 @@ class BarSetupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
-    if (provider.currentBar == null) {
-      return const BarCreationScreen();
-    }
-    return const HomePage();
+    final provider = Provider.of<BarProvider>(context, listen: false);
+
+    return FutureBuilder<void>(
+      future: provider.initProvider(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          );
+        }
+        if (provider.currentBar == null) {
+          return const BarCreationScreen();
+        }
+        return const HomePage();
+      },
+    );
   }
 }
 
@@ -91,59 +106,212 @@ class BarCreationScreen extends StatefulWidget {
 }
 
 class _BarCreationScreenState extends State<BarCreationScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _nomController = TextEditingController();
   final _adresseController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _nomController.dispose();
+    _adresseController.dispose();
+    super.dispose();
+  }
+
+  void _createBar() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        await Provider.of<BarProvider>(context, listen: false).createBar(
+          _nomController.text.trim(),
+          _adresseController.text.trim(),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Erreur lors de la création du bar : $e',
+              style: GoogleFonts.montserrat(),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Configurer votre bar',
-          style: GoogleFonts.montserrat(),
+      resizeToAvoidBottomInset: true,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              Theme.of(context).colorScheme.background,
+            ],
+          ),
         ),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Bienvenue ! Configurez votre bar pour commencer.',
-                style: GoogleFonts.montserrat(fontSize: 18),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                  controller: _nomController,
-                  decoration: const InputDecoration(labelText: 'Nom du bar')),
-              TextField(
-                controller: _adresseController,
-                decoration: const InputDecoration(
-                    labelText: 'Adresse (email/téléphone)'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_nomController.text.isNotEmpty &&
-                      _adresseController.text.isNotEmpty) {
-                    await Provider.of<BarProvider>(context, listen: false)
-                        .createBar(
-                            _nomController.text, _adresseController.text);
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (_) => const HomePage()));
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600]),
-                child: Text(
-                  'Créer le bar',
-                  style: GoogleFonts.montserrat(color: Colors.white),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 40),
+                    Image.asset(
+                      "lib/assets/logo.png",
+                      height: 80.0,
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Bienvenue dans Baristo',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Configurez votre bar pour commencer',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onBackground
+                            .withOpacity(0.7),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 32),
+                    Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _nomController,
+                              decoration: InputDecoration(
+                                labelText: 'Nom du bar',
+                                prefixIcon: Icon(Icons.store,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                filled: true,
+                                fillColor: Theme.of(context)
+                                    .colorScheme
+                                    .surfaceVariant,
+                              ),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Veuillez entrer le nom du bar';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _adresseController,
+                              decoration: InputDecoration(
+                                labelText: 'Adresse (email/téléphone)',
+                                prefixIcon: Icon(Icons.email,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                filled: true,
+                                fillColor: Theme.of(context)
+                                    .colorScheme
+                                    .surfaceVariant,
+                              ),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Veuillez entrer une adresse';
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    GestureDetector(
+                      onTap: _isLoading ? null : _createBar,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeInOut,
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          color: _isLoading
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer
+                                  .withOpacity(0.5)
+                              : Theme.of(context).colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: _isLoading
+                              ? const CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.white),
+                                )
+                              : Text(
+                                  'Créer le bar',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),

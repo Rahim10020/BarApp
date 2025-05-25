@@ -23,32 +23,82 @@ class VenteDetailScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Annuler'),
+            child: const Text('Annuler'),
           ),
           TextButton(
             onPressed: () async {
-              await provider.deleteVente(vente);
-              Navigator.pop(context);
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Vente supprimée avec succès',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
+              try {
+                await provider.deleteVente(vente);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Vente supprimée avec succès',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                    ),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
                   ),
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                ),
-              );
+                );
+              } catch (e) {
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(
+                      'Erreur',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    content: Text('Erreur lors de la suppression : $e'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              }
             },
-            child: Text('Supprimer'),
+            child: const Text('Supprimer'),
           ),
         ],
       ),
     );
+  }
+
+  void _downloadPdf(BuildContext context, BarProvider provider) async {
+    try {
+      final filePath = await provider.generateVentePdf(vente);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'PDF sauvegardé dans Téléchargements',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Erreur lors de la génération du PDF : $e',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onError,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override
@@ -66,8 +116,14 @@ class VenteDetailScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         actions: [
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.picture_as_pdf),
+            onPressed: () => _downloadPdf(context, provider),
+            tooltip: 'Télécharger PDF',
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
             onPressed: () => _showDeleteDialog(context, provider),
+            tooltip: 'Supprimer la vente',
           ),
         ],
       ),

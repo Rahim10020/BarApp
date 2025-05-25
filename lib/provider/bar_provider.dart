@@ -28,8 +28,10 @@ class BarProvider with ChangeNotifier {
 
   BarInstance? _currentBar;
 
-  BarProvider() {
-    _initHive();
+  BarProvider();
+
+  Future<void> initProvider() async {
+    await _initHive();
   }
 
   Future<void> _initHive() async {
@@ -47,6 +49,28 @@ class BarProvider with ChangeNotifier {
       _currentBar = _barBox.values.first;
     }
     notifyListeners();
+  }
+
+  Future<void> updateBar(String nom, String adresse) async {
+    if (_currentBar == null) {
+      throw Exception('Aucun bar configuré');
+    }
+    if (nom.trim().isEmpty || adresse.trim().isEmpty) {
+      throw Exception('Le nom et l\'adresse ne peuvent pas être vides');
+    }
+    _currentBar = BarInstance(
+      id: _currentBar!.id,
+      nom: nom.trim(),
+      adresse: adresse.trim(),
+    );
+    int index =
+        _barBox.values.toList().indexWhere((b) => b.id == _currentBar!.id);
+    if (index != -1) {
+      await _barBox.putAt(index, _currentBar!);
+      notifyListeners();
+    } else {
+      throw Exception('Bar non trouvé pour mise à jour');
+    }
   }
 
   Future<int> generateUniqueId(String entityType) async {
@@ -99,16 +123,17 @@ class BarProvider with ChangeNotifier {
 
   Future<String> generateCommandePdf(Commande commande) async {
     final pdf = pw.Document();
+    final now = DateTime.now();
 
     final headerStyle = pw.TextStyle(
       fontSize: 24,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColors.black,
+      color: PdfColors.blueGrey800,
     );
     final subHeaderStyle = pw.TextStyle(
       fontSize: 18,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColors.grey800,
+      color: PdfColors.blueGrey700,
     );
     final infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
     final tableHeaderStyle = pw.TextStyle(
@@ -117,44 +142,88 @@ class BarProvider with ChangeNotifier {
       color: PdfColors.white,
     );
     final tableCellStyle = pw.TextStyle(fontSize: 12, color: PdfColors.black);
+    final footerStyle = pw.TextStyle(fontSize: 10, color: PdfColors.grey600);
 
     pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) => pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Container(
-              padding: const pw.EdgeInsets.all(10),
-              decoration: const pw.BoxDecoration(
-                color: PdfColors.grey100,
-                border: pw.Border(
-                    bottom: pw.BorderSide(color: PdfColors.grey800, width: 2)),
-              ),
-              child: pw.Text(
-                'Bar: ${commande.barInstance.nom}',
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(32),
+        header: (context) => pw.Container(
+          padding: const pw.EdgeInsets.all(10),
+          decoration: pw.BoxDecoration(
+            color: PdfColors.blueGrey100,
+            border: pw.Border(
+                bottom: pw.BorderSide(color: PdfColors.blueGrey800, width: 2)),
+          ),
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+            children: [
+              pw.Text(
+                'Commande #${commande.id}',
                 style: headerStyle,
               ),
-            ),
-            pw.SizedBox(height: 20),
-            pw.Text('Commande #${commande.id}', style: subHeaderStyle),
-            pw.SizedBox(height: 10),
-            pw.Text('Date: ${Helpers.formatterDate(commande.dateCommande)}',
-                style: infoStyle),
+              pw.Text(
+                'Généré le ${Helpers.formatterDate(now)}',
+                style: footerStyle,
+              ),
+            ],
+          ),
+        ),
+        footer: (context) => pw.Container(
+          alignment: pw.Alignment.center,
+          margin: const pw.EdgeInsets.only(top: 10),
+          child: pw.Text(
+            'Généré par BAR App',
+            style: footerStyle,
+          ),
+        ),
+        build: (context) => [
+          pw.SizedBox(height: 20),
+          // Détails du bar
+          pw.Text('Détails du bar', style: subHeaderStyle),
+          pw.Divider(),
+          pw.SizedBox(height: 10),
+          pw.Text('Nom: ${commande.barInstance.nom}', style: infoStyle),
+          pw.Text('Adresse: ${commande.barInstance.adresse}', style: infoStyle),
+          pw.SizedBox(height: 20),
+          // Détails de la commande
+          pw.Text('Détails de la commande', style: subHeaderStyle),
+          pw.Divider(),
+          pw.SizedBox(height: 10),
+          pw.Text('Numéro: ${commande.id}', style: infoStyle),
+          pw.Text('Date: ${Helpers.formatterDate(commande.dateCommande)}',
+              style: infoStyle),
+          pw.Text(
+              'Montant total: ${Helpers.formatterEnCFA(commande.montantTotal)}',
+              style: infoStyle),
+          pw.Text(
+            'Fournisseur: ${commande.fournisseur?.nom ?? "Inconnu"}',
+            style: infoStyle,
+          ),
+          if (commande.fournisseur != null) ...[
             pw.Text(
-                'Montant Total: ${Helpers.formatterEnCFA(commande.montantTotal)}',
+                'Adresse: ${commande.fournisseur!.adresse ?? "Non spécifié"}',
                 style: infoStyle),
-            pw.Text(
-              'Fournisseur: ${commande.fournisseur != null ? commande.fournisseur!.nom : "Inconnu"}',
-              style: infoStyle,
-            ),
-            pw.SizedBox(height: 20),
-            pw.Text('Lignes de Commande:', style: subHeaderStyle),
-            pw.SizedBox(height: 10),
+          ],
+          pw.SizedBox(height: 20),
+          // Lignes de commande
+          pw.Text('Casiers commandés', style: subHeaderStyle),
+          pw.SizedBox(height: 10),
+          if (commande.lignesCommande.isEmpty)
+            pw.Text('Aucun casier dans cette commande', style: infoStyle)
+          else
             pw.Table(
               border: pw.TableBorder.all(color: PdfColors.grey400),
+              columnWidths: {
+                0: pw.FixedColumnWidth(100),
+                1: pw.FlexColumnWidth(),
+                2: pw.FixedColumnWidth(80),
+                3: pw.FixedColumnWidth(100),
+              },
               children: [
                 pw.TableRow(
-                  decoration: const pw.BoxDecoration(color: PdfColors.grey800),
+                  decoration:
+                      const pw.BoxDecoration(color: PdfColors.blueGrey700),
                   children: [
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
@@ -166,8 +235,7 @@ class BarProvider with ChangeNotifier {
                     ),
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
-                      child: pw.Text('Nombre de Boissons',
-                          style: tableHeaderStyle),
+                      child: pw.Text('Quantité', style: tableHeaderStyle),
                     ),
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
@@ -184,11 +252,31 @@ class BarProvider with ChangeNotifier {
                         ),
                         pw.Padding(
                           padding: const pw.EdgeInsets.all(5),
-                          child: pw.Text(
-                            ligne.casier.boissons.isNotEmpty
-                                ? ligne.casier.boissons[0].nom ?? 'Sans nom'
-                                : 'Aucune boisson',
-                            style: tableCellStyle,
+                          child: pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              pw.Text(
+                                ligne.casier.boissons.isNotEmpty
+                                    ? ligne.casier.boissons[0].nom ?? 'Sans nom'
+                                    : 'Aucune boisson',
+                                style: tableCellStyle,
+                              ),
+                              if (ligne.casier.boissons.isNotEmpty &&
+                                  ligne.casier.boissons[0].modele != null)
+                                pw.Text(
+                                  'Modèle: ${ligne.casier.boissons[0].modele!.name}',
+                                  style: tableCellStyle.copyWith(fontSize: 10),
+                                ),
+                              if (ligne.casier.boissons.isNotEmpty &&
+                                  ligne.casier.boissons[0].description !=
+                                      null &&
+                                  ligne.casier.boissons[0].description!
+                                      .isNotEmpty)
+                                pw.Text(
+                                  'Desc: ${ligne.casier.boissons[0].description}',
+                                  style: tableCellStyle.copyWith(fontSize: 10),
+                                ),
+                            ],
                           ),
                         ),
                         pw.Padding(
@@ -205,13 +293,23 @@ class BarProvider with ChangeNotifier {
                     )),
               ],
             ),
-          ],
-        ),
+          pw.SizedBox(height: 20),
+          // Résumé
+          pw.Text('Résumé', style: subHeaderStyle),
+          pw.Divider(),
+          pw.SizedBox(height: 10),
+          pw.Text('Nombre total de casiers: ${commande.lignesCommande.length}',
+              style: infoStyle),
+        ],
       ),
     );
 
     final directory = await getDownloadsDirectory();
-    final filePath = '${directory!.path}/commande_${commande.id}.pdf';
+    if (directory == null) {
+      throw Exception('Impossible d\'accéder au dossier de téléchargements');
+    }
+    final filePath =
+        '${directory.path}/commande_${commande.id}_${now.millisecondsSinceEpoch}.pdf';
     final file = File(filePath);
 
     if (await file.exists()) {
@@ -225,16 +323,17 @@ class BarProvider with ChangeNotifier {
 
   Future<String> generateVentePdf(Vente vente) async {
     final pdf = pw.Document();
+    final now = DateTime.now();
 
     final headerStyle = pw.TextStyle(
       fontSize: 24,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColors.black,
+      color: PdfColors.blueGrey800,
     );
     final subHeaderStyle = pw.TextStyle(
       fontSize: 18,
       fontWeight: pw.FontWeight.bold,
-      color: PdfColors.grey800,
+      color: PdfColors.blueGrey700,
     );
     final infoStyle = pw.TextStyle(fontSize: 14, color: PdfColors.black);
     final tableHeaderStyle = pw.TextStyle(
@@ -243,40 +342,80 @@ class BarProvider with ChangeNotifier {
       color: PdfColors.white,
     );
     final tableCellStyle = pw.TextStyle(fontSize: 12, color: PdfColors.black);
+    final footerStyle = pw.TextStyle(fontSize: 10, color: PdfColors.grey600);
 
     pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) => pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Container(
-              padding: const pw.EdgeInsets.all(10),
-              decoration: const pw.BoxDecoration(
-                color: PdfColors.grey100,
-                border: pw.Border(
-                    bottom: pw.BorderSide(color: PdfColors.grey800, width: 2)),
-              ),
-              child: pw.Text(
-                'Bar: ${_currentBar?.nom ?? "Bar Inconnu"}',
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(32),
+        header: (context) => pw.Container(
+          padding: const pw.EdgeInsets.all(10),
+          decoration: pw.BoxDecoration(
+            color: PdfColors.blueGrey100,
+            border: pw.Border(
+                bottom: pw.BorderSide(color: PdfColors.blueGrey800, width: 2)),
+          ),
+          child: pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+            children: [
+              pw.Text(
+                'Vente #${vente.id}',
                 style: headerStyle,
               ),
-            ),
-            pw.SizedBox(height: 20),
-            pw.Text('Vente #${vente.id}', style: subHeaderStyle),
-            pw.SizedBox(height: 10),
-            pw.Text('Date: ${Helpers.formatterDate(vente.dateVente)}',
-                style: infoStyle),
-            pw.Text(
-                'Montant Total: ${Helpers.formatterEnCFA(vente.montantTotal)}',
-                style: infoStyle),
-            pw.SizedBox(height: 20),
-            pw.Text('Lignes de Vente:', style: subHeaderStyle),
-            pw.SizedBox(height: 10),
+              pw.Text(
+                'Généré le ${Helpers.formatterDate(now)}',
+                style: footerStyle,
+              ),
+            ],
+          ),
+        ),
+        footer: (context) => pw.Container(
+          alignment: pw.Alignment.center,
+          margin: const pw.EdgeInsets.only(top: 10),
+          child: pw.Text(
+            'Généré par BAR App',
+            style: footerStyle,
+          ),
+        ),
+        build: (context) => [
+          pw.SizedBox(height: 20),
+          // Détails du bar
+          pw.Text('Détails du bar', style: subHeaderStyle),
+          pw.Divider(),
+          pw.SizedBox(height: 10),
+          pw.Text('Nom: ${_currentBar?.nom ?? "Bar Inconnu"}',
+              style: infoStyle),
+          pw.Text('Adresse: ${_currentBar?.adresse ?? "Non spécifiée"}',
+              style: infoStyle),
+          pw.SizedBox(height: 20),
+          // Détails de la vente
+          pw.Text('Détails de la vente', style: subHeaderStyle),
+          pw.Divider(),
+          pw.SizedBox(height: 10),
+          pw.Text('Numéro: ${vente.id}', style: infoStyle),
+          pw.Text('Date: ${Helpers.formatterDate(vente.dateVente)}',
+              style: infoStyle),
+          pw.Text(
+              'Montant total: ${Helpers.formatterEnCFA(vente.montantTotal)}',
+              style: infoStyle),
+          pw.SizedBox(height: 20),
+          // Lignes de vente
+          pw.Text('Articles vendus', style: subHeaderStyle),
+          pw.SizedBox(height: 10),
+          if (vente.lignesVente.isEmpty)
+            pw.Text('Aucun article vendu', style: infoStyle)
+          else
             pw.Table(
               border: pw.TableBorder.all(color: PdfColors.grey400),
+              columnWidths: {
+                0: pw.FlexColumnWidth(),
+                1: pw.FixedColumnWidth(80),
+                2: pw.FixedColumnWidth(100),
+              },
               children: [
                 pw.TableRow(
-                  decoration: const pw.BoxDecoration(color: PdfColors.grey800),
+                  decoration:
+                      const pw.BoxDecoration(color: PdfColors.blueGrey700),
                   children: [
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
@@ -296,8 +435,26 @@ class BarProvider with ChangeNotifier {
                       children: [
                         pw.Padding(
                           padding: const pw.EdgeInsets.all(5),
-                          child: pw.Text(ligne.boisson.nom ?? 'Sans nom',
-                              style: tableCellStyle),
+                          child: pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              pw.Text(
+                                ligne.boisson.nom ?? 'Sans nom',
+                                style: tableCellStyle,
+                              ),
+                              if (ligne.boisson.modele != null)
+                                pw.Text(
+                                  'Modèle: ${ligne.boisson.modele!.name}',
+                                  style: tableCellStyle.copyWith(fontSize: 10),
+                                ),
+                              if (ligne.boisson.description != null &&
+                                  ligne.boisson.description!.isNotEmpty)
+                                pw.Text(
+                                  'Desc: ${ligne.boisson.description}',
+                                  style: tableCellStyle.copyWith(fontSize: 10),
+                                ),
+                            ],
+                          ),
                         ),
                         pw.Padding(
                           padding: const pw.EdgeInsets.all(5),
@@ -312,13 +469,23 @@ class BarProvider with ChangeNotifier {
                     )),
               ],
             ),
-          ],
-        ),
+          pw.SizedBox(height: 20),
+          // Résumé
+          pw.Text('Résumé', style: subHeaderStyle),
+          pw.Divider(),
+          pw.SizedBox(height: 10),
+          pw.Text('Nombre total d\'articles: ${vente.lignesVente.length}',
+              style: infoStyle),
+        ],
       ),
     );
 
     final directory = await getDownloadsDirectory();
-    final filePath = '${directory!.path}/vente_${vente.id}.pdf';
+    if (directory == null) {
+      throw Exception('Impossible d\'accéder au dossier de téléchargements');
+    }
+    final filePath =
+        '${directory.path}/vente_${vente.id}_${now.millisecondsSinceEpoch}.pdf';
     final file = File(filePath);
 
     if (await file.exists()) {
@@ -469,7 +636,6 @@ class BarProvider with ChangeNotifier {
 
   Future<void> addVente(
       Vente vente, Map<Boisson, int> boissonToRefrigerateur) async {
-    // Valider la disponibilité des boissons
     for (var ligne in vente.lignesVente) {
       int refrigerateurId = boissonToRefrigerateur[ligne.boisson]!;
       var boissonsDisponibles = getBoissonsDansRefrigerateur(refrigerateurId);
@@ -488,7 +654,6 @@ class BarProvider with ChangeNotifier {
       }
     }
 
-    // Retirer les boissons des réfrigérateurs
     for (var ligne in vente.lignesVente) {
       int refrigerateurId = boissonToRefrigerateur[ligne.boisson]!;
       var refrigerateur = _refrigerateurBox.values.firstWhere(
@@ -501,12 +666,10 @@ class BarProvider with ChangeNotifier {
           refrigerateurId, boissonToRemove);
     }
 
-    // Enregistrer la vente
     await _venteBox.add(vente);
     notifyListeners();
   }
 
-  // BarInstance
   BarInstance? get currentBar => _currentBar;
   List<BarInstance> get bars => _barBox.values.toList();
   set currentBar(BarInstance? bar) {
@@ -524,7 +687,6 @@ class BarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Boissons
   List<Boisson> get boissons => _boissonBox.values.toList();
   Future<void> addBoisson(Boisson boisson) async {
     await _boissonBox.add(boisson);
@@ -547,7 +709,6 @@ class BarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Commandes
   List<Commande> get commandes => _commandeBox.values.toList();
   Future<void> addCommande(Commande commande) async {
     await _commandeBox.add(commande);
@@ -559,7 +720,6 @@ class BarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Fournisseurs
   List<Fournisseur> get fournisseurs => _fournisseurBox.values.toList();
   Future<void> addFournisseur(Fournisseur fournisseur) async {
     await _fournisseurBox.add(fournisseur);
@@ -584,7 +744,6 @@ class BarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Réfrigérateurs
   List<Refrigerateur> get refrigerateurs => _refrigerateurBox.values.toList();
   Future<void> addRefrigerateur(Refrigerateur refrigerateur) async {
     await _refrigerateurBox.add(refrigerateur);
@@ -604,7 +763,6 @@ class BarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Ventes
   List<Vente> get ventes => _venteBox.values.toList();
 
   Future<void> deleteVente(Vente vente) async {

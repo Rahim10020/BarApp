@@ -13,11 +13,6 @@ class AProposPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         title: Text(
           "À propos",
-          style: GoogleFonts.montserrat(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -32,14 +27,7 @@ class AProposPage extends StatelessWidget {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.primaryContainer,
-                      Theme.of(context).colorScheme.surfaceVariant,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: Theme.of(context).colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.all(16.0),
@@ -51,22 +39,23 @@ class AProposPage extends StatelessWidget {
                       style: GoogleFonts.montserrat(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       "Version 1.0.0",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                     ),
                     const SizedBox(height: 16),
                     Text(
                       "Cette application a été conçue pour simplifier la gestion de votre bar. Gérez vos boissons, casiers, réfrigérateurs, commandes, ventes et fournisseurs avec une interface intuitive et moderne.",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
                           ),
                     ),
                   ],
@@ -120,10 +109,11 @@ class AProposPage extends StatelessWidget {
             const SizedBox(height: 16),
             Center(
               child: Text(
-                "Développé avec ❤️ par AzRaTech",
-                style: GoogleFonts.montserrat(
+                "Par AZRATECH",
+                style: TextStyle(
                   fontSize: 14,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

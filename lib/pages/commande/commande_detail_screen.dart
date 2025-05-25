@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/commande.dart';
 import 'package:projet7/pages/detail/casier/casier_detail_sans_modif_screen.dart';
-import 'package:projet7/pages/detail/casier/casier_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +24,7 @@ class CommandeDetailScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Annuler'),
+            child: const Text('Annuler'),
           ),
           TextButton(
             onPressed: () async {
@@ -60,18 +59,47 @@ class CommandeDetailScreen extends StatelessWidget {
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(context),
-                        child: Text('OK'),
+                        child: const Text('OK'),
                       ),
                     ],
                   ),
                 );
               }
             },
-            child: Text('Supprimer'),
+            child: const Text('Supprimer'),
           ),
         ],
       ),
     );
+  }
+
+  void _downloadPdf(BuildContext context, BarProvider provider) async {
+    try {
+      final filePath = await provider.generateCommandePdf(commande);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'PDF sauvegardé dans Téléchargements',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Erreur lors de la génération du PDF : $e',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onError,
+                ),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override
@@ -89,8 +117,14 @@ class CommandeDetailScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         actions: [
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.picture_as_pdf),
+            onPressed: () => _downloadPdf(context, provider),
+            tooltip: 'Télécharger PDF',
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
             onPressed: () => _showDeleteDialog(context, provider),
+            tooltip: 'Supprimer la commande',
           ),
         ],
       ),
@@ -192,7 +226,7 @@ class CommandeDetailScreen extends StatelessWidget {
                                       children: [
                                         Text(
                                           ligne.casier.boissons.isNotEmpty
-                                              ? '${ligne.casier.boissons.first.nom} (${ligne.casier.boissons.first.modele?.name})'
+                                              ? '${ligne.casier.boissons.first.nom} (${ligne.casier.boissons.first.modele?.name ?? "Sans modèle"})'
                                               : 'Aucune boisson',
                                           style: Theme.of(context)
                                               .textTheme

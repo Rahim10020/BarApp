@@ -97,173 +97,186 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<BarProvider>(context);
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Card(
-            elevation: 6,
-            child: ExpansionTile(
-              title: Text(
-                'Nouveau Réfrigérateur',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              leading: Icon(
-                Icons.kitchen,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      TextField(
-                        controller: _nomController,
-                        decoration: InputDecoration(
-                          labelText: 'Nom',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).colorScheme.surfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: _tempController,
-                        decoration: InputDecoration(
-                          labelText: 'Température (°C)',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).colorScheme.surfaceVariant,
-                        ),
-                        keyboardType: TextInputType.number,
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton.icon(
-                        icon: Icon(
-                          Icons.kitchen,
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
-                        label: Text(
-                          'Ajouter',
-                          style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                          ),
-                        ),
-                        onPressed: () => _ajouterRefrigerateur(provider),
-                      ),
-                    ],
+    return Scaffold(
+      resizeToAvoidBottomInset:
+          true, // Permet au contenu de s'adapter au clavier
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Card(
+                elevation: 6,
+                child: ExpansionTile(
+                  title: Text(
+                    'Nouveau Réfrigérateur',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: provider.refrigerateurs.isEmpty
-                ? Center(
-                    child: Text(
-                      'Aucun réfrigérateur disponible',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                    ),
-                  )
-                : GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                    ),
-                    itemCount: provider.refrigerateurs.length,
-                    itemBuilder: (context, index) {
-                      var refrigerateur = provider.refrigerateurs[index];
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        decoration: BoxDecoration(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(blurRadius: 6, color: Colors.black26),
-                          ],
-                        ),
-                        child: InkWell(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => RefrigerateurDetailScreen(
-                                  refrigerateur: refrigerateur),
+                  leading: Icon(
+                    Icons.kitchen,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: _nomController,
+                            decoration: InputDecoration(
+                              labelText: 'Nom',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              filled: true,
+                              fillColor:
+                                  Theme.of(context).colorScheme.surfaceVariant,
                             ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.kitchen,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 40,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  refrigerateur.nom,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primaryContainer,
-                                      ),
-                                  textAlign: TextAlign.center,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  refrigerateur.temperature != null
-                                      ? 'Temp: ${refrigerateur.temperature}°C'
-                                      : 'N/A',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                Text(
-                                  '${refrigerateur.getBoissonTotal()} boissons',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: _tempController,
+                            decoration: InputDecoration(
+                              labelText: 'Température (°C)',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              filled: true,
+                              fillColor:
+                                  Theme.of(context).colorScheme.surfaceVariant,
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            icon: Icon(
+                              Icons.kitchen,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                            ),
+                            label: Text(
+                              'Ajouter',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
+                              ),
+                            ),
+                            onPressed: () => _ajouterRefrigerateur(provider),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: provider.refrigerateurs.isEmpty
+                    ? Center(
+                        child: Text(
+                          'Aucun réfrigérateur disponible',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                        ),
+                      )
+                    : GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                        ),
+                        itemCount: provider.refrigerateurs.length,
+                        itemBuilder: (context, index) {
+                          var refrigerateur = provider.refrigerateurs[index];
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: const [
+                                BoxShadow(blurRadius: 6, color: Colors.black26),
                               ],
                             ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                            child: InkWell(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => RefrigerateurDetailScreen(
+                                      refrigerateur: refrigerateur),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.kitchen,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      size: 40,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      refrigerateur.nom,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primaryContainer,
+                                          ),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      refrigerateur.temperature != null
+                                          ? 'Temp: ${refrigerateur.temperature}°C'
+                                          : 'N/A',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    Text(
+                                      '${refrigerateur.getBoissonTotal()} boissons',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
