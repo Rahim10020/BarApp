@@ -1,188 +1,173 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:open_file/open_file.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/vente.dart';
-import 'package:projet7/pages/vente/ligne_vente_detail_screen.dart';
+import 'package:projet7/pages/detail/boisson/boisson_detail_sans_modif_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
-class VenteDetailScreen extends StatefulWidget {
+class VenteDetailScreen extends StatelessWidget {
   final Vente vente;
 
   const VenteDetailScreen({super.key, required this.vente});
 
-  @override
-  State<VenteDetailScreen> createState() => _VenteDetailScreenState();
-}
-
-class _VenteDetailScreenState extends State<VenteDetailScreen> {
-  String? _pdfPath; // Stocker le chemin du PDF généré
-
-  Future<void> _downloadAndOpenPdf(BarProvider provider) async {
-    try {
-      String filePath = await provider.generateVentePdf(widget.vente);
-      setState(() {
-        _pdfPath = filePath; // Stocker le chemin du PDF
-      });
-      final result = await OpenFile.open(filePath);
-      if (result.type == ResultType.done) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'PDF ouvert avec succès !',
-              style: GoogleFonts.montserrat(),
-            ),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Impossible d\'ouvrir le PDF : ${result.message}',
-              style: GoogleFonts.montserrat(),
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Erreur lors de la génération du PDF : $e',
-            style: GoogleFonts.montserrat(),
-          ),
+  void _showDeleteDialog(BuildContext context, BarProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Supprimer la vente',
+          style: Theme.of(context).textTheme.titleMedium,
         ),
-      );
-    }
-  }
-
-  Future<void> _sharePdf() async {
-    if (_pdfPath == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Veuillez d\'abord générer le PDF',
-            style: GoogleFonts.montserrat(),
+        content: Text('Voulez-vous vraiment supprimer la vente #${vente.id} ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
           ),
-        ),
-      );
-      return;
-    }
-    try {
-      await Share.shareXFiles(
-        [XFile(_pdfPath!)],
-        text: 'Voici la vente #${widget.vente.id}',
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Erreur lors du partage : $e',
-            style: GoogleFonts.montserrat(),
+          TextButton(
+            onPressed: () async {
+              await provider.deleteVente(vente);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Vente supprimée avec succès',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
+                  ),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                ),
+              );
+            },
+            child: Text('Supprimer'),
           ),
-        ),
-      );
-    }
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<BarProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.white,
+        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         title: Text(
-          'Vente #${widget.vente.id}',
-          style: GoogleFonts.montserrat(
-            fontSize: 16,
-          ),
+          'Vente #${vente.id}',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
         ),
-        backgroundColor: Colors.brown[800],
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => _showDeleteDialog(context, provider),
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BuildInfoCard(
-              label: 'Montant Total',
-              value: Helpers.formatterEnCFA(widget.vente.montantTotal),
-            ),
-            BuildInfoCard(
-              label: 'Date',
-              value: Helpers.formatterDate(widget.vente.dateVente),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Boissons vendues:',
-              style: GoogleFonts.montserrat(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Card(
+          elevation: 6,
+          child: Column(
+            children: [
+              Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.local_drink,
+                    size: 80,
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.vente.lignesVente.length,
-                itemBuilder: (context, index) {
-                  var ligne = widget.vente.lignesVente[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    child: ListTile(
-                      leading: Icon(Icons.local_bar, color: Colors.brown[600]),
-                      title: Text(
-                        '${ligne.boisson.nom} (${ligne.boisson.modele?.name})',
-                        style: GoogleFonts.montserrat(),
-                      ),
-                      subtitle: Text(
-                        'Montant: ${Helpers.formatterEnCFA(ligne.montant)}',
-                        style: GoogleFonts.montserrat(),
-                      ),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LigneVenteDetailScreen(
-                            ligneVente: widget.vente.lignesVente[index],
-                          ),
-                        ),
-                      ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BuildInfoCard(
+                      label: "Date",
+                      value: Helpers.formatterDate(vente.dateVente),
                     ),
-                  );
-                },
+                    BuildInfoCard(
+                      label: "Montant total",
+                      value: Helpers.formatterEnCFA(vente.montantTotal),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Articles vendus:',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: vente.lignesVente.length,
+                      itemBuilder: (context, index) {
+                        var ligne = vente.lignesVente[index];
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.local_drink,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            title: Text(
+                              ligne.boisson.nom ?? 'Sans nom',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Modèle: ${ligne.boisson.modele?.name ?? "Sans modèle"}',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                Text(
+                                  'Quantité: 1',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                Text(
+                                  'Montant: ${Helpers.formatterEnCFA(ligne.montant)}',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BoissonDetailSansModifScreen(
+                                        boisson: ligne.boisson),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.download, color: Colors.white),
-                  label: Text(
-                    'Télécharger',
-                    style: GoogleFonts.montserrat(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600],
-                  ),
-                  onPressed: () => _downloadAndOpenPdf(provider),
-                ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.share, color: Colors.white),
-                  label: Text(
-                    'Partager',
-                    style: GoogleFonts.montserrat(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600],
-                  ),
-                  onPressed: _pdfPath != null ? _sharePdf : null,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -43,7 +43,7 @@ class _CasierScreenState extends State<CasierScreen> {
           boissonTotal: quantite,
           boissons: boissons,
         );
-        await provider.addCasier(casier);
+        // await provider.addCasier(casier);
         _quantiteController.clear();
         setState(() {
           _boissonSelectionnee = null;
@@ -159,95 +159,95 @@ class _CasierScreenState extends State<CasierScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Expanded(
-            child: provider.casiers.isEmpty
-                ? Center(
-                    child: Text(
-                      'Aucun casier disponible',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                    ),
-                  )
-                : GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 1.2,
-                    ),
-                    itemCount: provider.casiers.length,
-                    itemBuilder: (context, index) {
-                      var casier = provider.casiers[index];
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Theme.of(context).colorScheme.primaryContainer,
-                              Theme.of(context).colorScheme.surfaceVariant,
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(blurRadius: 6, color: Colors.black26),
-                          ],
-                        ),
-                        child: InkWell(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  CasierDetailScreen(casier: casier),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.storage,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 40,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Casier #${casier.id}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                ),
-                                Text(
-                                  casier.boissons.isNotEmpty
-                                      ? '${casier.boissonTotal} x ${casier.boissons.first.nom ?? 'Sans nom'}'
-                                      : 'Vide',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-          ),
+          // Expanded(
+          //   child: provider.casiers.isEmpty
+          //       ? Center(
+          //           child: Text(
+          //             'Aucun casier disponible',
+          //             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          //                   color: Theme.of(context).colorScheme.onSurface,
+          //                 ),
+          //           ),
+          //         )
+          //       : GridView.builder(
+          //           gridDelegate:
+          //               const SliverGridDelegateWithFixedCrossAxisCount(
+          //             crossAxisCount: 2,
+          //             crossAxisSpacing: 8,
+          //             mainAxisSpacing: 8,
+          //             childAspectRatio: 1.2,
+          //           ),
+          //           itemCount: provider.casiers.length,
+          //           itemBuilder: (context, index) {
+          //             var casier = provider.casiers[index];
+          //             return AnimatedContainer(
+          //               duration: const Duration(milliseconds: 300),
+          //               decoration: BoxDecoration(
+          //                 gradient: LinearGradient(
+          //                   colors: [
+          //                     Theme.of(context).colorScheme.primaryContainer,
+          //                     Theme.of(context).colorScheme.surfaceVariant,
+          //                   ],
+          //                   begin: Alignment.topLeft,
+          //                   end: Alignment.bottomRight,
+          //                 ),
+          //                 borderRadius: BorderRadius.circular(12),
+          //                 boxShadow: const [
+          //                   BoxShadow(blurRadius: 6, color: Colors.black26),
+          //                 ],
+          //               ),
+          //               child: InkWell(
+          //                 onTap: () => Navigator.push(
+          //                   context,
+          //                   MaterialPageRoute(
+          //                     builder: (_) =>
+          //                         CasierDetailScreen(casier: casier),
+          //                   ),
+          //                 ),
+          //                 child: Padding(
+          //                   padding: const EdgeInsets.all(12.0),
+          //                   child: Column(
+          //                     mainAxisAlignment: MainAxisAlignment.center,
+          //                     children: [
+          //                       Icon(
+          //                         Icons.storage,
+          //                         color: Theme.of(context).colorScheme.primary,
+          //                         size: 40,
+          //                       ),
+          //                       const SizedBox(height: 8),
+          //                       Text(
+          //                         'Casier #${casier.id}',
+          //                         style: Theme.of(context)
+          //                             .textTheme
+          //                             .titleMedium
+          //                             ?.copyWith(
+          //                               color: Theme.of(context)
+          //                                   .colorScheme
+          //                                   .onSurface,
+          //                             ),
+          //                       ),
+          //                       Text(
+          //                         casier.boissons.isNotEmpty
+          //                             ? '${casier.boissonTotal} x ${casier.boissons.first.nom ?? 'Sans nom'}'
+          //                             : 'Vide',
+          //                         style: Theme.of(context)
+          //                             .textTheme
+          //                             .bodySmall
+          //                             ?.copyWith(
+          //                               color: Theme.of(context)
+          //                                   .colorScheme
+          //                                   .primary,
+          //                             ),
+          //                         textAlign: TextAlign.center,
+          //                       ),
+          //                     ],
+          //                   ),
+          //                 ),
+          //               ),
+          //             );
+          //           },
+          //         ),
+          // ),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/commande.dart';
 import 'package:projet7/models/fournisseur.dart';
@@ -16,17 +17,16 @@ class CommandeScreen extends StatefulWidget {
 }
 
 class _CommandeScreenState extends State<CommandeScreen> {
-  Casier? casierSelectionne;
+  Boisson? boissonSelectionnee;
   Fournisseur? fournisseurSelectionne;
-  int selectedCasierIndex = 0;
   final _quantiteController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     final provider = Provider.of<BarProvider>(context, listen: false);
-    if (provider.casiers.isNotEmpty) {
-      casierSelectionne = provider.casiers[0];
+    if (provider.boissons.isNotEmpty) {
+      boissonSelectionnee = provider.boissons[0];
     }
     if (provider.fournisseurs.isNotEmpty) {
       fournisseurSelectionne = provider.fournisseurs[0];
@@ -36,8 +36,8 @@ class _CommandeScreenState extends State<CommandeScreen> {
   void _ajouterCommande(BarProvider provider) async {
     if (_quantiteController.text.isEmpty) {
       _showErrorDialog(context, "Veuillez préciser la quantité commandée");
-    } else if (casierSelectionne == null) {
-      _showErrorDialog(context, "Veuillez sélectionner un casier");
+    } else if (boissonSelectionnee == null) {
+      _showErrorDialog(context, "Veuillez sélectionner une boisson");
     } else if (provider.currentBar == null) {
       _showErrorDialog(context, "Aucun bar sélectionné");
     } else {
@@ -46,14 +46,31 @@ class _CommandeScreenState extends State<CommandeScreen> {
         if (quantite <= 0) {
           throw Exception("La quantité doit être positive");
         }
+        final boissons = <Boisson>[];
+        for (int i = 0; i < quantite; i++) {
+          final id = await provider.generateUniqueId("Boisson");
+          boissons.add(Boisson(
+            id: id,
+            nom: boissonSelectionnee!.nom,
+            prix: List.from(boissonSelectionnee!.prix),
+            estFroid: boissonSelectionnee!.estFroid,
+            modele: boissonSelectionnee!.modele,
+            description: boissonSelectionnee!.description,
+          ));
+        }
+        final casier = Casier(
+          id: await provider.generateUniqueId("Casier"),
+          boissonTotal: quantite,
+          boissons: boissons,
+        );
         final ligneCommande = LigneCommande(
           id: await provider.generateUniqueId("LigneCommande"),
-          montant: casierSelectionne!.getPrixTotal(),
-          casier: casierSelectionne!,
+          montant: casier.getPrixTotal(),
+          casier: casier,
         );
         final commande = Commande(
           id: await provider.generateUniqueId("Commande"),
-          montantTotal: ligneCommande.montant * quantite,
+          montantTotal: ligneCommande.montant,
           dateCommande: DateTime.now(),
           lignesCommande: [ligneCommande],
           barInstance: provider.currentBar!,
@@ -122,88 +139,30 @@ class _CommandeScreenState extends State<CommandeScreen> {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: [
-                      // Sélection du casier
-                      Container(
-                        height: 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: provider.casiers.length,
-                          itemBuilder: (context, index) {
-                            var casier = provider.casiers[index];
-                            return GestureDetector(
-                              onTap: () => setState(() {
-                                selectedCasierIndex = index;
-                                casierSelectionne = casier;
-                              }),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: selectedCasierIndex == index
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .primaryContainer
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .surfaceVariant,
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      blurRadius: 4,
-                                      color: Colors.black26,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Casier #${casier.id}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimaryContainer,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    Text(
-                                      casier.boissons.isNotEmpty
-                                          ? '${casier.boissons.first.nom}'
-                                          : 'Vide',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimaryContainer,
-                                          ),
-                                    ),
-                                    Text(
-                                      casier.boissons.isNotEmpty
-                                          ? '${casier.boissons.first.modele?.name}'
-                                          : '',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                      // Sélection de la boisson
+                      DropdownButtonFormField<Boisson>(
+                        value: boissonSelectionnee,
+                        decoration: InputDecoration(
+                          labelText: 'Boisson',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor:
+                              Theme.of(context).colorScheme.surfaceVariant,
                         ),
+                        items: provider.boissons
+                            .map((boisson) => DropdownMenuItem<Boisson>(
+                                  value: boisson,
+                                  child: Text(
+                                      '${boisson.nom} (${boisson.modele?.name ?? "Sans modèle"})'),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            boissonSelectionnee = value;
+                          });
+                        },
                       ),
                       const SizedBox(height: 12),
                       // Sélection du fournisseur
@@ -343,17 +302,6 @@ class _CommandeScreenState extends State<CommandeScreen> {
                                             .colorScheme
                                             .primary,
                                         fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                Text(
-                                  '${commande.lignesCommande.length} casiers',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
                                       ),
                                 ),
                               ],

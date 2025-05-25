@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/models/boisson.dart';
-import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/fournisseur.dart';
 import 'package:projet7/models/modele.dart';
 import 'package:projet7/pages/section/boisson_section.dart';
-import 'package:projet7/pages/section/casier_section.dart';
 import 'package:projet7/pages/section/fournisseur_section.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:provider/provider.dart';
@@ -23,10 +21,6 @@ class _AccueilScreenState extends State<AccueilScreen> {
   final _descriptionBoissonController = TextEditingController();
   Modele? _modeleBoisson;
   bool _estFroid = false;
-
-  // Contrôleurs pour les casiers
-  final _quantiteCasierController = TextEditingController();
-  Boisson? _boissonSelectionnee;
 
   // Contrôleurs pour les fournisseurs
   final _nomFournisseurController = TextEditingController();
@@ -94,56 +88,6 @@ class _AccueilScreenState extends State<AccueilScreen> {
     }
   }
 
-  void _ajouterCasier(BarProvider provider) async {
-    if (_boissonSelectionnee == null) {
-      _showErrorDialog(context, "Veuillez sélectionner une boisson");
-    } else if (_quantiteCasierController.text.isEmpty) {
-      _showErrorDialog(context, "Veuillez préciser la quantité");
-    } else {
-      try {
-        final quantite = int.parse(_quantiteCasierController.text);
-        if (quantite <= 0) {
-          throw Exception("La quantité doit être positive");
-        }
-        final boissons = <Boisson>[];
-        for (int i = 0; i < quantite; i++) {
-          final id = await provider.generateUniqueId("Boisson");
-          boissons.add(Boisson(
-            id: id,
-            nom: _boissonSelectionnee!.nom,
-            prix: List.from(_boissonSelectionnee!.prix),
-            estFroid: _boissonSelectionnee!.estFroid,
-            modele: _boissonSelectionnee!.modele,
-            description: _boissonSelectionnee!.description,
-          ));
-        }
-        final casier = Casier(
-          id: await provider.generateUniqueId("Casier"),
-          boissonTotal: quantite,
-          boissons: boissons,
-        );
-        await provider.addCasier(casier);
-        _quantiteCasierController.clear();
-        setState(() {
-          _boissonSelectionnee = null;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Casier ajouté avec succès !',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          ),
-        );
-      } catch (e) {
-        _showErrorDialog(context, "Erreur : $e");
-      }
-    }
-  }
-
   void _ajouterFournisseur(BarProvider provider) async {
     if (_nomFournisseurController.text.isEmpty) {
       _showErrorDialog(context, "Veuillez renseigner le nom du fournisseur");
@@ -194,18 +138,6 @@ class _AccueilScreenState extends State<AccueilScreen> {
             onDelete: (boisson) => provider.deleteBoisson(boisson),
           ),
           const SizedBox(height: 16),
-          // Section Casiers
-          CasierSection(
-            boissonSelectionnee: _boissonSelectionnee,
-            quantiteController: _quantiteCasierController,
-            onBoissonChanged: (value) =>
-                setState(() => _boissonSelectionnee = value),
-            onAjouter: () => _ajouterCasier(provider),
-            casiers: provider.casiers,
-            boissons: provider.boissons,
-            onDelete: (casier) => provider.deleteCasier(casier),
-          ),
-          const SizedBox(height: 16),
           // Section Fournisseurs
           FournisseurSection(
             nomController: _nomFournisseurController,
@@ -224,7 +156,6 @@ class _AccueilScreenState extends State<AccueilScreen> {
     _nomBoissonController.dispose();
     _prixBoissonController.dispose();
     _descriptionBoissonController.dispose();
-    _quantiteCasierController.dispose();
     _nomFournisseurController.dispose();
     _adresseFournisseurController.dispose();
     super.dispose();

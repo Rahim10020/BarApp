@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:projet7/models/bar_instance.dart';
@@ -16,12 +15,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:projet7/utils/helpers.dart';
-import 'package:collection/collection.dart'; // Ajouté pour firstWhereOrNull
+import 'package:collection/collection.dart';
 
 class BarProvider with ChangeNotifier {
   late Box<BarInstance> _barBox;
   late Box<Boisson> _boissonBox;
-  late Box<Casier> _casierBox;
   late Box<Commande> _commandeBox;
   late Box<Fournisseur> _fournisseurBox;
   late Box<Refrigerateur> _refrigerateurBox;
@@ -37,7 +35,6 @@ class BarProvider with ChangeNotifier {
   Future<void> _initHive() async {
     _barBox = await Hive.openBox<BarInstance>('bars');
     _boissonBox = await Hive.openBox<Boisson>('boissons');
-    _casierBox = await Hive.openBox<Casier>('casiers');
     _commandeBox = await Hive.openBox<Commande>('commandes');
     _fournisseurBox = await Hive.openBox<Fournisseur>('fournisseurs');
     _refrigerateurBox = await Hive.openBox<Refrigerateur>('refrigerateurs');
@@ -70,6 +67,34 @@ class BarProvider with ChangeNotifier {
     }
 
     return counter.lastId;
+  }
+
+  Map<Boisson, int> getBoissonsDansRefrigerateurs() {
+    Map<Boisson, int> boissonsDisponibles = {};
+    for (var refrigerateur in _refrigerateurBox.values) {
+      if (refrigerateur.boissons != null) {
+        for (var boisson in refrigerateur.boissons!) {
+          var key = boisson;
+          boissonsDisponibles[key] = (boissonsDisponibles[key] ?? 0) + 1;
+        }
+      }
+    }
+    return boissonsDisponibles;
+  }
+
+  Map<Boisson, int> getBoissonsDansRefrigerateur(int refrigerateurId) {
+    Map<Boisson, int> boissonsDisponibles = {};
+    var refrigerateur = _refrigerateurBox.values.firstWhere(
+      (r) => r.id == refrigerateurId,
+      orElse: () => throw Exception('Réfrigérateur non trouvé'),
+    );
+    if (refrigerateur.boissons != null) {
+      for (var boisson in refrigerateur.boissons!) {
+        var key = boisson;
+        boissonsDisponibles[key] = (boissonsDisponibles[key] ?? 0) + 1;
+      }
+    }
+    return boissonsDisponibles;
   }
 
   Future<String> generateCommandePdf(Commande commande) async {
@@ -259,6 +284,10 @@ class BarProvider with ChangeNotifier {
                     ),
                     pw.Padding(
                       padding: const pw.EdgeInsets.all(5),
+                      child: pw.Text('Quantité', style: tableHeaderStyle),
+                    ),
+                    pw.Padding(
+                      padding: const pw.EdgeInsets.all(5),
                       child: pw.Text('Montant', style: tableHeaderStyle),
                     ),
                   ],
@@ -269,6 +298,10 @@ class BarProvider with ChangeNotifier {
                           padding: const pw.EdgeInsets.all(5),
                           child: pw.Text(ligne.boisson.nom ?? 'Sans nom',
                               style: tableCellStyle),
+                        ),
+                        pw.Padding(
+                          padding: const pw.EdgeInsets.all(5),
+                          child: pw.Text('1', style: tableCellStyle),
                         ),
                         pw.Padding(
                           padding: const pw.EdgeInsets.all(5),
@@ -298,10 +331,10 @@ class BarProvider with ChangeNotifier {
   }
 
   Future<void> ajouterBoissonsAuRefrigerateur(
-      int casierId, int refrigerateurId, int nombre) async {
-    Casier? casier = _casierBox.values.firstWhere(
-      (c) => c.id == casierId,
-      orElse: () => throw Exception('Casier non trouvé'),
+      int commandeId, int refrigerateurId, int nombre) async {
+    Commande? commande = _commandeBox.values.firstWhere(
+      (c) => c.id == commandeId,
+      orElse: () => throw Exception('Commande non trouvée'),
     );
 
     var refrigerateur = _refrigerateurBox.values.firstWhere(
@@ -309,9 +342,17 @@ class BarProvider with ChangeNotifier {
       orElse: () => throw Exception('Réfrigérateur non trouvé'),
     );
 
-    if (casier.boissons.length < nombre || nombre <= 0) {
+    Casier? casier = commande.lignesCommande
+        .firstWhereOrNull(
+          (ligne) =>
+              ligne.casier.boissons.isNotEmpty &&
+              ligne.casier.boissonTotal >= nombre,
+        )
+        ?.casier;
+
+    if (casier == null || casier.boissons.length < nombre || nombre <= 0) {
       throw Exception(
-          'Nombre de boissons invalide ou insuffisant dans le casier');
+          'Nombre de boissons invalide ou insuffisant dans la commande');
     }
 
     refrigerateur.boissons ??= [];
@@ -334,8 +375,8 @@ class BarProvider with ChangeNotifier {
     casier.boissons.removeRange(0, nombre);
     casier.boissonTotal = casier.boissons.length;
 
-    int casierIndex = _casierBox.values.toList().indexOf(casier);
-    await _casierBox.putAt(casierIndex, casier);
+    int commandeIndex = _commandeBox.values.toList().indexOf(commande);
+    await _commandeBox.putAt(commandeIndex, commande);
 
     int refrigerateurIndex =
         _refrigerateurBox.values.toList().indexOf(refrigerateur);
@@ -345,6 +386,67 @@ class BarProvider with ChangeNotifier {
   }
 
   Future<void> retirerBoissonsDuRefrigerateur(
+      int commandeId, int refrigerateurId, Boisson boisson) async {
+    var refrigerateur = _refrigerateurBox.values.firstWhere(
+      (r) => r.id == refrigerateurId,
+      orElse: () => throw Exception('Réfrigérateur non trouvé'),
+    );
+
+    if (refrigerateur.boissons == null ||
+        !refrigerateur.boissons!.contains(boisson)) {
+      throw Exception('Boisson non trouvée dans le réfrigérateur');
+    }
+
+    Commande? commande = _commandeBox.values.firstWhere(
+      (c) => c.id == commandeId,
+      orElse: () => throw Exception('Commande non trouvée'),
+    );
+
+    Casier? casier = commande.lignesCommande
+        .firstWhereOrNull(
+          (ligne) =>
+              ligne.casier.boissons.isNotEmpty &&
+              ligne.casier.boissons.first.nom == boisson.nom &&
+              ligne.casier.boissons.first.modele == boisson.modele,
+        )
+        ?.casier;
+
+    if (casier == null) {
+      casier = Casier(
+        id: await generateUniqueId("Casier"),
+        boissonTotal: 0,
+        boissons: [],
+      );
+      commande.lignesCommande.add(LigneCommande(
+        id: await generateUniqueId("LigneCommande"),
+        montant: boisson.prix.isNotEmpty ? boisson.prix[0] : 0.0,
+        casier: casier,
+      ));
+    }
+
+    casier.boissons.add(Boisson(
+      id: await generateUniqueId("Boisson"),
+      nom: boisson.nom,
+      prix: List.from(boisson.prix),
+      estFroid: boisson.estFroid,
+      modele: boisson.modele,
+      description: boisson.description,
+    ));
+    casier.boissonTotal = casier.boissons.length;
+
+    refrigerateur.boissons!.remove(boisson);
+
+    int commandeIndex = _commandeBox.values.toList().indexOf(commande);
+    await _commandeBox.putAt(commandeIndex, commande);
+
+    int refrigerateurIndex =
+        _refrigerateurBox.values.toList().indexOf(refrigerateur);
+    await _refrigerateurBox.putAt(refrigerateurIndex, refrigerateur);
+
+    notifyListeners();
+  }
+
+  Future<void> retirerBoissonDuRefrigerateurSansCommande(
       int refrigerateurId, Boisson boisson) async {
     var refrigerateur = _refrigerateurBox.values.firstWhere(
       (r) => r.id == refrigerateurId,
@@ -356,50 +458,51 @@ class BarProvider with ChangeNotifier {
       throw Exception('Boisson non trouvée dans le réfrigérateur');
     }
 
-    // Trouver un casier correspondant (même nom et modèle)
-    Casier? casier = _casierBox.values.firstWhereOrNull(
-      (c) =>
-          c.boissons.isNotEmpty &&
-          c.boissons.first.nom == boisson.nom &&
-          c.boissons.first.modele == boisson.modele,
-    );
-
-    // Si aucun casier n'existe, créer un nouveau
-    if (casier == null) {
-      int newId = await generateUniqueId("Casier");
-      casier = Casier(
-        id: newId,
-        boissonTotal: 0,
-        boissons: [],
-      );
-    }
-
-    // Ajouter la boisson au casier
-    casier.boissons.add(Boisson(
-      id: await generateUniqueId("Boisson"),
-      nom: boisson.nom,
-      prix: List.from(boisson.prix),
-      estFroid: boisson.estFroid,
-      modele: boisson.modele,
-      description: boisson.description,
-    ));
-    casier.boissonTotal = casier.boissons.length;
-
-    // Mettre à jour ou ajouter le casier
-    if (_casierBox.values.contains(casier)) {
-      int casierIndex = _casierBox.values.toList().indexOf(casier);
-      await _casierBox.putAt(casierIndex, casier);
-    } else {
-      await _casierBox.add(casier);
-    }
-
-    // Retirer la boisson du réfrigérateur
     refrigerateur.boissons!.remove(boisson);
 
     int refrigerateurIndex =
         _refrigerateurBox.values.toList().indexOf(refrigerateur);
     await _refrigerateurBox.putAt(refrigerateurIndex, refrigerateur);
 
+    notifyListeners();
+  }
+
+  Future<void> addVente(
+      Vente vente, Map<Boisson, int> boissonToRefrigerateur) async {
+    // Valider la disponibilité des boissons
+    for (var ligne in vente.lignesVente) {
+      int refrigerateurId = boissonToRefrigerateur[ligne.boisson]!;
+      var boissonsDisponibles = getBoissonsDansRefrigerateur(refrigerateurId);
+      int quantiteDisponible = boissonsDisponibles.entries
+          .firstWhere(
+            (entry) =>
+                entry.key.nom == ligne.boisson.nom &&
+                entry.key.modele == ligne.boisson.modele,
+            orElse: () => throw Exception(
+                'Boisson ${ligne.boisson.nom} non disponible dans le réfrigérateur'),
+          )
+          .value;
+      if (1 > quantiteDisponible) {
+        throw Exception(
+            'Boisson ${ligne.boisson.nom} épuisée dans le réfrigérateur');
+      }
+    }
+
+    // Retirer les boissons des réfrigérateurs
+    for (var ligne in vente.lignesVente) {
+      int refrigerateurId = boissonToRefrigerateur[ligne.boisson]!;
+      var refrigerateur = _refrigerateurBox.values.firstWhere(
+        (r) => r.id == refrigerateurId,
+      );
+      var boissonToRemove = refrigerateur.boissons!.firstWhere(
+        (b) => b.nom == ligne.boisson.nom && b.modele == ligne.boisson.modele,
+      );
+      await retirerBoissonDuRefrigerateurSansCommande(
+          refrigerateurId, boissonToRemove);
+    }
+
+    // Enregistrer la vente
+    await _venteBox.add(vente);
     notifyListeners();
   }
 
@@ -441,26 +544,6 @@ class BarProvider with ChangeNotifier {
 
   Future<void> deleteBoisson(Boisson boisson) async {
     await _boissonBox.deleteAt(_boissonBox.values.toList().indexOf(boisson));
-    notifyListeners();
-  }
-
-  // Casiers
-  List<Casier> get casiers => _casierBox.values.toList();
-  Future<void> addCasier(Casier casier) async {
-    await _casierBox.add(casier);
-    notifyListeners();
-  }
-
-  Future<void> updateCasier(Casier casier, int index) async {
-    if (index < 0 || index >= _casierBox.length) {
-      throw Exception('Index invalide pour mise à jour du casier');
-    }
-    await _casierBox.putAt(index, casier);
-    notifyListeners();
-  }
-
-  Future<void> deleteCasier(Casier casier) async {
-    await _casierBox.deleteAt(_casierBox.values.toList().indexOf(casier));
     notifyListeners();
   }
 
@@ -523,10 +606,6 @@ class BarProvider with ChangeNotifier {
 
   // Ventes
   List<Vente> get ventes => _venteBox.values.toList();
-  Future<void> addVente(Vente vente) async {
-    await _venteBox.add(vente);
-    notifyListeners();
-  }
 
   Future<void> deleteVente(Vente vente) async {
     await _venteBox.deleteAt(_venteBox.values.toList().indexOf(vente));

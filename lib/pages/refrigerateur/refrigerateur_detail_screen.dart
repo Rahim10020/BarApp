@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/boisson.dart';
-import 'package:projet7/models/casier.dart';
+import 'package:projet7/models/commande.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_sans_modif_screen.dart';
-import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +22,7 @@ class _RefrigerateurDetailScreenState extends State<RefrigerateurDetailScreen> {
   final _nomController = TextEditingController();
   final _tempController = TextEditingController();
   final _quantiteController = TextEditingController();
-  Casier? _selectedCasier;
+  Commande? _selectedCommande;
   Boisson? _selectedBoisson;
 
   @override
@@ -180,11 +179,11 @@ class _RefrigerateurDetailScreenState extends State<RefrigerateurDetailScreen> {
   }
 
   void _ajouterBoissons(BuildContext context, BarProvider provider) async {
-    if (_selectedCasier == null || _quantiteController.text.isEmpty) {
+    if (_selectedCommande == null || _quantiteController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Veuillez sélectionner un casier et une quantité',
+            'Veuillez sélectionner une commande et une quantité',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
@@ -211,12 +210,12 @@ class _RefrigerateurDetailScreenState extends State<RefrigerateurDetailScreen> {
     }
     try {
       await provider.ajouterBoissonsAuRefrigerateur(
-        _selectedCasier!.id,
+        _selectedCommande!.id,
         widget.refrigerateur.id,
         quantite,
       );
       _quantiteController.clear();
-      _selectedCasier = null;
+      _selectedCommande = null;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -246,8 +245,71 @@ class _RefrigerateurDetailScreenState extends State<RefrigerateurDetailScreen> {
 
   void _retirerBoisson(
       BuildContext context, BarProvider provider, Boisson boisson) async {
+    Commande? selectedCommande;
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Sélectionner une commande',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        content: DropdownButtonFormField<Commande>(
+          value: selectedCommande,
+          decoration: InputDecoration(
+            labelText: 'Commande',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true,
+            fillColor: Theme.of(context).colorScheme.surfaceVariant,
+          ),
+          items: provider.commandes
+              .map((commande) => DropdownMenuItem<Commande>(
+                    value: commande,
+                    child: Text('Commande #${commande.id}'),
+                  ))
+              .toList(),
+          onChanged: (value) {
+            selectedCommande = value;
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (selectedCommande == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Veuillez sélectionner une commande',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                    ),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                );
+                return;
+              }
+              Navigator.pop(context);
+            },
+            child: Text('Confirmer'),
+          ),
+        ],
+      ),
+    );
+
+    if (selectedCommande == null) return;
+
     try {
       await provider.retirerBoissonsDuRefrigerateur(
+        selectedCommande!.id,
         widget.refrigerateur.id,
         boisson,
       );
@@ -361,10 +423,10 @@ class _RefrigerateurDetailScreenState extends State<RefrigerateurDetailScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 12.0),
                             child: Column(
                               children: [
-                                DropdownButtonFormField<Casier>(
-                                  value: _selectedCasier,
+                                DropdownButtonFormField<Commande>(
+                                  value: _selectedCommande,
                                   decoration: InputDecoration(
-                                    labelText: 'Casier',
+                                    labelText: 'Commande',
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -373,19 +435,20 @@ class _RefrigerateurDetailScreenState extends State<RefrigerateurDetailScreen> {
                                         .colorScheme
                                         .surfaceVariant,
                                   ),
-                                  items: provider.casiers
-                                      .where((casier) =>
-                                          casier.boissons.isNotEmpty)
-                                      .map((casier) => DropdownMenuItem<Casier>(
-                                            value: casier,
+                                  items: provider.commandes
+                                      .where((commande) =>
+                                          commande.lignesCommande.any((ligne) =>
+                                              ligne.casier.boissons.isNotEmpty))
+                                      .map((commande) =>
+                                          DropdownMenuItem<Commande>(
+                                            value: commande,
                                             child: Text(
-                                              '#${casier.id} (${casier.boissons.first.nom ?? 'Sans nom'} (${casier.boissons.first.getModele()}) : ${casier.boissonTotal})',
-                                            ),
+                                                'Commande #${commande.id} (${commande.lignesCommande.first.casier.boissons.first.nom ?? 'Sans nom'})'),
                                           ))
                                       .toList(),
                                   onChanged: (value) {
                                     setState(() {
-                                      _selectedCasier = value;
+                                      _selectedCommande = value;
                                     });
                                   },
                                 ),
@@ -525,5 +588,13 @@ class _RefrigerateurDetailScreenState extends State<RefrigerateurDetailScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nomController.dispose();
+    _tempController.dispose();
+    _quantiteController.dispose();
+    super.dispose();
   }
 }

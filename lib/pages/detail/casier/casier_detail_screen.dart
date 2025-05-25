@@ -73,13 +73,13 @@ class _CasierDetailScreenState extends State<CasierDetailScreen> {
           boissonTotal: quantite,
           boissons: boissons,
         );
-        final casierIndex =
-            provider.casiers.indexWhere((c) => c.id == widget.casier.id);
-        if (casierIndex != -1) {
-          await provider.updateCasier(casierModifie, casierIndex);
-        } else {
-          await provider.addCasier(casierModifie);
-        }
+        // final casierIndex =
+        //     provider.casiers.indexWhere((c) => c.id == widget.casier.id);
+        // if (casierIndex != -1) {
+        //   await provider.updateCasier(casierModifie, casierIndex);
+        // } else {
+        //   await provider.addCasier(casierModifie);
+        // }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -120,7 +120,7 @@ class _CasierDetailScreenState extends State<CasierDetailScreen> {
           ),
           TextButton(
             onPressed: () async {
-              await provider.deleteCasier(widget.casier);
+              // await provider.deleteCasier(widget.casier);
               Navigator.pop(context);
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
