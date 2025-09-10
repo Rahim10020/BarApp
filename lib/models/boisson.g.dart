@@ -23,13 +23,14 @@ class BoissonAdapter extends TypeAdapter<Boisson> {
       estFroid: fields[3] as bool,
       modele: fields[4] as Modele?,
       description: fields[5] as String?,
+      dateExpiration: fields[6] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Boisson obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class BoissonAdapter extends TypeAdapter<Boisson> {
       ..writeByte(4)
       ..write(obj.modele)
       ..writeByte(5)
-      ..write(obj.description);
+      ..write(obj.description)
+      ..writeByte(6)
+      ..write(obj.dateExpiration);
   }
 
   @override

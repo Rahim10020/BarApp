@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
+import 'dart:io';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:projet7/utils/helpers.dart';
 
@@ -479,6 +481,7 @@ class BarProvider with ChangeNotifier {
     List<String> alerts = [];
     const int lowStockThreshold = 5; // Configurable threshold
 
+    // Check refrigerators
     for (var refrigerateur in refrigerateurs) {
       if (refrigerateur.boissons != null) {
         var groupedBoissons = <String, int>{};
@@ -489,7 +492,26 @@ class BarProvider with ChangeNotifier {
 
         groupedBoissons.forEach((nom, count) {
           if (count <= lowStockThreshold) {
-            alerts.add('Stock faible: $nom ($count unités restantes)');
+            alerts.add(
+                'Stock faible (Réfrigérateur): $nom ($count unités restantes)');
+          }
+        });
+      }
+    }
+
+    // Check cases
+    for (var casier in casiers) {
+      if (casier.boissons.isNotEmpty) {
+        var groupedBoissons = <String, int>{};
+        for (var boisson in casier.boissons) {
+          var key = boisson.nom ?? 'Sans nom';
+          groupedBoissons[key] = (groupedBoissons[key] ?? 0) + 1;
+        }
+
+        groupedBoissons.forEach((nom, count) {
+          if (count <= lowStockThreshold) {
+            alerts.add(
+                'Stock faible (Casier #${casier.id}): $nom ($count unités restantes)');
           }
         });
       }
@@ -500,5 +522,98 @@ class BarProvider with ChangeNotifier {
 
   bool hasLowStockAlerts() {
     return getLowStockAlerts().isNotEmpty;
+  }
+
+  List<String> getExpiryAlerts() {
+    List<String> alerts = [];
+    const int daysBeforeExpiry = 7; // Alert 7 days before expiry
+
+    for (var refrigerateur in refrigerateurs) {
+      if (refrigerateur.boissons != null) {
+        for (var boisson in refrigerateur.boissons!) {
+          if (boisson.dateExpiration != null) {
+            final daysUntilExpiry =
+                boisson.dateExpiration!.difference(DateTime.now()).inDays;
+            if (daysUntilExpiry <= daysBeforeExpiry && daysUntilExpiry >= 0) {
+              alerts.add(
+                  'Expiration proche: ${boisson.nom ?? 'Sans nom'} expire dans $daysUntilExpiry jours');
+            } else if (daysUntilExpiry < 0) {
+              alerts.add('Expiré: ${boisson.nom ?? 'Sans nom'} a expiré');
+            }
+          }
+        }
+      }
+    }
+
+    return alerts;
+  }
+
+  bool hasExpiryAlerts() {
+    return getExpiryAlerts().isNotEmpty;
+  }
+
+  Future<void> backupData() async {
+    // Backup all data to JSON files
+    final directory = await getApplicationDocumentsDirectory();
+    final backupDir = Directory('${directory.path}/backup');
+    if (!await backupDir.exists()) {
+      await backupDir.create();
+    }
+
+    // Backup each box
+    await _backupBox(_barBox, '${backupDir.path}/bars.json');
+    await _backupBox(_boissonBox, '${backupDir.path}/boissons.json');
+    await _backupBox(_casierBox, '${backupDir.path}/casiers.json');
+    await _backupBox(_commandeBox, '${backupDir.path}/commandes.json');
+    await _backupBox(_fournisseurBox, '${backupDir.path}/fournisseurs.json');
+    await _backupBox(
+        _refrigerateurBox, '${backupDir.path}/refrigerateurs.json');
+    await _backupBox(_venteBox, '${backupDir.path}/ventes.json');
+    await _backupBox(_idCounterBox, '${backupDir.path}/id_counters.json');
+  }
+
+  Future<void> _backupBox(Box box, String path) async {
+    final data = box.toMap();
+    final file = File(path);
+    await file.writeAsString(jsonEncode(data));
+  }
+
+  Future<void> restoreData() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final backupDir = Directory('${directory.path}/backup');
+
+    if (!await backupDir.exists()) {
+      throw Exception('Aucune sauvegarde trouvée');
+    }
+
+    // Restore each box
+    await _restoreBox(_barBox, '${backupDir.path}/bars.json');
+    await _restoreBox(_boissonBox, '${backupDir.path}/boissons.json');
+    await _restoreBox(_casierBox, '${backupDir.path}/casiers.json');
+    await _restoreBox(_commandeBox, '${backupDir.path}/commandes.json');
+    await _restoreBox(_fournisseurBox, '${backupDir.path}/fournisseurs.json');
+    await _restoreBox(
+        _refrigerateurBox, '${backupDir.path}/refrigerateurs.json');
+    await _restoreBox(_venteBox, '${backupDir.path}/ventes.json');
+    await _restoreBox(_idCounterBox, '${backupDir.path}/id_counters.json');
+
+    // Reload current bar
+    if (_barBox.isEmpty) {
+      _currentBar = null;
+    } else {
+      _currentBar = _barBox.values.first;
+    }
+    notifyListeners();
+  }
+
+  Future<void> _restoreBox(Box box, String path) async {
+    final file = File(path);
+    if (await file.exists()) {
+      final data = jsonDecode(await file.readAsString());
+      await box.clear();
+      for (var entry in data.entries) {
+        await box.put(entry.key, entry.value);
+      }
+    }
   }
 }

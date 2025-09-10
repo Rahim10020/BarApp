@@ -23,6 +23,9 @@ class Boisson extends HiveObject {
   @HiveField(5)
   String? description;
 
+  @HiveField(6)
+  DateTime? dateExpiration;
+
   Boisson({
     required this.id,
     this.nom,
@@ -30,6 +33,7 @@ class Boisson extends HiveObject {
     required this.estFroid,
     this.modele,
     this.description,
+    this.dateExpiration,
   });
 
   String? getModele() => modele == Modele.petit

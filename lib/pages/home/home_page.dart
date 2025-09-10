@@ -126,6 +126,7 @@ class _HomePageState extends State<HomePage> {
     final pendingOrders = bar.commandes.length;
 
     final lowStockAlerts = bar.getLowStockAlerts();
+    final expiryAlerts = bar.getExpiryAlerts();
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -170,6 +171,43 @@ class _HomePageState extends State<HomePage> {
                             '• $alert',
                             style:
                                 GoogleFonts.montserrat(color: Colors.red[600]),
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+          if (expiryAlerts.isNotEmpty) ...[
+            Card(
+              color: Colors.orange[50],
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.access_time, color: Colors.orange[600]),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Alertes Expiration',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    ...expiryAlerts.map((alert) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Text(
+                            '• $alert',
+                            style: GoogleFonts.montserrat(
+                                color: Colors.orange[600]),
                           ),
                         )),
                   ],
