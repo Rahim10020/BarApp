@@ -132,8 +132,15 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
                     await Provider.of<BarProvider>(context, listen: false)
                         .createBar(
                             _nomController.text, _adresseController.text);
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (_) => const HomePage()));
+                    // Use a post-frame callback to ensure context is valid
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const HomePage()));
+                      }
+                    });
                   }
                 },
                 style: ElevatedButton.styleFrom(

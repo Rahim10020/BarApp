@@ -11,7 +11,7 @@ class LigneCommande {
   final int id;
 
   @HiveField(1)
-  final double montant;
+  double montant;
 
   @HiveField(2)
   final Casier casier;
@@ -27,5 +27,10 @@ class LigneCommande {
 
   double getMontant() {
     return casier.getPrixTotal();
+  }
+
+  /// Synchronise le montant stocké avec le montant calculé du casier
+  void synchroniserMontant() {
+    montant = casier.getPrixTotal();
   }
 }

@@ -12,7 +12,7 @@ class BuildCasierSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 40,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

@@ -53,9 +53,10 @@ class _CommandeScreenState extends State<CommandeScreen> {
       }
       var lignes = _casiersSelectionnes.asMap().entries.map((e) {
         var casier = e.value;
-
-        return LigneCommande(
+        var ligne = LigneCommande(
             id: e.key, montant: casier.getPrixTotal(), casier: casier);
+        ligne.synchroniserMontant(); // Assure la cohérence des données
+        return ligne;
       }).toList();
       var commande = Commande(
         id: await provider.generateUniqueId("Commande"),
@@ -66,20 +67,22 @@ class _CommandeScreenState extends State<CommandeScreen> {
         fournisseur: fournisseur,
       );
       provider.addCommande(commande);
-      setState(() {
-        _casiersSelectionnes.clear();
-        _nomFournisseurController.clear();
-        _adresseFournisseurController.clear();
-        _fournisseurSelectionne = null;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Commande créée avec succès!',
-            style: GoogleFonts.montserrat(),
+      if (mounted) {
+        setState(() {
+          _casiersSelectionnes.clear();
+          _nomFournisseurController.clear();
+          _adresseFournisseurController.clear();
+          _fournisseurSelectionne = null;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Commande créée avec succès!',
+              style: GoogleFonts.montserrat(),
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -255,14 +258,16 @@ class _CommandeScreenState extends State<CommandeScreen> {
                                 onPressed: () {
                                   provider.deleteCommande(commande);
                                   Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Commande #${commande.id} supprimé avec succès!',
-                                        style: GoogleFonts.montserrat(),
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Commande #${commande.id} supprimé avec succès!',
+                                          style: GoogleFonts.montserrat(),
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 },
                                 child: Text(
                                   "Oui",

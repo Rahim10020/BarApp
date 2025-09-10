@@ -79,18 +79,20 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
           int.tryParse(_boissonTotalController.text) ?? casier.boissons.length;
       casier.boissons = boissons;
       provider.updateCasier(casier);
-      setState(() {
-        _boissonTotalController.clear();
-      });
+      if (mounted) {
+        setState(() {
+          _boissonTotalController.clear();
+        });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "Casier #${casier.id} modifié avec succès!",
-            style: GoogleFonts.montserrat(),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "Casier #${casier.id} modifié avec succès!",
+              style: GoogleFonts.montserrat(),
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 

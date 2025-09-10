@@ -331,10 +331,15 @@ class BarProvider with ChangeNotifier {
     // Trouver le casier dans les lignes de commande
     Casier? casier;
     for (var commande in _commandeBox.values) {
-      casier = commande.lignesCommande
-          .map((ligne) => ligne.casier)
-          .firstWhere((c) => c.id == casierId, orElse: () => null as Casier);
-      if (casier != null) break;
+      try {
+        casier = commande.lignesCommande
+            .map((ligne) => ligne.casier)
+            .firstWhere((c) => c.id == casierId);
+        break; // Found it, exit the loop
+      } catch (e) {
+        // Casier not found in this commande, continue to next
+        continue;
+      }
     }
     if (casier == null) throw Exception('Casier non trouvé dans les commandes');
 

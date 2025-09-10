@@ -11,7 +11,7 @@ class LigneVente {
   final int id;
 
   @HiveField(1)
-  final double montant;
+  double montant;
 
   @HiveField(2)
   final Boisson boisson;
@@ -27,5 +27,10 @@ class LigneVente {
 
   double getMontant() {
     return boisson.prix.last;
+  }
+
+  /// Synchronise le montant stocké avec le montant de la boisson
+  void synchroniserMontant() {
+    montant = boisson.prix.last;
   }
 }

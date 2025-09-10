@@ -29,14 +29,14 @@ class _VenteScreenState extends State<VenteScreen> {
   void _ajouterVente(BarProvider provider) async {
     if (boissonsSelectionnees.isNotEmpty) {
       setState(() => _isAdding = true);
-      var lignes = boissonsSelectionnees
-          .asMap()
-          .entries
-          .map(
-            (e) => LigneVente(
-                id: e.key, montant: e.value.prix.last, boisson: e.value),
-          )
-          .toList();
+      var lignes = boissonsSelectionnees.asMap().entries.map(
+        (e) {
+          var ligne = LigneVente(
+              id: e.key, montant: e.value.prix.last, boisson: e.value);
+          ligne.synchroniserMontant(); // Assure la cohérence des données
+          return ligne;
+        },
+      ).toList();
       var vente = Vente(
         id: await provider.generateUniqueId("Vente"),
         montantTotal: lignes.fold(0.0, (sum, ligne) => sum + ligne.montant),
@@ -51,18 +51,20 @@ class _VenteScreenState extends State<VenteScreen> {
         await provider.updateRefrigerateur(refrigerateur);
       }
       await Future.delayed(const Duration(milliseconds: 500));
-      setState(() {
-        boissonsSelectionnees.clear();
-        _isAdding = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Vente enregistrée !',
-            style: GoogleFonts.montserrat(),
+      if (mounted) {
+        setState(() {
+          boissonsSelectionnees.clear();
+          _isAdding = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Vente enregistrée !',
+              style: GoogleFonts.montserrat(),
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -101,7 +103,7 @@ class _VenteScreenState extends State<VenteScreen> {
                 const SizedBox(
                   height: 24.0,
                 ),
-                Container(
+                SizedBox(
                   height: 65,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -276,14 +278,16 @@ class _VenteScreenState extends State<VenteScreen> {
                                 onPressed: () {
                                   provider.deleteVente(vente);
                                   Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Vente #${vente.id} supprimé avec succès!',
-                                        style: GoogleFonts.montserrat(),
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Vente #${vente.id} supprimé avec succès!',
+                                          style: GoogleFonts.montserrat(),
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 },
                                 child: Text(
                                   "Oui",

@@ -12,7 +12,7 @@ class BuildBoissonSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 65,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

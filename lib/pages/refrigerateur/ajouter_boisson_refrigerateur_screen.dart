@@ -75,29 +75,33 @@ class _AjouterBoissonRefrigerateurScreenState
         int nombre = int.tryParse(_boissonAAjouterController.text) ?? 0;
         await provider.ajouterBoissonsAuRefrigerateur(
             casierSelectionne!.id, refrigerateur.id, nombre);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Boissons ajoutées avec succès !",
-              style: GoogleFonts.montserrat(),
-            ),
-          ),
-        );
-        _boissonAAjouterController.clear();
-        Navigator.pop(context); // Retourner à l’écran précédent après succès
-      } catch (e) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("$e"),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text("ok", style: GoogleFonts.montserrat()),
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Boissons ajoutées avec succès !",
+                style: GoogleFonts.montserrat(),
               ),
-            ],
-          ),
-        );
+            ),
+          );
+          _boissonAAjouterController.clear();
+          Navigator.pop(context); // Retourner à l’écran précédent après succès
+        }
+      } catch (e) {
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("$e"),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("ok", style: GoogleFonts.montserrat()),
+                ),
+              ],
+            ),
+          );
+        }
       }
     }
   }
@@ -145,7 +149,7 @@ class _AjouterBoissonRefrigerateurScreenState
                   style: GoogleFonts.montserrat(),
                 )
               else
-                Container(
+                SizedBox(
                   height: 90,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,

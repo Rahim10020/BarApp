@@ -24,49 +24,57 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
   Future<void> _downloadAndOpenPdf(BarProvider provider) async {
     try {
       String filePath = await provider.generateCommandePdf(widget.commande);
-      setState(() {
-        _pdfPath = filePath; // Stocker le chemin du PDF
-      });
+      if (mounted) {
+        setState(() {
+          _pdfPath = filePath; // Stocker le chemin du PDF
+        });
+      }
       final result = await OpenFile.open(filePath);
-      if (result.type == ResultType.done) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-            'PDF ouvert avec succès !',
-            style: GoogleFonts.montserrat(),
-          )),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-            'Impossible d\'ouvrir le PDF : ${result.message}',
-            style: GoogleFonts.montserrat(),
-          )),
-        );
+      if (mounted) {
+        if (result.type == ResultType.done) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+              'PDF ouvert avec succès !',
+              style: GoogleFonts.montserrat(),
+            )),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+              'Impossible d\'ouvrir le PDF : ${result.message}',
+              style: GoogleFonts.montserrat(),
+            )),
+          );
+        }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Erreur lors de la génération du PDF : $e',
-            style: GoogleFonts.montserrat(),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Erreur lors de la génération du PDF : $e',
+              style: GoogleFonts.montserrat(),
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
   Future<void> _sharePdf() async {
     if (_pdfPath == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Veuillez d\'abord générer le PDF',
-            style: GoogleFonts.montserrat(),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Veuillez d\'abord générer le PDF',
+              style: GoogleFonts.montserrat(),
+            ),
           ),
-        ),
-      );
+        );
+      }
       return;
     }
     try {
@@ -75,14 +83,16 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
         text: 'Voici la commande #${widget.commande.id}',
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Erreur lors du partage : $e',
-            style: GoogleFonts.montserrat(),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Erreur lors du partage : $e',
+              style: GoogleFonts.montserrat(),
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 

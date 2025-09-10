@@ -57,15 +57,17 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
         temperature: double.tryParse(_tempController.text),
       );
       provider.addRefrigerateur(refrigerateur);
-      _resetForm();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '${refrigerateur.nom} ajouté avec succès!',
-            style: GoogleFonts.montserrat(),
+      if (mounted) {
+        _resetForm();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '${refrigerateur.nom} ajouté avec succès!',
+              style: GoogleFonts.montserrat(),
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -312,15 +314,17 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                                       provider
                                           .deleteRefrigerateur(refrigerateur);
                                       Navigator.pop(context);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            '${refrigerateur.nom} supprimé avec succès!',
-                                            style: GoogleFonts.montserrat(),
+                                      if (mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              '${refrigerateur.nom} supprimé avec succès!',
+                                              style: GoogleFonts.montserrat(),
+                                            ),
                                           ),
-                                        ),
-                                      );
+                                        );
+                                      }
                                     },
                                     child: Text(
                                       "Oui",
