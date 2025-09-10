@@ -13,7 +13,6 @@ import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:projet7/services/pdf_service.dart';
-import 'package:projet7/utils/helpers.dart';
 
 class BarProvider with ChangeNotifier {
   late Box<BarInstance> _barBox;
