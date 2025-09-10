@@ -473,4 +473,32 @@ class BarProvider with ChangeNotifier {
     await _venteBox.deleteAt(_venteBox.values.toList().indexOf(vente));
     notifyListeners();
   }
+
+  // Inventory alerts
+  List<String> getLowStockAlerts() {
+    List<String> alerts = [];
+    const int lowStockThreshold = 5; // Configurable threshold
+
+    for (var refrigerateur in refrigerateurs) {
+      if (refrigerateur.boissons != null) {
+        var groupedBoissons = <String, int>{};
+        for (var boisson in refrigerateur.boissons!) {
+          var key = boisson.nom ?? 'Sans nom';
+          groupedBoissons[key] = (groupedBoissons[key] ?? 0) + 1;
+        }
+
+        groupedBoissons.forEach((nom, count) {
+          if (count <= lowStockThreshold) {
+            alerts.add('Stock faible: $nom ($count unités restantes)');
+          }
+        });
+      }
+    }
+
+    return alerts;
+  }
+
+  bool hasLowStockAlerts() {
+    return getLowStockAlerts().isNotEmpty;
+  }
 }
