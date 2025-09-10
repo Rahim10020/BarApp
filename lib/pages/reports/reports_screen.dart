@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/provider/bar_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -14,6 +15,7 @@ class ReportsScreen extends StatefulWidget {
 class _ReportsScreenState extends State<ReportsScreen> {
   DateTime _startDate = DateTime.now().subtract(const Duration(days: 30));
   DateTime _endDate = DateTime.now();
+  String _selectedPeriod = 'daily';
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     final totalOrderCost =
         filteredOrders.fold(0.0, (sum, c) => sum + c.montantTotal);
+
+    // New statistics
+    final revenueByDrink = provider.getRevenueByDrink(_startDate, _endDate);
+    final topSellingDrinks = provider.getTopSellingDrinks(_startDate, _endDate);
+    final revenueTrends =
+        provider.getRevenueTrends(_startDate, _endDate, _selectedPeriod);
+    final inventoryLevels = provider.getInventoryLevels();
 
     return Scaffold(
       appBar: AppBar(
@@ -92,6 +101,49 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Période pour les tendances',
+              style: GoogleFonts.montserrat(fontSize: 16),
+            ),
+            DropdownButton<String>(
+              value: _selectedPeriod,
+              items: const [
+                DropdownMenuItem(value: 'daily', child: Text('Quotidien')),
+                DropdownMenuItem(value: 'weekly', child: Text('Hebdomadaire')),
+                DropdownMenuItem(value: 'monthly', child: Text('Mensuel')),
+              ],
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() => _selectedPeriod = value);
+                }
+              },
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  try {
+                    final filePath = await provider.generateStatisticsPdf(
+                        _startDate, _endDate, _selectedPeriod);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('PDF exporté: $filePath')),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Erreur lors de l\'export PDF')),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.download),
+                label: const Text('Exporter en PDF'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.brown[700],
+                  foregroundColor: Colors.white,
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             Text(
@@ -150,6 +202,88 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
+            Text(
+              'Boissons les plus vendues',
+              style: GoogleFonts.montserrat(
+                  fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: topSellingDrinks.isNotEmpty
+                      ? topSellingDrinks
+                          .map((entry) => _buildReportRow(
+                                entry.key,
+                                '${entry.value} ventes',
+                              ))
+                          .toList()
+                      : [const Text('Aucune vente dans cette période')],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Revenus par boisson',
+              style: GoogleFonts.montserrat(
+                  fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: revenueByDrink.isNotEmpty
+                      ? revenueByDrink.entries
+                          .map((entry) => _buildReportRow(
+                                entry.key,
+                                Helpers.formatterEnCFA(entry.value),
+                              ))
+                          .toList()
+                      : [const Text('Aucun revenu dans cette période')],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Tendances des revenus',
+              style: GoogleFonts.montserrat(
+                  fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  height: 200,
+                  child: _buildRevenueChart(revenueTrends),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Niveaux d\'inventaire',
+              style: GoogleFonts.montserrat(
+                  fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: inventoryLevels.isNotEmpty
+                      ? inventoryLevels.entries
+                          .map((entry) => _buildReportRow(
+                                entry.key,
+                                '${entry.value} unités',
+                              ))
+                          .toList()
+                      : [const Text('Aucun inventaire disponible')],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -165,6 +299,36 @@ class _ReportsScreenState extends State<ReportsScreen> {
           Text(label, style: GoogleFonts.montserrat()),
           Text(value,
               style: GoogleFonts.montserrat(fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRevenueChart(Map<DateTime, double> trends) {
+    if (trends.isEmpty) {
+      return const Center(child: Text('Aucune donnée disponible'));
+    }
+
+    final sortedTrends = trends.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
+
+    final spots = sortedTrends.asMap().entries.map((entry) {
+      return FlSpot(entry.key.toDouble(), entry.value.value);
+    }).toList();
+
+    return LineChart(
+      LineChartData(
+        gridData: const FlGridData(show: true),
+        titlesData: const FlTitlesData(show: true),
+        borderData: FlBorderData(show: true),
+        lineBarsData: [
+          LineChartBarData(
+            spots: spots,
+            isCurved: true,
+            color: Colors.brown,
+            barWidth: 3,
+            belowBarData: BarAreaData(show: false),
+          ),
         ],
       ),
     );
