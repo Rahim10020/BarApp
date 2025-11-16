@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:open_file/open_file.dart';
-import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:projet7/pages/vente/ligne_vente_detail_screen.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
+import 'package:projet7/ui/theme/app_colors.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
+import 'package:projet7/ui/widgets/buttons/app_button.dart';
+import 'package:projet7/ui/widgets/cards/app_card.dart';
+import 'package:projet7/ui/widgets/dialogs/app_dialogs.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+/// Écran de détail d'une vente avec génération PDF
 class VenteDetailScreen extends StatefulWidget {
   final Vente vente;
 
@@ -19,48 +23,35 @@ class VenteDetailScreen extends StatefulWidget {
 }
 
 class _VenteDetailScreenState extends State<VenteDetailScreen> {
-  String? _pdfPath; // Stocker le chemin du PDF généré
+  String? _pdfPath;
+  bool _isGeneratingPdf = false;
 
-  Future<void> _downloadAndOpenPdf(BarProvider provider) async {
+  Future<void> _downloadAndOpenPdf(BarAppProvider provider) async {
+    setState(() => _isGeneratingPdf = true);
+
     try {
-      String filePath = await provider.generateVentePdf(widget.vente);
+      final filePath = await provider.generateVentePdf(widget.vente);
+
       if (mounted) {
         setState(() {
-          _pdfPath = filePath; // Stocker le chemin du PDF
+          _pdfPath = filePath;
+          _isGeneratingPdf = false;
         });
       }
+
       final result = await OpenFile.open(filePath);
+
       if (mounted) {
         if (result.type == ResultType.done) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'PDF ouvert avec succès !',
-                style: GoogleFonts.montserrat(),
-              ),
-            ),
-          );
+          context.showSuccessSnackBar('PDF ouvert avec succès');
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Impossible d\'ouvrir le PDF : ${result.message}',
-                style: GoogleFonts.montserrat(),
-              ),
-            ),
-          );
+          context.showErrorSnackBar('Impossible d\'ouvrir le PDF : ${result.message}');
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Erreur lors de la génération du PDF : $e',
-              style: GoogleFonts.montserrat(),
-            ),
-          ),
-        );
+        setState(() => _isGeneratingPdf = false);
+        context.showErrorSnackBar('Erreur : $e');
       }
     }
   }
@@ -68,127 +59,212 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
   Future<void> _sharePdf() async {
     if (_pdfPath == null) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Veuillez d\'abord générer le PDF',
-              style: GoogleFonts.montserrat(),
-            ),
-          ),
-        );
+        context.showWarningSnackBar('Veuillez d\'abord générer le PDF');
       }
       return;
     }
+
     try {
       await Share.shareXFiles(
         [XFile(_pdfPath!)],
-        text: 'Voici la vente #${widget.vente.id}',
+        text: 'Vente #${widget.vente.id}',
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Erreur lors du partage : $e',
-              style: GoogleFonts.montserrat(),
-            ),
-          ),
-        );
+        context.showErrorSnackBar('Erreur lors du partage : $e');
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.white,
-        title: Text(
-          'Vente #${widget.vente.id}',
-          style: GoogleFonts.montserrat(
-            fontSize: 16,
-          ),
-        ),
-        backgroundColor: Colors.brown[800],
+        title: Text('Vente #${widget.vente.id}'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: ThemeConstants.pagePadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BuildInfoCard(
-              label: 'Montant Total',
-              value: Helpers.formatterEnCFA(widget.vente.montantTotal),
-            ),
-            BuildInfoCard(
-              label: 'Date',
-              value: Helpers.formatterDate(widget.vente.dateVente),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Boissons vendues:',
-              style: GoogleFonts.montserrat(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.vente.lignesVente.length,
-                itemBuilder: (context, index) {
-                  var ligne = widget.vente.lignesVente[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    child: ListTile(
-                      leading: Icon(Icons.local_bar, color: Colors.brown[600]),
-                      title: Text(
-                        '${ligne.boisson.nom} (${ligne.boisson.modele?.name})',
-                        style: GoogleFonts.montserrat(),
-                      ),
-                      subtitle: Text(
-                        'Montant: ${Helpers.formatterEnCFA(ligne.montant)}',
-                        style: GoogleFonts.montserrat(),
-                      ),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LigneVenteDetailScreen(
-                            ligneVente: widget.vente.lignesVente[index],
-                          ),
-                        ),
-                      ),
+            // En-tête avec montant total
+            AppCard(
+              color: AppColors.revenue.withOpacity(0.1),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(ThemeConstants.spacingMd),
+                    decoration: BoxDecoration(
+                      color: AppColors.revenue.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                     ),
-                  );
-                },
+                    child: Icon(
+                      Icons.receipt_long_rounded,
+                      color: AppColors.revenue,
+                      size: ThemeConstants.iconSizeXl,
+                    ),
+                  ),
+                  SizedBox(width: ThemeConstants.spacingMd),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Montant Total',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        Text(
+                          Helpers.formatterEnCFA(widget.vente.montantTotal),
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: AppColors.revenue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
+
+            SizedBox(height: ThemeConstants.spacingMd),
+
+            // Date
+            AppCard(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.calendar_today_rounded,
+                    color: AppColors.primary,
+                    size: ThemeConstants.iconSizeMd,
+                  ),
+                  SizedBox(width: ThemeConstants.spacingMd),
+                  Text(
+                    'Date',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const Spacer(),
+                  Text(
+                    Helpers.formatterDate(widget.vente.dateVente),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: ThemeConstants.spacingLg),
+
+            // Titre de la section
+            Text(
+              'Boissons vendues',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+
+            SizedBox(height: ThemeConstants.spacingMd),
+
+            // Liste des lignes de vente
+            Expanded(
+              child: widget.vente.lignesVente.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.shopping_cart_outlined,
+                            size: ThemeConstants.iconSize3Xl,
+                            color: AppColors.textSecondary,
+                          ),
+                          SizedBox(height: ThemeConstants.spacingMd),
+                          Text(
+                            'Aucune boisson',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.separated(
+                      itemCount: widget.vente.lignesVente.length,
+                      separatorBuilder: (_, __) => SizedBox(height: ThemeConstants.spacingSm),
+                      itemBuilder: (context, index) {
+                        final ligne = widget.vente.lignesVente[index];
+                        return AppCard(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LigneVenteDetailScreen(
+                                ligneVente: ligne,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                                decoration: BoxDecoration(
+                                  color: AppColors.coldDrink.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
+                                ),
+                                child: Icon(
+                                  Icons.local_bar_rounded,
+                                  color: AppColors.coldDrink,
+                                  size: ThemeConstants.iconSizeMd,
+                                ),
+                              ),
+                              SizedBox(width: ThemeConstants.spacingMd),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${ligne.boisson.nom} (${ligne.boisson.modele?.name})',
+                                      style: Theme.of(context).textTheme.titleSmall,
+                                    ),
+                                    SizedBox(height: ThemeConstants.spacingXs),
+                                    Text(
+                                      Helpers.formatterEnCFA(ligne.montant),
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                            color: AppColors.revenue,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Icon(
+                                Icons.chevron_right_rounded,
+                                color: AppColors.textSecondary,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+
+            SizedBox(height: ThemeConstants.spacingMd),
+
+            // Boutons d'action
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.download, color: Colors.white),
-                  label: Text(
-                    'Télécharger',
-                    style: GoogleFonts.montserrat(color: Colors.white),
+                Expanded(
+                  child: AppButton.primary(
+                    text: 'Télécharger PDF',
+                    icon: Icons.download_rounded,
+                    isLoading: _isGeneratingPdf,
+                    onPressed: () => _downloadAndOpenPdf(provider),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600],
-                  ),
-                  onPressed: () => _downloadAndOpenPdf(provider),
                 ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.share, color: Colors.white),
-                  label: Text(
-                    'Partager',
-                    style: GoogleFonts.montserrat(color: Colors.white),
+                SizedBox(width: ThemeConstants.spacingMd),
+                Expanded(
+                  child: AppButton.secondary(
+                    text: 'Partager',
+                    icon: Icons.share_rounded,
+                    onPressed: _pdfPath != null ? _sharePdf : null,
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600],
-                  ),
-                  onPressed: _pdfPath != null ? _sharePdf : null,
                 ),
               ],
             ),

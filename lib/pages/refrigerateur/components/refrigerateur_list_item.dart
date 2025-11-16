@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/pages/refrigerateur/ajouter_boisson_refrigerateur_screen.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_detail_screen.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
+import 'package:projet7/ui/theme/app_colors.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
+import 'package:projet7/ui/widgets/cards/app_card.dart';
+import 'package:projet7/ui/widgets/dialogs/app_dialogs.dart';
 
-class RefrigerateurListItem extends StatefulWidget {
+/// Item de liste moderne pour afficher un réfrigérateur
+class RefrigerateurListItem extends StatelessWidget {
   final Refrigerateur refrigerateur;
-  final BarProvider provider;
+  final BarAppProvider provider;
 
   const RefrigerateurListItem({
     super.key,
@@ -16,222 +20,140 @@ class RefrigerateurListItem extends StatefulWidget {
   });
 
   @override
-  State<RefrigerateurListItem> createState() => _RefrigerateurListItemState();
-}
-
-class _RefrigerateurListItemState extends State<RefrigerateurListItem> {
-  final _nomController = TextEditingController();
-  final _tempController = TextEditingController();
-
-  void _modifierRefrigerateur() {
-    if (_nomController.text.isEmpty || _nomController.text == "") {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Veuillez renseigner le nom",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
-    } else if (_tempController.text.isEmpty || _tempController.text == "") {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "Veuillez renseigner la température",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
-    } else {
-      widget.refrigerateur.nom = _nomController.text;
-      widget.refrigerateur.temperature = double.tryParse(_tempController.text);
-      widget.provider.updateRefrigerateur(widget.refrigerateur);
-      _resetForm();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '${widget.refrigerateur.nom} modifié avec succès!',
-            style: GoogleFonts.montserrat(),
-          ),
-        ),
-      );
-    }
-  }
-
-  void _resetForm() {
-    _nomController.clear();
-    _tempController.clear();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [BoxShadow(blurRadius: 4, color: Colors.black12)],
+    final boissonTotal = refrigerateur.getBoissonTotal();
+
+    return AppCard(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => RefrigerateurDetailScreen(
+            refrigerateur: refrigerateur,
+          ),
+        ),
       ),
-      child: ListTile(
-        leading: Icon(Icons.kitchen, color: Colors.brown[600]),
-        title: Text(widget.refrigerateur.nom),
-        subtitle: widget.refrigerateur.temperature != null
-            ? Text(
-                'Temp : ${widget.refrigerateur.temperature}°C - ${widget.refrigerateur.getBoissonTotal()} boissons',
-                style: GoogleFonts.montserrat(),
-              )
-            : Text(
-                '${widget.refrigerateur.getBoissonTotal()} boissons',
-                style: GoogleFonts.montserrat(),
-              ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: const Icon(
-                Icons.add_circle,
-                color: Colors.green,
-              ),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AjouterBoissonRefrigerateurScreen(
-                    refrigerateur: widget.refrigerateur,
+      child: Row(
+        children: [
+          // Icône avec fond coloré
+          Container(
+            padding: EdgeInsets.all(ThemeConstants.spacingMd),
+            decoration: BoxDecoration(
+              color: AppColors.coldDrink.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+            ),
+            child: Icon(
+              Icons.kitchen_rounded,
+              color: AppColors.coldDrink,
+              size: ThemeConstants.iconSizeLg,
+            ),
+          ),
+
+          SizedBox(width: ThemeConstants.spacingMd),
+
+          // Informations
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Nom
+                Text(
+                  refrigerateur.nom,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: ThemeConstants.spacingXs),
+
+                // Température et Boissons
+                Row(
+                  children: [
+                    if (refrigerateur.temperature != null) ...[
+                      Icon(
+                        Icons.thermostat_rounded,
+                        size: ThemeConstants.iconSizeSm,
+                        color: AppColors.coldDrink,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '${refrigerateur.temperature}°C',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.coldDrink,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      Text(
+                        ' • ',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                    Icon(
+                      Icons.local_drink_rounded,
+                      size: ThemeConstants.iconSizeSm,
+                      color: AppColors.textSecondary,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      '$boissonTotal boisson${boissonTotal > 1 ? 's' : ''}',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // Actions
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Ajouter des boissons
+              IconButton(
+                icon: Icon(
+                  Icons.add_circle_rounded,
+                  color: AppColors.success,
+                  size: ThemeConstants.iconSizeMd,
+                ),
+                tooltip: 'Ajouter des boissons',
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AjouterBoissonRefrigerateurScreen(
+                      refrigerateur: refrigerateur,
+                    ),
                   ),
                 ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.edit, color: Colors.blue),
-              onPressed: () {
-                _nomController.text = widget.refrigerateur.nom;
-                _tempController.text =
-                    widget.refrigerateur.temperature?.toString() ?? '';
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text(
-                      'Modifier ${widget.refrigerateur.nom}',
-                      style: GoogleFonts.montserrat(
-                        color: Colors.white,
-                      ),
-                    ),
-                    content: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextField(
-                            controller: _nomController,
-                            decoration: InputDecoration(
-                              labelText: 'Nom',
-                              labelStyle: GoogleFonts.montserrat(),
-                            ),
-                          ),
-                          TextField(
-                            controller: _tempController,
-                            decoration: InputDecoration(
-                              labelText: 'Température (°C)',
-                              labelStyle: GoogleFonts.montserrat(),
-                            ),
-                            keyboardType: TextInputType.number,
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _resetForm();
-                        },
-                        child: Text(
-                          'Annuler',
-                          style: GoogleFonts.montserrat(),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          _modifierRefrigerateur();
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'Modifier',
-                          style: GoogleFonts.montserrat(),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text(
-                      "Voulez-vous supprimer ${widget.refrigerateur.nom} ?",
-                      style: GoogleFonts.montserrat(),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          "Annuler",
-                          style: GoogleFonts.montserrat(),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          widget.provider
-                              .deleteRefrigerateur(widget.refrigerateur);
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                '${widget.refrigerateur.nom} supprimé avec succès!',
-                                style: GoogleFonts.montserrat(),
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Oui",
-                          style: GoogleFonts.montserrat(),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => RefrigerateurDetailScreen(
-              refrigerateur: widget.refrigerateur,
-            ),
+              // Supprimer
+              IconButton(
+                icon: Icon(
+                  Icons.delete_rounded,
+                  color: AppColors.error,
+                  size: ThemeConstants.iconSizeMd,
+                ),
+                tooltip: 'Supprimer',
+                onPressed: () async {
+                  final confirmed = await AppDialogs.showDeleteDialog(
+                    context,
+                    title: 'Supprimer le réfrigérateur',
+                    message: 'Voulez-vous vraiment supprimer ${refrigerateur.nom} ?',
+                  );
+
+                  if (confirmed == true && context.mounted) {
+                    try {
+                      await provider.deleteRefrigerateur(refrigerateur);
+                      if (context.mounted) {
+                        context.showSuccessSnackBar('${refrigerateur.nom} supprimé');
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        context.showErrorSnackBar('Erreur: ${e.toString()}');
+                      }
+                    }
+                  }
+                },
+              ),
+            ],
           ),
-        ),
+        ],
       ),
     );
   }

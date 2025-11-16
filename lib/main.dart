@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:projet7/pages/home/home_page.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/pages/home/new_home_page.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/provider/theme_provider.dart';
 import 'package:projet7/services/hive_setup.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
+import 'package:projet7/ui/widgets/buttons/app_button.dart';
+import 'package:projet7/ui/widgets/inputs/app_text_field.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -17,7 +19,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => themeProvider),
-        ChangeNotifierProvider(create: (context) => BarProvider()),
+        ChangeNotifierProvider(create: (context) => BarAppProvider()),
       ],
       child: const MyApp(),
     ),
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "BAR",
+      title: "BarApp",
       supportedLocales: const [
         Locale("fr", "FR"),
       ],
@@ -51,11 +53,11 @@ class BarSetupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
     if (provider.currentBar == null) {
       return const BarCreationScreen();
     }
-    return const HomePage();
+    return const NewHomePage();
   }
 }
 
@@ -74,59 +76,87 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Configurer votre bar',
-          style: GoogleFonts.montserrat(),
-        ),
+        title: Text('Configuration'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Bienvenue ! Configurez votre bar pour commencer.',
-                style: GoogleFonts.montserrat(fontSize: 18),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                  controller: _nomController,
-                  decoration: const InputDecoration(labelText: 'Nom du bar')),
-              TextField(
-                controller: _adresseController,
-                decoration: const InputDecoration(
-                    labelText: 'Adresse (email/téléphone)'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_nomController.text.isNotEmpty &&
-                      _adresseController.text.isNotEmpty) {
-                    await Provider.of<BarProvider>(context, listen: false)
-                        .createBar(
-                            _nomController.text, _adresseController.text);
-                    // Use a post-frame callback to ensure context is valid
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const HomePage()));
-                      }
-                    });
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600]),
-                child: Text(
-                  'Créer le bar',
-                  style: GoogleFonts.montserrat(color: Colors.white),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: ThemeConstants.pagePadding,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: ThemeConstants.maxWidthForm),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Icône
+                Icon(
+                  Icons.local_bar,
+                  size: ThemeConstants.iconSize2Xl,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-              ),
-            ],
+                SizedBox(height: ThemeConstants.spacingLg),
+
+                // Titre
+                Text(
+                  'Bienvenue !',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: ThemeConstants.spacingSm),
+
+                // Sous-titre
+                Text(
+                  'Configurez votre bar pour commencer.',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: ThemeConstants.spacingXl),
+
+                // Champ nom
+                AppTextField(
+                  controller: _nomController,
+                  label: 'Nom du bar',
+                  hint: 'Ex: Le Comptoir',
+                  prefixIcon: Icons.store,
+                ),
+                SizedBox(height: ThemeConstants.spacingMd),
+
+                // Champ adresse
+                AppTextField(
+                  controller: _adresseController,
+                  label: 'Contact',
+                  hint: 'Email ou téléphone',
+                  prefixIcon: Icons.contact_mail,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                SizedBox(height: ThemeConstants.spacingXl),
+
+                // Bouton créer
+                AppButton.primary(
+                  text: 'Créer le bar',
+                  icon: Icons.check,
+                  isFullWidth: true,
+                  size: AppButtonSize.large,
+                  onPressed: () async {
+                    if (_nomController.text.isNotEmpty &&
+                        _adresseController.text.isNotEmpty) {
+                      await Provider.of<BarAppProvider>(context, listen: false)
+                          .createBar(
+                              _nomController.text, _adresseController.text);
+                      // Use a post-frame callback to ensure context is valid
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (mounted) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const NewHomePage()));
+                        }
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

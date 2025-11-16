@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:projet7/models/casier.dart';
+import 'package:projet7/models/commande.dart';
+import 'package:projet7/models/fournisseur.dart';
+import 'package:projet7/models/ligne_commande.dart';
 import 'package:projet7/pages/commande/commande_detail_screen.dart';
 import 'package:projet7/pages/commande/components/commande_form.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
+import 'package:projet7/ui/theme/app_colors.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
+import 'package:projet7/ui/widgets/cards/app_card.dart';
+import 'package:projet7/ui/widgets/dialogs/app_dialogs.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
-import 'package:projet7/models/commande.dart';
-import 'package:projet7/models/ligne_commande.dart';
-import 'package:projet7/models/casier.dart';
-import 'package:projet7/models/fournisseur.dart';
 
+/// Écran de gestion des commandes
 class CommandeScreen extends StatefulWidget {
   const CommandeScreen({super.key});
 
@@ -23,42 +27,54 @@ class _CommandeScreenState extends State<CommandeScreen> {
   final _adresseFournisseurController = TextEditingController();
   Fournisseur? _fournisseurSelectionne;
 
-  void _ajouterCommande(BarProvider provider) async {
+  @override
+  void dispose() {
+    _nomFournisseurController.dispose();
+    _adresseFournisseurController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _ajouterCommande(BarAppProvider provider) async {
+    // Validation
     if (_casiersSelectionnes.isEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "La commande doit concerner au moins un casier",
-            style: GoogleFonts.montserrat(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ok", style: GoogleFonts.montserrat()),
-            ),
-          ],
-        ),
-      );
-    } else {
+      context.showWarningSnackBar('La commande doit concerner au moins un casier');
+      return;
+    }
+
+    if (_fournisseurSelectionne == null && _nomFournisseurController.text.trim().isEmpty) {
+      context.showWarningSnackBar('Veuillez sélectionner ou créer un fournisseur');
+      return;
+    }
+
+    try {
       Fournisseur? fournisseur;
-      if (_nomFournisseurController.text.isNotEmpty) {
+
+      // Créer un nouveau fournisseur si le nom est renseigné
+      if (_nomFournisseurController.text.trim().isNotEmpty) {
         fournisseur = Fournisseur(
-            id: await provider.generateUniqueId("Fournisseur"),
-            nom: _nomFournisseurController.text,
-            adresse: _adresseFournisseurController.text);
-        provider.addFournisseur(fournisseur);
+          id: await provider.generateUniqueId("Fournisseur"),
+          nom: _nomFournisseurController.text.trim(),
+          adresse: _adresseFournisseurController.text.trim(),
+        );
+        await provider.addFournisseur(fournisseur);
       } else {
         fournisseur = _fournisseurSelectionne;
       }
-      var lignes = _casiersSelectionnes.asMap().entries.map((e) {
-        var casier = e.value;
-        var ligne = LigneCommande(
-            id: e.key, montant: casier.getPrixTotal(), casier: casier);
-        ligne.synchroniserMontant(); // Assure la cohérence des données
+
+      // Créer les lignes de commande
+      final lignes = _casiersSelectionnes.asMap().entries.map((e) {
+        final casier = e.value;
+        final ligne = LigneCommande(
+          id: e.key,
+          montant: casier.getPrixTotal(),
+          casier: casier,
+        );
+        ligne.synchroniserMontant();
         return ligne;
       }).toList();
-      var commande = Commande(
+
+      // Créer la commande
+      final commande = Commande(
         id: await provider.generateUniqueId("Commande"),
         montantTotal: lignes.fold(0.0, (sum, ligne) => sum + ligne.montant),
         dateCommande: DateTime.now(),
@@ -66,7 +82,9 @@ class _CommandeScreenState extends State<CommandeScreen> {
         barInstance: provider.currentBar!,
         fournisseur: fournisseur,
       );
-      provider.addCommande(commande);
+
+      await provider.addCommande(commande);
+
       if (mounted) {
         setState(() {
           _casiersSelectionnes.clear();
@@ -74,28 +92,21 @@ class _CommandeScreenState extends State<CommandeScreen> {
           _adresseFournisseurController.clear();
           _fournisseurSelectionne = null;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Commande créée avec succès!',
-              style: GoogleFonts.montserrat(),
-            ),
-          ),
-        );
+        context.showSuccessSnackBar('Commande #${commande.id} créée avec succès');
+      }
+    } catch (e) {
+      if (mounted) {
+        context.showErrorSnackBar('Erreur: ${e.toString()}');
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
+
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        bottom: 16.0,
-        top: 8.0,
-      ),
+      padding: ThemeConstants.pagePadding,
       child: Column(
         children: [
           CommandeForm(
@@ -108,94 +119,178 @@ class _CommandeScreenState extends State<CommandeScreen> {
                 setState(() => _fournisseurSelectionne = value),
             onAjouterCommande: () => _ajouterCommande(provider),
           ),
+
+          SizedBox(height: ThemeConstants.spacingMd),
+
+          // Liste des commandes
           Expanded(
-            child: ListView.builder(
-              itemCount: provider.commandes.length,
-              itemBuilder: (context, index) {
-                var commande = provider.commandes[index];
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(blurRadius: 4, color: Colors.black12)
-                    ],
-                  ),
-                  child: ListTile(
-                    leading: Icon(Icons.receipt_long, color: Colors.brown[600]),
-                    title: Text(
-                      'Commande #${commande.id}',
-                      style: GoogleFonts.montserrat(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                    ),
-                    subtitle: Text(
-                      'Total : ${Helpers.formatterEnCFA(commande.montantTotal)} - ${Helpers.formatterDate(commande.dateCommande)}',
-                      style: GoogleFonts.montserrat(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text(
-                              "Voulez-vous supprimer Commande #${commande.id} ?",
-                              style: GoogleFonts.montserrat(),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text(
-                                  "Annuler",
-                                  style: GoogleFonts.montserrat(),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  provider.deleteCommande(commande);
-                                  Navigator.pop(context);
-                                  if (mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Commande #${commande.id} supprimé avec succès!',
-                                          style: GoogleFonts.montserrat(),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                },
-                                child: Text(
-                                  "Oui",
-                                  style: GoogleFonts.montserrat(),
-                                ),
-                              )
-                            ],
+            child: provider.commandes.isEmpty
+                ? Center(
+                    child: AppCard(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_outlined,
+                            size: ThemeConstants.iconSize3Xl,
+                            color: AppColors.textSecondary,
                           ),
-                        );
-                      },
+                          SizedBox(height: ThemeConstants.spacingMd),
+                          Text(
+                            'Aucune commande',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          SizedBox(height: ThemeConstants.spacingXs),
+                          Text(
+                            'Créez votre première commande ci-dessus',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
                     ),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CommandeDetailScreen(
-                          commande: commande,
+                  )
+                : ListView.separated(
+                    itemCount: provider.commandes.length,
+                    separatorBuilder: (_, __) =>
+                        SizedBox(height: ThemeConstants.spacingSm),
+                    itemBuilder: (context, index) {
+                      final commande = provider.commandes[index];
+                      return _CommandeListItem(
+                        commande: commande,
+                        provider: provider,
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Item de liste pour une commande
+class _CommandeListItem extends StatelessWidget {
+  final Commande commande;
+  final BarAppProvider provider;
+
+  const _CommandeListItem({
+    required this.commande,
+    required this.provider,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => CommandeDetailScreen(commande: commande),
+        ),
+      ),
+      child: Row(
+        children: [
+          // Icône
+          Container(
+            padding: EdgeInsets.all(ThemeConstants.spacingMd),
+            decoration: BoxDecoration(
+              color: AppColors.expense.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+            ),
+            child: Icon(
+              Icons.receipt_long_rounded,
+              color: AppColors.expense,
+              size: ThemeConstants.iconSizeLg,
+            ),
+          ),
+
+          SizedBox(width: ThemeConstants.spacingMd),
+
+          // Informations
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ID et Fournisseur
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ThemeConstants.spacingXs,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
+                      ),
+                      child: Text(
+                        '#${commande.id}',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                    if (commande.fournisseur != null) ...[
+                      SizedBox(width: ThemeConstants.spacingXs),
+                      Flexible(
+                        child: Text(
+                          commande.fournisseur!.nom,
+                          style: Theme.of(context).textTheme.titleMedium,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                    ],
+                  ],
+                ),
+                SizedBox(height: ThemeConstants.spacingXs),
+
+                // Montant et Date
+                Row(
+                  children: [
+                    Text(
+                      Helpers.formatterEnCFA(commande.montantTotal),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.expense,
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
-                  ),
-                );
-              },
+                    Text(
+                      ' • ${Helpers.formatterDate(commande.dateCommande)}',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ],
             ),
+          ),
+
+          // Action Supprimer
+          IconButton(
+            icon: Icon(
+              Icons.delete_rounded,
+              color: AppColors.error,
+              size: ThemeConstants.iconSizeMd,
+            ),
+            onPressed: () async {
+              final confirmed = await AppDialogs.showDeleteDialog(
+                context,
+                title: 'Supprimer la commande',
+                message: 'Voulez-vous vraiment supprimer la commande #${commande.id} ?',
+              );
+
+              if (confirmed == true && context.mounted) {
+                try {
+                  await provider.deleteCommande(commande);
+                  if (context.mounted) {
+                    context.showSuccessSnackBar('Commande #${commande.id} supprimée');
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    context.showErrorSnackBar('Erreur: ${e.toString()}');
+                  }
+                }
+              }
+            },
           ),
         ],
       ),
