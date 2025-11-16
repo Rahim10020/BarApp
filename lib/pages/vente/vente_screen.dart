@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:projet7/models/boisson.dart';
+import 'package:projet7/models/ligne_vente.dart';
+import 'package:projet7/models/vente.dart';
 import 'package:projet7/pages/vente/components/vente_form.dart';
 import 'package:projet7/pages/vente/components/vente_list_item.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
+import 'package:projet7/ui/widgets/dialogs/app_dialogs.dart';
+import 'package:projet7/ui/widgets/inputs/app_text_field.dart';
 import 'package:provider/provider.dart';
-import 'package:projet7/models/vente.dart';
-import 'package:projet7/models/ligne_vente.dart';
-import 'package:projet7/models/boisson.dart';
 
+/// Écran de vente redesigné avec design system
 class VenteScreen extends StatefulWidget {
   const VenteScreen({super.key});
 
@@ -26,108 +29,158 @@ class _VenteScreenState extends State<VenteScreen> {
     _searchController.addListener(() => setState(() {}));
   }
 
-  void _ajouterVente(BarProvider provider) async {
-    if (boissonsSelectionnees.isNotEmpty) {
-      setState(() => _isAdding = true);
-      var lignes = boissonsSelectionnees.asMap().entries.map(
-        (e) {
-          var ligne = LigneVente(
-              id: e.key, montant: e.value.prix.last, boisson: e.value);
-          ligne.synchroniserMontant(); // Assure la cohérence des données
-          return ligne;
-        },
-      ).toList();
-      var vente = Vente(
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  /// Ajouter une vente avec feedback UX moderne
+  Future<void> _ajouterVente(BarAppProvider provider) async {
+    if (boissonsSelectionnees.isEmpty) {
+      context.showWarningSnackBar('Veuillez sélectionner des boissons');
+      return;
+    }
+
+    setState(() => _isAdding = true);
+
+    try {
+      // Créer les lignes de vente
+      final lignes = boissonsSelectionnees.asMap().entries.map((e) {
+        final ligne = LigneVente(
+          id: e.key,
+          montant: e.value.prix.last,
+          boisson: e.value,
+        );
+        ligne.synchroniserMontant();
+        return ligne;
+      }).toList();
+
+      // Créer la vente
+      final vente = Vente(
         id: await provider.generateUniqueId("Vente"),
         montantTotal: lignes.fold(0.0, (sum, ligne) => sum + ligne.montant),
         dateVente: DateTime.now(),
         lignesVente: lignes,
       );
+
       await provider.addVente(vente);
+
       // Retirer les boissons vendues des réfrigérateurs
-      for (var refrigerateur in provider.refrigerateurs) {
+      for (final refrigerateur in provider.refrigerateurs) {
         refrigerateur.boissons
             ?.removeWhere((b) => boissonsSelectionnees.contains(b));
         await provider.updateRefrigerateur(refrigerateur);
       }
-      await Future.delayed(const Duration(milliseconds: 500));
+
+      // Attendre un court délai pour l'animation
+      await Future.delayed(ThemeConstants.durationNormal);
+
       if (mounted) {
         setState(() {
           boissonsSelectionnees.clear();
           _isAdding = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Vente enregistrée !',
-              style: GoogleFonts.montserrat(),
-            ),
-          ),
-        );
+        context.showSuccessSnackBar('Vente enregistrée avec succès !');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isAdding = false);
+        context.showErrorSnackBar('Erreur lors de l\'enregistrement: $e');
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
+
     // Limiter les boissons disponibles à celles des réfrigérateurs
-    var boissonsDisponibles =
+    final boissonsDisponibles =
         provider.refrigerateurs.expand((r) => r.boissons ?? []).toList();
 
+    // ✅ FIX: Filtrer une seule fois (pas deux fois comme avant)
+    final searchQuery = _searchController.text.toLowerCase();
+    final ventesFiltered = searchQuery.isEmpty
+        ? provider.ventes.toList()
+        : provider.ventes.where((v) {
+            return v.id.toString().contains(searchQuery) ||
+                v.dateVente.toString().toLowerCase().contains(searchQuery) ||
+                v.lignesVente.any((l) =>
+                    (l.boisson.nom ?? '')
+                        .toLowerCase()
+                        .contains(searchQuery));
+          }).toList();
+
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: ThemeConstants.pagePadding,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // === FORMULAIRE DE VENTE ===
           VenteForm(
             provider: provider,
             boissonsSelectionnees: boissonsSelectionnees,
             isAdding: _isAdding,
             onAjouterVente: () => _ajouterVente(provider),
           ),
-          const SizedBox(height: 16),
-          TextField(
+
+          SizedBox(height: ThemeConstants.spacingLg),
+
+          // === RECHERCHE ===
+          AppSearchField(
             controller: _searchController,
-            decoration: InputDecoration(
-              hintText: 'Rechercher (ID, date, boisson)',
-              hintStyle: GoogleFonts.montserrat(
-                color: Theme.of(context).colorScheme.inversePrimary,
-              ),
-              prefixIcon: const Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              filled: true,
-              fillColor: Theme.of(context).colorScheme.secondary,
-            ),
+            hint: 'Rechercher par ID, date ou boisson...',
+            onChanged: (_) {}, // Le setState est dans initState
           ),
+
+          SizedBox(height: ThemeConstants.spacingMd),
+
+          // === LISTE DES VENTES ===
           Expanded(
-            child: ListView.builder(
-              itemCount: provider.ventes
-                  .where((v) =>
-                      v.id.toString().contains(_searchController.text) ||
-                      v.dateVente.toString().contains(_searchController.text) ||
-                      v.lignesVente.any((l) =>
-                          l.boisson.nom?.contains(_searchController.text) ??
-                          false))
-                  .length,
-              itemBuilder: (context, index) {
-                var vente = provider.ventes
-                    .where((v) =>
-                        v.id.toString().contains(_searchController.text) ||
-                        v.dateVente
-                            .toString()
-                            .contains(_searchController.text) ||
-                        v.lignesVente.any((l) =>
-                            l.boisson.nom?.contains(_searchController.text) ??
-                            false))
-                    .toList()[index];
-                return VenteListItem(
-                  vente: vente,
-                  provider: provider,
-                );
-              },
-            ),
+            child: ventesFiltered.isEmpty
+                ? _buildEmptyState(context, searchQuery.isNotEmpty)
+                : ListView.separated(
+                    itemCount: ventesFiltered.length,
+                    separatorBuilder: (_, __) =>
+                        SizedBox(height: ThemeConstants.spacingSm),
+                    itemBuilder: (context, index) {
+                      final vente = ventesFiltered[index];
+                      return VenteListItem(
+                        vente: vente,
+                        provider: provider,
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// État vide (aucune vente)
+  Widget _buildEmptyState(BuildContext context, bool isSearching) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            isSearching ? Icons.search_off_rounded : Icons.receipt_long_rounded,
+            size: ThemeConstants.iconSize2Xl,
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          SizedBox(height: ThemeConstants.spacingMd),
+          Text(
+            isSearching ? 'Aucun résultat' : 'Aucune vente',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          SizedBox(height: ThemeConstants.spacingXs),
+          Text(
+            isSearching
+                ? 'Essayez avec d\'autres mots-clés'
+                : 'Créez votre première vente ci-dessus',
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
           ),
         ],
       ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/ligne_vente.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
+import 'package:projet7/ui/theme/app_colors.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
+import 'package:projet7/ui/widgets/cards/app_card.dart';
 import 'package:projet7/utils/helpers.dart';
 
+/// Écran de détail d'une ligne de vente
 class LigneVenteDetailScreen extends StatelessWidget {
   final LigneVente ligneVente;
 
@@ -14,50 +16,141 @@ class LigneVenteDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.white,
-        title: Text(
-          "Ligne de vente #${ligneVente.id}",
-          style: GoogleFonts.montserrat(),
-        ),
-        backgroundColor: Colors.brown[800],
+        title: Text('Ligne de vente #${ligneVente.id}'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: ThemeConstants.pagePadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BuildInfoCard(
-              label: 'ID',
-              value: ligneVente.id.toString(),
-            ),
-            BuildInfoCard(
-              label: 'Montant',
-              value: Helpers.formatterEnCFA(ligneVente.getMontant()),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Boisson',
-              style: GoogleFonts.montserrat(
-                  fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Card(
-              margin: const EdgeInsets.symmetric(vertical: 4),
-              child: ListTile(
-                leading: Icon(Icons.local_bar, color: Colors.brown[600]),
-                title: Text(
-                  ligneVente.boisson.nom ?? 'Sans nom',
-                  style: GoogleFonts.montserrat(),
-                ),
-                subtitle: Text(
-                  Helpers.formatterEnCFA(ligneVente.boisson.prix.last),
-                ),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        BoissonDetailScreen(boisson: ligneVente.boisson),
+            // ID et Montant
+            Row(
+              children: [
+                Expanded(
+                  child: AppCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.tag_rounded,
+                              color: AppColors.primary,
+                              size: ThemeConstants.iconSizeSm,
+                            ),
+                            SizedBox(width: ThemeConstants.spacingXs),
+                            Text(
+                              'ID',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: ThemeConstants.spacingXs),
+                        Text(
+                          '#${ligneVente.id}',
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+                SizedBox(width: ThemeConstants.spacingMd),
+                Expanded(
+                  child: AppCard(
+                    color: AppColors.revenue.withOpacity(0.1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.payments_rounded,
+                              color: AppColors.revenue,
+                              size: ThemeConstants.iconSizeSm,
+                            ),
+                            SizedBox(width: ThemeConstants.spacingXs),
+                            Text(
+                              'Montant',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: ThemeConstants.spacingXs),
+                        Text(
+                          Helpers.formatterEnCFA(ligneVente.getMontant()),
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: AppColors.revenue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(height: ThemeConstants.spacingLg),
+
+            // Titre section Boisson
+            Text(
+              'Boisson',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+
+            SizedBox(height: ThemeConstants.spacingMd),
+
+            // Card Boisson
+            AppCard(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BoissonDetailScreen(
+                    boisson: ligneVente.boisson,
+                  ),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(ThemeConstants.spacingMd),
+                    decoration: BoxDecoration(
+                      color: AppColors.coldDrink.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                    ),
+                    child: Icon(
+                      Icons.local_bar_rounded,
+                      color: AppColors.coldDrink,
+                      size: ThemeConstants.iconSizeLg,
+                    ),
+                  ),
+                  SizedBox(width: ThemeConstants.spacingMd),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ligneVente.boisson.nom ?? 'Sans nom',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        SizedBox(height: ThemeConstants.spacingXs),
+                        Text(
+                          Helpers.formatterEnCFA(ligneVente.boisson.prix.last),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: AppColors.revenue,
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppColors.textSecondary,
+                  ),
+                ],
               ),
             ),
           ],

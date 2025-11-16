@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/boisson.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
+import 'package:projet7/ui/theme/app_colors.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
+import 'package:projet7/ui/widgets/buttons/app_button.dart';
+import 'package:projet7/ui/widgets/cards/app_card.dart';
 
+/// Formulaire moderne pour créer une nouvelle vente
 class VenteForm extends StatefulWidget {
-  final BarProvider provider;
+  final BarAppProvider provider;
   final List<Boisson> boissonsSelectionnees;
   final bool isAdding;
   final Function() onAjouterVente;
@@ -25,116 +29,216 @@ class _VenteFormState extends State<VenteForm> {
   @override
   Widget build(BuildContext context) {
     // Limiter les boissons disponibles à celles des réfrigérateurs
-    var boissonsDisponibles =
+    final boissonsDisponibles =
         widget.provider.refrigerateurs.expand((r) => r.boissons ?? []).toList();
 
+    // État vide si aucune boisson
+    if (boissonsDisponibles.isEmpty) {
+      return AppCard(
+        child: Column(
+          children: [
+            Icon(
+              Icons.inventory_2_outlined,
+              size: ThemeConstants.iconSize2Xl,
+              color: AppColors.textSecondary,
+            ),
+            SizedBox(height: ThemeConstants.spacingMd),
+            Text(
+              'Aucune boisson en stock',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            SizedBox(height: ThemeConstants.spacingXs),
+            Text(
+              'Ajoutez des boissons aux réfrigérateurs pour créer une vente',
+              style: Theme.of(context).textTheme.bodySmall,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      padding: EdgeInsets.all(widget.isAdding ? 20 : 16),
-      decoration: BoxDecoration(
+      duration: ThemeConstants.animationNormal,
+      child: AppCard(
         color: widget.isAdding
-            ? Colors.green[200]
-            : Theme.of(context).colorScheme.secondary,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 4,
-            color: Colors.black26,
-          )
-        ],
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Ajouter une vente',
-            style: GoogleFonts.montserrat(),
-          ),
-          const SizedBox(
-            height: 24.0,
-          ),
-          SizedBox(
-            height: 65,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: boissonsDisponibles.length,
-              itemBuilder: (context, index) {
-                var boisson = boissonsDisponibles[index];
-                bool isSelected =
-                    widget.boissonsSelectionnees.contains(boisson);
-                return GestureDetector(
-                  onTap: () => setState(() {
-                    if (isSelected) {
-                      widget.boissonsSelectionnees.remove(boisson);
-                    } else {
-                      widget.boissonsSelectionnees.add(boisson);
-                    }
-                  }),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    padding: const EdgeInsets.only(
-                      left: 9,
-                      right: 9,
-                      top: 6,
-                      bottom: 3,
+            ? AppColors.success.withOpacity(0.1)
+            : null,
+        border: widget.isAdding
+            ? Border.all(
+                color: AppColors.success.withOpacity(0.3),
+                width: ThemeConstants.borderWidthMedium,
+              )
+            : null,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Titre
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                  ),
+                  child: Icon(
+                    Icons.add_shopping_cart_rounded,
+                    color: AppColors.primary,
+                    size: ThemeConstants.iconSizeMd,
+                  ),
+                ),
+                SizedBox(width: ThemeConstants.spacingMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Nouvelle Vente',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text(
+                        'Sélectionnez les boissons',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                if (widget.boissonsSelectionnees.isNotEmpty)
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ThemeConstants.spacingSm,
+                      vertical: ThemeConstants.spacingXs,
                     ),
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.tertiary,
-                      borderRadius: BorderRadius.circular(8),
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(ThemeConstants.radiusFull),
                     ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.local_bar,
-                              size: 20,
-                              color: Colors.brown[600],
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              boisson.nom ?? 'Sans nom',
-                              style: GoogleFonts.montserrat(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          ' (${boisson.getModele()})',
-                          style: GoogleFonts.montserrat(
-                            color: Colors.blue,
+                    child: Text(
+                      '${widget.boissonsSelectionnees.length}',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ),
-                      ],
                     ),
                   ),
-                );
-              },
+              ],
             ),
-          ),
-          const SizedBox(
-            height: 14.0,
-          ),
-          ElevatedButton.icon(
-            icon: const Icon(
-              Icons.local_drink,
-              color: Colors.white,
+
+            SizedBox(height: ThemeConstants.spacingLg),
+
+            // Liste horizontale des boissons
+            SizedBox(
+              height: 70,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: boissonsDisponibles.length,
+                separatorBuilder: (_, __) => SizedBox(width: ThemeConstants.spacingSm),
+                itemBuilder: (context, index) {
+                  final boisson = boissonsDisponibles[index];
+                  final isSelected = widget.boissonsSelectionnees.contains(boisson);
+
+                  return _BoissonChip(
+                    boisson: boisson,
+                    isSelected: isSelected,
+                    onTap: () => setState(() {
+                      if (isSelected) {
+                        widget.boissonsSelectionnees.remove(boisson);
+                      } else {
+                        widget.boissonsSelectionnees.add(boisson);
+                      }
+                    }),
+                  );
+                },
+              ),
             ),
-            label: Text(
-              'Enregistrer',
-              style: GoogleFonts.montserrat(color: Colors.white),
+
+            SizedBox(height: ThemeConstants.spacingLg),
+
+            // Bouton Enregistrer
+            AppButton.primary(
+              text: 'Enregistrer la vente',
+              icon: Icons.check_circle_rounded,
+              isFullWidth: true,
+              onPressed: widget.boissonsSelectionnees.isNotEmpty
+                  ? widget.onAjouterVente
+                  : null,
             ),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.brown[600]),
-            onPressed: widget.boissonsSelectionnees.isNotEmpty
-                ? widget.onAjouterVente
-                : null,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Chip pour sélectionner une boisson
+class _BoissonChip extends StatelessWidget {
+  final Boisson boisson;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _BoissonChip({
+    required this.boisson,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: ThemeConstants.animationFast,
+        padding: EdgeInsets.symmetric(
+          horizontal: ThemeConstants.spacingMd,
+          vertical: ThemeConstants.spacingSm,
+        ),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.primary
+              : Theme.of(context).colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+          border: Border.all(
+            color: isSelected
+                ? AppColors.primary
+                : Theme.of(context).dividerColor,
+            width: isSelected
+                ? ThemeConstants.borderWidthMedium
+                : ThemeConstants.borderWidthThin,
           ),
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  isSelected ? Icons.check_circle : Icons.local_bar_rounded,
+                  size: ThemeConstants.iconSizeMd,
+                  color: isSelected ? Colors.white : AppColors.primary,
+                ),
+                SizedBox(width: ThemeConstants.spacingXs),
+                Text(
+                  boisson.nom ?? 'Sans nom',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: isSelected ? Colors.white : null,
+                        fontWeight: isSelected ? FontWeight.bold : null,
+                      ),
+                ),
+              ],
+            ),
+            SizedBox(height: ThemeConstants.spacingXs),
+            Text(
+              boisson.getModele(),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: isSelected
+                        ? Colors.white.withOpacity(0.9)
+                        : AppColors.textSecondary,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }
