@@ -51,7 +51,7 @@ class AppTheme {
     ),
 
     // Card
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: ThemeConstants.cardElevation,
       color: AppColors.cardLight,
       surfaceTintColor: Colors.transparent,
@@ -197,7 +197,7 @@ class AppTheme {
     ),
 
     // Dialog
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: AppColors.surfaceLight,
       surfaceTintColor: Colors.transparent,
       elevation: ThemeConstants.elevationHighest,
@@ -352,7 +352,7 @@ class AppTheme {
     ),
 
     // Card
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: ThemeConstants.cardElevation,
       color: AppColors.cardDark,
       surfaceTintColor: Colors.transparent,
@@ -498,7 +498,7 @@ class AppTheme {
     ),
 
     // Dialog
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: AppColors.surfaceDark,
       surfaceTintColor: Colors.transparent,
       elevation: ThemeConstants.elevationHighest,

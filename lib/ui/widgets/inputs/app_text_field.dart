@@ -133,6 +133,7 @@ class AppDropdown<T> extends StatelessWidget {
   final List<DropdownMenuItem<T>> items;
   final ValueChanged<T?>? onChanged;
   final String? hint;
+  final IconData? prefixIcon;
   final FormFieldValidator<T>? validator;
   final bool enabled;
 
@@ -143,6 +144,7 @@ class AppDropdown<T> extends StatelessWidget {
     required this.items,
     this.onChanged,
     this.hint,
+    this.prefixIcon,
     this.validator,
     this.enabled = true,
   });
@@ -166,6 +168,7 @@ class AppDropdown<T> extends StatelessWidget {
           hint: hint != null ? Text(hint!) : null,
           validator: validator,
           decoration: InputDecoration(
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
             contentPadding: EdgeInsets.symmetric(
               horizontal: ThemeConstants.spacingMd,
               vertical: ThemeConstants.spacingSm,
@@ -182,6 +185,7 @@ class AppNumberField extends StatelessWidget {
   final TextEditingController? controller;
   final String? label;
   final String? hint;
+  final IconData? prefixIcon;
   final double? min;
   final double? max;
   final int? decimals;
@@ -195,6 +199,7 @@ class AppNumberField extends StatelessWidget {
     this.controller,
     this.label,
     this.hint,
+    this.prefixIcon,
     this.min,
     this.max,
     this.decimals = 0,
@@ -206,17 +211,20 @@ class AppNumberField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actualDecimals = decimals ?? 0;
+
     return AppTextField(
       controller: controller,
       label: label,
       hint: hint,
+      prefixIcon: prefixIcon,
       keyboardType: TextInputType.numberWithOptions(
-        decimal: decimals! > 0,
+        decimal: actualDecimals > 0,
         signed: min == null || min! < 0,
       ),
       inputFormatters: [
         FilteringTextInputFormatter.allow(
-          decimals! > 0 ? RegExp(r'^\d*\.?\d*') : RegExp(r'^\d*'),
+          actualDecimals > 0 ? RegExp(r'^\d*\.?\d*') : RegExp(r'^\d*'),
         ),
       ],
       onChanged: onChanged,

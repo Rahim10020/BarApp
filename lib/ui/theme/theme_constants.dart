@@ -63,6 +63,7 @@ class ThemeConstants {
   static const double iconSizeLg = 32.0;
   static const double iconSizeXl = 48.0;
   static const double iconSize2Xl = 64.0;
+  static const double iconSize3Xl = 80.0;
 
   // === BUTTON HEIGHTS ===
 
@@ -115,6 +116,9 @@ class ThemeConstants {
   static const double dividerIndent = 0.0;
 
   // === ANIMATIONS ===
+
+  /// Animation rapide - 150ms (alias pour compatibilité)
+  static const Duration animationFast = Duration(milliseconds: 150);
 
   /// Duration ultra rapide - 100ms
   static const Duration durationFast = Duration(milliseconds: 100);

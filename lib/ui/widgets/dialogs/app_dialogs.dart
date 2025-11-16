@@ -37,13 +37,20 @@ class AppDialogs {
   /// Dialog de confirmation de suppression
   static Future<bool?> showDeleteDialog(
     BuildContext context, {
-    required String itemName,
+    String? itemName,
+    String? title,
     String? message,
   }) {
+    final dialogTitle = title ?? 'Supprimer ${itemName ?? 'cet élément'} ?';
+    final dialogMessage = message ??
+        (itemName != null
+            ? 'Voulez-vous vraiment supprimer $itemName ? Cette action est irréversible.'
+            : 'Voulez-vous vraiment supprimer cet élément ? Cette action est irréversible.');
+
     return showConfirmDialog(
       context,
-      title: 'Supprimer $itemName ?',
-      message: message ?? 'Voulez-vous vraiment supprimer $itemName ? Cette action est irréversible.',
+      title: dialogTitle,
+      message: dialogMessage,
       confirmText: 'Supprimer',
       cancelText: 'Annuler',
       isDangerous: true,

@@ -95,10 +95,6 @@ class _VenteScreenState extends State<VenteScreen> {
   Widget build(BuildContext context) {
     final provider = Provider.of<BarAppProvider>(context);
 
-    // Limiter les boissons disponibles à celles des réfrigérateurs
-    final boissonsDisponibles =
-        provider.refrigerateurs.expand((r) => r.boissons ?? []).toList();
-
     // ✅ FIX: Filtrer une seule fois (pas deux fois comme avant)
     final searchQuery = _searchController.text.toLowerCase();
     final ventesFiltered = searchQuery.isEmpty
