@@ -36,19 +36,19 @@ class RefrigerateurListItem extends StatelessWidget {
         children: [
           // Icône avec fond coloré
           Container(
-            padding: EdgeInsets.all(ThemeConstants.spacingMd),
+            padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
               color: AppColors.coldDrink.withOpacity(0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.kitchen_rounded,
               color: AppColors.coldDrink,
               size: ThemeConstants.iconSizeLg,
             ),
           ),
 
-          SizedBox(width: ThemeConstants.spacingMd),
+          const SizedBox(width: ThemeConstants.spacingMd),
 
           // Informations
           Expanded(
@@ -61,18 +61,18 @@ class RefrigerateurListItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: ThemeConstants.spacingXs),
+                const SizedBox(height: ThemeConstants.spacingXs),
 
                 // Température et Boissons
                 Row(
                   children: [
                     if (refrigerateur.temperature != null) ...[
-                      Icon(
+                      const Icon(
                         Icons.thermostat_rounded,
                         size: ThemeConstants.iconSizeSm,
                         color: AppColors.coldDrink,
                       ),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
                         '${refrigerateur.temperature}°C',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -90,7 +90,7 @@ class RefrigerateurListItem extends StatelessWidget {
                       size: ThemeConstants.iconSizeSm,
                       color: AppColors.textSecondary,
                     ),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Text(
                       '$boissonTotal boisson${boissonTotal > 1 ? 's' : ''}',
                       style: Theme.of(context).textTheme.bodySmall,
@@ -107,7 +107,7 @@ class RefrigerateurListItem extends StatelessWidget {
             children: [
               // Ajouter des boissons
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.add_circle_rounded,
                   color: AppColors.success,
                   size: ThemeConstants.iconSizeMd,
@@ -124,7 +124,7 @@ class RefrigerateurListItem extends StatelessWidget {
               ),
               // Supprimer
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.delete_rounded,
                   color: AppColors.error,
                   size: ThemeConstants.iconSizeMd,
@@ -134,14 +134,16 @@ class RefrigerateurListItem extends StatelessWidget {
                   final confirmed = await AppDialogs.showDeleteDialog(
                     context,
                     title: 'Supprimer le réfrigérateur',
-                    message: 'Voulez-vous vraiment supprimer ${refrigerateur.nom} ?',
+                    message:
+                        'Voulez-vous vraiment supprimer ${refrigerateur.nom} ?',
                   );
 
                   if (confirmed == true && context.mounted) {
                     try {
                       await provider.deleteRefrigerateur(refrigerateur);
                       if (context.mounted) {
-                        context.showSuccessSnackBar('${refrigerateur.nom} supprimé');
+                        context.showSuccessSnackBar(
+                            '${refrigerateur.nom} supprimé');
                       }
                     } catch (e) {
                       if (context.mounted) {

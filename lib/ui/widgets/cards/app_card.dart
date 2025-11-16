@@ -81,7 +81,7 @@ class AppInfoCard extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(ThemeConstants.spacingMd),
+            padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
               color: (iconColor ?? AppColors.primary).withOpacity(0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
@@ -92,7 +92,7 @@ class AppInfoCard extends StatelessWidget {
               size: ThemeConstants.iconSizeLg,
             ),
           ),
-          SizedBox(width: ThemeConstants.spacingMd),
+          const SizedBox(width: ThemeConstants.spacingMd),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +102,7 @@ class AppInfoCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 if (subtitle != null) ...[
-                  SizedBox(height: ThemeConstants.spacingXs),
+                  const SizedBox(height: ThemeConstants.spacingXs),
                   Text(
                     subtitle!,
                     style: Theme.of(context).textTheme.bodySmall,
@@ -152,7 +152,7 @@ class AppStatCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
                   color: statColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
@@ -165,16 +165,16 @@ class AppStatCard extends StatelessWidget {
               ),
               if (trend != null)
                 Container(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: ThemeConstants.spacingSm,
                     vertical: ThemeConstants.spacingXs,
                   ),
                   decoration: BoxDecoration(
-                    color: (isPositiveTrend
-                            ? AppColors.success
-                            : AppColors.error)
-                        .withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
+                    color:
+                        (isPositiveTrend ? AppColors.success : AppColors.error)
+                            .withOpacity(0.1),
+                    borderRadius:
+                        BorderRadius.circular(ThemeConstants.radiusSm),
                   ),
                   child: Text(
                     trend!,
@@ -188,7 +188,7 @@ class AppStatCard extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
           Text(
             value,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -196,7 +196,7 @@ class AppStatCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          SizedBox(height: ThemeConstants.spacingXs),
+          const SizedBox(height: ThemeConstants.spacingXs),
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall,
@@ -240,13 +240,13 @@ class AppListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       onTap: onTap,
-      padding: EdgeInsets.all(ThemeConstants.spacingMd),
+      padding: const EdgeInsets.all(ThemeConstants.spacingMd),
       child: Row(
         children: [
           // Leading icon
           if (leadingIcon != null)
             Container(
-              padding: EdgeInsets.all(ThemeConstants.spacingSm),
+              padding: const EdgeInsets.all(ThemeConstants.spacingSm),
               decoration: BoxDecoration(
                 color: (leadingIconColor ?? AppColors.primary).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
@@ -257,7 +257,8 @@ class AppListCard extends StatelessWidget {
                 size: ThemeConstants.iconSizeMd,
               ),
             ),
-          if (leadingIcon != null) SizedBox(width: ThemeConstants.spacingMd),
+          if (leadingIcon != null)
+            const SizedBox(width: ThemeConstants.spacingMd),
 
           // Content
           Expanded(
@@ -271,7 +272,7 @@ class AppListCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (subtitle != null) ...[
-                  SizedBox(height: ThemeConstants.spacingXs),
+                  const SizedBox(height: ThemeConstants.spacingXs),
                   Text(
                     subtitle!,
                     style: Theme.of(context).textTheme.bodySmall,
@@ -286,7 +287,7 @@ class AppListCard extends StatelessWidget {
           // Trailing
           if (trailing != null)
             Padding(
-              padding: EdgeInsets.only(left: ThemeConstants.spacingSm),
+              padding: const EdgeInsets.only(left: ThemeConstants.spacingSm),
               child: Text(
                 trailing!,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -298,7 +299,7 @@ class AppListCard extends StatelessWidget {
 
           if (customTrailing != null)
             Padding(
-              padding: EdgeInsets.only(left: ThemeConstants.spacingSm),
+              padding: const EdgeInsets.only(left: ThemeConstants.spacingSm),
               child: customTrailing!,
             ),
 
@@ -307,20 +308,20 @@ class AppListCard extends StatelessWidget {
           if (onEdit != null)
             IconButton(
               onPressed: onEdit,
-              icon: Icon(Icons.edit_outlined),
+              icon: const Icon(Icons.edit_outlined),
               iconSize: ThemeConstants.iconSizeSm,
               color: AppColors.primary,
-              constraints: BoxConstraints(),
-              padding: EdgeInsets.all(ThemeConstants.spacingSm),
+              constraints: const BoxConstraints(),
+              padding: const EdgeInsets.all(ThemeConstants.spacingSm),
             ),
           if (onDelete != null)
             IconButton(
               onPressed: onDelete,
-              icon: Icon(Icons.delete_outline),
+              icon: const Icon(Icons.delete_outline),
               iconSize: ThemeConstants.iconSizeSm,
               color: AppColors.error,
-              constraints: BoxConstraints(),
-              padding: EdgeInsets.all(ThemeConstants.spacingSm),
+              constraints: const BoxConstraints(),
+              padding: const EdgeInsets.all(ThemeConstants.spacingSm),
             ),
         ],
       ),
@@ -346,7 +347,7 @@ class AppEmptyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      padding: EdgeInsets.all(ThemeConstants.spacingXl),
+      padding: const EdgeInsets.all(ThemeConstants.spacingXl),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -355,7 +356,7 @@ class AppEmptyCard extends StatelessWidget {
             size: ThemeConstants.iconSize2Xl,
             color: AppColors.greyLight400,
           ),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
           Text(
             message,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -364,7 +365,7 @@ class AppEmptyCard extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           if (actionText != null && onAction != null) ...[
-            SizedBox(height: ThemeConstants.spacingLg),
+            const SizedBox(height: ThemeConstants.spacingLg),
             TextButton(
               onPressed: onAction,
               child: Text(actionText!),

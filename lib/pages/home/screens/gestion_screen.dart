@@ -45,12 +45,13 @@ class _GestionScreenState extends State<GestionScreen>
           child: TabBar(
             controller: _tabController,
             labelColor: AppColors.primary,
-            unselectedLabelColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            unselectedLabelColor:
+                Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             indicatorColor: AppColors.primary,
             indicatorWeight: 3,
             labelStyle: Theme.of(context).textTheme.titleSmall,
             unselectedLabelStyle: Theme.of(context).textTheme.titleSmall,
-            tabs: [
+            tabs: const [
               Tab(
                 icon: Icon(Icons.shopping_cart),
                 text: 'Commandes',
@@ -66,9 +67,9 @@ class _GestionScreenState extends State<GestionScreen>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: [
-              const CommandeScreen(),
-              const ReportsScreen(),
+            children: const [
+              CommandeScreen(),
+              ReportsScreen(),
             ],
           ),
         ),

@@ -4,7 +4,6 @@ import 'package:projet7/domain/repositories/i_commande_repository.dart';
 import 'package:projet7/domain/repositories/i_refrigerateur_repository.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
-import 'package:projet7/models/refrigerateur.dart';
 
 /// Use case pour transférer des boissons d'un casier vers un réfrigérateur
 class TransferDrinksToFridgeUseCase {

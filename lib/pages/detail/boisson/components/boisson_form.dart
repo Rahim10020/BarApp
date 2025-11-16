@@ -45,18 +45,18 @@ class _BoissonFormState extends State<BoissonForm> {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.add_box_rounded,
                   color: AppColors.primary,
                   size: ThemeConstants.iconSizeMd,
                 ),
               ),
-              SizedBox(width: ThemeConstants.spacingMd),
+              const SizedBox(width: ThemeConstants.spacingMd),
               Text(
                 'Ajouter une boisson',
                 style: Theme.of(context).textTheme.titleMedium,
@@ -64,7 +64,7 @@ class _BoissonFormState extends State<BoissonForm> {
             ],
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Nom et Prix (ligne)
           Row(
@@ -77,7 +77,7 @@ class _BoissonFormState extends State<BoissonForm> {
                   prefixIcon: Icons.local_bar_rounded,
                 ),
               ),
-              SizedBox(width: ThemeConstants.spacingMd),
+              const SizedBox(width: ThemeConstants.spacingMd),
               Expanded(
                 child: AppNumberField(
                   controller: widget.prixController,
@@ -89,7 +89,7 @@ class _BoissonFormState extends State<BoissonForm> {
             ],
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Description
           AppTextField(
@@ -100,7 +100,7 @@ class _BoissonFormState extends State<BoissonForm> {
             prefixIcon: Icons.description_rounded,
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Modèle (Dropdown)
           AppDropdown<Modele>(
@@ -117,7 +117,7 @@ class _BoissonFormState extends State<BoissonForm> {
             onChanged: widget.onModeleChanged,
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Bouton Ajouter
           AppButton.primary(

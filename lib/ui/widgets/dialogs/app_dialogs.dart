@@ -43,7 +43,8 @@ class AppDialogs {
     return showConfirmDialog(
       context,
       title: 'Supprimer $itemName ?',
-      message: message ?? 'Voulez-vous vraiment supprimer $itemName ? Cette action est irréversible.',
+      message: message ??
+          'Voulez-vous vraiment supprimer $itemName ? Cette action est irréversible.',
       confirmText: 'Supprimer',
       cancelText: 'Annuler',
       isDangerous: true,
@@ -84,8 +85,8 @@ class AppDialogs {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.error_outline, color: AppColors.error),
-            SizedBox(width: ThemeConstants.spacingSm),
+            const Icon(Icons.error_outline, color: AppColors.error),
+            const SizedBox(width: ThemeConstants.spacingSm),
             Text(title),
           ],
         ),
@@ -112,8 +113,8 @@ class AppDialogs {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.check_circle_outline, color: AppColors.success),
-            SizedBox(width: ThemeConstants.spacingSm),
+            const Icon(Icons.check_circle_outline, color: AppColors.success),
+            const SizedBox(width: ThemeConstants.spacingSm),
             Text(title),
           ],
         ),
@@ -152,9 +153,9 @@ class AppDialogs {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircularProgressIndicator(),
+              const CircularProgressIndicator(),
               if (message != null) ...[
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
                 Text(message),
               ],
             ],
@@ -186,7 +187,7 @@ class AppDialogs {
       builder: (context) => Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.vertical(
+          borderRadius: const BorderRadius.vertical(
             top: Radius.circular(ThemeConstants.bottomSheetBorderRadius),
           ),
         ),
@@ -198,7 +199,7 @@ class AppDialogs {
           children: [
             // Drag handle
             if (enableDrag) ...[
-              SizedBox(height: ThemeConstants.spacingSm),
+              const SizedBox(height: ThemeConstants.spacingSm),
               Container(
                 width: 40,
                 height: 4,
@@ -211,7 +212,7 @@ class AppDialogs {
 
             // Title
             if (title != null) ...[
-              SizedBox(height: ThemeConstants.spacingMd),
+              const SizedBox(height: ThemeConstants.spacingMd),
               Padding(
                 padding: ThemeConstants.paddingHorizontal,
                 child: Text(
@@ -219,8 +220,8 @@ class AppDialogs {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              SizedBox(height: ThemeConstants.spacingMd),
-              Divider(height: 1),
+              const SizedBox(height: ThemeConstants.spacingMd),
+              const Divider(height: 1),
             ],
 
             // Content
@@ -311,8 +312,8 @@ extension SnackBarExtension on BuildContext {
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.check_circle, color: Colors.white),
-            SizedBox(width: ThemeConstants.spacingSm),
+            const Icon(Icons.check_circle, color: Colors.white),
+            const SizedBox(width: ThemeConstants.spacingSm),
             Expanded(child: Text(message)),
           ],
         ),
@@ -328,8 +329,8 @@ extension SnackBarExtension on BuildContext {
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.error, color: Colors.white),
-            SizedBox(width: ThemeConstants.spacingSm),
+            const Icon(Icons.error, color: Colors.white),
+            const SizedBox(width: ThemeConstants.spacingSm),
             Expanded(child: Text(message)),
           ],
         ),
@@ -345,8 +346,8 @@ extension SnackBarExtension on BuildContext {
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.info, color: Colors.white),
-            SizedBox(width: ThemeConstants.spacingSm),
+            const Icon(Icons.info, color: Colors.white),
+            const SizedBox(width: ThemeConstants.spacingSm),
             Expanded(child: Text(message)),
           ],
         ),
@@ -362,8 +363,8 @@ extension SnackBarExtension on BuildContext {
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.warning, color: Colors.white),
-            SizedBox(width: ThemeConstants.spacingSm),
+            const Icon(Icons.warning, color: Colors.white),
+            const SizedBox(width: ThemeConstants.spacingSm),
             Expanded(child: Text(message)),
           ],
         ),

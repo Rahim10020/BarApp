@@ -6,8 +6,7 @@ import 'package:projet7/models/boisson.dart';
 /// Implémentation du repository des boissons
 class BoissonRepositoryImpl extends BaseRepositoryImpl<Boisson>
     implements IBoissonRepository {
-  BoissonRepositoryImpl(HiveLocalDatasource<Boisson> datasource)
-      : super(datasource);
+  BoissonRepositoryImpl(super.datasource);
 
   @override
   List<Boisson> searchByName(String query) {

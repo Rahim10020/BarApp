@@ -107,7 +107,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
             onResetForm: _resetForm,
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Liste des boissons
           Expanded(
@@ -122,12 +122,12 @@ class _BoissonScreenState extends State<BoissonScreen> {
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,
                           ),
-                          SizedBox(height: ThemeConstants.spacingMd),
+                          const SizedBox(height: ThemeConstants.spacingMd),
                           Text(
                             'Aucune boisson',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          SizedBox(height: ThemeConstants.spacingXs),
+                          const SizedBox(height: ThemeConstants.spacingXs),
                           Text(
                             'Ajoutez votre première boisson ci-dessus',
                             style: Theme.of(context).textTheme.bodySmall,
@@ -139,7 +139,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
                 : ListView.separated(
                     itemCount: provider.boissons.length,
                     separatorBuilder: (_, __) =>
-                        SizedBox(height: ThemeConstants.spacingSm),
+                        const SizedBox(height: ThemeConstants.spacingSm),
                     itemBuilder: (context, index) {
                       final boisson = provider.boissons[index];
                       return BoissonListItem(

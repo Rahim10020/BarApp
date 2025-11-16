@@ -76,14 +76,15 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Configuration'),
+        title: const Text('Configuration'),
         centerTitle: true,
       ),
       body: Center(
         child: SingleChildScrollView(
           padding: ThemeConstants.pagePadding,
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: ThemeConstants.maxWidthForm),
+            constraints:
+                const BoxConstraints(maxWidth: ThemeConstants.maxWidthForm),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,7 +95,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
                   size: ThemeConstants.iconSize2Xl,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                SizedBox(height: ThemeConstants.spacingLg),
+                const SizedBox(height: ThemeConstants.spacingLg),
 
                 // Titre
                 Text(
@@ -102,7 +103,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: ThemeConstants.spacingSm),
+                const SizedBox(height: ThemeConstants.spacingSm),
 
                 // Sous-titre
                 Text(
@@ -110,7 +111,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
                   style: Theme.of(context).textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: ThemeConstants.spacingXl),
+                const SizedBox(height: ThemeConstants.spacingXl),
 
                 // Champ nom
                 AppTextField(
@@ -119,7 +120,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
                   hint: 'Ex: Le Comptoir',
                   prefixIcon: Icons.store,
                 ),
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
 
                 // Champ adresse
                 AppTextField(
@@ -129,7 +130,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
                   prefixIcon: Icons.contact_mail,
                   keyboardType: TextInputType.emailAddress,
                 ),
-                SizedBox(height: ThemeConstants.spacingXl),
+                const SizedBox(height: ThemeConstants.spacingXl),
 
                 // Bouton créer
                 AppButton.primary(

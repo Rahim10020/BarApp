@@ -45,18 +45,18 @@ class _CommandeFormState extends State<CommandeForm> {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
                   color: AppColors.expense.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.receipt_long_rounded,
                   color: AppColors.expense,
                   size: ThemeConstants.iconSizeMd,
                 ),
               ),
-              SizedBox(width: ThemeConstants.spacingMd),
+              const SizedBox(width: ThemeConstants.spacingMd),
               Text(
                 'Nouvelle Commande',
                 style: Theme.of(context).textTheme.titleMedium,
@@ -64,7 +64,7 @@ class _CommandeFormState extends State<CommandeForm> {
             ],
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Sélection Fournisseur Existant
           AppDropdown<Fournisseur>(
@@ -81,14 +81,15 @@ class _CommandeFormState extends State<CommandeForm> {
             onChanged: widget.onFournisseurChanged,
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Divider avec "OU"
           Row(
             children: [
               Expanded(child: Divider(color: Theme.of(context).dividerColor)),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: ThemeConstants.spacingSm),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: ThemeConstants.spacingSm),
                 child: Text(
                   'OU',
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
@@ -100,14 +101,14 @@ class _CommandeFormState extends State<CommandeForm> {
             ],
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Nouveau Fournisseur
           Text(
             'Créer un nouveau fournisseur',
             style: Theme.of(context).textTheme.labelLarge,
           ),
-          SizedBox(height: ThemeConstants.spacingSm),
+          const SizedBox(height: ThemeConstants.spacingSm),
 
           AppTextField(
             controller: widget.nomFournisseurController,
@@ -116,7 +117,7 @@ class _CommandeFormState extends State<CommandeForm> {
             prefixIcon: Icons.person_rounded,
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppTextField(
             controller: widget.adresseFournisseurController,
@@ -126,29 +127,30 @@ class _CommandeFormState extends State<CommandeForm> {
             maxLines: 2,
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Sélecteur de Casiers
           Text(
             'Casiers à commander (${widget.casiersSelectionnes.length} sélectionné${widget.casiersSelectionnes.length > 1 ? 's' : ''})',
             style: Theme.of(context).textTheme.labelLarge,
           ),
-          SizedBox(height: ThemeConstants.spacingSm),
+          const SizedBox(height: ThemeConstants.spacingSm),
 
           widget.provider.casiers.isEmpty
               ? Container(
-                  padding: EdgeInsets.all(ThemeConstants.spacingMd),
+                  padding: const EdgeInsets.all(ThemeConstants.spacingMd),
                   decoration: BoxDecoration(
                     color: AppColors.warning.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                    borderRadius:
+                        BorderRadius.circular(ThemeConstants.radiusMd),
                     border: Border.all(
                       color: AppColors.warning.withOpacity(0.3),
                     ),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.info_outline, color: AppColors.warning),
-                      SizedBox(width: ThemeConstants.spacingSm),
+                      const Icon(Icons.info_outline, color: AppColors.warning),
+                      const SizedBox(width: ThemeConstants.spacingSm),
                       Expanded(
                         child: Text(
                           'Aucun casier disponible. Créez des casiers d\'abord.',
@@ -162,7 +164,8 @@ class _CommandeFormState extends State<CommandeForm> {
                   itemCount: widget.provider.casiers.length,
                   itemBuilder: (context, index) {
                     final casier = widget.provider.casiers[index];
-                    final isSelected = widget.casiersSelectionnes.contains(casier);
+                    final isSelected =
+                        widget.casiersSelectionnes.contains(casier);
 
                     return GestureDetector(
                       onTap: () => setState(() {
@@ -174,18 +177,21 @@ class _CommandeFormState extends State<CommandeForm> {
                       }),
                       child: AnimatedContainer(
                         duration: ThemeConstants.animationFast,
-                        margin: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.symmetric(
                           horizontal: ThemeConstants.spacingXs,
                         ),
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: ThemeConstants.spacingMd,
                           vertical: ThemeConstants.spacingSm,
                         ),
                         decoration: BoxDecoration(
                           color: isSelected
                               ? AppColors.primary
-                              : Theme.of(context).colorScheme.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest,
+                          borderRadius:
+                              BorderRadius.circular(ThemeConstants.radiusMd),
                           border: Border.all(
                             color: isSelected
                                 ? AppColors.primary
@@ -200,14 +206,21 @@ class _CommandeFormState extends State<CommandeForm> {
                           children: [
                             Text(
                               'Casier #${casier.id}',
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
                                     color: isSelected ? Colors.white : null,
-                                    fontWeight: isSelected ? FontWeight.bold : null,
+                                    fontWeight:
+                                        isSelected ? FontWeight.bold : null,
                                   ),
                             ),
                             Text(
                               '${casier.boissonTotal} unités',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
                                     color: isSelected
                                         ? Colors.white.withOpacity(0.9)
                                         : AppColors.textSecondary,
@@ -220,7 +233,7 @@ class _CommandeFormState extends State<CommandeForm> {
                   },
                 ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Bouton Créer
           AppButton.primary(

@@ -87,7 +87,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
             onResetForm: _resetForm,
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Liste des réfrigérateurs
           Expanded(
@@ -102,12 +102,12 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,
                           ),
-                          SizedBox(height: ThemeConstants.spacingMd),
+                          const SizedBox(height: ThemeConstants.spacingMd),
                           Text(
                             'Aucun réfrigérateur',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          SizedBox(height: ThemeConstants.spacingXs),
+                          const SizedBox(height: ThemeConstants.spacingXs),
                           Text(
                             'Ajoutez votre premier réfrigérateur ci-dessus',
                             style: Theme.of(context).textTheme.bodySmall,
@@ -119,7 +119,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                 : ListView.separated(
                     itemCount: provider.refrigerateurs.length,
                     separatorBuilder: (_, __) =>
-                        SizedBox(height: ThemeConstants.spacingSm),
+                        const SizedBox(height: ThemeConstants.spacingSm),
                     itemBuilder: (context, index) {
                       final refrigerateur = provider.refrigerateurs[index];
                       return RefrigerateurListItem(

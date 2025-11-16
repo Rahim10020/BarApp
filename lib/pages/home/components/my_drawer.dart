@@ -86,18 +86,18 @@ class MyDrawer extends StatelessWidget {
             children: [
               // Icône
               Container(
-                padding: EdgeInsets.all(ThemeConstants.spacingMd),
+                padding: const EdgeInsets.all(ThemeConstants.spacingMd),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusXl),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.local_bar_rounded,
                   size: ThemeConstants.iconSize2Xl,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: ThemeConstants.spacingMd),
+              const SizedBox(height: ThemeConstants.spacingMd),
 
               // Nom du bar
               Text(
@@ -110,7 +110,7 @@ class MyDrawer extends StatelessWidget {
 
               // Contact
               if (barContact.isNotEmpty) ...[
-                SizedBox(height: ThemeConstants.spacingXs),
+                const SizedBox(height: ThemeConstants.spacingXs),
                 Text(
                   barContact,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -135,7 +135,7 @@ class MyDrawer extends StatelessWidget {
   }) {
     return ListTile(
       leading: Container(
-        padding: EdgeInsets.all(ThemeConstants.spacingSm),
+        padding: const EdgeInsets.all(ThemeConstants.spacingSm),
         decoration: BoxDecoration(
           color: AppColors.primary.withOpacity(0.1),
           borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
@@ -155,7 +155,7 @@ class MyDrawer extends StatelessWidget {
         style: Theme.of(context).textTheme.bodySmall,
       ),
       onTap: onTap,
-      contentPadding: EdgeInsets.symmetric(
+      contentPadding: const EdgeInsets.symmetric(
         horizontal: ThemeConstants.spacingMd,
         vertical: ThemeConstants.spacingXs,
       ),
@@ -177,12 +177,12 @@ class MyDrawer extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.local_bar_rounded,
             size: ThemeConstants.iconSizeSm,
             color: AppColors.primary,
           ),
-          SizedBox(width: ThemeConstants.spacingSm),
+          const SizedBox(width: ThemeConstants.spacingSm),
           Text(
             'BarApp v1.0',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(

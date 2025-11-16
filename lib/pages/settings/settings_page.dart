@@ -85,16 +85,17 @@ class _SettingsPageState extends State<SettingsPage> {
             'Apparence',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             child: Row(
               children: [
                 Container(
-                  padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                  padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                    borderRadius:
+                        BorderRadius.circular(ThemeConstants.radiusMd),
                   ),
                   child: Icon(
                     themeProvider.isDarkMode
@@ -104,7 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     size: ThemeConstants.iconSizeMd,
                   ),
                 ),
-                SizedBox(width: ThemeConstants.spacingMd),
+                const SizedBox(width: ThemeConstants.spacingMd),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,20 +124,20 @@ class _SettingsPageState extends State<SettingsPage> {
                 CupertinoSwitch(
                   value: themeProvider.isDarkMode,
                   onChanged: (_) => themeProvider.toggleTheme(),
-                  activeColor: AppColors.primary,
+                  activeTrackColor: AppColors.primary,
                 ),
               ],
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingXl),
+          const SizedBox(height: ThemeConstants.spacingXl),
 
           // Section Données
           Text(
             'Sauvegarde et Restauration',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             child: Column(
@@ -144,12 +145,12 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.backup_rounded,
                       color: AppColors.info,
                       size: ThemeConstants.iconSizeMd,
                     ),
-                    SizedBox(width: ThemeConstants.spacingSm),
+                    const SizedBox(width: ThemeConstants.spacingSm),
                     Text(
                       'Gestion des données',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -158,12 +159,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: ThemeConstants.spacingSm),
+                const SizedBox(height: ThemeConstants.spacingSm),
                 Text(
                   'Sauvegardez vos données régulièrement pour éviter toute perte.',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
 
                 // Boutons d'action
                 Row(
@@ -177,7 +178,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         onPressed: () => _handleBackup(barProvider),
                       ),
                     ),
-                    SizedBox(width: ThemeConstants.spacingMd),
+                    const SizedBox(width: ThemeConstants.spacingMd),
                     Expanded(
                       child: AppButton.secondary(
                         text: 'Restaurer',
@@ -192,14 +193,14 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingXl),
+          const SizedBox(height: ThemeConstants.spacingXl),
 
           // Section À propos
           Text(
             'À propos',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             child: Column(
@@ -210,14 +211,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   label: 'Version',
                   value: '1.0.0',
                 ),
-                Divider(height: ThemeConstants.spacingLg),
+                const Divider(height: ThemeConstants.spacingLg),
                 _buildInfoRow(
                   context,
                   icon: Icons.local_bar_rounded,
                   label: 'Application',
                   value: 'BarApp',
                 ),
-                Divider(height: ThemeConstants.spacingLg),
+                const Divider(height: ThemeConstants.spacingLg),
                 _buildInfoRow(
                   context,
                   icon: Icons.business_rounded,
@@ -228,7 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingXl),
+          const SizedBox(height: ThemeConstants.spacingXl),
 
           // Section Danger
           Text(
@@ -237,7 +238,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   color: AppColors.error,
                 ),
           ),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             color: AppColors.error.withOpacity(0.1),
@@ -250,12 +251,12 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.warning_rounded,
                       color: AppColors.error,
                       size: ThemeConstants.iconSizeMd,
                     ),
-                    SizedBox(width: ThemeConstants.spacingSm),
+                    const SizedBox(width: ThemeConstants.spacingSm),
                     Text(
                       'Actions irréversibles',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -264,12 +265,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: ThemeConstants.spacingSm),
+                const SizedBox(height: ThemeConstants.spacingSm),
                 Text(
                   'Ces actions ne peuvent pas être annulées.',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
                 AppButton(
                   text: 'Réinitialiser les données',
                   icon: Icons.delete_forever_rounded,
@@ -295,7 +296,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingXl),
+          const SizedBox(height: ThemeConstants.spacingXl),
         ],
       ),
     );
@@ -314,7 +315,7 @@ class _SettingsPageState extends State<SettingsPage> {
           color: AppColors.primary,
           size: ThemeConstants.iconSizeSm,
         ),
-        SizedBox(width: ThemeConstants.spacingMd),
+        const SizedBox(width: ThemeConstants.spacingMd),
         Expanded(
           child: Text(
             label,
