@@ -88,7 +88,7 @@ class MyDrawer extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(ThemeConstants.spacingMd),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusXl),
                 ),
                 child: const Icon(
@@ -114,7 +114,7 @@ class MyDrawer extends StatelessWidget {
                 Text(
                   barContact,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                 ),
               ],
@@ -137,7 +137,7 @@ class MyDrawer extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(ThemeConstants.spacingSm),
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.1),
+          color: AppColors.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
         ),
         child: Icon(

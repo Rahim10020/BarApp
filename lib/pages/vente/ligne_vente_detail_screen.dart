@@ -60,7 +60,7 @@ class LigneVenteDetailScreen extends StatelessWidget {
                 const SizedBox(width: ThemeConstants.spacingMd),
                 Expanded(
                   child: AppCard(
-                    color: AppColors.revenue.withOpacity(0.1),
+                    color: AppColors.revenue.withValues(alpha: 0.1),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -119,7 +119,7 @@ class LigneVenteDetailScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(ThemeConstants.spacingMd),
                     decoration: BoxDecoration(
-                      color: AppColors.coldDrink.withOpacity(0.1),
+                      color: AppColors.coldDrink.withValues(alpha: 0.1),
                       borderRadius:
                           BorderRadius.circular(ThemeConstants.radiusMd),
                     ),
@@ -150,7 +150,7 @@ class LigneVenteDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.chevron_right_rounded,
                     color: AppColors.textSecondary,
                   ),

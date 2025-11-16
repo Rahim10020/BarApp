@@ -44,7 +44,7 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
     _boissonTotalController.dispose();
   }
 
-  void _modifierCasier(BarProvider provider, Casier casier) async {
+  void _modifierCasier(BarAppProvider provider, Casier casier) async {
     if (_boissonTotalController.text.isEmpty ||
         _boissonTotalController.text == "") {
       showDialog(

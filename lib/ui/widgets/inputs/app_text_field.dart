@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../theme/app_colors.dart';
 import '../../theme/theme_constants.dart';
 
 /// Text field réutilisable avec styles cohérents
@@ -167,11 +166,12 @@ class AppDropdown<T> extends StatelessWidget {
           onChanged: enabled ? onChanged : null,
           hint: hint != null ? Text(hint!) : null,
           validator: validator,
-          decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(
               horizontal: ThemeConstants.spacingMd,
               vertical: ThemeConstants.spacingSm,
             ),
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
           ),
         ),
       ],
@@ -321,13 +321,14 @@ class AppTimeField extends StatelessWidget {
       readOnly: true,
       prefixIcon: Icons.access_time,
       onTap: () async {
+        final localizations = MaterialLocalizations.of(context);
         final time = await showTimePicker(
           context: context,
           initialTime: initialTime ?? TimeOfDay.now(),
         );
 
         if (time != null) {
-          controller.text = time.format(context);
+          controller.text = localizations.formatTimeOfDay(time);
           onTimeSelected?.call(time);
         }
       },

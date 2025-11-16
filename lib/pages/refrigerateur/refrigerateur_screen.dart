@@ -7,6 +7,7 @@ import 'package:projet7/ui/theme/app_colors.dart';
 import 'package:projet7/ui/theme/theme_constants.dart';
 import 'package:projet7/ui/widgets/cards/app_card.dart';
 import 'package:provider/provider.dart';
+import 'package:projet7/ui/widgets/dialogs/app_dialogs.dart';
 
 /// Écran de gestion des réfrigérateurs
 class RefrigerateurScreen extends StatefulWidget {
@@ -97,7 +98,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.kitchen_outlined,
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,

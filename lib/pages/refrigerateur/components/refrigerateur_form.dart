@@ -40,7 +40,7 @@ class _RefrigerateurFormState extends State<RefrigerateurForm> {
               Container(
                 padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
-                  color: AppColors.coldDrink.withOpacity(0.1),
+                  color: AppColors.coldDrink.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                 ),
                 child: const Icon(

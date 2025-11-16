@@ -3,7 +3,6 @@ import 'package:projet7/pages/detail/boisson/boisson_screen.dart';
 import 'package:projet7/pages/detail/casier/casier_screen.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_screen.dart';
 import 'package:projet7/ui/theme/app_colors.dart';
-import 'package:projet7/ui/theme/theme_constants.dart';
 
 /// Écran Stock - Regroupe Boissons, Casiers et Réfrigérateurs
 class StockScreen extends StatefulWidget {
@@ -48,7 +47,7 @@ class _StockScreenState extends State<StockScreen>
             controller: _tabController,
             labelColor: AppColors.primary,
             unselectedLabelColor:
-                Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
             indicatorColor: AppColors.primary,
             indicatorWeight: 3,
             labelStyle: Theme.of(context).textTheme.titleSmall,

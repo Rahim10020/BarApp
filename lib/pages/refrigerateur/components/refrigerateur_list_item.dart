@@ -38,7 +38,7 @@ class RefrigerateurListItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
-              color: AppColors.coldDrink.withOpacity(0.1),
+              color: AppColors.coldDrink.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
             child: const Icon(
@@ -85,7 +85,7 @@ class RefrigerateurListItem extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
-                    Icon(
+                    const Icon(
                       Icons.local_drink_rounded,
                       size: ThemeConstants.iconSizeSm,
                       color: AppColors.textSecondary,

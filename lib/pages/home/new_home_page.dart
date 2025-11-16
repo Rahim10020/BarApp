@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:projet7/pages/commande/commande_screen.dart';
-import 'package:projet7/pages/detail/boisson/boisson_screen.dart';
-import 'package:projet7/pages/detail/casier/casier_screen.dart';
 import 'package:projet7/pages/home/components/dashboard_widget.dart';
 import 'package:projet7/pages/home/components/my_drawer.dart';
 import 'package:projet7/pages/home/screens/gestion_screen.dart';
 import 'package:projet7/pages/home/screens/stock_screen.dart';
-import 'package:projet7/pages/refrigerateur/refrigerateur_screen.dart';
-import 'package:projet7/pages/reports/reports_screen.dart';
 import 'package:projet7/pages/search/search_screen.dart';
 import 'package:projet7/pages/vente/vente_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
@@ -94,7 +89,7 @@ class _NewHomePageState extends State<NewHomePage> {
         color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -168,7 +163,7 @@ class _NewHomePageState extends State<NewHomePage> {
           decoration: BoxDecoration(
             color: isSelected
                 ? (isDark ? AppColors.primaryLight : AppColors.primary)
-                    .withOpacity(0.1)
+                    .withValues(alpha: 0.1)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
           ),

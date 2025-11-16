@@ -41,10 +41,12 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
 
       final result = await OpenFile.open(filePath);
 
-      if (mounted) {
-        if (result.type == ResultType.done) {
+      if (result.type == ResultType.done) {
+        if (mounted) {
           context.showSuccessSnackBar('PDF ouvert avec succès');
-        } else {
+        }
+      } else {
+        if (mounted) {
           context.showErrorSnackBar(
               'Impossible d\'ouvrir le PDF : ${result.message}');
         }
@@ -92,13 +94,13 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
           children: [
             // En-tête avec montant total
             AppCard(
-              color: AppColors.revenue.withOpacity(0.1),
+              color: AppColors.revenue.withValues(alpha: 0.1),
               child: Row(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(ThemeConstants.spacingMd),
                     decoration: BoxDecoration(
-                      color: AppColors.revenue.withOpacity(0.2),
+                      color: AppColors.revenue.withValues(alpha: 0.2),
                       borderRadius:
                           BorderRadius.circular(ThemeConstants.radiusMd),
                     ),
@@ -178,7 +180,7 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.shopping_cart_outlined,
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,
@@ -212,7 +214,8 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                                 padding: const EdgeInsets.all(
                                     ThemeConstants.spacingSm),
                                 decoration: BoxDecoration(
-                                  color: AppColors.coldDrink.withOpacity(0.1),
+                                  color: AppColors.coldDrink
+                                      .withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(
                                       ThemeConstants.radiusSm),
                                 ),
@@ -248,7 +251,7 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                                   ],
                                 ),
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.chevron_right_rounded,
                                 color: AppColors.textSecondary,
                               ),

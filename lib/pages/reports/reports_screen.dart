@@ -6,6 +6,7 @@ import 'package:projet7/ui/theme/theme_constants.dart';
 import 'package:projet7/ui/widgets/buttons/app_button.dart';
 import 'package:projet7/ui/widgets/cards/app_card.dart';
 import 'package:projet7/ui/widgets/dialogs/app_dialogs.dart';
+import 'package:projet7/ui/widgets/inputs/app_text_field.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 
@@ -72,7 +73,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     Container(
                       padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                       decoration: BoxDecoration(
-                        color: AppColors.info.withOpacity(0.1),
+                        color: AppColors.info.withValues(alpha: 0.1),
                         borderRadius:
                             BorderRadius.circular(ThemeConstants.radiusMd),
                       ),
@@ -167,11 +168,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         _endDate,
                         _selectedPeriod,
                       );
-                      if (mounted) {
+                      if (context.mounted) {
                         context.showSuccessSnackBar('PDF exporté: $filePath');
                       }
                     } catch (e) {
-                      if (mounted) {
+                      if (context.mounted) {
                         context
                             .showErrorSnackBar('Erreur lors de l\'export PDF');
                       }
@@ -250,8 +251,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
           AppCard(
             color: (totalRevenue - totalOrderCost) >= 0
-                ? AppColors.success.withOpacity(0.05)
-                : AppColors.error.withOpacity(0.05),
+                ? AppColors.success.withValues(alpha: 0.05)
+                : AppColors.error.withValues(alpha: 0.05),
             child: _buildReportRow(
               context,
               'Bénéfice (Revenus - Coûts)',
@@ -481,7 +482,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               dotData: const FlDotData(show: true),
               belowBarData: BarAreaData(
                 show: true,
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
               ),
             ),
           ],

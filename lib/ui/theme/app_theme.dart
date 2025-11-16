@@ -29,7 +29,7 @@ class AppTheme {
       onSurface: AppColors.textPrimaryLight,
       onError: Colors.white,
       outline: AppColors.borderLight,
-      shadow: Colors.black.withOpacity(0.1),
+      shadow: Colors.black.withValues(alpha: 0.1),
     ),
 
     // Scaffold
@@ -55,7 +55,7 @@ class AppTheme {
       elevation: ThemeConstants.cardElevation,
       color: AppColors.cardLight,
       surfaceTintColor: Colors.transparent,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: const RoundedRectangleBorder(
         borderRadius: ThemeConstants.cardBorderRadius,
       ),
@@ -330,7 +330,7 @@ class AppTheme {
       onSurface: AppColors.textPrimaryDark,
       onError: AppColors.greyDark900,
       outline: AppColors.borderDark,
-      shadow: Colors.black.withOpacity(0.3),
+      shadow: Colors.black.withValues(alpha: 0.3),
     ),
 
     // Scaffold
@@ -356,7 +356,7 @@ class AppTheme {
       elevation: ThemeConstants.cardElevation,
       color: AppColors.cardDark,
       surfaceTintColor: Colors.transparent,
-      shadowColor: Colors.black.withOpacity(0.3),
+      shadowColor: Colors.black.withValues(alpha: 0.3),
       shape: const RoundedRectangleBorder(
         borderRadius: ThemeConstants.cardBorderRadius,
       ),

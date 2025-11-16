@@ -93,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Container(
                   padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius:
                         BorderRadius.circular(ThemeConstants.radiusMd),
                   ),
@@ -241,9 +241,9 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
-            color: AppColors.error.withOpacity(0.1),
+            color: AppColors.error.withValues(alpha: 0.1),
             border: Border.all(
-              color: AppColors.error.withOpacity(0.3),
+              color: AppColors.error.withValues(alpha: 0.3),
               width: ThemeConstants.borderWidthThin,
             ),
             child: Column(

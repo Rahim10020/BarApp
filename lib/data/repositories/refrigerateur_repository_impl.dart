@@ -1,4 +1,3 @@
-import 'package:projet7/data/datasources/hive_local_datasource.dart';
 import 'package:projet7/data/repositories/base_repository_impl.dart';
 import 'package:projet7/domain/repositories/i_refrigerateur_repository.dart';
 import 'package:projet7/models/refrigerateur.dart';
@@ -10,7 +9,7 @@ class RefrigerateurRepositoryImpl extends BaseRepositoryImpl<Refrigerateur>
   @override
   List<Refrigerateur> getByTemperatureRange(double min, double max) {
     return getAll()
-        .where((r) => r.temperature >= min && r.temperature <= max)
+        .where((r) => r.temperature! >= min && r.temperature! <= max)
         .toList();
   }
 

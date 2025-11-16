@@ -105,11 +105,6 @@ class _CasierScreenState extends State<CasierScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.inventory_outlined,
-                size: ThemeConstants.iconSize3Xl,
-                color: AppColors.textSecondary,
-              ),
               const SizedBox(height: ThemeConstants.spacingMd),
               Text(
                 'Aucune boisson disponible',
@@ -142,7 +137,7 @@ class _CasierScreenState extends State<CasierScreen> {
                     Container(
                       padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius:
                             BorderRadius.circular(ThemeConstants.radiusMd),
                       ),
@@ -237,7 +232,7 @@ class _CasierScreenState extends State<CasierScreen> {
                                     .bodySmall
                                     ?.copyWith(
                                       color: isSelected
-                                          ? Colors.white.withOpacity(0.9)
+                                          ? Colors.white.withValues(alpha: 0.9)
                                           : AppColors.textSecondary,
                                     ),
                               ),
@@ -272,7 +267,7 @@ class _CasierScreenState extends State<CasierScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.inventory_outlined,
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,
@@ -300,6 +295,29 @@ class _CasierScreenState extends State<CasierScreen> {
                       return _CasierListItem(
                         casier: casier,
                         provider: provider,
+                        onDelete: () async {
+                          final confirmed = await AppDialogs.showDeleteDialog(
+                            context,
+                            title: 'Supprimer le casier',
+                            message:
+                                'Voulez-vous vraiment supprimer ce casier ?',
+                          );
+
+                          if (confirmed == true && context.mounted) {
+                            try {
+                              await provider.deleteCasier(casier);
+                              if (context.mounted) {
+                                context.showSuccessSnackBar(
+                                    'Casier #${casier.id} supprimé');
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                context.showErrorSnackBar(
+                                    'Erreur: ${e.toString()}');
+                              }
+                            }
+                          }
+                        },
                       );
                     },
                   ),
@@ -314,10 +332,12 @@ class _CasierScreenState extends State<CasierScreen> {
 class _CasierListItem extends StatelessWidget {
   final Casier casier;
   final BarAppProvider provider;
+  final VoidCallback onDelete;
 
   const _CasierListItem({
     required this.casier,
     required this.provider,
+    required this.onDelete,
   });
 
   @override
@@ -335,7 +355,7 @@ class _CasierListItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
-              color: AppColors.stockAvailable.withOpacity(0.1),
+              color: AppColors.stockAvailable.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
             child: const Icon(
@@ -361,7 +381,7 @@ class _CasierListItem extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius:
                             BorderRadius.circular(ThemeConstants.radiusSm),
                       ),
@@ -428,27 +448,7 @@ class _CasierListItem extends StatelessWidget {
                   color: AppColors.error,
                   size: ThemeConstants.iconSizeMd,
                 ),
-                onPressed: () async {
-                  final confirmed = await AppDialogs.showDeleteDialog(
-                    context,
-                    title: 'Supprimer le casier',
-                    message: 'Voulez-vous vraiment supprimer ce casier ?',
-                  );
-
-                  if (confirmed == true && context.mounted) {
-                    try {
-                      await provider.deleteCasier(casier);
-                      if (context.mounted) {
-                        context.showSuccessSnackBar(
-                            'Casier #${casier.id} supprimé');
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        context.showErrorSnackBar('Erreur: ${e.toString()}');
-                      }
-                    }
-                  }
-                },
+                onPressed: onDelete,
               ),
             ],
           ),

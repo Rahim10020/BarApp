@@ -117,7 +117,7 @@ class _BoissonScreenState extends State<BoissonScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.local_bar_outlined,
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,

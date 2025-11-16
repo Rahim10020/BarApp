@@ -36,8 +36,8 @@ class BoissonListItem extends StatelessWidget {
             padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
               color: boisson.estFroid
-                  ? AppColors.coldDrink.withOpacity(0.1)
-                  : AppColors.primary.withOpacity(0.1),
+                  ? AppColors.coldDrink.withValues(alpha: 0.1)
+                  : AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
             child: Icon(
@@ -73,7 +73,7 @@ class BoissonListItem extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.info.withOpacity(0.1),
+                        color: AppColors.info.withValues(alpha: 0.1),
                         borderRadius:
                             BorderRadius.circular(ThemeConstants.radiusSm),
                       ),

@@ -21,7 +21,7 @@ class CommandeDetailScreen extends StatefulWidget {
 class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
   String? _pdfPath; // Stocker le chemin du PDF généré
 
-  Future<void> _downloadAndOpenPdf(BarProvider provider) async {
+  Future<void> _downloadAndOpenPdf(BarAppProvider provider) async {
     try {
       String filePath = await provider.generateCommandePdf(widget.commande);
       if (mounted) {

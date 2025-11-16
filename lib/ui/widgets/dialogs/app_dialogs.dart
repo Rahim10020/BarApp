@@ -41,11 +41,9 @@ class AppDialogs {
     String? title,
     String? message,
   }) {
-    final dialogTitle = title ?? 'Supprimer ${itemName ?? 'cet élément'} ?';
-    final dialogMessage = message ??
-        (itemName != null
-            ? 'Voulez-vous vraiment supprimer $itemName ? Cette action est irréversible.'
-            : 'Voulez-vous vraiment supprimer cet élément ? Cette action est irréversible.');
+    (itemName != null
+        ? 'Voulez-vous vraiment supprimer $itemName ? Cette action est irréversible.'
+        : 'Voulez-vous vraiment supprimer cet élément ? Cette action est irréversible.');
 
     return showConfirmDialog(
       context,

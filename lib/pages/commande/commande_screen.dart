@@ -134,7 +134,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.receipt_long_outlined,
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,
@@ -197,7 +197,7 @@ class _CommandeListItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
-              color: AppColors.expense.withOpacity(0.1),
+              color: AppColors.expense.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
             child: const Icon(
@@ -223,7 +223,7 @@ class _CommandeListItem extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius:
                             BorderRadius.circular(ThemeConstants.radiusSm),
                       ),

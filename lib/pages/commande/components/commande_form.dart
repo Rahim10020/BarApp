@@ -47,7 +47,7 @@ class _CommandeFormState extends State<CommandeForm> {
               Container(
                 padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
-                  color: AppColors.expense.withOpacity(0.1),
+                  color: AppColors.expense.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                 ),
                 child: const Icon(
@@ -140,11 +140,11 @@ class _CommandeFormState extends State<CommandeForm> {
               ? Container(
                   padding: const EdgeInsets.all(ThemeConstants.spacingMd),
                   decoration: BoxDecoration(
-                    color: AppColors.warning.withOpacity(0.1),
+                    color: AppColors.warning.withValues(alpha: 0.1),
                     borderRadius:
                         BorderRadius.circular(ThemeConstants.radiusMd),
                     border: Border.all(
-                      color: AppColors.warning.withOpacity(0.3),
+                      color: AppColors.warning.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Row(
@@ -222,7 +222,7 @@ class _CommandeFormState extends State<CommandeForm> {
                                   .bodySmall
                                   ?.copyWith(
                                     color: isSelected
-                                        ? Colors.white.withOpacity(0.9)
+                                        ? Colors.white.withValues(alpha: 0.9)
                                         : AppColors.textSecondary,
                                   ),
                             ),

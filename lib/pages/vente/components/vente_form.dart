@@ -37,7 +37,7 @@ class _VenteFormState extends State<VenteForm> {
       return AppCard(
         child: Column(
           children: [
-            Icon(
+            const Icon(
               Icons.inventory_2_outlined,
               size: ThemeConstants.iconSize2Xl,
               color: AppColors.textSecondary,
@@ -61,10 +61,11 @@ class _VenteFormState extends State<VenteForm> {
     return AnimatedContainer(
       duration: ThemeConstants.animationNormal,
       child: AppCard(
-        color: widget.isAdding ? AppColors.success.withOpacity(0.1) : null,
+        color:
+            widget.isAdding ? AppColors.success.withValues(alpha: 0.1) : null,
         border: widget.isAdding
             ? Border.all(
-                color: AppColors.success.withOpacity(0.3),
+                color: AppColors.success.withValues(alpha: 0.3),
                 width: ThemeConstants.borderWidthMedium,
               )
             : null,
@@ -77,7 +78,7 @@ class _VenteFormState extends State<VenteForm> {
                 Container(
                   padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius:
                         BorderRadius.circular(ThemeConstants.radiusMd),
                   ),
@@ -231,10 +232,10 @@ class _BoissonChip extends StatelessWidget {
             ),
             const SizedBox(height: ThemeConstants.spacingXs),
             Text(
-              boisson.getModele(),
+              boisson.getModele() ?? 'N/A',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: isSelected
-                        ? Colors.white.withOpacity(0.9)
+                        ? Colors.white.withValues(alpha: 0.9)
                         : AppColors.textSecondary,
                   ),
             ),

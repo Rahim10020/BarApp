@@ -46,7 +46,7 @@ class _GestionScreenState extends State<GestionScreen>
             controller: _tabController,
             labelColor: AppColors.primary,
             unselectedLabelColor:
-                Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
             indicatorColor: AppColors.primary,
             indicatorWeight: 3,
             labelStyle: Theme.of(context).textTheme.titleSmall,

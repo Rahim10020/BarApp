@@ -34,7 +34,7 @@ class VenteListItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
-              color: AppColors.revenue.withOpacity(0.1),
+              color: AppColors.revenue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
             child: const Icon(
@@ -60,7 +60,7 @@ class VenteListItem extends StatelessWidget {
                         vertical: ThemeConstants.spacingXs,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius:
                             BorderRadius.circular(ThemeConstants.radiusSm),
                       ),
@@ -91,7 +91,7 @@ class VenteListItem extends StatelessWidget {
                 // Date
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.calendar_today_rounded,
                       size: ThemeConstants.iconSizeSm,
                       color: AppColors.textSecondary,

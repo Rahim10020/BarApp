@@ -39,7 +39,7 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
     _descriptionController.dispose();
   }
 
-  void _modifierBoisson(BarProvider provider, Boisson boisson) {
+  void _modifierBoisson(BarAppProvider provider, Boisson boisson) {
     if (_nomController.text.isEmpty || _nomController.text == "") {
       showDialog(
         context: context,

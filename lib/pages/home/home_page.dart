@@ -10,7 +10,7 @@ import 'package:projet7/pages/refrigerateur/refrigerateur_screen.dart';
 import 'package:projet7/pages/reports/reports_screen.dart';
 import 'package:projet7/pages/search/search_screen.dart';
 import 'package:projet7/pages/vente/vente_screen.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BarProvider>(
+    return Consumer<BarAppProvider>(
       builder: (context, bar, child) => Scaffold(
         appBar: AppBar(
           elevation: 0,

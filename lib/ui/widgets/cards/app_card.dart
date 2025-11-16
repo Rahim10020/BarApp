@@ -83,7 +83,7 @@ class AppInfoCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
-              color: (iconColor ?? AppColors.primary).withOpacity(0.1),
+              color: (iconColor ?? AppColors.primary).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
             child: Icon(
@@ -154,7 +154,7 @@ class AppStatCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
-                  color: statColor.withOpacity(0.1),
+                  color: statColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                 ),
                 child: Icon(
@@ -172,7 +172,7 @@ class AppStatCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color:
                         (isPositiveTrend ? AppColors.success : AppColors.error)
-                            .withOpacity(0.1),
+                            .withValues(alpha: 0.1),
                     borderRadius:
                         BorderRadius.circular(ThemeConstants.radiusSm),
                   ),
@@ -248,7 +248,8 @@ class AppListCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(ThemeConstants.spacingSm),
               decoration: BoxDecoration(
-                color: (leadingIconColor ?? AppColors.primary).withOpacity(0.1),
+                color: (leadingIconColor ?? AppColors.primary)
+                    .withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
               ),
               child: Icon(

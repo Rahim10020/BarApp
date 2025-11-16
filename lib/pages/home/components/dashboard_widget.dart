@@ -167,9 +167,9 @@ class DashboardWidget extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AppCard(
-      color: color.withOpacity(isDark ? 0.15 : 0.1),
+      color: color.withValues(alpha: isDark ? 0.15 : 0.1),
       border: Border.all(
-        color: color.withOpacity(0.3),
+        color: color.withValues(alpha: 0.3),
         width: ThemeConstants.borderWidthThin,
       ),
       child: Column(
@@ -181,7 +181,7 @@ class DashboardWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
+                  color: color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                 ),
                 child: Icon(
