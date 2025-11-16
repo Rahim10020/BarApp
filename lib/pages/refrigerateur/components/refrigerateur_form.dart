@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
+import 'package:projet7/ui/theme/app_colors.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
+import 'package:projet7/ui/widgets/buttons/app_button.dart';
+import 'package:projet7/ui/widgets/cards/app_card.dart';
+import 'package:projet7/ui/widgets/inputs/app_text_field.dart';
 
+/// Formulaire moderne pour ajouter un réfrigérateur
 class RefrigerateurForm extends StatefulWidget {
-  final BarProvider provider;
+  final BarAppProvider provider;
   final TextEditingController nomController;
   final TextEditingController tempController;
   final Function() onAjouterRefrigerateur;
@@ -25,52 +30,69 @@ class RefrigerateurForm extends StatefulWidget {
 class _RefrigerateurFormState extends State<RefrigerateurForm> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Text(
-              'Nouveau Réfrigérateur',
-              style: GoogleFonts.montserrat(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Titre
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                decoration: BoxDecoration(
+                  color: AppColors.coldDrink.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                ),
+                child: Icon(
+                  Icons.kitchen_rounded,
+                  color: AppColors.coldDrink,
+                  size: ThemeConstants.iconSizeMd,
+                ),
               ),
-            ),
-            TextField(
-              controller: widget.nomController,
-              decoration: InputDecoration(
-                labelText: 'Nom',
-                labelStyle: GoogleFonts.montserrat(),
+              SizedBox(width: ThemeConstants.spacingMd),
+              Text(
+                'Nouveau Réfrigérateur',
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-            ),
-            TextField(
-              controller: widget.tempController,
-              decoration: InputDecoration(
-                labelText: 'Température (°C)',
-                labelStyle: GoogleFonts.montserrat(),
+            ],
+          ),
+
+          SizedBox(height: ThemeConstants.spacingMd),
+
+          // Nom et Température (ligne)
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: AppTextField(
+                  controller: widget.nomController,
+                  label: 'Nom',
+                  hint: 'Ex: Frigo Principal',
+                  prefixIcon: Icons.label_rounded,
+                ),
               ),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(
-              height: 16.0,
-            ),
-            ElevatedButton.icon(
-              icon: const Icon(
-                Icons.kitchen,
-                color: Colors.white,
+              SizedBox(width: ThemeConstants.spacingMd),
+              Expanded(
+                child: AppNumberField(
+                  controller: widget.tempController,
+                  label: 'Temp. (°C)',
+                  hint: '4',
+                  prefixIcon: Icons.thermostat_rounded,
+                ),
               ),
-              label: Text(
-                'Ajouter',
-                style: GoogleFonts.montserrat(color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.brown[600],
-              ),
-              onPressed: widget.onAjouterRefrigerateur,
-            ),
-          ],
-        ),
+            ],
+          ),
+
+          SizedBox(height: ThemeConstants.spacingMd),
+
+          // Bouton Ajouter
+          AppButton.primary(
+            text: 'Ajouter le réfrigérateur',
+            icon: Icons.add_circle_rounded,
+            isFullWidth: true,
+            onPressed: widget.onAjouterRefrigerateur,
+          ),
+        ],
       ),
     );
   }
