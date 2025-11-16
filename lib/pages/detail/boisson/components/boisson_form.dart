@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/modele.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
+import 'package:projet7/ui/theme/app_colors.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
+import 'package:projet7/ui/widgets/buttons/app_button.dart';
+import 'package:projet7/ui/widgets/cards/app_card.dart';
+import 'package:projet7/ui/widgets/inputs/app_text_field.dart';
 
+/// Formulaire moderne pour ajouter une boisson
 class BoissonForm extends StatefulWidget {
-  final BarProvider provider;
+  final BarAppProvider provider;
   final TextEditingController nomController;
   final TextEditingController prixController;
   final TextEditingController descriptionController;
@@ -32,99 +37,96 @@ class BoissonForm extends StatefulWidget {
 class _BoissonFormState extends State<BoissonForm> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Ajouter une boisson',
-              style: GoogleFonts.montserrat(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Titre
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                ),
+                child: Icon(
+                  Icons.add_box_rounded,
+                  color: AppColors.primary,
+                  size: ThemeConstants.iconSizeMd,
+                ),
               ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: widget.nomController,
-                    decoration: InputDecoration(
-                      labelText: 'Nom',
-                      labelStyle: GoogleFonts.montserrat(),
-                      contentPadding: const EdgeInsets.all(8),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                      controller: widget.prixController,
-                      decoration: InputDecoration(
-                        labelText: 'Prix',
-                        labelStyle: GoogleFonts.montserrat(),
-                        contentPadding: const EdgeInsets.all(8),
-                      ),
-                      keyboardType: TextInputType.number),
-                ),
-              ],
-            ),
-            TextField(
-              controller: widget.descriptionController,
-              decoration: InputDecoration(
-                labelText: 'Description',
-                labelStyle: GoogleFonts.montserrat(),
-                contentPadding: const EdgeInsets.all(8),
+              SizedBox(width: ThemeConstants.spacingMd),
+              Text(
+                'Ajouter une boisson',
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButton<Modele>(
-                    hint: Text(
-                      'Modèle',
-                      style: GoogleFonts.montserrat(),
-                    ),
-                    value: widget.selectedModele,
-                    items: Modele.values
-                        .map(
-                          (modele) => DropdownMenuItem(
-                            value: modele,
-                            child: Text(
-                              modele == Modele.petit ? 'Petit' : 'Grand',
-                              style: GoogleFonts.montserrat(),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: widget.onModeleChanged,
-                  ),
+            ],
+          ),
+
+          SizedBox(height: ThemeConstants.spacingMd),
+
+          // Nom et Prix (ligne)
+          Row(
+            children: [
+              Expanded(
+                child: AppTextField(
+                  controller: widget.nomController,
+                  label: 'Nom',
+                  hint: 'Ex: Coca-Cola',
+                  prefixIcon: Icons.local_bar_rounded,
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Center(
-              child: ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.add,
-                  size: 18,
-                  color: Colors.white,
-                ),
-                label: Text(
-                  'Ajouter',
-                  style: GoogleFonts.montserrat(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.brown[600],
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                ),
-                onPressed: widget.onAjouterBoisson,
               ),
-            ),
-          ],
-        ),
+              SizedBox(width: ThemeConstants.spacingMd),
+              Expanded(
+                child: AppNumberField(
+                  controller: widget.prixController,
+                  label: 'Prix (FCFA)',
+                  hint: '500',
+                  prefixIcon: Icons.payments_rounded,
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: ThemeConstants.spacingMd),
+
+          // Description
+          AppTextField(
+            controller: widget.descriptionController,
+            label: 'Description (optionnel)',
+            hint: 'Décrivez la boisson...',
+            maxLines: 2,
+            prefixIcon: Icons.description_rounded,
+          ),
+
+          SizedBox(height: ThemeConstants.spacingMd),
+
+          // Modèle (Dropdown)
+          AppDropdown<Modele>(
+            value: widget.selectedModele,
+            label: 'Modèle',
+            hint: 'Sélectionnez le modèle',
+            prefixIcon: Icons.category_rounded,
+            items: Modele.values.map((modele) {
+              return DropdownMenuItem(
+                value: modele,
+                child: Text(modele == Modele.petit ? 'Petit' : 'Grand'),
+              );
+            }).toList(),
+            onChanged: widget.onModeleChanged,
+          ),
+
+          SizedBox(height: ThemeConstants.spacingMd),
+
+          // Bouton Ajouter
+          AppButton.primary(
+            text: 'Ajouter la boisson',
+            icon: Icons.add_circle_rounded,
+            isFullWidth: true,
+            onPressed: widget.onAjouterBoisson,
+          ),
+        ],
       ),
     );
   }
