@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/modele.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:provider/provider.dart';
 
 class ModifierBoissonScreen extends StatefulWidget {
@@ -97,7 +97,7 @@ class _ModifierBoissonScreenState extends State<ModifierBoissonScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,

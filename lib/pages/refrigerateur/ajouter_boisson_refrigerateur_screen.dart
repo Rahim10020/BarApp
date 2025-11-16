@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/models/casier.dart';
 import 'package:projet7/models/refrigerateur.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:provider/provider.dart';
 
 class AjouterBoissonRefrigerateurScreen extends StatefulWidget {
@@ -25,7 +25,7 @@ class _AjouterBoissonRefrigerateurScreenState
   @override
   void initState() {
     super.initState();
-    final provider = Provider.of<BarProvider>(context, listen: false);
+    final provider = Provider.of<BarAppProvider>(context, listen: false);
     // Sélectionner le premier casier des lignes de commande s’il existe
     var casiersCommandes = provider.commandes
         .expand((commande) => commande.lignesCommande)
@@ -37,7 +37,7 @@ class _AjouterBoissonRefrigerateurScreenState
   }
 
   Future<void> _ajouterBoissonsAuRefrigerateur(
-      BarProvider provider, Refrigerateur refrigerateur) async {
+      BarAppProvider provider, Refrigerateur refrigerateur) async {
     if (_boissonAAjouterController.text.isEmpty) {
       showDialog(
         context: context,
@@ -108,7 +108,7 @@ class _AjouterBoissonRefrigerateurScreenState
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
     // Récupérer les casiers des lignes de commande uniquement
     var casiersCommandes = provider.commandes
         .expand((commande) => commande.lignesCommande)

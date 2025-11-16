@@ -120,6 +120,9 @@ class ThemeConstants {
   /// Animation rapide - 150ms (alias pour compatibilité)
   static const Duration animationFast = Duration(milliseconds: 150);
 
+  /// Animation normale - 200ms (alias pour compatibilité)
+  static const Duration animationNormal = Duration(milliseconds: 200);
+
   /// Duration ultra rapide - 100ms
   static const Duration durationFast = Duration(milliseconds: 100);
 
