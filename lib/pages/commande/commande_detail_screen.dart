@@ -4,7 +4,7 @@ import 'package:open_file/open_file.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/models/commande.dart';
 import 'package:projet7/pages/commande/ligne_commande_detail_screen.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -98,7 +98,7 @@ class _CommandeDetailScreenState extends State<CommandeDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
 
     return Scaffold(
       appBar: AppBar(

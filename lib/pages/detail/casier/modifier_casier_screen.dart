@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:projet7/components/build_boisson_selector.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:provider/provider.dart';
 
 class ModifierCasierScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
   void initState() {
     super.initState();
     _boissonTotalController.text = widget.casier.boissonTotal.toString();
-    final provider = Provider.of<BarProvider>(context, listen: false);
+    final provider = Provider.of<BarAppProvider>(context, listen: false);
     for (int i = 0; i < provider.boissons.length; i++) {
       if (widget.casier.boissons.isNotEmpty) {
         if (widget.casier.boissons[0] == provider.boissons[i]) {
@@ -98,7 +98,7 @@ class _ModifierCasierScreenState extends State<ModifierCasierScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,

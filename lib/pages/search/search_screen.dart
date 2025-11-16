@@ -10,7 +10,7 @@ import 'package:projet7/pages/detail/casier/casier_detail_screen.dart';
 import 'package:projet7/pages/commande/commande_detail_screen.dart';
 import 'package:projet7/pages/refrigerateur/refrigerateur_detail_screen.dart';
 import 'package:projet7/pages/vente/vente_detail_screen.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
 
     // Search results
     final matchingBoissons = provider.boissons
