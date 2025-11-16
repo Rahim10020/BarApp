@@ -92,6 +92,10 @@ class AppColors {
   static const Color textSecondaryDark = Color(0xFFD1D5DB);
   static const Color textDisabledDark = Color(0xFF6B7280);
 
+  /// Alias pour compatibilité (utilise light mode par défaut)
+  static const Color textSecondary = textSecondaryLight;
+  static const Color textDisabled = textDisabledLight;
+
   // === BORDURES ===
 
   static const Color borderLight = Color(0xFFE5E7EB);
