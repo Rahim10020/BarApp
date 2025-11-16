@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projet7/pages/home/new_home_page.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/provider/theme_provider.dart';
 import 'package:projet7/services/hive_setup.dart';
 import 'package:projet7/ui/theme/theme_constants.dart';
@@ -19,7 +19,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => themeProvider),
-        ChangeNotifierProvider(create: (context) => BarProvider()),
+        ChangeNotifierProvider(create: (context) => BarAppProvider()),
       ],
       child: const MyApp(),
     ),
@@ -53,7 +53,7 @@ class BarSetupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
     if (provider.currentBar == null) {
       return const BarCreationScreen();
     }
@@ -140,7 +140,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
                   onPressed: () async {
                     if (_nomController.text.isNotEmpty &&
                         _adresseController.text.isNotEmpty) {
-                      await Provider.of<BarProvider>(context, listen: false)
+                      await Provider.of<BarAppProvider>(context, listen: false)
                           .createBar(
                               _nomController.text, _adresseController.text);
                       // Use a post-frame callback to ensure context is valid

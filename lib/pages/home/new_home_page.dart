@@ -10,7 +10,7 @@ import 'package:projet7/pages/refrigerateur/refrigerateur_screen.dart';
 import 'package:projet7/pages/reports/reports_screen.dart';
 import 'package:projet7/pages/search/search_screen.dart';
 import 'package:projet7/pages/vente/vente_screen.dart';
-import 'package:projet7/provider/bar_provider.dart';
+import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/ui/theme/app_colors.dart';
 import 'package:projet7/ui/theme/app_typography.dart';
 import 'package:projet7/ui/theme/theme_constants.dart';
@@ -35,7 +35,7 @@ class _NewHomePageState extends State<NewHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<BarProvider>(context);
+    final provider = Provider.of<BarAppProvider>(context);
 
     // Liste des pages
     final List<Widget> pages = [
