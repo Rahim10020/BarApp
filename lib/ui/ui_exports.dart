@@ -1,5 +1,6 @@
 /// Exports pour le design system BarApp
 /// Importer ce fichier pour accéder à tous les composants UI
+library;
 
 // Theme
 export 'theme/app_colors.dart';

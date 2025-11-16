@@ -43,7 +43,7 @@ class AppTheme {
       foregroundColor: AppColors.textPrimaryLight,
       surfaceTintColor: Colors.transparent,
       titleTextStyle: AppTypography.textThemeLight.titleLarge,
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: AppColors.textPrimaryLight,
         size: ThemeConstants.iconSizeMd,
       ),
@@ -56,7 +56,7 @@ class AppTheme {
       color: AppColors.cardLight,
       surfaceTintColor: Colors.transparent,
       shadowColor: Colors.black.withOpacity(0.1),
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: ThemeConstants.cardBorderRadius,
       ),
       margin: EdgeInsets.zero,
@@ -67,8 +67,8 @@ class AppTheme {
       backgroundColor: AppColors.surfaceLight,
       selectedItemColor: AppColors.primary,
       unselectedItemColor: AppColors.greyLight500,
-      selectedIconTheme: IconThemeData(size: ThemeConstants.iconSizeLg),
-      unselectedIconTheme: IconThemeData(size: ThemeConstants.iconSizeMd),
+      selectedIconTheme: const IconThemeData(size: ThemeConstants.iconSizeLg),
+      unselectedIconTheme: const IconThemeData(size: ThemeConstants.iconSizeMd),
       selectedLabelStyle: AppTypography.textThemeLight.labelSmall,
       unselectedLabelStyle: AppTypography.textThemeLight.labelSmall,
       type: BottomNavigationBarType.fixed,
@@ -91,11 +91,11 @@ class AppTheme {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 0,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingLg,
           vertical: ThemeConstants.spacingMd,
         ),
-        minimumSize: Size(0, ThemeConstants.buttonHeightMd),
+        minimumSize: const Size(0, ThemeConstants.buttonHeightMd),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
         ),
@@ -107,15 +107,15 @@ class AppTheme {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.primary,
-        side: BorderSide(
+        side: const BorderSide(
           color: AppColors.primary,
           width: ThemeConstants.borderWidthMedium,
         ),
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingLg,
           vertical: ThemeConstants.spacingMd,
         ),
-        minimumSize: Size(0, ThemeConstants.buttonHeightMd),
+        minimumSize: const Size(0, ThemeConstants.buttonHeightMd),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
         ),
@@ -127,11 +127,11 @@ class AppTheme {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.primary,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingMd,
           vertical: ThemeConstants.spacingSm,
         ),
-        minimumSize: Size(0, ThemeConstants.buttonHeightSm),
+        minimumSize: const Size(0, ThemeConstants.buttonHeightSm),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
         ),
@@ -152,35 +152,35 @@ class AppTheme {
       filled: true,
       fillColor: AppColors.greyLight50,
       contentPadding: ThemeConstants.inputPadding,
-      border: OutlineInputBorder(
+      border: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.borderLight,
           width: ThemeConstants.inputBorderWidth,
         ),
       ),
-      enabledBorder: OutlineInputBorder(
+      enabledBorder: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.borderLight,
           width: ThemeConstants.inputBorderWidth,
         ),
       ),
-      focusedBorder: OutlineInputBorder(
+      focusedBorder: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.primary,
           width: ThemeConstants.borderWidthMedium,
         ),
       ),
-      errorBorder: OutlineInputBorder(
+      errorBorder: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.error,
           width: ThemeConstants.inputBorderWidth,
         ),
       ),
-      focusedErrorBorder: OutlineInputBorder(
+      focusedErrorBorder: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.error,
@@ -209,7 +209,7 @@ class AppTheme {
     ),
 
     // Bottom Sheet
-    bottomSheetTheme: BottomSheetThemeData(
+    bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.surfaceLight,
       surfaceTintColor: Colors.transparent,
       elevation: ThemeConstants.elevationHighest,
@@ -221,7 +221,7 @@ class AppTheme {
     ),
 
     // Divider
-    dividerTheme: DividerThemeData(
+    dividerTheme: const DividerThemeData(
       color: AppColors.dividerLight,
       thickness: ThemeConstants.dividerThickness,
       space: ThemeConstants.dividerThickness,
@@ -235,7 +235,7 @@ class AppTheme {
       secondaryLabelStyle: AppTypography.textThemeLight.labelMedium?.copyWith(
         color: Colors.white,
       ),
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: ThemeConstants.spacingSm,
         vertical: ThemeConstants.spacingXs,
       ),
@@ -301,7 +301,7 @@ class AppTheme {
     textTheme: AppTypography.textThemeLight,
 
     // Icon Theme
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: AppColors.textPrimaryLight,
       size: ThemeConstants.iconSizeMd,
     ),
@@ -344,7 +344,7 @@ class AppTheme {
       foregroundColor: AppColors.textPrimaryDark,
       surfaceTintColor: Colors.transparent,
       titleTextStyle: AppTypography.textThemeDark.titleLarge,
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: AppColors.textPrimaryDark,
         size: ThemeConstants.iconSizeMd,
       ),
@@ -357,7 +357,7 @@ class AppTheme {
       color: AppColors.cardDark,
       surfaceTintColor: Colors.transparent,
       shadowColor: Colors.black.withOpacity(0.3),
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: ThemeConstants.cardBorderRadius,
       ),
       margin: EdgeInsets.zero,
@@ -368,8 +368,8 @@ class AppTheme {
       backgroundColor: AppColors.surfaceDark,
       selectedItemColor: AppColors.primaryLight,
       unselectedItemColor: AppColors.greyDark400,
-      selectedIconTheme: IconThemeData(size: ThemeConstants.iconSizeLg),
-      unselectedIconTheme: IconThemeData(size: ThemeConstants.iconSizeMd),
+      selectedIconTheme: const IconThemeData(size: ThemeConstants.iconSizeLg),
+      unselectedIconTheme: const IconThemeData(size: ThemeConstants.iconSizeMd),
       selectedLabelStyle: AppTypography.textThemeDark.labelSmall,
       unselectedLabelStyle: AppTypography.textThemeDark.labelSmall,
       type: BottomNavigationBarType.fixed,
@@ -392,11 +392,11 @@ class AppTheme {
         backgroundColor: AppColors.primaryLight,
         foregroundColor: AppColors.greyDark900,
         elevation: 0,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingLg,
           vertical: ThemeConstants.spacingMd,
         ),
-        minimumSize: Size(0, ThemeConstants.buttonHeightMd),
+        minimumSize: const Size(0, ThemeConstants.buttonHeightMd),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
         ),
@@ -408,15 +408,15 @@ class AppTheme {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.primaryLight,
-        side: BorderSide(
+        side: const BorderSide(
           color: AppColors.primaryLight,
           width: ThemeConstants.borderWidthMedium,
         ),
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingLg,
           vertical: ThemeConstants.spacingMd,
         ),
-        minimumSize: Size(0, ThemeConstants.buttonHeightMd),
+        minimumSize: const Size(0, ThemeConstants.buttonHeightMd),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
         ),
@@ -428,11 +428,11 @@ class AppTheme {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.primaryLight,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingMd,
           vertical: ThemeConstants.spacingSm,
         ),
-        minimumSize: Size(0, ThemeConstants.buttonHeightSm),
+        minimumSize: const Size(0, ThemeConstants.buttonHeightSm),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
         ),
@@ -453,35 +453,35 @@ class AppTheme {
       filled: true,
       fillColor: AppColors.greyDark100,
       contentPadding: ThemeConstants.inputPadding,
-      border: OutlineInputBorder(
+      border: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.borderDark,
           width: ThemeConstants.inputBorderWidth,
         ),
       ),
-      enabledBorder: OutlineInputBorder(
+      enabledBorder: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.borderDark,
           width: ThemeConstants.inputBorderWidth,
         ),
       ),
-      focusedBorder: OutlineInputBorder(
+      focusedBorder: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.primaryLight,
           width: ThemeConstants.borderWidthMedium,
         ),
       ),
-      errorBorder: OutlineInputBorder(
+      errorBorder: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.errorLight,
           width: ThemeConstants.inputBorderWidth,
         ),
       ),
-      focusedErrorBorder: OutlineInputBorder(
+      focusedErrorBorder: const OutlineInputBorder(
         borderRadius: ThemeConstants.inputBorderRadius,
         borderSide: BorderSide(
           color: AppColors.errorLight,
@@ -510,7 +510,7 @@ class AppTheme {
     ),
 
     // Bottom Sheet
-    bottomSheetTheme: BottomSheetThemeData(
+    bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.surfaceDark,
       surfaceTintColor: Colors.transparent,
       elevation: ThemeConstants.elevationHighest,
@@ -522,7 +522,7 @@ class AppTheme {
     ),
 
     // Divider
-    dividerTheme: DividerThemeData(
+    dividerTheme: const DividerThemeData(
       color: AppColors.dividerDark,
       thickness: ThemeConstants.dividerThickness,
       space: ThemeConstants.dividerThickness,
@@ -536,7 +536,7 @@ class AppTheme {
       secondaryLabelStyle: AppTypography.textThemeDark.labelMedium?.copyWith(
         color: AppColors.greyDark900,
       ),
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: ThemeConstants.spacingSm,
         vertical: ThemeConstants.spacingXs,
       ),
@@ -602,7 +602,7 @@ class AppTheme {
     textTheme: AppTypography.textThemeDark,
 
     // Icon Theme
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: AppColors.textPrimaryDark,
       size: ThemeConstants.iconSizeMd,
     ),

@@ -47,12 +47,13 @@ class _StockScreenState extends State<StockScreen>
           child: TabBar(
             controller: _tabController,
             labelColor: AppColors.primary,
-            unselectedLabelColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            unselectedLabelColor:
+                Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             indicatorColor: AppColors.primary,
             indicatorWeight: 3,
             labelStyle: Theme.of(context).textTheme.titleSmall,
             unselectedLabelStyle: Theme.of(context).textTheme.titleSmall,
-            tabs: [
+            tabs: const [
               Tab(
                 icon: Icon(Icons.local_drink),
                 text: 'Boissons',
@@ -72,10 +73,10 @@ class _StockScreenState extends State<StockScreen>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: [
-              const BoissonScreen(),
-              const CasierScreen(),
-              const RefrigerateurScreen(),
+            children: const [
+              BoissonScreen(),
+              CasierScreen(),
+              RefrigerateurScreen(),
             ],
           ),
         ),

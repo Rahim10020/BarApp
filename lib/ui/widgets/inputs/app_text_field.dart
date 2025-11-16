@@ -58,7 +58,7 @@ class AppTextField extends StatelessWidget {
             label!,
             style: Theme.of(context).textTheme.titleSmall,
           ),
-          SizedBox(height: ThemeConstants.spacingSm),
+          const SizedBox(height: ThemeConstants.spacingSm),
         ],
         TextFormField(
           controller: controller,
@@ -109,10 +109,10 @@ class AppSearchField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hint ?? 'Rechercher...',
-        prefixIcon: Icon(Icons.search),
+        prefixIcon: const Icon(Icons.search),
         suffixIcon: controller?.text.isNotEmpty == true
             ? IconButton(
-                icon: Icon(Icons.clear),
+                icon: const Icon(Icons.clear),
                 onPressed: onClear ??
                     () {
                       controller?.clear();
@@ -159,7 +159,7 @@ class AppDropdown<T> extends StatelessWidget {
             label!,
             style: Theme.of(context).textTheme.titleSmall,
           ),
-          SizedBox(height: ThemeConstants.spacingSm),
+          const SizedBox(height: ThemeConstants.spacingSm),
         ],
         DropdownButtonFormField<T>(
           value: value,
@@ -167,8 +167,7 @@ class AppDropdown<T> extends StatelessWidget {
           onChanged: enabled ? onChanged : null,
           hint: hint != null ? Text(hint!) : null,
           validator: validator,
-          decoration: InputDecoration(
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+          decoration: const InputDecoration(
             contentPadding: EdgeInsets.symmetric(
               horizontal: ThemeConstants.spacingMd,
               vertical: ThemeConstants.spacingSm,

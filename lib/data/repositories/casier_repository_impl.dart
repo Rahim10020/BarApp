@@ -5,14 +5,14 @@ import 'package:projet7/models/casier.dart';
 
 class CasierRepositoryImpl extends BaseRepositoryImpl<Casier>
     implements ICasierRepository {
-  CasierRepositoryImpl(HiveLocalDatasource<Casier> datasource)
-      : super(datasource);
+  CasierRepositoryImpl(super.datasource);
 
   @override
   List<Casier> getWithDrink(String drinkName) {
     final lowerDrinkName = drinkName.toLowerCase();
     return getAll().where((c) {
-      return c.boissons.any((b) => (b.nom ?? '').toLowerCase().contains(lowerDrinkName));
+      return c.boissons
+          .any((b) => (b.nom ?? '').toLowerCase().contains(lowerDrinkName));
     }).toList();
   }
 

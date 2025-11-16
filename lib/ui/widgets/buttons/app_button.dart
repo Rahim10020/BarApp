@@ -124,7 +124,7 @@ class AppButton extends StatelessWidget {
             children: [
               if (icon != null) ...[
                 Icon(icon, size: _getIconSize()),
-                SizedBox(width: ThemeConstants.spacingSm),
+                const SizedBox(width: ThemeConstants.spacingSm),
               ],
               Text(
                 text,
@@ -247,17 +247,17 @@ class AppButton extends StatelessWidget {
   EdgeInsets _getPadding() {
     switch (size) {
       case AppButtonSize.small:
-        return EdgeInsets.symmetric(
+        return const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingMd,
           vertical: ThemeConstants.spacingSm,
         );
       case AppButtonSize.medium:
-        return EdgeInsets.symmetric(
+        return const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingLg,
           vertical: ThemeConstants.spacingMd,
         );
       case AppButtonSize.large:
-        return EdgeInsets.symmetric(
+        return const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingXl,
           vertical: ThemeConstants.spacingMd,
         );

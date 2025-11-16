@@ -110,12 +110,12 @@ class _CasierScreenState extends State<CasierScreen> {
                 size: ThemeConstants.iconSize3Xl,
                 color: AppColors.textSecondary,
               ),
-              SizedBox(height: ThemeConstants.spacingMd),
+              const SizedBox(height: ThemeConstants.spacingMd),
               Text(
                 'Aucune boisson disponible',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              SizedBox(height: ThemeConstants.spacingXs),
+              const SizedBox(height: ThemeConstants.spacingXs),
               Text(
                 'Créez des boissons avant de créer des casiers',
                 style: Theme.of(context).textTheme.bodySmall,
@@ -140,18 +140,19 @@ class _CasierScreenState extends State<CasierScreen> {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                      padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.radiusMd),
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.inventory_2_rounded,
                         color: AppColors.primary,
                         size: ThemeConstants.iconSizeMd,
                       ),
                     ),
-                    SizedBox(width: ThemeConstants.spacingMd),
+                    const SizedBox(width: ThemeConstants.spacingMd),
                     Text(
                       'Nouveau Casier',
                       style: Theme.of(context).textTheme.titleMedium,
@@ -159,7 +160,7 @@ class _CasierScreenState extends State<CasierScreen> {
                   ],
                 ),
 
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
 
                 // Quantité
                 AppNumberField(
@@ -169,38 +170,43 @@ class _CasierScreenState extends State<CasierScreen> {
                   prefixIcon: Icons.numbers_rounded,
                 ),
 
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
 
                 // Sélecteur de boisson
                 Text(
                   'Type de boisson',
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
-                SizedBox(height: ThemeConstants.spacingSm),
+                const SizedBox(height: ThemeConstants.spacingSm),
 
                 SizedBox(
                   height: 60,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: provider.boissons.length,
-                    separatorBuilder: (_, __) => SizedBox(width: ThemeConstants.spacingSm),
+                    separatorBuilder: (_, __) =>
+                        const SizedBox(width: ThemeConstants.spacingSm),
                     itemBuilder: (context, index) {
                       final boisson = provider.boissons[index];
                       final isSelected = _boissonSelectionnee?.id == boisson.id;
 
                       return GestureDetector(
-                        onTap: () => setState(() => _boissonSelectionnee = boisson),
+                        onTap: () =>
+                            setState(() => _boissonSelectionnee = boisson),
                         child: AnimatedContainer(
                           duration: ThemeConstants.animationFast,
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: ThemeConstants.spacingMd,
                             vertical: ThemeConstants.spacingSm,
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? AppColors.primary
-                                : Theme.of(context).colorScheme.surfaceContainerHighest,
-                            borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainerHighest,
+                            borderRadius:
+                                BorderRadius.circular(ThemeConstants.radiusMd),
                             border: Border.all(
                               color: isSelected
                                   ? AppColors.primary
@@ -215,14 +221,21 @@ class _CasierScreenState extends State<CasierScreen> {
                             children: [
                               Text(
                                 boisson.nom ?? 'Sans nom',
-                                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
                                       color: isSelected ? Colors.white : null,
-                                      fontWeight: isSelected ? FontWeight.bold : null,
+                                      fontWeight:
+                                          isSelected ? FontWeight.bold : null,
                                     ),
                               ),
                               Text(
                                 boisson.modele?.name ?? '',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
                                       color: isSelected
                                           ? Colors.white.withOpacity(0.9)
                                           : AppColors.textSecondary,
@@ -236,7 +249,7 @@ class _CasierScreenState extends State<CasierScreen> {
                   ),
                 ),
 
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
 
                 // Bouton Créer
                 AppButton.primary(
@@ -249,7 +262,7 @@ class _CasierScreenState extends State<CasierScreen> {
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Liste des casiers
           Expanded(
@@ -264,12 +277,12 @@ class _CasierScreenState extends State<CasierScreen> {
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,
                           ),
-                          SizedBox(height: ThemeConstants.spacingMd),
+                          const SizedBox(height: ThemeConstants.spacingMd),
                           Text(
                             'Aucun casier',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          SizedBox(height: ThemeConstants.spacingXs),
+                          const SizedBox(height: ThemeConstants.spacingXs),
                           Text(
                             'Créez votre premier casier ci-dessus',
                             style: Theme.of(context).textTheme.bodySmall,
@@ -281,7 +294,7 @@ class _CasierScreenState extends State<CasierScreen> {
                 : ListView.separated(
                     itemCount: provider.casiers.length,
                     separatorBuilder: (_, __) =>
-                        SizedBox(height: ThemeConstants.spacingSm),
+                        const SizedBox(height: ThemeConstants.spacingSm),
                     itemBuilder: (context, index) {
                       final casier = provider.casiers[index];
                       return _CasierListItem(
@@ -320,19 +333,19 @@ class _CasierListItem extends StatelessWidget {
         children: [
           // Icône
           Container(
-            padding: EdgeInsets.all(ThemeConstants.spacingMd),
+            padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
               color: AppColors.stockAvailable.withOpacity(0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.inventory_2_rounded,
               color: AppColors.stockAvailable,
               size: ThemeConstants.iconSizeLg,
             ),
           ),
 
-          SizedBox(width: ThemeConstants.spacingMd),
+          const SizedBox(width: ThemeConstants.spacingMd),
 
           // Informations
           Expanded(
@@ -343,13 +356,14 @@ class _CasierListItem extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: ThemeConstants.spacingXs,
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.radiusSm),
                       ),
                       child: Text(
                         '#${casier.id}',
@@ -359,7 +373,7 @@ class _CasierListItem extends StatelessWidget {
                             ),
                       ),
                     ),
-                    SizedBox(width: ThemeConstants.spacingXs),
+                    const SizedBox(width: ThemeConstants.spacingXs),
                     Flexible(
                       child: Text(
                         '${casier.boissons.first.nom} (${casier.boissons.first.modele?.name})',
@@ -369,7 +383,7 @@ class _CasierListItem extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: ThemeConstants.spacingXs),
+                const SizedBox(height: ThemeConstants.spacingXs),
 
                 // Prix et Quantité
                 Row(
@@ -396,7 +410,7 @@ class _CasierListItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.edit_rounded,
                   color: AppColors.info,
                   size: ThemeConstants.iconSizeMd,
@@ -409,7 +423,7 @@ class _CasierListItem extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.delete_rounded,
                   color: AppColors.error,
                   size: ThemeConstants.iconSizeMd,
@@ -425,7 +439,8 @@ class _CasierListItem extends StatelessWidget {
                     try {
                       await provider.deleteCasier(casier);
                       if (context.mounted) {
-                        context.showSuccessSnackBar('Casier #${casier.id} supprimé');
+                        context.showSuccessSnackBar(
+                            'Casier #${casier.id} supprimé');
                       }
                     } catch (e) {
                       if (context.mounted) {

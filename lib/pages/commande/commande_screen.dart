@@ -37,12 +37,15 @@ class _CommandeScreenState extends State<CommandeScreen> {
   Future<void> _ajouterCommande(BarAppProvider provider) async {
     // Validation
     if (_casiersSelectionnes.isEmpty) {
-      context.showWarningSnackBar('La commande doit concerner au moins un casier');
+      context
+          .showWarningSnackBar('La commande doit concerner au moins un casier');
       return;
     }
 
-    if (_fournisseurSelectionne == null && _nomFournisseurController.text.trim().isEmpty) {
-      context.showWarningSnackBar('Veuillez sélectionner ou créer un fournisseur');
+    if (_fournisseurSelectionne == null &&
+        _nomFournisseurController.text.trim().isEmpty) {
+      context
+          .showWarningSnackBar('Veuillez sélectionner ou créer un fournisseur');
       return;
     }
 
@@ -92,7 +95,8 @@ class _CommandeScreenState extends State<CommandeScreen> {
           _adresseFournisseurController.clear();
           _fournisseurSelectionne = null;
         });
-        context.showSuccessSnackBar('Commande #${commande.id} créée avec succès');
+        context
+            .showSuccessSnackBar('Commande #${commande.id} créée avec succès');
       }
     } catch (e) {
       if (mounted) {
@@ -120,7 +124,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
             onAjouterCommande: () => _ajouterCommande(provider),
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Liste des commandes
           Expanded(
@@ -135,12 +139,12 @@ class _CommandeScreenState extends State<CommandeScreen> {
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,
                           ),
-                          SizedBox(height: ThemeConstants.spacingMd),
+                          const SizedBox(height: ThemeConstants.spacingMd),
                           Text(
                             'Aucune commande',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          SizedBox(height: ThemeConstants.spacingXs),
+                          const SizedBox(height: ThemeConstants.spacingXs),
                           Text(
                             'Créez votre première commande ci-dessus',
                             style: Theme.of(context).textTheme.bodySmall,
@@ -152,7 +156,7 @@ class _CommandeScreenState extends State<CommandeScreen> {
                 : ListView.separated(
                     itemCount: provider.commandes.length,
                     separatorBuilder: (_, __) =>
-                        SizedBox(height: ThemeConstants.spacingSm),
+                        const SizedBox(height: ThemeConstants.spacingSm),
                     itemBuilder: (context, index) {
                       final commande = provider.commandes[index];
                       return _CommandeListItem(
@@ -191,19 +195,19 @@ class _CommandeListItem extends StatelessWidget {
         children: [
           // Icône
           Container(
-            padding: EdgeInsets.all(ThemeConstants.spacingMd),
+            padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
               color: AppColors.expense.withOpacity(0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.receipt_long_rounded,
               color: AppColors.expense,
               size: ThemeConstants.iconSizeLg,
             ),
           ),
 
-          SizedBox(width: ThemeConstants.spacingMd),
+          const SizedBox(width: ThemeConstants.spacingMd),
 
           // Informations
           Expanded(
@@ -214,13 +218,14 @@ class _CommandeListItem extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: ThemeConstants.spacingXs,
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.radiusSm),
                       ),
                       child: Text(
                         '#${commande.id}',
@@ -231,7 +236,7 @@ class _CommandeListItem extends StatelessWidget {
                       ),
                     ),
                     if (commande.fournisseur != null) ...[
-                      SizedBox(width: ThemeConstants.spacingXs),
+                      const SizedBox(width: ThemeConstants.spacingXs),
                       Flexible(
                         child: Text(
                           commande.fournisseur!.nom,
@@ -242,7 +247,7 @@ class _CommandeListItem extends StatelessWidget {
                     ],
                   ],
                 ),
-                SizedBox(height: ThemeConstants.spacingXs),
+                const SizedBox(height: ThemeConstants.spacingXs),
 
                 // Montant et Date
                 Row(
@@ -266,7 +271,7 @@ class _CommandeListItem extends StatelessWidget {
 
           // Action Supprimer
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.delete_rounded,
               color: AppColors.error,
               size: ThemeConstants.iconSizeMd,
@@ -275,14 +280,16 @@ class _CommandeListItem extends StatelessWidget {
               final confirmed = await AppDialogs.showDeleteDialog(
                 context,
                 title: 'Supprimer la commande',
-                message: 'Voulez-vous vraiment supprimer la commande #${commande.id} ?',
+                message:
+                    'Voulez-vous vraiment supprimer la commande #${commande.id} ?',
               );
 
               if (confirmed == true && context.mounted) {
                 try {
                   await provider.deleteCommande(commande);
                   if (context.mounted) {
-                    context.showSuccessSnackBar('Commande #${commande.id} supprimée');
+                    context.showSuccessSnackBar(
+                        'Commande #${commande.id} supprimée');
                   }
                 } catch (e) {
                   if (context.mounted) {

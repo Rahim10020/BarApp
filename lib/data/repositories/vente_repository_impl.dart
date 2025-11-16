@@ -6,7 +6,7 @@ import 'package:projet7/models/vente.dart';
 /// Implémentation du repository des ventes
 class VenteRepositoryImpl extends BaseRepositoryImpl<Vente>
     implements IVenteRepository {
-  VenteRepositoryImpl(HiveLocalDatasource<Vente> datasource) : super(datasource);
+  VenteRepositoryImpl(super.datasource);
 
   @override
   List<Vente> getByDateRange(DateTime startDate, DateTime endDate) {

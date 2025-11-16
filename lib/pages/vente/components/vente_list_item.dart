@@ -32,19 +32,19 @@ class VenteListItem extends StatelessWidget {
         children: [
           // Icône avec fond coloré
           Container(
-            padding: EdgeInsets.all(ThemeConstants.spacingMd),
+            padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
               color: AppColors.revenue.withOpacity(0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.receipt_long_rounded,
               color: AppColors.revenue,
               size: ThemeConstants.iconSizeLg,
             ),
           ),
 
-          SizedBox(width: ThemeConstants.spacingMd),
+          const SizedBox(width: ThemeConstants.spacingMd),
 
           // Informations
           Expanded(
@@ -55,13 +55,14 @@ class VenteListItem extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: ThemeConstants.spacingSm,
                         vertical: ThemeConstants.spacingXs,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.radiusSm),
                       ),
                       child: Text(
                         '#${vente.id}',
@@ -71,20 +72,21 @@ class VenteListItem extends StatelessWidget {
                             ),
                       ),
                     ),
-                    SizedBox(width: ThemeConstants.spacingSm),
+                    const SizedBox(width: ThemeConstants.spacingSm),
                     Expanded(
                       child: Text(
                         Helpers.formatterEnCFA(vente.montantTotal),
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: AppColors.revenue,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: AppColors.revenue,
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                     ),
                   ],
                 ),
 
-                SizedBox(height: ThemeConstants.spacingXs),
+                const SizedBox(height: ThemeConstants.spacingXs),
 
                 // Date
                 Row(
@@ -94,7 +96,7 @@ class VenteListItem extends StatelessWidget {
                       size: ThemeConstants.iconSizeSm,
                       color: AppColors.textSecondary,
                     ),
-                    SizedBox(width: ThemeConstants.spacingXs),
+                    const SizedBox(width: ThemeConstants.spacingXs),
                     Text(
                       Helpers.formatterDate(vente.dateVente),
                       style: Theme.of(context).textTheme.bodySmall,
@@ -107,7 +109,7 @@ class VenteListItem extends StatelessWidget {
 
           // Bouton supprimer
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.delete_rounded,
               color: AppColors.error,
               size: ThemeConstants.iconSizeMd,
@@ -116,7 +118,8 @@ class VenteListItem extends StatelessWidget {
               final confirmed = await AppDialogs.showDeleteDialog(
                 context,
                 title: 'Supprimer la vente',
-                message: 'Voulez-vous vraiment supprimer la vente #${vente.id} ?',
+                message:
+                    'Voulez-vous vraiment supprimer la vente #${vente.id} ?',
               );
 
               if (confirmed == true && context.mounted) {

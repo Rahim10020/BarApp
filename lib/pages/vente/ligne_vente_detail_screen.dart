@@ -33,30 +33,31 @@ class LigneVenteDetailScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.tag_rounded,
                               color: AppColors.primary,
                               size: ThemeConstants.iconSizeSm,
                             ),
-                            SizedBox(width: ThemeConstants.spacingXs),
+                            const SizedBox(width: ThemeConstants.spacingXs),
                             Text(
                               'ID',
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
                         ),
-                        SizedBox(height: ThemeConstants.spacingXs),
+                        const SizedBox(height: ThemeConstants.spacingXs),
                         Text(
                           '#${ligneVente.id}',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(width: ThemeConstants.spacingMd),
+                const SizedBox(width: ThemeConstants.spacingMd),
                 Expanded(
                   child: AppCard(
                     color: AppColors.revenue.withOpacity(0.1),
@@ -65,25 +66,26 @@ class LigneVenteDetailScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.payments_rounded,
                               color: AppColors.revenue,
                               size: ThemeConstants.iconSizeSm,
                             ),
-                            SizedBox(width: ThemeConstants.spacingXs),
+                            const SizedBox(width: ThemeConstants.spacingXs),
                             Text(
                               'Montant',
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
                         ),
-                        SizedBox(height: ThemeConstants.spacingXs),
+                        const SizedBox(height: ThemeConstants.spacingXs),
                         Text(
                           Helpers.formatterEnCFA(ligneVente.getMontant()),
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: AppColors.revenue,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    color: AppColors.revenue,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ],
                     ),
@@ -92,7 +94,7 @@ class LigneVenteDetailScreen extends StatelessWidget {
               ],
             ),
 
-            SizedBox(height: ThemeConstants.spacingLg),
+            const SizedBox(height: ThemeConstants.spacingLg),
 
             // Titre section Boisson
             Text(
@@ -100,7 +102,7 @@ class LigneVenteDetailScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
 
-            SizedBox(height: ThemeConstants.spacingMd),
+            const SizedBox(height: ThemeConstants.spacingMd),
 
             // Card Boisson
             AppCard(
@@ -115,18 +117,19 @@ class LigneVenteDetailScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(ThemeConstants.spacingMd),
+                    padding: const EdgeInsets.all(ThemeConstants.spacingMd),
                     decoration: BoxDecoration(
                       color: AppColors.coldDrink.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                      borderRadius:
+                          BorderRadius.circular(ThemeConstants.radiusMd),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.local_bar_rounded,
                       color: AppColors.coldDrink,
                       size: ThemeConstants.iconSizeLg,
                     ),
                   ),
-                  SizedBox(width: ThemeConstants.spacingMd),
+                  const SizedBox(width: ThemeConstants.spacingMd),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,13 +138,14 @@ class LigneVenteDetailScreen extends StatelessWidget {
                           ligneVente.boisson.nom ?? 'Sans nom',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        SizedBox(height: ThemeConstants.spacingXs),
+                        const SizedBox(height: ThemeConstants.spacingXs),
                         Text(
                           Helpers.formatterEnCFA(ligneVente.boisson.prix.last),
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.revenue,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.revenue,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                         ),
                       ],
                     ),

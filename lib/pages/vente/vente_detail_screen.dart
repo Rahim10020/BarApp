@@ -45,7 +45,8 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
         if (result.type == ResultType.done) {
           context.showSuccessSnackBar('PDF ouvert avec succès');
         } else {
-          context.showErrorSnackBar('Impossible d\'ouvrir le PDF : ${result.message}');
+          context.showErrorSnackBar(
+              'Impossible d\'ouvrir le PDF : ${result.message}');
         }
       }
     } catch (e) {
@@ -95,18 +96,19 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
               child: Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(ThemeConstants.spacingMd),
+                    padding: const EdgeInsets.all(ThemeConstants.spacingMd),
                     decoration: BoxDecoration(
                       color: AppColors.revenue.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                      borderRadius:
+                          BorderRadius.circular(ThemeConstants.radiusMd),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.receipt_long_rounded,
                       color: AppColors.revenue,
                       size: ThemeConstants.iconSizeXl,
                     ),
                   ),
-                  SizedBox(width: ThemeConstants.spacingMd),
+                  const SizedBox(width: ThemeConstants.spacingMd),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +119,10 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                         ),
                         Text(
                           Helpers.formatterEnCFA(widget.vente.montantTotal),
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
                                 color: AppColors.revenue,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -129,18 +134,18 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
               ),
             ),
 
-            SizedBox(height: ThemeConstants.spacingMd),
+            const SizedBox(height: ThemeConstants.spacingMd),
 
             // Date
             AppCard(
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.calendar_today_rounded,
                     color: AppColors.primary,
                     size: ThemeConstants.iconSizeMd,
                   ),
-                  SizedBox(width: ThemeConstants.spacingMd),
+                  const SizedBox(width: ThemeConstants.spacingMd),
                   Text(
                     'Date',
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -156,7 +161,7 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
               ),
             ),
 
-            SizedBox(height: ThemeConstants.spacingLg),
+            const SizedBox(height: ThemeConstants.spacingLg),
 
             // Titre de la section
             Text(
@@ -164,7 +169,7 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
 
-            SizedBox(height: ThemeConstants.spacingMd),
+            const SizedBox(height: ThemeConstants.spacingMd),
 
             // Liste des lignes de vente
             Expanded(
@@ -178,7 +183,7 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                             size: ThemeConstants.iconSize3Xl,
                             color: AppColors.textSecondary,
                           ),
-                          SizedBox(height: ThemeConstants.spacingMd),
+                          const SizedBox(height: ThemeConstants.spacingMd),
                           Text(
                             'Aucune boisson',
                             style: Theme.of(context).textTheme.titleMedium,
@@ -188,7 +193,8 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                     )
                   : ListView.separated(
                       itemCount: widget.vente.lignesVente.length,
-                      separatorBuilder: (_, __) => SizedBox(height: ThemeConstants.spacingSm),
+                      separatorBuilder: (_, __) =>
+                          const SizedBox(height: ThemeConstants.spacingSm),
                       itemBuilder: (context, index) {
                         final ligne = widget.vente.lignesVente[index];
                         return AppCard(
@@ -203,30 +209,38 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                           child: Row(
                             children: [
                               Container(
-                                padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                                padding: const EdgeInsets.all(
+                                    ThemeConstants.spacingSm),
                                 decoration: BoxDecoration(
                                   color: AppColors.coldDrink.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
+                                  borderRadius: BorderRadius.circular(
+                                      ThemeConstants.radiusSm),
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.local_bar_rounded,
                                   color: AppColors.coldDrink,
                                   size: ThemeConstants.iconSizeMd,
                                 ),
                               ),
-                              SizedBox(width: ThemeConstants.spacingMd),
+                              const SizedBox(width: ThemeConstants.spacingMd),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       '${ligne.boisson.nom} (${ligne.boisson.modele?.name})',
-                                      style: Theme.of(context).textTheme.titleSmall,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall,
                                     ),
-                                    SizedBox(height: ThemeConstants.spacingXs),
+                                    const SizedBox(
+                                        height: ThemeConstants.spacingXs),
                                     Text(
                                       Helpers.formatterEnCFA(ligne.montant),
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
                                             color: AppColors.revenue,
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -245,7 +259,7 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                     ),
             ),
 
-            SizedBox(height: ThemeConstants.spacingMd),
+            const SizedBox(height: ThemeConstants.spacingMd),
 
             // Boutons d'action
             Row(
@@ -258,7 +272,7 @@ class _VenteDetailScreenState extends State<VenteDetailScreen> {
                     onPressed: () => _downloadAndOpenPdf(provider),
                   ),
                 ),
-                SizedBox(width: ThemeConstants.spacingMd),
+                const SizedBox(width: ThemeConstants.spacingMd),
                 Expanded(
                   child: AppButton.secondary(
                     text: 'Partager',

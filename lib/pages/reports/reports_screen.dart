@@ -33,23 +33,28 @@ class _ReportsScreenState extends State<ReportsScreen> {
             v.dateVente.isBefore(_endDate.add(const Duration(days: 1))))
         .toList();
 
-    final totalRevenue = filteredSales.fold(0.0, (sum, v) => sum + v.montantTotal);
+    final totalRevenue =
+        filteredSales.fold(0.0, (sum, v) => sum + v.montantTotal);
     final totalOrders = filteredSales.length;
-    final averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0.0;
+    final averageOrderValue =
+        totalOrders > 0 ? totalRevenue / totalOrders : 0.0;
 
     // Filtrer les commandes
     final filteredOrders = provider.commandes
         .where((c) =>
-            c.dateCommande.isAfter(_startDate.subtract(const Duration(days: 1))) &&
+            c.dateCommande
+                .isAfter(_startDate.subtract(const Duration(days: 1))) &&
             c.dateCommande.isBefore(_endDate.add(const Duration(days: 1))))
         .toList();
 
-    final totalOrderCost = filteredOrders.fold(0.0, (sum, c) => sum + c.montantTotal);
+    final totalOrderCost =
+        filteredOrders.fold(0.0, (sum, c) => sum + c.montantTotal);
 
     // Statistiques avancées
     final revenueByDrink = provider.getRevenueByDrink(_startDate, _endDate);
     final topSellingDrinks = provider.getTopSellingDrinks(_startDate, _endDate);
-    final revenueTrends = provider.getRevenueTrends(_startDate, _endDate, _selectedPeriod);
+    final revenueTrends =
+        provider.getRevenueTrends(_startDate, _endDate, _selectedPeriod);
     final inventoryLevels = provider.getInventoryLevels();
 
     return SingleChildScrollView(
@@ -65,18 +70,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                      padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                       decoration: BoxDecoration(
                         color: AppColors.info.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.radiusMd),
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.date_range_rounded,
                         color: AppColors.info,
                         size: ThemeConstants.iconSizeMd,
                       ),
                     ),
-                    SizedBox(width: ThemeConstants.spacingMd),
+                    const SizedBox(width: ThemeConstants.spacingMd),
                     Text(
                       'Période d\'analyse',
                       style: Theme.of(context).textTheme.titleMedium,
@@ -84,7 +90,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ],
                 ),
 
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
 
                 // Sélection de dates
                 Row(
@@ -106,7 +112,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         },
                       ),
                     ),
-                    SizedBox(width: ThemeConstants.spacingMd),
+                    const SizedBox(width: ThemeConstants.spacingMd),
                     Expanded(
                       child: AppButton.secondary(
                         text: 'Au: ${Helpers.formatterDate(_endDate)}',
@@ -127,7 +133,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ],
                 ),
 
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
 
                 // Période pour les tendances
                 AppDropdown<String>(
@@ -136,7 +142,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   prefixIcon: Icons.trending_up_rounded,
                   items: const [
                     DropdownMenuItem(value: 'daily', child: Text('Quotidien')),
-                    DropdownMenuItem(value: 'weekly', child: Text('Hebdomadaire')),
+                    DropdownMenuItem(
+                        value: 'weekly', child: Text('Hebdomadaire')),
                     DropdownMenuItem(value: 'monthly', child: Text('Mensuel')),
                   ],
                   onChanged: (value) {
@@ -146,7 +153,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   },
                 ),
 
-                SizedBox(height: ThemeConstants.spacingMd),
+                const SizedBox(height: ThemeConstants.spacingMd),
 
                 // Bouton Export PDF
                 AppButton.primary(
@@ -165,7 +172,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       }
                     } catch (e) {
                       if (mounted) {
-                        context.showErrorSnackBar('Erreur lors de l\'export PDF');
+                        context
+                            .showErrorSnackBar('Erreur lors de l\'export PDF');
                       }
                     }
                   },
@@ -174,11 +182,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingLg),
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // Section Ventes
           _buildSectionTitle(context, 'Ventes', Icons.point_of_sale_rounded),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             child: Column(
@@ -189,14 +197,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   Helpers.formatterEnCFA(totalRevenue),
                   AppColors.revenue,
                 ),
-                Divider(height: ThemeConstants.spacingMd),
+                const Divider(height: ThemeConstants.spacingMd),
                 _buildReportRow(
                   context,
                   'Nombre de ventes',
                   '$totalOrders',
                   AppColors.info,
                 ),
-                Divider(height: ThemeConstants.spacingMd),
+                const Divider(height: ThemeConstants.spacingMd),
                 _buildReportRow(
                   context,
                   'Panier moyen',
@@ -207,11 +215,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingLg),
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // Section Commandes
           _buildSectionTitle(context, 'Commandes', Icons.shopping_cart_rounded),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             child: Column(
@@ -222,7 +230,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   Helpers.formatterEnCFA(totalOrderCost),
                   AppColors.expense,
                 ),
-                Divider(height: ThemeConstants.spacingMd),
+                const Divider(height: ThemeConstants.spacingMd),
                 _buildReportRow(
                   context,
                   'Nombre de commandes',
@@ -233,11 +241,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingLg),
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // Section Bénéfice
-          _buildSectionTitle(context, 'Bénéfice estimé', Icons.account_balance_wallet_rounded),
-          SizedBox(height: ThemeConstants.spacingMd),
+          _buildSectionTitle(
+              context, 'Bénéfice estimé', Icons.account_balance_wallet_rounded),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             color: (totalRevenue - totalOrderCost) >= 0
@@ -247,16 +256,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
               context,
               'Bénéfice (Revenus - Coûts)',
               Helpers.formatterEnCFA(totalRevenue - totalOrderCost),
-              (totalRevenue - totalOrderCost) >= 0 ? AppColors.success : AppColors.error,
+              (totalRevenue - totalOrderCost) >= 0
+                  ? AppColors.success
+                  : AppColors.error,
               isBold: true,
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingLg),
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // Section Top Ventes
-          _buildSectionTitle(context, 'Boissons les plus vendues', Icons.star_rounded),
-          SizedBox(height: ThemeConstants.spacingMd),
+          _buildSectionTitle(
+              context, 'Boissons les plus vendues', Icons.star_rounded),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             child: topSellingDrinks.isNotEmpty
@@ -265,7 +277,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       final index = topSellingDrinks.indexOf(entry);
                       return Column(
                         children: [
-                          if (index > 0) Divider(height: ThemeConstants.spacingMd),
+                          if (index > 0)
+                            const Divider(height: ThemeConstants.spacingMd),
                           _buildReportRow(
                             context,
                             entry.key,
@@ -279,20 +292,23 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 : _buildEmptyState(context, 'Aucune vente dans cette période'),
           ),
 
-          SizedBox(height: ThemeConstants.spacingLg),
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // Section Revenus par boisson
-          _buildSectionTitle(context, 'Revenus par boisson', Icons.monetization_on_rounded),
-          SizedBox(height: ThemeConstants.spacingMd),
+          _buildSectionTitle(
+              context, 'Revenus par boisson', Icons.monetization_on_rounded),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             child: revenueByDrink.isNotEmpty
                 ? Column(
                     children: revenueByDrink.entries.map((entry) {
-                      final index = revenueByDrink.entries.toList().indexOf(entry);
+                      final index =
+                          revenueByDrink.entries.toList().indexOf(entry);
                       return Column(
                         children: [
-                          if (index > 0) Divider(height: ThemeConstants.spacingMd),
+                          if (index > 0)
+                            const Divider(height: ThemeConstants.spacingMd),
                           _buildReportRow(
                             context,
                             entry.key,
@@ -306,11 +322,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 : _buildEmptyState(context, 'Aucun revenu dans cette période'),
           ),
 
-          SizedBox(height: ThemeConstants.spacingLg),
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // Section Tendances
-          _buildSectionTitle(context, 'Tendances des revenus', Icons.trending_up_rounded),
-          SizedBox(height: ThemeConstants.spacingMd),
+          _buildSectionTitle(
+              context, 'Tendances des revenus', Icons.trending_up_rounded),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             child: SizedBox(
@@ -319,20 +336,23 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
           ),
 
-          SizedBox(height: ThemeConstants.spacingLg),
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // Section Inventaire
-          _buildSectionTitle(context, 'Niveaux d\'inventaire', Icons.inventory_rounded),
-          SizedBox(height: ThemeConstants.spacingMd),
+          _buildSectionTitle(
+              context, 'Niveaux d\'inventaire', Icons.inventory_rounded),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           AppCard(
             child: inventoryLevels.isNotEmpty
                 ? Column(
                     children: inventoryLevels.entries.map((entry) {
-                      final index = inventoryLevels.entries.toList().indexOf(entry);
+                      final index =
+                          inventoryLevels.entries.toList().indexOf(entry);
                       return Column(
                         children: [
-                          if (index > 0) Divider(height: ThemeConstants.spacingMd),
+                          if (index > 0)
+                            const Divider(height: ThemeConstants.spacingMd),
                           _buildReportRow(
                             context,
                             entry.key,
@@ -346,7 +366,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 : _buildEmptyState(context, 'Aucun inventaire disponible'),
           ),
 
-          SizedBox(height: ThemeConstants.spacingXl),
+          const SizedBox(height: ThemeConstants.spacingXl),
         ],
       ),
     );
@@ -356,7 +376,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     return Row(
       children: [
         Icon(icon, color: AppColors.primary, size: ThemeConstants.iconSizeMd),
-        SizedBox(width: ThemeConstants.spacingSm),
+        const SizedBox(width: ThemeConstants.spacingSm),
         Text(
           title,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -384,7 +404,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
-        SizedBox(width: ThemeConstants.spacingMd),
+        const SizedBox(width: ThemeConstants.spacingMd),
         Text(
           value,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -398,7 +418,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   Widget _buildEmptyState(BuildContext context, String message) {
     return Padding(
-      padding: EdgeInsets.all(ThemeConstants.spacingMd),
+      padding: const EdgeInsets.all(ThemeConstants.spacingMd),
       child: Center(
         child: Text(
           message,
@@ -415,14 +435,15 @@ class _ReportsScreenState extends State<ReportsScreen> {
       return _buildEmptyState(context, 'Aucune donnée disponible');
     }
 
-    final sortedTrends = trends.entries.toList()..sort((a, b) => a.key.compareTo(b.key));
+    final sortedTrends = trends.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
 
     final spots = sortedTrends.asMap().entries.map((entry) {
       return FlSpot(entry.key.toDouble(), entry.value.value);
     }).toList();
 
     return Padding(
-      padding: EdgeInsets.all(ThemeConstants.spacingMd),
+      padding: const EdgeInsets.all(ThemeConstants.spacingMd),
       child: LineChart(
         LineChartData(
           gridData: FlGridData(

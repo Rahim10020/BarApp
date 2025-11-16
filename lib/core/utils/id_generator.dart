@@ -24,9 +24,7 @@ class IdGenerator {
     }
 
     // Si pas trouvé, créer un nouveau compteur
-    if (counter == null) {
-      counter = IdCounter(entityType: entityType, lastId: 0);
-    }
+    counter ??= IdCounter(entityType: entityType, lastId: 0);
 
     // Incrémenter
     counter.lastId += 1;

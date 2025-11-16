@@ -103,9 +103,7 @@ class _VenteScreenState extends State<VenteScreen> {
             return v.id.toString().contains(searchQuery) ||
                 v.dateVente.toString().toLowerCase().contains(searchQuery) ||
                 v.lignesVente.any((l) =>
-                    (l.boisson.nom ?? '')
-                        .toLowerCase()
-                        .contains(searchQuery));
+                    (l.boisson.nom ?? '').toLowerCase().contains(searchQuery));
           }).toList();
 
     return Padding(
@@ -121,7 +119,7 @@ class _VenteScreenState extends State<VenteScreen> {
             onAjouterVente: () => _ajouterVente(provider),
           ),
 
-          SizedBox(height: ThemeConstants.spacingLg),
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // === RECHERCHE ===
           AppSearchField(
@@ -130,7 +128,7 @@ class _VenteScreenState extends State<VenteScreen> {
             onChanged: (_) {}, // Le setState est dans initState
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // === LISTE DES VENTES ===
           Expanded(
@@ -139,7 +137,7 @@ class _VenteScreenState extends State<VenteScreen> {
                 : ListView.separated(
                     itemCount: ventesFiltered.length,
                     separatorBuilder: (_, __) =>
-                        SizedBox(height: ThemeConstants.spacingSm),
+                        const SizedBox(height: ThemeConstants.spacingSm),
                     itemBuilder: (context, index) {
                       final vente = ventesFiltered[index];
                       return VenteListItem(
@@ -165,12 +163,12 @@ class _VenteScreenState extends State<VenteScreen> {
             size: ThemeConstants.iconSize2Xl,
             color: Theme.of(context).colorScheme.outline,
           ),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
           Text(
             isSearching ? 'Aucun résultat' : 'Aucune vente',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          SizedBox(height: ThemeConstants.spacingXs),
+          const SizedBox(height: ThemeConstants.spacingXs),
           Text(
             isSearching
                 ? 'Essayez avec d\'autres mots-clés'

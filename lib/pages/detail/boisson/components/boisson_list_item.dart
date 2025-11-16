@@ -33,7 +33,7 @@ class BoissonListItem extends StatelessWidget {
         children: [
           // Icône avec fond coloré
           Container(
-            padding: EdgeInsets.all(ThemeConstants.spacingMd),
+            padding: const EdgeInsets.all(ThemeConstants.spacingMd),
             decoration: BoxDecoration(
               color: boisson.estFroid
                   ? AppColors.coldDrink.withOpacity(0.1)
@@ -41,13 +41,15 @@ class BoissonListItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
             ),
             child: Icon(
-              boisson.estFroid ? Icons.ac_unit_rounded : Icons.local_bar_rounded,
+              boisson.estFroid
+                  ? Icons.ac_unit_rounded
+                  : Icons.local_bar_rounded,
               color: boisson.estFroid ? AppColors.coldDrink : AppColors.primary,
               size: ThemeConstants.iconSizeLg,
             ),
           ),
 
-          SizedBox(width: ThemeConstants.spacingMd),
+          const SizedBox(width: ThemeConstants.spacingMd),
 
           // Informations
           Expanded(
@@ -64,15 +66,16 @@ class BoissonListItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    SizedBox(width: ThemeConstants.spacingXs),
+                    const SizedBox(width: ThemeConstants.spacingXs),
                     Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: ThemeConstants.spacingXs,
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.info.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.radiusSm),
                       ),
                       child: Text(
                         boisson.modele?.name ?? '',
@@ -84,7 +87,7 @@ class BoissonListItem extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: ThemeConstants.spacingXs),
+                const SizedBox(height: ThemeConstants.spacingXs),
 
                 // Prix
                 Text(
@@ -103,7 +106,7 @@ class BoissonListItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.edit_rounded,
                   color: AppColors.info,
                   size: ThemeConstants.iconSizeMd,
@@ -118,7 +121,7 @@ class BoissonListItem extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.delete_rounded,
                   color: AppColors.error,
                   size: ThemeConstants.iconSizeMd,

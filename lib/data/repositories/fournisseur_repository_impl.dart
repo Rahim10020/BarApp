@@ -5,8 +5,7 @@ import 'package:projet7/data/datasources/hive_local_datasource.dart';
 
 class FournisseurRepositoryImpl extends BaseRepositoryImpl<Fournisseur>
     implements IFournisseurRepository {
-  FournisseurRepositoryImpl(HiveLocalDatasource<Fournisseur> datasource)
-      : super(datasource);
+  FournisseurRepositoryImpl(super.datasource);
 
   @override
   List<Fournisseur> searchByName(String query) {

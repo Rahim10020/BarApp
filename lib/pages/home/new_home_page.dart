@@ -61,7 +61,7 @@ class _NewHomePageState extends State<NewHomePage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const SearchScreen()),
@@ -96,13 +96,13 @@ class _NewHomePageState extends State<NewHomePage> {
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 8,
-            offset: Offset(0, -2),
+            offset: const Offset(0, -2),
           ),
         ],
       ),
       child: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: ThemeConstants.spacingMd,
             vertical: ThemeConstants.spacingSm,
           ),
@@ -161,7 +161,7 @@ class _NewHomePageState extends State<NewHomePage> {
         borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
         child: AnimatedContainer(
           duration: ThemeConstants.durationNormal,
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: ThemeConstants.spacingSm,
             horizontal: ThemeConstants.spacingXs,
           ),
@@ -179,14 +179,12 @@ class _NewHomePageState extends State<NewHomePage> {
                 isSelected ? activeIcon : icon,
                 color: isSelected
                     ? (isDark ? AppColors.primaryLight : AppColors.primary)
-                    : (isDark
-                        ? AppColors.greyDark400
-                        : AppColors.greyLight600),
+                    : (isDark ? AppColors.greyDark400 : AppColors.greyLight600),
                 size: isSelected
                     ? ThemeConstants.iconSizeLg
                     : ThemeConstants.iconSizeMd,
               ),
-              SizedBox(height: ThemeConstants.spacingXs),
+              const SizedBox(height: ThemeConstants.spacingXs),
               Text(
                 label,
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
@@ -217,8 +215,8 @@ class _NewHomePageState extends State<NewHomePage> {
       // Sur le dashboard, bouton pour aller à ventes
       return FloatingActionButton.extended(
         onPressed: () => navigateBottomBar(1),
-        icon: Icon(Icons.add_shopping_cart),
-        label: Text('Vente rapide'),
+        icon: const Icon(Icons.add_shopping_cart),
+        label: const Text('Vente rapide'),
       );
     }
     return null;

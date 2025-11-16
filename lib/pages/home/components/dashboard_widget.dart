@@ -47,7 +47,7 @@ class DashboardWidget extends StatelessWidget {
             'Tableau de Bord',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
-          SizedBox(height: ThemeConstants.spacingLg),
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // === ALERTES ===
           if (lowStockAlerts.isNotEmpty) ...[
@@ -58,7 +58,7 @@ class DashboardWidget extends StatelessWidget {
               color: AppColors.error,
               alerts: lowStockAlerts,
             ),
-            SizedBox(height: ThemeConstants.spacingMd),
+            const SizedBox(height: ThemeConstants.spacingMd),
           ],
 
           if (expiryAlerts.isNotEmpty) ...[
@@ -69,7 +69,7 @@ class DashboardWidget extends StatelessWidget {
               color: AppColors.warning,
               alerts: expiryAlerts,
             ),
-            SizedBox(height: ThemeConstants.spacingMd),
+            const SizedBox(height: ThemeConstants.spacingMd),
           ],
 
           // === MÉTRIQUES (GRID) ===
@@ -112,14 +112,14 @@ class DashboardWidget extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: ThemeConstants.spacingXl),
+          const SizedBox(height: ThemeConstants.spacingXl),
 
           // === ACTIONS RAPIDES ===
           Text(
             'Actions Rapides',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           Row(
             children: [
@@ -130,7 +130,7 @@ class DashboardWidget extends StatelessWidget {
                   onPressed: () => onNavigate(1),
                 ),
               ),
-              SizedBox(width: ThemeConstants.spacingMd),
+              const SizedBox(width: ThemeConstants.spacingMd),
               Expanded(
                 child: AppButton.secondary(
                   text: 'Nouvelle Commande',
@@ -141,7 +141,7 @@ class DashboardWidget extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Bouton Voir Rapports
           AppButton(
@@ -179,7 +179,7 @@ class DashboardWidget extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
@@ -190,7 +190,7 @@ class DashboardWidget extends StatelessWidget {
                   size: ThemeConstants.iconSizeMd,
                 ),
               ),
-              SizedBox(width: ThemeConstants.spacingMd),
+              const SizedBox(width: ThemeConstants.spacingMd),
               Expanded(
                 child: Text(
                   title,
@@ -201,13 +201,14 @@ class DashboardWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: ThemeConstants.spacingSm,
                   vertical: ThemeConstants.spacingXs,
                 ),
                 decoration: BoxDecoration(
                   color: color,
-                  borderRadius: BorderRadius.circular(ThemeConstants.radiusFull),
+                  borderRadius:
+                      BorderRadius.circular(ThemeConstants.radiusFull),
                 ),
                 child: Text(
                   '${alerts.length}',
@@ -219,16 +220,17 @@ class DashboardWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Liste des alertes (max 3 affichées)
           ...alerts.take(3).map((alert) => Padding(
-                padding: EdgeInsets.only(bottom: ThemeConstants.spacingXs),
+                padding:
+                    const EdgeInsets.only(bottom: ThemeConstants.spacingXs),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 6),
+                      margin: const EdgeInsets.only(top: 6),
                       width: 6,
                       height: 6,
                       decoration: BoxDecoration(
@@ -236,7 +238,7 @@ class DashboardWidget extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                     ),
-                    SizedBox(width: ThemeConstants.spacingSm),
+                    const SizedBox(width: ThemeConstants.spacingSm),
                     Expanded(
                       child: Text(
                         alert,
@@ -251,7 +253,7 @@ class DashboardWidget extends StatelessWidget {
 
           // Indicateur "plus d'alertes"
           if (alerts.length > 3) ...[
-            SizedBox(height: ThemeConstants.spacingXs),
+            const SizedBox(height: ThemeConstants.spacingXs),
             Text(
               '+ ${alerts.length - 3} autres alertes',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(

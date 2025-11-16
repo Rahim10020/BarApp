@@ -47,7 +47,8 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? EdgeInsets.symmetric(vertical: ThemeConstants.spacingMd),
+      padding: padding ??
+          const EdgeInsets.symmetric(vertical: ThemeConstants.spacingMd),
       child: Row(
         children: [
           Expanded(
@@ -59,7 +60,7 @@ class SectionHeader extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 if (subtitle != null) ...[
-                  SizedBox(height: ThemeConstants.spacingXs),
+                  const SizedBox(height: ThemeConstants.spacingXs),
                   Text(
                     subtitle!,
                     style: Theme.of(context).textTheme.bodySmall,
@@ -105,14 +106,14 @@ class EmptyState extends StatelessWidget {
               size: ThemeConstants.iconSize2Xl,
               color: Theme.of(context).colorScheme.outline,
             ),
-            SizedBox(height: ThemeConstants.spacingLg),
+            const SizedBox(height: ThemeConstants.spacingLg),
             Text(
               title,
               style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
             if (subtitle != null) ...[
-              SizedBox(height: ThemeConstants.spacingSm),
+              const SizedBox(height: ThemeConstants.spacingSm),
               Text(
                 subtitle!,
                 style: Theme.of(context).textTheme.bodyMedium,
@@ -120,7 +121,7 @@ class EmptyState extends StatelessWidget {
               ),
             ],
             if (actionText != null && onAction != null) ...[
-              SizedBox(height: ThemeConstants.spacingLg),
+              const SizedBox(height: ThemeConstants.spacingLg),
               ElevatedButton(
                 onPressed: onAction,
                 child: Text(actionText!),
@@ -161,14 +162,14 @@ class ErrorState extends StatelessWidget {
               size: ThemeConstants.iconSize2Xl,
               color: Theme.of(context).colorScheme.error,
             ),
-            SizedBox(height: ThemeConstants.spacingLg),
+            const SizedBox(height: ThemeConstants.spacingLg),
             if (title != null) ...[
               Text(
                 title!,
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: ThemeConstants.spacingSm),
+              const SizedBox(height: ThemeConstants.spacingSm),
             ],
             Text(
               message,
@@ -176,10 +177,10 @@ class ErrorState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             if (actionText != null && onRetry != null) ...[
-              SizedBox(height: ThemeConstants.spacingLg),
+              const SizedBox(height: ThemeConstants.spacingLg),
               ElevatedButton.icon(
                 onPressed: onRetry,
-                icon: Icon(Icons.refresh),
+                icon: const Icon(Icons.refresh),
                 label: Text(actionText!),
               ),
             ],
@@ -202,9 +203,9 @@ class LoadingState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
+          const CircularProgressIndicator(),
           if (message != null) ...[
-            SizedBox(height: ThemeConstants.spacingMd),
+            const SizedBox(height: ThemeConstants.spacingMd),
             Text(
               message!,
               style: Theme.of(context).textTheme.bodyMedium,

@@ -5,8 +5,7 @@ import 'package:projet7/models/commande.dart';
 
 class CommandeRepositoryImpl extends BaseRepositoryImpl<Commande>
     implements ICommandeRepository {
-  CommandeRepositoryImpl(HiveLocalDatasource<Commande> datasource)
-      : super(datasource);
+  CommandeRepositoryImpl(super.datasource);
 
   @override
   List<Commande> getByDateRange(DateTime startDate, DateTime endDate) {
@@ -30,7 +29,8 @@ class CommandeRepositoryImpl extends BaseRepositoryImpl<Commande>
 
   @override
   List<Commande> getRecent({int limit = 10}) {
-    final sorted = getAll()..sort((a, b) => b.dateCommande.compareTo(a.dateCommande));
+    final sorted = getAll()
+      ..sort((a, b) => b.dateCommande.compareTo(a.dateCommande));
     return sorted.take(limit).toList();
   }
 }

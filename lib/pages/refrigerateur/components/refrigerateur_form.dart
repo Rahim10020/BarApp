@@ -38,18 +38,18 @@ class _RefrigerateurFormState extends State<RefrigerateurForm> {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
                   color: AppColors.coldDrink.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.kitchen_rounded,
                   color: AppColors.coldDrink,
                   size: ThemeConstants.iconSizeMd,
                 ),
               ),
-              SizedBox(width: ThemeConstants.spacingMd),
+              const SizedBox(width: ThemeConstants.spacingMd),
               Text(
                 'Nouveau Réfrigérateur',
                 style: Theme.of(context).textTheme.titleMedium,
@@ -57,7 +57,7 @@ class _RefrigerateurFormState extends State<RefrigerateurForm> {
             ],
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Nom et Température (ligne)
           Row(
@@ -71,7 +71,7 @@ class _RefrigerateurFormState extends State<RefrigerateurForm> {
                   prefixIcon: Icons.label_rounded,
                 ),
               ),
-              SizedBox(width: ThemeConstants.spacingMd),
+              const SizedBox(width: ThemeConstants.spacingMd),
               Expanded(
                 child: AppNumberField(
                   controller: widget.tempController,
@@ -83,7 +83,7 @@ class _RefrigerateurFormState extends State<RefrigerateurForm> {
             ],
           ),
 
-          SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingMd),
 
           // Bouton Ajouter
           AppButton.primary(

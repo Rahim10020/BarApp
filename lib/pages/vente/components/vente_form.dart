@@ -42,12 +42,12 @@ class _VenteFormState extends State<VenteForm> {
               size: ThemeConstants.iconSize2Xl,
               color: AppColors.textSecondary,
             ),
-            SizedBox(height: ThemeConstants.spacingMd),
+            const SizedBox(height: ThemeConstants.spacingMd),
             Text(
               'Aucune boisson en stock',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            SizedBox(height: ThemeConstants.spacingXs),
+            const SizedBox(height: ThemeConstants.spacingXs),
             Text(
               'Ajoutez des boissons aux réfrigérateurs pour créer une vente',
               style: Theme.of(context).textTheme.bodySmall,
@@ -61,9 +61,7 @@ class _VenteFormState extends State<VenteForm> {
     return AnimatedContainer(
       duration: ThemeConstants.animationNormal,
       child: AppCard(
-        color: widget.isAdding
-            ? AppColors.success.withOpacity(0.1)
-            : null,
+        color: widget.isAdding ? AppColors.success.withOpacity(0.1) : null,
         border: widget.isAdding
             ? Border.all(
                 color: AppColors.success.withOpacity(0.3),
@@ -77,18 +75,19 @@ class _VenteFormState extends State<VenteForm> {
             Row(
               children: [
                 Container(
-                  padding: EdgeInsets.all(ThemeConstants.spacingSm),
+                  padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                    borderRadius:
+                        BorderRadius.circular(ThemeConstants.radiusMd),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_shopping_cart_rounded,
                     color: AppColors.primary,
                     size: ThemeConstants.iconSizeMd,
                   ),
                 ),
-                SizedBox(width: ThemeConstants.spacingMd),
+                const SizedBox(width: ThemeConstants.spacingMd),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,13 +105,14 @@ class _VenteFormState extends State<VenteForm> {
                 ),
                 if (widget.boissonsSelectionnees.isNotEmpty)
                   Container(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: ThemeConstants.spacingSm,
                       vertical: ThemeConstants.spacingXs,
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(ThemeConstants.radiusFull),
+                      borderRadius:
+                          BorderRadius.circular(ThemeConstants.radiusFull),
                     ),
                     child: Text(
                       '${widget.boissonsSelectionnees.length}',
@@ -125,7 +125,7 @@ class _VenteFormState extends State<VenteForm> {
               ],
             ),
 
-            SizedBox(height: ThemeConstants.spacingLg),
+            const SizedBox(height: ThemeConstants.spacingLg),
 
             // Liste horizontale des boissons
             SizedBox(
@@ -133,10 +133,12 @@ class _VenteFormState extends State<VenteForm> {
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: boissonsDisponibles.length,
-                separatorBuilder: (_, __) => SizedBox(width: ThemeConstants.spacingSm),
+                separatorBuilder: (_, __) =>
+                    const SizedBox(width: ThemeConstants.spacingSm),
                 itemBuilder: (context, index) {
                   final boisson = boissonsDisponibles[index];
-                  final isSelected = widget.boissonsSelectionnees.contains(boisson);
+                  final isSelected =
+                      widget.boissonsSelectionnees.contains(boisson);
 
                   return _BoissonChip(
                     boisson: boisson,
@@ -153,7 +155,7 @@ class _VenteFormState extends State<VenteForm> {
               ),
             ),
 
-            SizedBox(height: ThemeConstants.spacingLg),
+            const SizedBox(height: ThemeConstants.spacingLg),
 
             // Bouton Enregistrer
             AppButton.primary(
@@ -189,7 +191,7 @@ class _BoissonChip extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: ThemeConstants.animationFast,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: ThemeConstants.spacingMd,
           vertical: ThemeConstants.spacingSm,
         ),
@@ -199,9 +201,8 @@ class _BoissonChip extends StatelessWidget {
               : Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
           border: Border.all(
-            color: isSelected
-                ? AppColors.primary
-                : Theme.of(context).dividerColor,
+            color:
+                isSelected ? AppColors.primary : Theme.of(context).dividerColor,
             width: isSelected
                 ? ThemeConstants.borderWidthMedium
                 : ThemeConstants.borderWidthThin,
@@ -218,7 +219,7 @@ class _BoissonChip extends StatelessWidget {
                   size: ThemeConstants.iconSizeMd,
                   color: isSelected ? Colors.white : AppColors.primary,
                 ),
-                SizedBox(width: ThemeConstants.spacingXs),
+                const SizedBox(width: ThemeConstants.spacingXs),
                 Text(
                   boisson.nom ?? 'Sans nom',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -228,7 +229,7 @@ class _BoissonChip extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: ThemeConstants.spacingXs),
+            const SizedBox(height: ThemeConstants.spacingXs),
             Text(
               boisson.getModele(),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(

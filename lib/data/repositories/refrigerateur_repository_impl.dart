@@ -5,8 +5,7 @@ import 'package:projet7/models/refrigerateur.dart';
 
 class RefrigerateurRepositoryImpl extends BaseRepositoryImpl<Refrigerateur>
     implements IRefrigerateurRepository {
-  RefrigerateurRepositoryImpl(HiveLocalDatasource<Refrigerateur> datasource)
-      : super(datasource);
+  RefrigerateurRepositoryImpl(super.datasource);
 
   @override
   List<Refrigerateur> getByTemperatureRange(double min, double max) {
