@@ -1,8 +1,25 @@
 import 'package:hive/hive.dart';
 import 'package:projet7/core/error/failures.dart';
 
-/// Datasource générique pour Hive
-/// T = Type de l'entité qui doit avoir un champ `id`
+/// Source de données locale générique utilisant Hive pour la persistance.
+///
+/// Cette classe fournit une interface CRUD générique pour stocker et
+/// récupérer des entités dans une box Hive.
+///
+/// [T] représente le type de l'entité. L'entité doit avoir un champ `id`
+/// accessible via la fonction [getId] fournie au constructeur.
+///
+/// Toutes les opérations incluent une gestion d'erreurs appropriée
+/// avec des exceptions typées ([DatabaseFailure], [NotFoundFailure]).
+///
+/// Exemple d'utilisation :
+/// ```dart
+/// final datasource = HiveLocalDatasource<Boisson>(
+///   box: boissonBox,
+///   getId: (b) => b.id,
+/// );
+/// final boissons = datasource.getAll();
+/// ```
 class HiveLocalDatasource<T> {
   final Box<T> box;
   final int Function(T) getId;

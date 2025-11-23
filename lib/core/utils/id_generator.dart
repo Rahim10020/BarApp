@@ -1,7 +1,19 @@
 import 'package:hive/hive.dart';
 import 'package:projet7/models/id_counter.dart';
 
-/// Générateur d'IDs uniques pour chaque type d'entité
+/// Générateur d'identifiants uniques séquentiels pour chaque type d'entité.
+///
+/// Utilise une box Hive pour persister les compteurs et garantir
+/// l'unicité des IDs même après redémarrage de l'application.
+///
+/// Chaque type d'entité (Boisson, Casier, Vente, etc.) a son propre compteur
+/// indépendant, permettant une numérotation séparée.
+///
+/// Exemple d'utilisation :
+/// ```dart
+/// final id = await idGenerator.generateUniqueId('Boisson');
+/// final boisson = Boisson(id: id, ...);
+/// ```
 class IdGenerator {
   final Box<IdCounter> _idCounterBox;
 

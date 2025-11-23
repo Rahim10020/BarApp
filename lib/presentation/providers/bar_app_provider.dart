@@ -20,8 +20,25 @@ import 'package:projet7/models/fournisseur.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/models/vente.dart';
 
-/// Nouveau BarProvider simplifié utilisant l'architecture clean
-/// Délègue toutes les opérations aux repositories et use cases
+/// Provider principal de l'application utilisant l'architecture clean.
+///
+/// Cette classe sert de pont entre l'interface utilisateur et la logique métier.
+/// Elle délègue toutes les opérations aux repositories et use cases appropriés,
+/// et notifie les widgets lors de changements de données.
+///
+/// Implémente [ChangeNotifier] pour la gestion d'état avec Provider.
+///
+/// Fonctionnalités principales :
+/// - Gestion CRUD pour toutes les entités (boissons, casiers, ventes, etc.)
+/// - Opérations complexes via use cases (transferts, statistiques, PDF)
+/// - Alertes d'inventaire (stock bas, expirations)
+/// - Sauvegarde et restauration des données
+///
+/// Exemple d'utilisation :
+/// ```dart
+/// final provider = Provider.of<BarAppProvider>(context);
+/// await provider.addBoisson(nouvelleBoisson);
+/// ```
 class BarAppProvider with ChangeNotifier {
   final RepositoryManager _manager = RepositoryManager();
 

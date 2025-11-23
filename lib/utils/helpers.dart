@@ -1,7 +1,17 @@
 import 'package:intl/intl.dart';
 import 'package:projet7/models/modele.dart';
 
+/// Classe utilitaire contenant des fonctions d'aide pour le formatage.
+///
+/// Fournit des méthodes statiques pour :
+/// - Conversion entre enum [Modele] et chaînes de caractères
+/// - Formatage des montants en FCFA (Franc CFA)
+/// - Formatage des dates au format français
 class Helpers {
+  /// Convertit une chaîne en enum [Modele].
+  ///
+  /// [modele] : "Petit" ou "Grand".
+  /// Retourne [Modele.grand] par défaut si la chaîne n'est pas reconnue.
   static Modele getModele(String modele) {
     switch (modele) {
       case "Petit":
@@ -12,6 +22,10 @@ class Helpers {
     return Modele.grand;
   }
 
+  /// Convertit un enum [Modele] en chaîne lisible.
+  ///
+  /// [modele] : l'enum à convertir.
+  /// Retourne "Petit", "Grand" ou `null` si le modèle est null.
   static String? getModeleToString(Modele? modele) {
     switch (modele) {
       case Modele.petit:
@@ -23,12 +37,24 @@ class Helpers {
     }
   }
 
+  /// Formate un montant en devise FCFA (Franc CFA).
+  ///
+  /// [montant] : le montant à formater.
+  /// Retourne une chaîne formatée (ex: "1 500 FCFA").
+  ///
+  /// Utilise la locale française pour le formatage des nombres.
   static String formatterEnCFA(double montant) {
     return NumberFormat.currency(
             locale: "fr_FR", symbol: "FCFA", decimalDigits: 0)
         .format(montant);
   }
 
+  /// Formate une date au format français avec heure.
+  ///
+  /// [date] : la date à formater.
+  /// Retourne une chaîne au format "JJ/MM/AAAA à HH:MM".
+  ///
+  /// Exemple : "25/12/2024 à 14:30"
   static String formatterDate(DateTime date) {
     return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString()} à ${date.hour.toString().padLeft(2, "0")}:${date.minute.toString().padLeft(2, "0")}";
   }
