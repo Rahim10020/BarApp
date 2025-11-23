@@ -58,4 +58,14 @@ class Helpers {
   static String formatterDate(DateTime date) {
     return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString()} à ${date.hour.toString().padLeft(2, "0")}:${date.minute.toString().padLeft(2, "0")}";
   }
+
+  /// Formate une date au format court.
+  ///
+  /// [date] : la date à formater.
+  /// Retourne une chaîne au format "JJ/MM/AA".
+  ///
+  /// Exemple : "25/12/24"
+  static String formatterDateCourt(DateTime date) {
+    return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}";
+  }
 }

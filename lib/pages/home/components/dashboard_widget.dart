@@ -77,9 +77,9 @@ class DashboardWidget extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            crossAxisSpacing: ThemeConstants.spacingMd,
-            mainAxisSpacing: ThemeConstants.spacingMd,
-            childAspectRatio: 1.1,
+            crossAxisSpacing: ThemeConstants.spacingSm,
+            mainAxisSpacing: ThemeConstants.spacingSm,
+            childAspectRatio: 1.5,
             children: [
               AppStatCard(
                 label: 'Ventes Aujourd\'hui',
@@ -127,27 +127,30 @@ class DashboardWidget extends StatelessWidget {
                 child: AppButton.primary(
                   text: 'Nouvelle Vente',
                   icon: Icons.add_shopping_cart_rounded,
+                  size: AppButtonSize.small,
                   onPressed: () => onNavigate(1),
                 ),
               ),
-              const SizedBox(width: ThemeConstants.spacingMd),
+              const SizedBox(width: ThemeConstants.spacingSm),
               Expanded(
                 child: AppButton.secondary(
-                  text: 'Nouvelle Commande',
+                  text: 'Nvlle Commande',
                   icon: Icons.add_box_rounded,
+                  size: AppButtonSize.small,
                   onPressed: () => onNavigate(3),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingSm),
 
           // Bouton Voir Rapports
           AppButton(
             text: 'Voir les Rapports',
             icon: Icons.analytics_rounded,
             type: AppButtonType.text,
+            size: AppButtonSize.small,
             isFullWidth: true,
             onPressed: () => onNavigate(3),
           ),

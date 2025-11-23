@@ -239,6 +239,7 @@ class _CommandeFormState extends State<CommandeForm> {
           AppButton.primary(
             text: 'Créer la commande',
             icon: Icons.add_shopping_cart_rounded,
+            size: AppButtonSize.small,
             isFullWidth: true,
             onPressed: widget.onAjouterCommande,
           ),

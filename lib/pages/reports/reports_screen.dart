@@ -98,8 +98,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   children: [
                     Expanded(
                       child: AppButton.secondary(
-                        text: 'Du: ${Helpers.formatterDate(_startDate)}',
+                        text: 'Du: ${Helpers.formatterDateCourt(_startDate)}',
                         icon: Icons.calendar_today_rounded,
+                        size: AppButtonSize.small,
                         onPressed: () async {
                           final picked = await showDatePicker(
                             context: context,
@@ -113,11 +114,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         },
                       ),
                     ),
-                    const SizedBox(width: ThemeConstants.spacingMd),
+                    const SizedBox(width: ThemeConstants.spacingSm),
                     Expanded(
                       child: AppButton.secondary(
-                        text: 'Au: ${Helpers.formatterDate(_endDate)}',
+                        text: 'Au: ${Helpers.formatterDateCourt(_endDate)}',
                         icon: Icons.event_rounded,
+                        size: AppButtonSize.small,
                         onPressed: () async {
                           final picked = await showDatePicker(
                             context: context,
@@ -160,6 +162,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 AppButton.primary(
                   text: 'Exporter en PDF',
                   icon: Icons.download_rounded,
+                  size: AppButtonSize.small,
                   isFullWidth: true,
                   onPressed: () async {
                     try {
