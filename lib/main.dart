@@ -9,6 +9,16 @@ import 'package:projet7/ui/widgets/buttons/app_button.dart';
 import 'package:projet7/ui/widgets/inputs/app_text_field.dart';
 import 'package:provider/provider.dart';
 
+/// Point d'entrée principal de l'application BarApp.
+///
+/// Initialise les services essentiels dans l'ordre suivant :
+/// 1. Flutter bindings pour les opérations asynchrones
+/// 2. Hive (base de données locale) via [HiveSetup]
+/// 3. Provider pour le thème (clair/sombre)
+/// 4. Provider principal ([BarAppProvider])
+///
+/// Configure également la localisation française (fr_FR) pour
+/// le formatage des dates et devises.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveSetup.initialize();

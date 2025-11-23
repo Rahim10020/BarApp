@@ -29,8 +29,21 @@ import 'package:projet7/models/id_counter.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/models/vente.dart';
 
-/// Gestionnaire centralisé pour tous les repositories et use cases
-/// Pattern simple de Dependency Injection sans librairie externe
+/// Gestionnaire centralisé pour l'injection de dépendances de l'application.
+///
+/// Cette classe singleton gère l'initialisation et l'accès à tous les
+/// repositories, use cases et services de l'application.
+///
+/// Implémente un pattern simple de Dependency Injection sans librairie externe,
+/// assurant que toutes les dépendances sont créées et injectées correctement.
+///
+/// **Important** : Appeler [initialize] avant d'accéder aux getters.
+///
+/// Exemple d'utilisation :
+/// ```dart
+/// await RepositoryManager().initialize();
+/// final venteRepo = RepositoryManager().venteRepository;
+/// ```
 class RepositoryManager {
   // === SINGLETON ===
   static final RepositoryManager _instance = RepositoryManager._internal();

@@ -2,6 +2,10 @@ import 'package:projet7/data/repositories/base_repository_impl.dart';
 import 'package:projet7/domain/repositories/i_commande_repository.dart';
 import 'package:projet7/models/commande.dart';
 
+/// Implémentation concrète du repository des commandes fournisseurs.
+///
+/// Étend [BaseRepositoryImpl] avec les opérations spécifiques aux commandes :
+/// filtrage par période, par fournisseur et calcul des coûts.
 class CommandeRepositoryImpl extends BaseRepositoryImpl<Commande>
     implements ICommandeRepository {
   CommandeRepositoryImpl(super.datasource);

@@ -1,13 +1,23 @@
 import 'package:projet7/domain/repositories/i_casier_repository.dart';
 import 'package:projet7/domain/repositories/i_refrigerateur_repository.dart';
 
-/// Modèle pour les alertes d'inventaire
+/// Modèle représentant une alerte d'inventaire.
+///
+/// Peut être de type 'low_stock' (stock bas) ou 'expiry' (expiration).
 class InventoryAlert {
-  final String type; // 'low_stock' ou 'expiry'
+  /// Type d'alerte : 'low_stock' ou 'expiry'.
+  final String type;
+
+  /// Message descriptif de l'alerte.
   final String message;
+
+  /// Date d'expiration (pour les alertes de type 'expiry').
   final DateTime? expiryDate;
+
+  /// Niveau de stock actuel (pour les alertes de type 'low_stock').
   final int? stockLevel;
 
+  /// Crée une nouvelle alerte d'inventaire.
   InventoryAlert({
     required this.type,
     required this.message,
@@ -16,7 +26,12 @@ class InventoryAlert {
   });
 }
 
-/// Use case pour récupérer toutes les alertes d'inventaire
+/// Use case pour détecter et récupérer les alertes d'inventaire.
+///
+/// Analyse les stocks des réfrigérateurs et casiers pour identifier :
+/// - Les produits en stock bas (sous un seuil configurable)
+/// - Les produits proches de leur date d'expiration
+/// - Les produits déjà expirés
 class GetInventoryAlertsUseCase {
   final IRefrigerateurRepository refrigerateurRepository;
   final ICasierRepository casierRepository;

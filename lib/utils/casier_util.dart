@@ -1,5 +1,9 @@
 import 'package:projet7/models/casier.dart';
 
+/// Utilitaires pour le tri et le filtrage des casiers.
+///
+/// Fournit des méthodes statiques pour organiser les casiers
+/// par prix ou par contenu.
 class CasierUtil {
   static List<Casier> trierCasierParPrix(List<Casier> casiers) {
     List<Casier> casiersParPrix = List.from(casiers);

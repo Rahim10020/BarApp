@@ -1,7 +1,15 @@
 import 'package:projet7/data/datasources/hive_local_datasource.dart';
 import 'package:projet7/domain/repositories/i_base_repository.dart';
 
-/// Implémentation de base pour tous les repositories
+/// Implémentation de base générique pour tous les repositories.
+///
+/// Cette classe fournit une implémentation par défaut de [IBaseRepository]
+/// en déléguant toutes les opérations au [HiveLocalDatasource].
+///
+/// Les repositories spécifiques étendent cette classe et ajoutent
+/// des méthodes additionnelles selon leurs besoins.
+///
+/// [T] représente le type de l'entité gérée par le repository.
 class BaseRepositoryImpl<T> implements IBaseRepository<T> {
   final HiveLocalDatasource<T> datasource;
 

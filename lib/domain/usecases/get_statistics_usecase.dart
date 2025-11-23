@@ -3,17 +3,38 @@ import 'package:projet7/domain/repositories/i_commande_repository.dart';
 import 'package:projet7/domain/repositories/i_refrigerateur_repository.dart';
 import 'package:projet7/domain/repositories/i_vente_repository.dart';
 
-/// Modèle pour les statistiques
+/// Modèle de données regroupant toutes les statistiques du bar.
+///
+/// Contient les métriques clés pour l'analyse des performances :
+/// revenus, ventes, inventaire et tendances.
+///
+/// Utilisé pour générer les rapports PDF et afficher le tableau de bord.
 class BarStatistics {
+  /// Revenus par boisson : clé = nom de la boisson, valeur = revenu total en FCFA.
   final Map<String, double> revenueByDrink;
+
+  /// Top des boissons les plus vendues, triées par nombre de ventes décroissant.
   final List<MapEntry<String, int>> topSellingDrinks;
+
+  /// Tendances des revenus par période : clé = date, valeur = revenu en FCFA.
   final Map<DateTime, double> revenueTrends;
+
+  /// Niveaux d'inventaire : clé = nom de la boisson, valeur = quantité en stock.
   final Map<String, int> inventoryLevels;
+
+  /// Revenu total sur la période en FCFA.
   final double totalRevenue;
+
+  /// Nombre total de ventes/transactions.
   final int totalOrders;
+
+  /// Valeur moyenne d'une vente en FCFA.
   final double averageOrderValue;
+
+  /// Coût total des commandes fournisseurs en FCFA.
   final double totalOrderCost;
 
+  /// Crée une nouvelle instance de [BarStatistics].
   BarStatistics({
     required this.revenueByDrink,
     required this.topSellingDrinks,
@@ -26,7 +47,19 @@ class BarStatistics {
   });
 }
 
-/// Use case pour calculer les statistiques du bar
+/// Use case pour calculer et agréger les statistiques du bar.
+///
+/// Analyse les données de ventes, commandes et inventaire pour produire
+/// des métriques complètes sur les performances du bar.
+///
+/// Exemple d'utilisation :
+/// ```dart
+/// final stats = getStatisticsUseCase.execute(
+///   startDate: DateTime(2024, 1, 1),
+///   endDate: DateTime(2024, 12, 31),
+///   period: 'monthly',
+/// );
+/// ```
 class GetStatisticsUseCase {
   final IVenteRepository venteRepository;
   final ICommandeRepository commandeRepository;
