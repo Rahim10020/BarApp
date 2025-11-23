@@ -5,6 +5,12 @@ import 'package:projet7/models/ligne_commande.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
 import 'package:projet7/utils/helpers.dart';
 
+/// Écran de détail d'une ligne de commande.
+///
+/// Affiche les informations détaillées d'une ligne de commande incluant:
+/// - Identifiant et montant de la ligne
+/// - Informations du casier associé
+/// - Détails de la boisson contenue avec navigation vers l'écran de détail
 class LigneCommandeDetailScreen extends StatelessWidget {
   final LigneCommande ligneCommande;
 

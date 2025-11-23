@@ -6,6 +6,13 @@ import 'package:projet7/models/casier.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:provider/provider.dart';
 
+/// Écran de modification d'un casier existant.
+///
+/// Permet de modifier le contenu d'un casier:
+/// - Nombre total de boissons
+/// - Type de boisson via un sélecteur horizontal
+///
+/// Crée de nouvelles instances de boissons basées sur le modèle sélectionné.
 class ModifierCasierScreen extends StatefulWidget {
   final Casier casier;
 

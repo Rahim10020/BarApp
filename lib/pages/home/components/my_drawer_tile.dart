@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Élément de menu personnalisé pour le drawer de navigation.
+///
+/// Affiche une icône et un texte stylisé pour représenter
+/// une option de navigation dans le menu latéral.
+///
+/// Exemple d'utilisation:
+/// ```dart
+/// MyDrawerTile(
+///   text: 'Paramètres',
+///   icon: Icons.settings,
+///   onTap: () => Navigator.pushNamed(context, '/settings'),
+/// )
+/// ```
 class MyDrawerTile extends StatelessWidget {
   final String text;
   final IconData icon;

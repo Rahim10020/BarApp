@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Page "À propos" de l'application.
+///
+/// Affiche les informations sur l'application:
+/// - Nom de l'application (BarApp)
+/// - Version actuelle
+/// - Description de l'application
 class AProposPage extends StatelessWidget {
   const AProposPage({super.key});
 

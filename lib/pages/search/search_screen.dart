@@ -14,6 +14,16 @@ import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 
+/// Écran de recherche globale dans l'application.
+///
+/// Permet de rechercher parmi toutes les entités de l'application:
+/// - Boissons (par nom)
+/// - Casiers (par ID)
+/// - Commandes (par ID ou nom de fournisseur)
+/// - Ventes (par ID ou nom de boisson)
+/// - Réfrigérateurs (par ID)
+///
+/// Les résultats sont affichés par catégorie avec navigation vers les détails.
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 

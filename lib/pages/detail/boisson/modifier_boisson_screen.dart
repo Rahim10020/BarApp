@@ -5,6 +5,15 @@ import 'package:projet7/models/modele.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:provider/provider.dart';
 
+/// Écran de modification d'une boisson existante.
+///
+/// Permet de modifier les propriétés d'une boisson:
+/// - Nom
+/// - Prix
+/// - Description
+/// - Modèle (petit/grand)
+///
+/// Valide les champs obligatoires avant d'enregistrer les modifications.
 class ModifierBoissonScreen extends StatefulWidget {
   final Boisson boisson;
 

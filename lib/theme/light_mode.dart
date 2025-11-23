@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// Configuration du thème clair de l'application.
+///
+/// Définit les couleurs pour le mode clair avec une palette
+/// de gris clairs et de blancs pour une interface lumineuse
+/// et facile à lire en pleine lumière.
 ThemeData lightMode = ThemeData(
   colorScheme: const ColorScheme.light(
     surface: Color(0xFFE8E8E8),

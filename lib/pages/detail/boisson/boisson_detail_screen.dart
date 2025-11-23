@@ -4,6 +4,13 @@ import 'package:projet7/models/boisson.dart';
 import 'package:projet7/components/build_info_card.dart';
 import 'package:projet7/utils/helpers.dart';
 
+/// Écran de détail d'une boisson.
+///
+/// Affiche les informations complètes d'une boisson:
+/// - Nom et prix actuel
+/// - État (froide ou non)
+/// - Modèle (petit/grand)
+/// - Description
 class BoissonDetailScreen extends StatelessWidget {
   final Boisson boisson;
 

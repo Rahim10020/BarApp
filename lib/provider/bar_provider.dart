@@ -14,6 +14,16 @@ import 'package:projet7/models/vente.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:projet7/services/pdf_service.dart';
 
+/// Provider legacy pour la gestion de l'état du bar.
+///
+/// Note: Cette classe est dépréciée en faveur de [BarAppProvider].
+///
+/// Gère l'état global de l'application avec les fonctionnalités:
+/// - Opérations CRUD sur toutes les entités (boissons, casiers, ventes, etc.)
+/// - Génération de PDF pour commandes, ventes et statistiques
+/// - Alertes de stock et d'expiration
+/// - Sauvegarde et restauration des données
+/// - Statistiques et rapports
 class BarProvider with ChangeNotifier {
   late Box<BarInstance> _barBox;
   late Box<Boisson> _boissonBox;

@@ -5,6 +5,13 @@ import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:provider/provider.dart';
 
+/// Écran d'ajout de boissons à un réfrigérateur.
+///
+/// Permet de transférer des boissons depuis les casiers commandés
+/// vers un réfrigérateur spécifique.
+///
+/// Affiche la liste des casiers disponibles dans les commandes
+/// et permet de spécifier le nombre de boissons à transférer.
 class AjouterBoissonRefrigerateurScreen extends StatefulWidget {
   final Refrigerateur refrigerateur;
 

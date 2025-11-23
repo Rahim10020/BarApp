@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// Configuration du thème sombre de l'application.
+///
+/// Définit les couleurs pour le mode sombre avec une palette
+/// de gris foncés et de couleurs neutres pour une meilleure
+/// lisibilité en conditions de faible luminosité.
 ThemeData darkMode = ThemeData(
   colorScheme: const ColorScheme.dark(
     surface: Color(0xFF323437),
