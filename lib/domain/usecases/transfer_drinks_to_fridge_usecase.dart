@@ -5,7 +5,13 @@ import 'package:projet7/domain/repositories/i_refrigerateur_repository.dart';
 import 'package:projet7/models/boisson.dart';
 import 'package:projet7/models/casier.dart';
 
-/// Use case pour transférer des boissons d'un casier vers un réfrigérateur
+/// Use case pour transférer des boissons d'un casier vers un réfrigérateur.
+///
+/// Copie les boissons du casier vers le frigo avec [estFroid] = true.
+/// Génère de nouveaux IDs pour les boissons transférées.
+///
+/// Lance [NotFoundFailure] si le casier ou le frigo n'existe pas.
+/// Lance [ValidationFailure] si le nombre demandé est invalide.
 class TransferDrinksToFridgeUseCase {
   final ICommandeRepository commandeRepository;
   final IRefrigerateurRepository refrigerateurRepository;

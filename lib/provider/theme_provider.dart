@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:projet7/ui/theme/app_theme.dart';
 
-/// Provider pour gérer le thème de l'application (Light / Dark)
+/// Provider pour gérer le thème de l'application (clair/sombre).
+///
+/// Persiste la préférence de thème dans Hive et notifie les widgets
+/// lors des changements pour reconstruire l'interface.
+///
+/// Utilise [AppTheme.lightTheme] et [AppTheme.darkTheme] pour les thèmes.
 class ThemeProvider with ChangeNotifier {
   late Box _themesBox;
   late ThemeData _themeData;

@@ -3,6 +3,12 @@ import 'package:projet7/core/utils/id_generator.dart';
 import 'package:projet7/domain/repositories/i_bar_repository.dart';
 import 'package:projet7/models/bar_instance.dart';
 
+/// Implémentation concrète du repository pour la configuration du bar.
+///
+/// Gère l'instance unique du bar dans l'application.
+/// Utilise directement une box Hive car il n'y a qu'un seul bar.
+///
+/// Le bar est toujours stocké au premier index de la box.
 class BarRepositoryImpl implements IBarRepository {
   final Box<BarInstance> box;
   final IdGenerator idGenerator;

@@ -12,6 +12,12 @@ import 'package:projet7/models/vente.dart';
 import 'package:projet7/models/modele.dart';
 import 'package:projet7/provider/theme_provider.dart';
 
+/// Service d'initialisation de la base de données Hive.
+///
+/// Configure Hive Flutter et enregistre tous les adaptateurs de types
+/// nécessaires pour la sérialisation des modèles de données.
+///
+/// Doit être appelé au démarrage de l'application avant toute opération Hive.
 class HiveSetup {
   static Future<void> initialize() async {
     await Hive.initFlutter();

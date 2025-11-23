@@ -2,6 +2,10 @@ import 'package:projet7/data/repositories/base_repository_impl.dart';
 import 'package:projet7/domain/repositories/i_refrigerateur_repository.dart';
 import 'package:projet7/models/refrigerateur.dart';
 
+/// Implémentation concrète du repository des réfrigérateurs.
+///
+/// Étend [BaseRepositoryImpl] avec les opérations spécifiques aux frigos :
+/// filtrage par température, détection de stock bas et comptage des boissons.
 class RefrigerateurRepositoryImpl extends BaseRepositoryImpl<Refrigerateur>
     implements IRefrigerateurRepository {
   RefrigerateurRepositoryImpl(super.datasource);

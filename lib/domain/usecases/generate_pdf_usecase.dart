@@ -4,7 +4,12 @@ import 'package:projet7/models/commande.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:projet7/services/pdf_service.dart';
 
-/// Use case pour générer tous les types de PDF
+/// Use case pour générer les rapports PDF de l'application.
+///
+/// Permet de créer des PDF pour les commandes, les ventes et les statistiques.
+/// Utilise [PdfService] pour la génération effective des documents.
+///
+/// Les fichiers sont sauvegardés dans le dossier Downloads.
 class GeneratePdfUseCase {
   final IBarRepository barRepository;
   final GetStatisticsUseCase getStatisticsUseCase;

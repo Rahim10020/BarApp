@@ -3,7 +3,12 @@ import 'dart:io';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-/// Use case pour la sauvegarde et la restauration des données
+/// Use case pour la sauvegarde et la restauration des données de l'application.
+///
+/// Permet d'exporter toutes les données Hive vers des fichiers JSON
+/// et de les restaurer ultérieurement pour la récupération de données.
+///
+/// Les sauvegardes sont stockées dans le dossier Documents de l'application.
 class BackupRestoreUseCase {
   final Map<String, Box> boxes;
 

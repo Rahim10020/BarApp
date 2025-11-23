@@ -1,5 +1,11 @@
 import 'package:projet7/models/vente.dart';
 
+/// Utilitaires pour l'analyse et le tri des ventes.
+///
+/// Fournit des méthodes statiques pour organiser les ventes
+/// par popularité, valeur totale ou quantité vendue.
+///
+/// Utilisé principalement pour générer des rapports et tableaux de bord.
 class VenteUtil {
   static List<Vente> getVentesPopulaire(List<Vente> ventes) {
     List<Vente> ventesPopulaires = [];
