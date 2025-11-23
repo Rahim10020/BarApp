@@ -7,6 +7,13 @@ import 'package:projet7/models/vente.dart';
 ///
 /// Utilisé principalement pour générer des rapports et tableaux de bord.
 class VenteUtil {
+  /// Retourne les ventes triées par popularité (quantité vendue).
+  ///
+  /// [ventes] : Liste de ventes à analyser.
+  /// Retourne une liste triée par quantité totale décroissante.
+  ///
+  /// Note: Cette méthode agrège les ventes par type de boisson
+  /// et trie par la quantité totale vendue.
   static List<Vente> getVentesPopulaire(List<Vente> ventes) {
     List<Vente> ventesPopulaires = [];
     List<int> quantitesTotales = [];
@@ -36,6 +43,11 @@ class VenteUtil {
     return ventesTries;
   }
 
+  /// Groupe les ventes par type de boisson.
+  ///
+  /// [ventes] : Liste de ventes à grouper.
+  /// Retourne une liste de listes, où chaque sous-liste contient
+  /// toutes les ventes d'un même type de boisson.
   static List<List<Vente>> getVentesPopulaire2(List<Vente> ventes) {
     Map<int, List<Vente>> ventesGroupees = {};
 
@@ -46,6 +58,11 @@ class VenteUtil {
     return ventesGroupees.values.toList();
   }
 
+  /// Retourne les ventes triées par valeur totale décroissante.
+  ///
+  /// [ventes] : Liste de ventes à analyser.
+  /// Retourne une liste groupée et triée par la valeur totale
+  /// (quantité × prix) de chaque type de boisson.
   static List<List<Vente>> getVentesLesPlusVendues(List<Vente> ventes) {
     List<List<Vente>> ventesGroupees = getVentesPopulaire2(ventes);
 
@@ -61,12 +78,22 @@ class VenteUtil {
     return ventesGroupees;
   }
 
+  /// Trie les ventes par prix total décroissant.
+  ///
+  /// [ventes] : Liste de ventes à trier.
+  /// Retourne une nouvelle liste triée de la plus grande
+  /// à la plus petite vente en termes de montant.
   static List<Vente> getGrandesVentes(List<Vente> ventes) {
     List<Vente> ventesTriees = List.from(ventes);
     ventesTriees.sort((a, b) => (b.getPrixTotal()).compareTo(a.getPrixTotal()));
     return ventesTriees;
   }
 
+  /// Trie les ventes par prix total croissant.
+  ///
+  /// [ventes] : Liste de ventes à trier.
+  /// Retourne une nouvelle liste triée de la plus petite
+  /// à la plus grande vente en termes de montant.
   static List<Vente> getPetitesVentes(List<Vente> ventes) {
     List<Vente> ventesTriees = List.from(ventes);
     ventesTriees.sort((a, b) => (a.getPrixTotal()).compareTo(b.getPrixTotal()));
