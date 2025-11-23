@@ -250,6 +250,7 @@ class _CasierScreenState extends State<CasierScreen> {
                 AppButton.primary(
                   text: 'Créer le casier',
                   icon: Icons.add_box_rounded,
+                  size: AppButtonSize.small,
                   isFullWidth: true,
                   onPressed: () => _ajouterCasier(provider),
                 ),
@@ -425,30 +426,61 @@ class _CasierListItem extends StatelessWidget {
             ),
           ),
 
-          // Actions
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.edit_rounded,
-                  color: AppColors.info,
-                  size: ThemeConstants.iconSizeMd,
-                ),
-                onPressed: () => Navigator.push(
+          // Menu d'actions
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_vert,
+              color: AppColors.textSecondary,
+              size: ThemeConstants.iconSizeMd,
+            ),
+            onSelected: (value) {
+              if (value == 'edit') {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ModifierCasierScreen(casier: casier),
                   ),
+                );
+              } else if (value == 'delete') {
+                onDelete();
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem<String>(
+                value: 'edit',
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.edit_rounded,
+                      color: AppColors.info,
+                      size: ThemeConstants.iconSizeSm,
+                    ),
+                    const SizedBox(width: ThemeConstants.spacingSm),
+                    Text(
+                      'Modifier',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(
-                  Icons.delete_rounded,
-                  color: AppColors.error,
-                  size: ThemeConstants.iconSizeMd,
+              PopupMenuItem<String>(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.delete_rounded,
+                      color: AppColors.error,
+                      size: ThemeConstants.iconSizeSm,
+                    ),
+                    const SizedBox(width: ThemeConstants.spacingSm),
+                    Text(
+                      'Supprimer',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.error,
+                          ),
+                    ),
+                  ],
                 ),
-                onPressed: onDelete,
               ),
             ],
           ),

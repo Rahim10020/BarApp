@@ -208,10 +208,10 @@ class _NewHomePageState extends State<NewHomePage> {
   Widget? _buildFloatingActionButton() {
     if (_selectedIndex == 0) {
       // Sur le dashboard, bouton pour aller à ventes
-      return FloatingActionButton.extended(
+      return FloatingActionButton.small(
         onPressed: () => navigateBottomBar(1),
-        icon: const Icon(Icons.add_shopping_cart),
-        label: const Text('Vente rapide'),
+        tooltip: 'Vente rapide',
+        child: const Icon(Icons.add_shopping_cart, size: 20),
       );
     }
     return null;
