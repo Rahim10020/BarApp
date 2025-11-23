@@ -73,39 +73,41 @@ class MyDrawer extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      height: 200,
+      height: 160,
       decoration: BoxDecoration(
         gradient: isDark ? AppColors.darkGradient : AppColors.primaryGradient,
       ),
       child: SafeArea(
         child: Padding(
-          padding: ThemeConstants.paddingAll(ThemeConstants.spacingLg),
+          padding: ThemeConstants.paddingAll(ThemeConstants.spacingMd),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               // Icône
               Container(
-                padding: const EdgeInsets.all(ThemeConstants.spacingMd),
+                padding: const EdgeInsets.all(ThemeConstants.spacingSm),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(ThemeConstants.radiusXl),
+                  borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                 ),
                 child: const Icon(
                   Icons.local_bar_rounded,
-                  size: ThemeConstants.iconSize2Xl,
+                  size: ThemeConstants.iconSizeLg,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: ThemeConstants.spacingMd),
+              const SizedBox(height: ThemeConstants.spacingSm),
 
               // Nom du bar
               Text(
                 barName,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
 
               // Contact
@@ -113,9 +115,11 @@ class MyDrawer extends StatelessWidget {
                 const SizedBox(height: ThemeConstants.spacingXs),
                 Text(
                   barContact,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.white.withValues(alpha: 0.9),
                       ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ],
