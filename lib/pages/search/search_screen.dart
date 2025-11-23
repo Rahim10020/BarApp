@@ -261,7 +261,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(ThemeConstants.radiusFull),
+                  borderRadius:
+                      BorderRadius.circular(ThemeConstants.radiusFull),
                 ),
                 child: Text(
                   '$count',
@@ -298,7 +299,7 @@ class _SearchScreenState extends State<SearchScreen> {
               color: AppColors.warmDrink.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.wine_bar_rounded,
               color: AppColors.warmDrink,
               size: ThemeConstants.iconSizeSm,
@@ -351,7 +352,7 @@ class _SearchScreenState extends State<SearchScreen> {
               color: AppColors.stockAvailable.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.inventory_2_rounded,
               color: AppColors.stockAvailable,
               size: ThemeConstants.iconSizeSm,
@@ -402,7 +403,7 @@ class _SearchScreenState extends State<SearchScreen> {
               color: AppColors.expense.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.receipt_long_rounded,
               color: AppColors.expense,
               size: ThemeConstants.iconSizeSm,
@@ -453,7 +454,7 @@ class _SearchScreenState extends State<SearchScreen> {
               color: AppColors.revenue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.point_of_sale_rounded,
               color: AppColors.revenue,
               size: ThemeConstants.iconSizeSm,
@@ -505,7 +506,7 @@ class _SearchScreenState extends State<SearchScreen> {
               color: AppColors.coldDrink.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.kitchen_rounded,
               color: AppColors.coldDrink,
               size: ThemeConstants.iconSizeSm,
