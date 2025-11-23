@@ -80,26 +80,25 @@ class _NewHomePageState extends State<NewHomePage> {
     );
   }
 
-  /// Bottom Navigation Bar moderne
+  /// Bottom Navigation Bar style WhatsApp
   Widget _buildBottomNavigationBar(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
+        border: Border(
+          top: BorderSide(
+            color: isDark ? AppColors.greyDark600 : AppColors.greyLight200,
+            width: 0.5,
           ),
-        ],
+        ),
       ),
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: ThemeConstants.spacingMd,
-            vertical: ThemeConstants.spacingSm,
+            horizontal: ThemeConstants.spacingXs,
+            vertical: ThemeConstants.spacingXs,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -139,7 +138,7 @@ class _NewHomePageState extends State<NewHomePage> {
     );
   }
 
-  /// Item de navigation
+  /// Item de navigation style WhatsApp
   Widget _buildNavItem({
     required BuildContext context,
     required IconData icon,
@@ -150,49 +149,34 @@ class _NewHomePageState extends State<NewHomePage> {
     final isSelected = _selectedIndex == index;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    final activeColor = isDark ? AppColors.primaryLight : AppColors.primary;
+    final inactiveColor = isDark ? AppColors.greyDark400 : AppColors.greyLight600;
+
     return Expanded(
       child: InkWell(
         onTap: () => navigateBottomBar(index),
-        borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
-        child: AnimatedContainer(
-          duration: ThemeConstants.durationNormal,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: ThemeConstants.spacingSm,
-            horizontal: ThemeConstants.spacingXs,
-          ),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? (isDark ? AppColors.primaryLight : AppColors.primary)
-                    .withValues(alpha: 0.1)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+            vertical: ThemeConstants.spacingXs,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 isSelected ? activeIcon : icon,
-                color: isSelected
-                    ? (isDark ? AppColors.primaryLight : AppColors.primary)
-                    : (isDark ? AppColors.greyDark400 : AppColors.greyLight600),
-                size: isSelected
-                    ? ThemeConstants.iconSizeLg
-                    : ThemeConstants.iconSizeMd,
+                color: isSelected ? activeColor : inactiveColor,
+                size: ThemeConstants.iconSizeMd,
               ),
-              const SizedBox(height: ThemeConstants.spacingXs),
+              const SizedBox(height: 2),
               Text(
                 label,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: isSelected
-                          ? (isDark
-                              ? AppColors.primaryLight
-                              : AppColors.primary)
-                          : (isDark
-                              ? AppColors.greyDark400
-                              : AppColors.greyLight600),
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.normal,
-                    ),
+                style: TextStyle(
+                  fontSize: 10,
+                  color: isSelected ? activeColor : inactiveColor,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                ),
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
