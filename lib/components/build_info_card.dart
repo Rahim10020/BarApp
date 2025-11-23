@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Carte d'information réutilisable affichant une paire label-valeur.
+///
+/// Utilisée dans les écrans de détail pour afficher des informations
+/// sous forme de carte avec le label à gauche et la valeur en gras à droite.
+///
+/// Exemple d'utilisation:
+/// ```dart
+/// BuildInfoCard(
+///   label: 'Prix',
+///   value: '1500 FCFA',
+/// )
+/// ```
 class BuildInfoCard extends StatelessWidget {
   final String label;
   final String value;

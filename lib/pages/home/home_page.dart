@@ -13,6 +13,19 @@ import 'package:projet7/pages/vente/vente_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:provider/provider.dart';
 
+/// Page d'accueil principale de l'application.
+///
+/// Gère la navigation entre les différentes sections via une barre
+/// de navigation inférieure (GNav):
+/// - Tableau de bord
+/// - Ventes
+/// - Boissons
+/// - Casiers
+/// - Commandes
+/// - Réfrigérateurs
+/// - Rapports
+///
+/// Inclut également un drawer latéral et un bouton de recherche.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 

@@ -6,6 +6,15 @@ import 'package:projet7/models/commande.dart';
 import 'package:projet7/models/vente.dart';
 import 'package:projet7/utils/helpers.dart';
 
+/// Service de génération de documents PDF.
+///
+/// Fournit des méthodes statiques pour créer des documents PDF:
+/// - [generateCommandePdf] - PDF de détail d'une commande fournisseur
+/// - [generateVentePdf] - PDF de détail d'une vente
+/// - [generateStatisticsPdf] - Rapport statistique complet avec revenus,
+///   ventes populaires et niveaux d'inventaire
+///
+/// Les PDF sont sauvegardés dans le dossier Téléchargements de l'appareil.
 class PdfService {
   static Future<String> generateCommandePdf(
       Commande commande, String barName) async {

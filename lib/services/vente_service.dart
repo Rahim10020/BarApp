@@ -4,6 +4,15 @@ import 'package:projet7/models/ligne_vente.dart';
 import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/models/vente.dart';
 
+/// Service de gestion des ventes.
+///
+/// Fournit des méthodes pour manipuler les ventes:
+/// - [ajouterVente] - Créer une nouvelle vente et mettre à jour le stock
+/// - [getVentes] - Récupérer toutes les ventes
+/// - [getVentesTriees] - Récupérer les ventes triées par date ou montant
+/// - [rechercherVentes] - Rechercher des ventes par ID, date ou nom de boisson
+///
+/// Note: Ce service accède directement à Hive sans passer par le provider.
 class VenteService {
   final String _venteBoxName = 'ventes';
   // final String _boissonBoxName = 'boissons';

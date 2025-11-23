@@ -5,6 +5,13 @@ import 'package:projet7/models/refrigerateur.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
 import 'package:projet7/utils/helpers.dart';
 
+/// Écran de détail d'un réfrigérateur.
+///
+/// Affiche les informations complètes d'un réfrigérateur:
+/// - Nom et température
+/// - Nombre total de boissons
+/// - Prix total des boissons
+/// - Liste des boissons avec navigation vers les détails
 class RefrigerateurDetailScreen extends StatelessWidget {
   final Refrigerateur refrigerateur;
 

@@ -5,6 +5,13 @@ import 'package:projet7/models/casier.dart';
 import 'package:projet7/pages/detail/boisson/boisson_detail_screen.dart';
 import 'package:projet7/utils/helpers.dart';
 
+/// Écran de détail d'un casier.
+///
+/// Affiche les informations complètes d'un casier:
+/// - Identifiant
+/// - Nombre total de boissons
+/// - Prix total du casier
+/// - Type de boisson contenue avec navigation vers les détails
 class CasierDetailScreen extends StatelessWidget {
   final Casier casier;
 

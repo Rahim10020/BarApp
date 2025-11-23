@@ -9,6 +9,14 @@ import 'package:projet7/utils/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+/// Écran de détail d'une commande fournisseur.
+///
+/// Affiche les informations complètes d'une commande incluant:
+/// - Identifiant, montant total, date
+/// - Informations du bar et du fournisseur
+/// - Liste des lignes de commande avec navigation vers les détails
+///
+/// Permet également de générer, télécharger et partager un PDF de la commande.
 class CommandeDetailScreen extends StatefulWidget {
   final Commande commande;
 
