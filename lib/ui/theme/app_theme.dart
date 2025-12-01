@@ -1,41 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:projet7/theme/dark_mode.dart' as theme;
+import 'package:projet7/theme/light_mode.dart' as theme;
 import 'app_colors.dart';
 import 'app_typography.dart';
 import 'theme_constants.dart';
 
 /// Thèmes de l'application (Light & Dark)
+///
+/// IMPORTANT: Les thèmes sont maintenant basés sur les fichiers dark_mode.dart et light_mode.dart
+/// situés dans /lib/theme/. Les couleurs AppColors sont synchronisées avec ces fichiers.
 class AppTheme {
   // === LIGHT THEME ===
 
-  static ThemeData lightTheme = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.light,
-
-    // Color Scheme
-    colorScheme: ColorScheme.light(
-      primary: AppColors.primary,
-      primaryContainer: AppColors.primaryLight,
-      secondary: AppColors.secondary,
-      secondaryContainer: AppColors.secondaryLight,
-      tertiary: AppColors.accent,
-      tertiaryContainer: AppColors.accentLight,
-      surface: AppColors.surfaceLight,
-      surfaceContainerHighest: AppColors.greyLight100,
-      surfaceContainerHigh: AppColors.greyLight50,
-      error: AppColors.error,
-      onPrimary: Colors.white,
-      onSecondary: Colors.white,
-      onSurface: AppColors.textPrimaryLight,
-      onError: Colors.white,
-      outline: AppColors.borderLight,
-      shadow: Colors.black.withValues(alpha: 0.1),
-    ),
-
+  static ThemeData lightTheme = theme.lightMode.copyWith(
     // Scaffold
     scaffoldBackgroundColor: AppColors.backgroundLight,
-
-    // AppBar
     appBarTheme: AppBarTheme(
       elevation: ThemeConstants.appBarElevation,
       centerTitle: false,
@@ -309,30 +289,7 @@ class AppTheme {
 
   // === DARK THEME ===
 
-  static ThemeData darkTheme = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.dark,
-
-    // Color Scheme
-    colorScheme: ColorScheme.dark(
-      primary: AppColors.primaryLight,
-      primaryContainer: AppColors.primary,
-      secondary: AppColors.secondaryLight,
-      secondaryContainer: AppColors.secondary,
-      tertiary: AppColors.accentLight,
-      tertiaryContainer: AppColors.accent,
-      surface: AppColors.surfaceDark,
-      surfaceContainerHighest: AppColors.greyDark200,
-      surfaceContainerHigh: AppColors.greyDark100,
-      error: AppColors.errorLight,
-      onPrimary: AppColors.greyDark900,
-      onSecondary: AppColors.greyDark900,
-      onSurface: AppColors.textPrimaryDark,
-      onError: AppColors.greyDark900,
-      outline: AppColors.borderDark,
-      shadow: Colors.black.withValues(alpha: 0.3),
-    ),
-
+  static ThemeData darkTheme = theme.darkMode.copyWith(
     // Scaffold
     scaffoldBackgroundColor: AppColors.backgroundDark,
 

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:projet7/ui/theme/app_theme.dart';
+import 'package:projet7/theme/dark_mode.dart';
+import 'package:projet7/theme/light_mode.dart';
 
 /// Provider pour gérer le thème de l'application (clair/sombre).
 ///
 /// Persiste la préférence de thème dans Hive et notifie les widgets
 /// lors des changements pour reconstruire l'interface.
 ///
-/// Utilise [AppTheme.lightTheme] et [AppTheme.darkTheme] pour les thèmes.
+/// Utilise [lightMode] et [darkMode] pour les thèmes.
 class ThemeProvider with ChangeNotifier {
   late Box _themesBox;
   late ThemeData _themeData;
@@ -17,12 +18,12 @@ class ThemeProvider with ChangeNotifier {
   Future<void> initHive() async {
     _themesBox = await Hive.openBox("themesBox");
     bool isDark = _themesBox.get("isDarkMode", defaultValue: false);
-    _themeData = isDark ? AppTheme.darkTheme : AppTheme.lightTheme;
+    _themeData = isDark ? darkMode : lightMode;
     notifyListeners();
   }
 
   ThemeData get themeData => _themeData;
-  bool get isDarkMode => _themeData == AppTheme.darkTheme;
+  bool get isDarkMode => _themeData == darkMode;
 
   set themeData(ThemeData themeData) {
     _themeData = themeData;
@@ -31,6 +32,6 @@ class ThemeProvider with ChangeNotifier {
   }
 
   void toggleTheme() {
-    themeData = isDarkMode ? AppTheme.lightTheme : AppTheme.darkTheme;
+    themeData = isDarkMode ? lightMode : darkMode;
   }
 }
