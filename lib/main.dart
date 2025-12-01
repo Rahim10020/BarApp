@@ -64,6 +64,16 @@ class BarSetupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<BarAppProvider>(context);
+
+    // Attendre l'initialisation du provider
+    if (!provider.isInitialized) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     if (provider.currentBar == null) {
       return const BarCreationScreen();
     }

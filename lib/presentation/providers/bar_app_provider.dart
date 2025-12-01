@@ -58,11 +58,15 @@ class BarAppProvider with ChangeNotifier {
   late GeneratePdfUseCase _generatePdfUseCase;
   late BackupRestoreUseCase _backupRestoreUseCase;
 
+  bool _isInitialized = false;
+
   BarAppProvider() {
-    _initialize();
+    _initializeSync();
   }
 
-  Future<void> _initialize() async {
+  void _initializeSync() async {
+    if (_isInitialized) return;
+
     await _manager.initialize();
 
     // Récupérer les repositories
@@ -81,11 +85,17 @@ class BarAppProvider with ChangeNotifier {
     _generatePdfUseCase = _manager.generatePdfUseCase;
     _backupRestoreUseCase = _manager.backupRestoreUseCase;
 
+    _isInitialized = true;
     notifyListeners();
   }
 
   // === BAR INSTANCE ===
-  BarInstance? get currentBar => _barRepo.getCurrentBar();
+  bool get isInitialized => _isInitialized;
+
+  BarInstance? get currentBar {
+    if (!_isInitialized) return null;
+    return _barRepo.getCurrentBar();
+  }
 
   Future<void> createBar(String nom, String adresse) async {
     await _barRepo.createBar(nom, adresse);
@@ -211,7 +221,10 @@ class BarAppProvider with ChangeNotifier {
 
   List<String> getExpiryAlerts() {
     final alerts = _inventoryAlertsUseCase.execute();
-    return alerts.where((a) => a.type == 'expiry').map((a) => a.message).toList();
+    return alerts
+        .where((a) => a.type == 'expiry')
+        .map((a) => a.message)
+        .toList();
   }
 
   bool hasExpiryAlerts() {
