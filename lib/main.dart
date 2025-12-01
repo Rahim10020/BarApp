@@ -140,16 +140,23 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Bar créé avec succès'),
-        ),
-      );
-
+      // Naviguer d'abord, puis afficher le SnackBar après une courte attente
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const NewHomePage()),
       );
+
+      // Afficher le SnackBar après la navigation
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Bar créé avec succès'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      });
     } finally {
       if (mounted) {
         setState(() {

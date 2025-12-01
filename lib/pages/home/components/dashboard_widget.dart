@@ -79,7 +79,7 @@ class DashboardWidget extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: ThemeConstants.spacingSm,
             mainAxisSpacing: ThemeConstants.spacingSm,
-            childAspectRatio: 1.5,
+            childAspectRatio: 1.2,
             children: [
               AppStatCard(
                 label: 'Ventes Aujourd\'hui',

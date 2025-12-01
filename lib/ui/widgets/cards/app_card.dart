@@ -147,6 +147,7 @@ class AppStatCard extends StatelessWidget {
       onTap: onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -188,20 +189,22 @@ class AppStatCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: ThemeConstants.spacingMd),
+          const SizedBox(height: ThemeConstants.spacingSm),
           Text(
             value,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: statColor,
                   fontWeight: FontWeight.bold,
                 ),
           ),
           const SizedBox(height: ThemeConstants.spacingXs),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodySmall,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
