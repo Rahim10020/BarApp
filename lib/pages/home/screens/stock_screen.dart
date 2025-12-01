@@ -36,12 +36,6 @@ class _StockScreenState extends State<StockScreen>
         Container(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            border: Border(
-              bottom: BorderSide(
-                color: Theme.of(context).dividerColor,
-                width: 1,
-              ),
-            ),
           ),
           child: TabBar(
             controller: _tabController,
