@@ -138,7 +138,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
         _adresseController.text.trim(),
       );
 
-      if (!mounted) return;
+      if (!context.mounted) return;
 
       // Naviguer d'abord, puis afficher le SnackBar après une courte attente
       Navigator.pushReplacement(
@@ -148,7 +148,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
 
       // Afficher le SnackBar après la navigation
       Future.delayed(const Duration(milliseconds: 300), () {
-        if (mounted) {
+        if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Bar créé avec succès'),
@@ -242,7 +242,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 24,
             offset: const Offset(0, 12),
           ),
@@ -274,7 +274,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
             width: ThemeConstants.iconSize2Xl + 16,
             height: ThemeConstants.iconSize2Xl + 16,
             decoration: BoxDecoration(
-              color: colorScheme.primary.withOpacity(0.08),
+              color: colorScheme.primary.withValues(alpha: 0.08),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -297,7 +297,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
           'Configurez votre bar pour commencer.\n'
           'Ces informations apparaîtront sur vos reçus et communications.',
           style: textTheme.bodyMedium?.copyWith(
-            color: colorScheme.onSurface.withOpacity(0.7),
+            color: colorScheme.onSurface.withValues(alpha: 0.7),
           ),
           textAlign: TextAlign.center,
         ),
