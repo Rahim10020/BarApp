@@ -103,6 +103,35 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    Color resolveBackground() {
+      switch (type) {
+        case AppButtonType.primary:
+          return customColor ?? (isDark ? AppColors.accent : AppColors.primary);
+        case AppButtonType.secondary:
+          return Colors.transparent;
+        case AppButtonType.text:
+          return Colors.transparent;
+        case AppButtonType.danger:
+          return customColor ?? AppColors.error;
+        case AppButtonType.success:
+          return customColor ?? AppColors.success;
+      }
+    }
+
+    Color resolveForeground() {
+      switch (type) {
+        case AppButtonType.secondary:
+          return customColor ?? (isDark ? AppColors.accent : AppColors.primary);
+        case AppButtonType.text:
+          return customColor ?? (isDark ? AppColors.accent : AppColors.primary);
+        default:
+          return AppColors.backgroundLight;
+      }
+    }
+
     final buttonHeight = _getHeight();
     final buttonPadding = _getPadding();
     final fontSize = _getFontSize();
@@ -148,8 +177,8 @@ class AppButton extends StatelessWidget {
         button = ElevatedButton(
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: customColor ?? AppColors.primary,
-            foregroundColor: Colors.white,
+            backgroundColor: resolveBackground(),
+            foregroundColor: resolveForeground(),
             minimumSize: Size(0, buttonHeight),
             padding: buttonPadding,
             shape: RoundedRectangleBorder(
@@ -164,9 +193,9 @@ class AppButton extends StatelessWidget {
         button = OutlinedButton(
           onPressed: isLoading ? null : onPressed,
           style: OutlinedButton.styleFrom(
-            foregroundColor: customColor ?? AppColors.primary,
+            foregroundColor: resolveForeground(),
             side: BorderSide(
-              color: customColor ?? AppColors.primary,
+              color: resolveForeground(),
               width: ThemeConstants.borderWidthMedium,
             ),
             minimumSize: Size(0, buttonHeight),
@@ -183,7 +212,7 @@ class AppButton extends StatelessWidget {
         button = TextButton(
           onPressed: isLoading ? null : onPressed,
           style: TextButton.styleFrom(
-            foregroundColor: customColor ?? AppColors.primary,
+            foregroundColor: resolveForeground(),
             minimumSize: Size(0, buttonHeight),
             padding: buttonPadding,
             shape: RoundedRectangleBorder(

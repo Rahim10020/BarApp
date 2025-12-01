@@ -38,10 +38,14 @@ class _GestionScreenState extends State<GestionScreen>
           ),
           child: TabBar(
             controller: _tabController,
-            labelColor: AppColors.primary,
+            labelColor: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.accent
+                : AppColors.primary,
             unselectedLabelColor:
                 Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-            indicatorColor: AppColors.primary,
+            indicatorColor: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.accent
+                : AppColors.primary,
             indicatorWeight: 3,
             labelStyle: Theme.of(context).textTheme.titleSmall,
             unselectedLabelStyle: Theme.of(context).textTheme.titleSmall,
