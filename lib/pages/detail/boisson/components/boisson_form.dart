@@ -50,13 +50,15 @@ class _BoissonFormState extends State<BoissonForm> {
                   color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.add_box_rounded,
-                  color: AppColors.primary,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.accent
+                      : AppColors.primary,
                   size: ThemeConstants.iconSizeMd,
                 ),
               ),
-              const SizedBox(width: ThemeConstants.spacingMd),
+              const SizedBox(width: ThemeConstants.spacingSm),
               Text(
                 'Ajouter une boisson',
                 style: Theme.of(context).textTheme.titleMedium,
