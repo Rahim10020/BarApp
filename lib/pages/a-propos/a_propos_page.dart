@@ -32,11 +32,11 @@ class AProposPage extends StatelessWidget {
 
             // Logo et nom de l'app
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(ThemeConstants.spacingLg),
               decoration: BoxDecoration(
-                gradient: isDark
-                    ? AppColors.darkGradient
-                    : AppColors.primaryGradient,
+                gradient:
+                    isDark ? AppColors.darkGradient : AppColors.primaryGradient,
                 borderRadius: BorderRadius.circular(ThemeConstants.radiusXl),
                 boxShadow: isDark ? AppColors.shadowDark : AppColors.shadowMd,
               ),
