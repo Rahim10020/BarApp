@@ -83,7 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // Section Apparence
           Text(
             'Apparence',
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: ThemeConstants.spacingMd),
 
@@ -101,7 +101,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     themeProvider.isDarkMode
                         ? Icons.dark_mode_rounded
                         : Icons.light_mode_rounded,
-                    color: AppColors.primary,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.accent
+                        : AppColors.primary,
                     size: ThemeConstants.iconSizeMd,
                   ),
                 ),
@@ -135,7 +137,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // Section Données
           Text(
             'Sauvegarde et Restauration',
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: ThemeConstants.spacingMd),
 
@@ -198,7 +200,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // Section À propos
           Text(
             'À propos',
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: ThemeConstants.spacingMd),
 
@@ -234,7 +236,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // Section Danger
           Text(
             'Zone de danger',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: AppColors.error,
                 ),
           ),
@@ -312,7 +314,9 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Icon(
           icon,
-          color: AppColors.primary,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.accent
+              : AppColors.primary,
           size: ThemeConstants.iconSizeSm,
         ),
         const SizedBox(width: ThemeConstants.spacingMd),

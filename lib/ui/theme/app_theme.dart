@@ -323,7 +323,7 @@ class AppTheme {
     // Bottom Navigation Bar
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.surfaceDark,
-      selectedItemColor: AppColors.primaryLight,
+      selectedItemColor: AppColors.accent,
       unselectedItemColor: AppColors.greyDark400,
       selectedIconTheme: const IconThemeData(size: ThemeConstants.iconSizeLg),
       unselectedIconTheme: const IconThemeData(size: ThemeConstants.iconSizeMd),

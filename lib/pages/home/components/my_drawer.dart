@@ -196,7 +196,7 @@ class MyDrawer extends StatelessWidget {
               ),
               child: Icon(
                 icon,
-                color: AppColors.primary,
+                color: isDark ? AppColors.accent : AppColors.primary,
                 size: ThemeConstants.iconSizeMd,
               ),
             ),
@@ -227,6 +227,8 @@ class MyDrawer extends StatelessWidget {
 
   /// Footer du drawer
   Widget _buildFooter(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
       duration: const Duration(milliseconds: 250),
@@ -249,16 +251,17 @@ class MyDrawer extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Icon(
+            Icon(
               Icons.local_bar_rounded,
               size: ThemeConstants.iconSizeSm,
-              color: AppColors.primary,
+              color: isDark ? AppColors.backgroundLight : AppColors.primary,
             ),
             const SizedBox(width: ThemeConstants.spacingSm),
             Text(
               'BarApp v1.0',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.primary,
+                    color:
+                        isDark ? AppColors.backgroundLight : AppColors.primary,
                     fontWeight: FontWeight.w600,
                   ),
             ),

@@ -149,8 +149,9 @@ class _NewHomePageState extends State<NewHomePage> {
     final isSelected = _selectedIndex == index;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final activeColor = isDark ? AppColors.primaryLight : AppColors.primary;
-    final inactiveColor = isDark ? AppColors.greyDark400 : AppColors.greyLight600;
+    const activeColor = AppColors.accent;
+    final inactiveColor =
+        isDark ? AppColors.greyDark400 : AppColors.greyLight600;
 
     return Expanded(
       child: InkWell(

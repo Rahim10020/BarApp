@@ -94,7 +94,7 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.text,
     this.onPressed,
-    this.size = AppButtonSize.medium,
+    this.size = AppButtonSize.small,
     this.icon,
     this.isLoading = false,
     this.isFullWidth = false,
