@@ -379,12 +379,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget _buildSectionTitle(BuildContext context, String title, IconData icon) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.primary, size: ThemeConstants.iconSizeMd),
+        Icon(icon, color: AppColors.primary, size: ThemeConstants.iconSizeSm),
         const SizedBox(width: ThemeConstants.spacingSm),
         Expanded(
           child: Text(
             title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
             overflow: TextOverflow.ellipsis,
