@@ -113,26 +113,28 @@ class _BoissonScreenState extends State<BoissonScreen> {
           Expanded(
             child: provider.boissons.isEmpty
                 ? Center(
-                    child: AppCard(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.local_bar_outlined,
-                            size: ThemeConstants.iconSize3Xl,
-                            color: AppColors.textSecondary,
-                          ),
-                          const SizedBox(height: ThemeConstants.spacingMd),
-                          Text(
-                            'Aucune boisson',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: ThemeConstants.spacingXs),
-                          Text(
-                            'Ajoutez votre première boisson ci-dessus',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
+                    child: SingleChildScrollView(
+                      child: AppCard(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.local_bar_outlined,
+                              size: ThemeConstants.iconSize3Xl,
+                              color: AppColors.textSecondary,
+                            ),
+                            const SizedBox(height: ThemeConstants.spacingMd),
+                            Text(
+                              'Aucune boisson',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: ThemeConstants.spacingXs),
+                            Text(
+                              'Ajoutez votre première boisson ci-dessus',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   )
