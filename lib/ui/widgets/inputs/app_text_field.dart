@@ -169,6 +169,7 @@ class AppDropdown<T> extends StatelessWidget {
           onChanged: enabled ? onChanged : null,
           hint: hint != null ? Text(hint!) : null,
           validator: validator,
+          isExpanded: true,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(
               horizontal: ThemeConstants.spacingMd,

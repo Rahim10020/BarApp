@@ -381,11 +381,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
       children: [
         Icon(icon, color: AppColors.primary, size: ThemeConstants.iconSizeMd),
         const SizedBox(width: ThemeConstants.spacingSm),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+        Expanded(
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );

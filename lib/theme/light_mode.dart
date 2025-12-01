@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 
-/// Configuration du thème clair de l'application.
-///
-/// Définit les couleurs pour le mode clair avec une palette
-/// de gris clairs et de blancs pour une interface lumineuse
-/// et facile à lire en pleine lumière.
 ThemeData lightMode = ThemeData(
-  colorScheme: const ColorScheme.light(
-    surface: Color(0xFFE8E8E8),
-    primary: Color(0xFF9E9E9E),
-    secondary: Color(0xFFFFFFFF),
-    tertiary: Color(0xFFDBDBDB),
-    // tertiary: Color(0xFF737373),
-    inversePrimary: Color.fromARGB(255, 23, 23, 23),
+  brightness: Brightness.light,
+  colorScheme: const ColorScheme(
+    brightness: Brightness.light,
+
+    primary: Color(0xFF0D1B2A), // Bleu nuit premium
+    onPrimary: Colors.white,
+    primaryContainer: Color(0xFF1B263B),
+
+    secondary: Color(0xFF415A77), // Bleu/gris froid
+    onSecondary: Colors.white,
+    secondaryContainer: Color(0xFFE8ECF3),
+
+    tertiary: Color(0xFFE0A85A), // Accent or
+    onTertiary: Colors.black,
+
+    surface: Color(0xFFF3F4F6), // Light background
+    onSurface: Color(0xFF0D1B2A),
+
+    error: Color(0xFFB00020),
+    onError: Colors.white,
+
+    inversePrimary: Color(0xFFE9EAF2),
   ),
 );

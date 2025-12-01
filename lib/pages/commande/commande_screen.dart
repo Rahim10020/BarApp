@@ -111,62 +111,63 @@ class _CommandeScreenState extends State<CommandeScreen> {
 
     return Padding(
       padding: ThemeConstants.pagePadding,
-      child: Column(
-        children: [
-          CommandeForm(
-            provider: provider,
-            casiersSelectionnes: _casiersSelectionnes,
-            nomFournisseurController: _nomFournisseurController,
-            adresseFournisseurController: _adresseFournisseurController,
-            fournisseurSelectionne: _fournisseurSelectionne,
-            onFournisseurChanged: (value) =>
-                setState(() => _fournisseurSelectionne = value),
-            onAjouterCommande: () => _ajouterCommande(provider),
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            CommandeForm(
+              provider: provider,
+              casiersSelectionnes: _casiersSelectionnes,
+              nomFournisseurController: _nomFournisseurController,
+              adresseFournisseurController: _adresseFournisseurController,
+              fournisseurSelectionne: _fournisseurSelectionne,
+              onFournisseurChanged: (value) =>
+                  setState(() => _fournisseurSelectionne = value),
+              onAjouterCommande: () => _ajouterCommande(provider),
+            ),
 
-          const SizedBox(height: ThemeConstants.spacingMd),
+            const SizedBox(height: ThemeConstants.spacingMd),
 
-          // Liste des commandes
-          Expanded(
-            child: provider.commandes.isEmpty
-                ? Center(
-                    child: AppCard(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.receipt_long_outlined,
-                            size: ThemeConstants.iconSize3Xl,
-                            color: AppColors.textSecondary,
-                          ),
-                          const SizedBox(height: ThemeConstants.spacingMd),
-                          Text(
-                            'Aucune commande',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: ThemeConstants.spacingXs),
-                          Text(
-                            'Créez votre première commande ci-dessus',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
+            // Liste des commandes
+            if (provider.commandes.isEmpty)
+              AppCard(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.receipt_long_outlined,
+                      size: ThemeConstants.iconSize3Xl,
+                      color: AppColors.textSecondary,
                     ),
-                  )
-                : ListView.separated(
-                    itemCount: provider.commandes.length,
-                    separatorBuilder: (_, __) =>
-                        const SizedBox(height: ThemeConstants.spacingSm),
-                    itemBuilder: (context, index) {
-                      final commande = provider.commandes[index];
-                      return _CommandeListItem(
-                        commande: commande,
-                        provider: provider,
-                      );
-                    },
-                  ),
-          ),
-        ],
+                    const SizedBox(height: ThemeConstants.spacingMd),
+                    Text(
+                      'Aucune commande',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: ThemeConstants.spacingXs),
+                    Text(
+                      'Créez votre première commande ci-dessus',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              )
+            else
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: provider.commandes.length,
+                separatorBuilder: (_, __) =>
+                    const SizedBox(height: ThemeConstants.spacingSm),
+                itemBuilder: (context, index) {
+                  final commande = provider.commandes[index];
+                  return _CommandeListItem(
+                    commande: commande,
+                    provider: provider,
+                  );
+                },
+              ),
+          ],
+        ),
       ),
     );
   }
