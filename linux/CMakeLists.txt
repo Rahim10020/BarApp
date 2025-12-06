@@ -1,5 +1,12 @@
 # Project-level configuration.
 cmake_minimum_required(VERSION 3.10)
+
+# Workaround for Flutter Snap ninja path issue
+find_program(NINJA_PATH ninja)
+if(NINJA_PATH)
+  set(CMAKE_MAKE_PROGRAM ${NINJA_PATH} CACHE FILEPATH "Path to ninja build tool" FORCE)
+endif()
+
 project(runner LANGUAGES CXX)
 
 # The name of the executable created for the application. Change this to change
