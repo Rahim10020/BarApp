@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:projet7/pages/home/new_home_page.dart';
+import 'package:projet7/pages/home/home_page.dart';
 import 'package:projet7/pages/settings/auth_login_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/provider/theme_provider.dart';
@@ -144,7 +144,7 @@ class _BarSetupScreenState extends State<BarSetupScreen> {
             )
           : (provider.currentBar == null
               ? const BarCreationScreen(key: ValueKey('creation'))
-              : const NewHomePage(key: ValueKey('home'))),
+              : const HomePage(key: ValueKey('home'))),
     );
   }
 }
@@ -209,7 +209,7 @@ class _BarCreationScreenState extends State<BarCreationScreen> {
       // Naviguer d'abord, puis afficher le SnackBar après une courte attente
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const NewHomePage()),
+        MaterialPageRoute(builder: (_) => const HomePage()),
       );
 
       // Afficher le SnackBar après la navigation

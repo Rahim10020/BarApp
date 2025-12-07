@@ -1,31 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:projet7/pages/commande/commande_screen.dart';
-import 'package:projet7/pages/detail/boisson/boisson_screen.dart';
-import 'package:projet7/pages/detail/casier/casier_screen.dart';
 import 'package:projet7/pages/home/components/dashboard_widget.dart';
 import 'package:projet7/pages/home/components/my_drawer.dart';
-import 'package:projet7/pages/refrigerateur/refrigerateur_screen.dart';
-import 'package:projet7/pages/reports/reports_screen.dart';
+import 'package:projet7/pages/home/screens/gestion_screen.dart';
+import 'package:projet7/pages/home/screens/stock_screen.dart';
 import 'package:projet7/pages/search/search_screen.dart';
 import 'package:projet7/pages/vente/vente_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
+import 'package:projet7/ui/theme/app_colors.dart';
+import 'package:projet7/ui/theme/app_typography.dart';
+import 'package:projet7/ui/theme/theme_constants.dart';
 import 'package:provider/provider.dart';
 
-/// Page d'accueil principale de l'application.
-///
-/// Gère la navigation entre les différentes sections via une barre
-/// de navigation inférieure (GNav):
-/// - Tableau de bord
-/// - Ventes
-/// - Boissons
-/// - Casiers
-/// - Commandes
-/// - Réfrigérateurs
-/// - Rapports
-///
-/// Inclut également un drawer latéral et un bouton de recherche.
+/// Nouvelle page d'accueil avec navigation simplifiée (4 items max)
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -42,83 +28,177 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  final List _pages = [
-    const VenteScreen(),
-    const BoissonScreen(),
-    const CasierScreen(),
-    const CommandeScreen(),
-    const RefrigerateurScreen(),
-    const ReportsScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<BarAppProvider>(
-      builder: (context, bar, child) => Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-          centerTitle: true,
-          title: Text(
-            bar.currentBar!.nom,
-            style: GoogleFonts.montserrat(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+    final provider = Provider.of<BarAppProvider>(context);
+
+    // Liste des pages
+    final List<Widget> pages = [
+      DashboardWidget(bar: provider, onNavigate: navigateBottomBar),
+      const VenteScreen(),
+      const StockScreen(),
+      const GestionScreen(),
+    ];
+
+    // Titres des pages
+    final List<String> pageTitles = [
+      provider.currentBar?.nom ?? 'BarApp',
+      'Ventes',
+      'Stock',
+      'Gestion',
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          pageTitles[_selectedIndex],
+          style: AppTypography.pageTitle(context),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SearchScreen()),
             ),
+            tooltip: 'Rechercher',
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SearchScreen()),
+        ],
+      ),
+      drawer: const MyDrawer(),
+      body: AnimatedSwitcher(
+        duration: ThemeConstants.durationMedium,
+        switchInCurve: ThemeConstants.curveEaseOut,
+        switchOutCurve: ThemeConstants.curveEaseIn,
+        child: KeyedSubtree(
+          key: ValueKey(_selectedIndex),
+          child: pages[_selectedIndex],
+        ),
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+      floatingActionButton: _buildFloatingActionButton(),
+    );
+  }
+
+  /// Bottom Navigation Bar style WhatsApp
+  Widget _buildBottomNavigationBar(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+        border: Border(
+          top: BorderSide(
+            color: isDark ? AppColors.greyDark600 : AppColors.greyLight200,
+            width: 0.5,
+          ),
+        ),
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: ThemeConstants.spacingXs,
+            vertical: ThemeConstants.spacingXs,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(
+                context: context,
+                icon: Icons.home_outlined,
+                activeIcon: Icons.home,
+                label: 'Accueil',
+                index: 0,
               ),
-            ),
-          ],
-        ),
-        drawer: const MyDrawer(),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: GNav(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              activeColor: Theme.of(context).colorScheme.inversePrimary,
-              tabBackgroundColor: Theme.of(context).colorScheme.surface,
-              padding: const EdgeInsets.all(8),
-              gap: 8,
-              onTabChange: (index) {
-                navigateBottomBar(index);
-              },
-              tabs: const [
-                GButton(icon: Icons.dashboard, text: 'Accueil'),
-                GButton(icon: Icons.local_drink, text: 'Ventes'),
-                GButton(icon: Icons.wine_bar, text: 'Boissons'),
-                GButton(icon: Icons.storage, text: 'Casiers'),
-                GButton(icon: Icons.receipt, text: 'Commandes'),
-                GButton(icon: Icons.kitchen, text: 'Réfrigérateurs'),
-                GButton(icon: Icons.analytics, text: 'Rapports'),
-              ],
-            ),
+              _buildNavItem(
+                context: context,
+                icon: Icons.point_of_sale_outlined,
+                activeIcon: Icons.point_of_sale,
+                label: 'Ventes',
+                index: 1,
+              ),
+              _buildNavItem(
+                context: context,
+                icon: Icons.inventory_2_outlined,
+                activeIcon: Icons.inventory_2,
+                label: 'Stock',
+                index: 2,
+              ),
+              _buildNavItem(
+                context: context,
+                icon: Icons.analytics_outlined,
+                activeIcon: Icons.analytics,
+                label: 'Gestion',
+                index: 3,
+              ),
+            ],
           ),
         ),
-        body: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: _selectedIndex == 0
-              ? DashboardWidget(bar: bar, onNavigate: navigateBottomBar)
-              : _pages[_selectedIndex - 1],
-        ),
-        floatingActionButton: _selectedIndex == 0
-            ? FloatingActionButton(
-                onPressed: () => setState(() => _selectedIndex = 1),
-                backgroundColor: Colors.brown[600],
-                child: const Icon(Icons.add_shopping_cart),
-              )
-            : null,
       ),
     );
+  }
+
+  /// Item de navigation style WhatsApp
+  Widget _buildNavItem({
+    required BuildContext context,
+    required IconData icon,
+    required IconData activeIcon,
+    required String label,
+    required int index,
+  }) {
+    final isSelected = _selectedIndex == index;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    const activeColor = AppColors.accent;
+    final inactiveColor =
+        isDark ? AppColors.greyDark400 : AppColors.greyLight600;
+
+    return Expanded(
+      child: InkWell(
+        onTap: () => navigateBottomBar(index),
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: ThemeConstants.spacingXs,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isSelected ? activeIcon : icon,
+                color: isSelected ? activeColor : inactiveColor,
+                size: ThemeConstants.iconSizeMd,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: isSelected ? activeColor : inactiveColor,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Floating Action Button (vente rapide)
+  Widget? _buildFloatingActionButton() {
+    if (_selectedIndex == 0) {
+      // Sur le dashboard, bouton pour aller à ventes
+      return FloatingActionButton.small(
+        onPressed: () => navigateBottomBar(1),
+        tooltip: 'Vente rapide',
+        child: const Icon(Icons.add_shopping_cart, size: 20),
+      );
+    }
+    return null;
   }
 }
