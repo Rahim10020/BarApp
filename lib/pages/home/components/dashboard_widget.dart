@@ -42,13 +42,6 @@ class DashboardWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Titre
-          Text(
-            'Tableau de Bord',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: ThemeConstants.spacingLg),
-
           // === ALERTES ===
           if (lowStockAlerts.isNotEmpty) ...[
             _buildAlertCard(

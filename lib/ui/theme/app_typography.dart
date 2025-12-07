@@ -259,7 +259,7 @@ class AppTypography {
     return GoogleFonts.montserrat(
       fontSize: 20,
       fontWeight: FontWeight.bold,
-      color: color ?? (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
+      color: color ?? (isDark ? AppColors.accent : AppColors.textPrimaryLight),
       letterSpacing: 0.15,
     );
   }
