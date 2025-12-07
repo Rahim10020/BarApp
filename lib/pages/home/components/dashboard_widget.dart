@@ -110,7 +110,7 @@ class DashboardWidget extends StatelessWidget {
           // === ACTIONS RAPIDES ===
           Text(
             'Actions Rapides',
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: ThemeConstants.spacingMd),
 
@@ -118,34 +118,24 @@ class DashboardWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: AppButton.primary(
-                  text: 'Nouvelle Vente',
-                  icon: Icons.add_shopping_cart_rounded,
-                  size: AppButtonSize.small,
-                  onPressed: () => onNavigate(1),
-                ),
-              ),
-              const SizedBox(width: ThemeConstants.spacingSm),
-              Expanded(
-                child: AppButton.secondary(
-                  text: 'Nvlle Commande',
+                  text: 'Commande',
                   icon: Icons.add_box_rounded,
                   size: AppButtonSize.small,
                   onPressed: () => onNavigate(3),
                 ),
               ),
+              const SizedBox(width: ThemeConstants.spacingSm),
+              // Bouton Voir Rapports
+              Expanded(
+                child: AppButton.secondary(
+                  text: 'Rapports',
+                  icon: Icons.analytics_rounded,
+                  size: AppButtonSize.small,
+                  isFullWidth: true,
+                  onPressed: () => onNavigate(3),
+                ),
+              ),
             ],
-          ),
-
-          const SizedBox(height: ThemeConstants.spacingSm),
-
-          // Bouton Voir Rapports
-          AppButton(
-            text: 'Voir les Rapports',
-            icon: Icons.analytics_rounded,
-            type: AppButtonType.text,
-            size: AppButtonSize.small,
-            isFullWidth: true,
-            onPressed: () => onNavigate(3),
           ),
         ],
       ),
