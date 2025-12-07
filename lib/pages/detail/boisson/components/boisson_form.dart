@@ -54,7 +54,7 @@ class _BoissonFormState extends State<BoissonForm> {
                 child: Icon(
                   Icons.add_box_rounded,
                   color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.accent
+                      ? AppColors.backgroundLight
                       : AppColors.primary,
                   size: ThemeConstants.iconSizeMd,
                 ),
