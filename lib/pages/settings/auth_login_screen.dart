@@ -27,6 +27,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
   @override
   void initState() {
     super.initState();
+    _pinController.addListener(() {
+      setState(() {}); // Rebuild to update button state
+    });
     _initAuth();
   }
 
@@ -110,11 +113,13 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
         if (mounted) {
           if (_failedAttempts >= 3) {
             context.showErrorSnackBar(
-              'Trop de tentatives échouées. Veuillez réessayer plus tard.'
+              'Code PIN incorrect ($_failedAttempts tentatives). Trop de tentatives échouées.'
             );
             // Optionnel: bloquer temporairement l'accès
           } else {
-            context.showErrorSnackBar('Code PIN incorrect');
+            context.showErrorSnackBar(
+              'Code PIN incorrect ($_failedAttempts/3 tentatives)'
+            );
           }
         }
       }
@@ -196,7 +201,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                           text: 'Se connecter',
                           icon: Icons.login,
                           isFullWidth: true,
-                          onPressed: _isLoading ? null : _authenticateWithPin,
+                          onPressed: (_isLoading || _pinController.text.isEmpty)
+                              ? null
+                              : _authenticateWithPin,
                           isLoading: _isLoading,
                         ),
 

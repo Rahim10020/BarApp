@@ -26,10 +26,18 @@ class _AuthSetupScreenState extends State<AuthSetupScreen> {
   List<BiometricType> _availableBiometrics = [];
   bool _useBiometric = false;
 
+  bool get _areAllFieldsFilled {
+    return _pinController.text.isNotEmpty &&
+        _confirmPinController.text.isNotEmpty;
+  }
+
   @override
   void initState() {
     super.initState();
     _checkBiometricAvailability();
+    // Add listeners to update button state
+    _pinController.addListener(() => setState(() {}));
+    _confirmPinController.addListener(() => setState(() {}));
   }
 
   @override
@@ -237,7 +245,7 @@ class _AuthSetupScreenState extends State<AuthSetupScreen> {
                 text: 'Configurer',
                 icon: Icons.check_circle,
                 isFullWidth: true,
-                onPressed: _isLoading ? null : _setupAuth,
+                onPressed: (_isLoading || !_areAllFieldsFilled) ? null : _setupAuth,
                 isLoading: _isLoading,
               ),
 

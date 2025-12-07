@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projet7/pages/settings/auth_setup_screen.dart';
+import 'package:projet7/pages/settings/change_pin_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/provider/theme_provider.dart';
 import 'package:projet7/services/auth_service.dart';
@@ -259,14 +260,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     onPressed: () async {
                       final result = await Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const AuthSetupScreen(),
+                          builder: (context) => const ChangePinScreen(),
                         ),
                       );
 
                       if (result == true) {
-                        await _loadAuthStatus();
                         if (mounted) {
-                          context.showSuccessSnackBar('Code PIN modifié');
+                          context.showSuccessSnackBar('Code PIN modifié avec succès');
                         }
                       }
                     },
