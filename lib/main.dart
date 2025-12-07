@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projet7/pages/home/new_home_page.dart';
+import 'package:projet7/pages/settings/auth_login_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/provider/theme_provider.dart';
+import 'package:projet7/services/auth_service.dart';
 import 'package:projet7/services/hive_setup.dart';
 import 'package:projet7/ui/theme/theme_constants.dart';
 import 'package:projet7/ui/widgets/buttons/app_button.dart';
@@ -58,11 +60,75 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class BarSetupScreen extends StatelessWidget {
+class BarSetupScreen extends StatefulWidget {
   const BarSetupScreen({super.key});
 
   @override
+  State<BarSetupScreen> createState() => _BarSetupScreenState();
+}
+
+class _BarSetupScreenState extends State<BarSetupScreen> {
+  final AuthService _authService = AuthService();
+  bool _isAuthenticated = false;
+  bool _isCheckingAuth = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthentication();
+  }
+
+  Future<void> _checkAuthentication() async {
+    final isAuthEnabled = await _authService.isAuthEnabled();
+
+    if (!isAuthEnabled) {
+      // Pas d'authentification configurée, passer directement
+      setState(() {
+        _isAuthenticated = true;
+        _isCheckingAuth = false;
+      });
+      return;
+    }
+
+    // Afficher l'écran de login
+    setState(() => _isCheckingAuth = false);
+
+    if (mounted) {
+      final result = await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const AuthLoginScreen(),
+          fullscreenDialog: true,
+        ),
+      );
+
+      if (result == true) {
+        setState(() => _isAuthenticated = true);
+      } else {
+        // Si l'utilisateur ferme l'écran de login sans s'authentifier
+        // On peut soit quitter l'app, soit redemander l'authentification
+        _checkAuthentication();
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isCheckingAuth) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (!_isAuthenticated) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     final provider = Provider.of<BarAppProvider>(context);
 
     return AnimatedSwitcher(

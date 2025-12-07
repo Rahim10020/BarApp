@@ -1,19 +1,10 @@
-- dans l'image sidebar.jpeg que je t'ai fournie, on vois bien que le design n'est pas bon. 
-    je veux que tu me changes ca
-- dans l'image recherche.jpeg que je t'ai fournie, on vois bien que le design n'est pas bon. 
-    je veux que tu me changes ca (les couleurs ne sont pas coherent avec 
-    celles utilisees dans les autres pages)
-- dans l'image rapports.jpeg que je t'ai fournie, on vois bien que c'est pas bien cote design. 
-    les boutons sont trop gros et au niveau de periode d'analyse, les textes sortent des champs 
-    (je veux que tu m'arranges ca)
-- dans l'image propos.jpeg que je t'ai fournie, on vois bien que le design n'est pas bon. 
-    je pense que tu peux faire mieux
-- dans l'image home.jpeg que je t'ai fournie, les boutons sont trop gros, 
-    de meme l'affichage des stats est trop grands et le bouton vente rapide est trop 
-    grand ce qui fais qu'il cache une peu les autres elements. Aussi le texte Nouvelle commande deborde du bouton. (regle moi tout ca avec un bon design)
-- je veux que tu reduises la hauteur de ma bottom navigation bar. c'est trop haut la.
-- dans l'image commandes.jpeg que je t'ai fournie, je pense qu'on peut faire un peut 
-    mieux en matiere de design
-- dans l'image casiers.jpeg que je t'ai fournie, on vois bien aussi que les boutons sont trop grosses
-    et aussi pour un truc plus clean, tu peux en faire en sorte qu'on mette le bouton des trois
-    points verticaux de tel sorte que quand on clique dessus, on peut supprimer ou soit editer une boisson
+POUR LE MOMENT ON VA PAS MODIFIER LE CODE
+- C'est une application mobile de gestion donc ca dois etre securiser. Comment 
+    me suggeres tu de faire pour que la personne saisisse un mot de passe 
+    avant d'y avoir acces ?
+- La creation et l'ajout des boissons est une tache qui pourrais etre fastidieuse
+    pour l'administrateur donc ce que je veux qu'on fasse c'est qu'on cree un fichier 
+    qui va contenir toutes les boissons qui sont sur le marche actuellement avec leurs prix 
+    repectives et 
+    leur modeles et autres (bref toutes les attributs du modele boisson) et il pourrais 
+    charger ca des le debut de l'app (on reflechira a quelle moment)

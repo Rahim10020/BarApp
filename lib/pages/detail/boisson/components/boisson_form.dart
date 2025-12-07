@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/models/modele.dart';
+import 'package:projet7/pages/detail/boisson/boisson_import_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/ui/theme/app_colors.dart';
 import 'package:projet7/ui/theme/theme_constants.dart';
@@ -121,12 +122,39 @@ class _BoissonFormState extends State<BoissonForm> {
 
           const SizedBox(height: ThemeConstants.spacingMd),
 
-          // Bouton Ajouter
-          AppButton.primary(
-            text: 'Ajouter la boisson',
-            icon: Icons.add_circle_rounded,
-            isFullWidth: true,
-            onPressed: widget.onAjouterBoisson,
+          // Boutons Ajouter et Importer
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: AppButton.primary(
+                  text: 'Ajouter',
+                  icon: Icons.add_circle_rounded,
+                  isFullWidth: true,
+                  onPressed: widget.onAjouterBoisson,
+                ),
+              ),
+              const SizedBox(width: ThemeConstants.spacingMd),
+              Expanded(
+                child: AppButton.secondary(
+                  text: 'Importer',
+                  icon: Icons.download,
+                  isFullWidth: true,
+                  onPressed: () async {
+                    final result = await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const BoissonImportScreen(),
+                      ),
+                    );
+
+                    if (result == true) {
+                      // Les boissons ont été importées
+                      widget.onResetForm();
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -1,0 +1,110 @@
+{
+  "boissons": [
+    {
+      "nom": "Coca-Cola",
+      "prix": [500.0, 750.0],
+      "modele": "petit",
+      "description": "Boisson gazeuse rafraîchissante",
+      "estFroid": false
+    },
+    {
+      "nom": "Coca-Cola",
+      "prix": [750.0, 1000.0],
+      "modele": "grand",
+      "description": "Boisson gazeuse rafraîchissante - Grand format",
+      "estFroid": false
+    },
+    {
+      "nom": "Fanta Orange",
+      "prix": [500.0, 750.0],
+      "modele": "petit",
+      "description": "Boisson gazeuse à l'orange",
+      "estFroid": false
+    },
+    {
+      "nom": "Fanta Orange",
+      "prix": [750.0, 1000.0],
+      "modele": "grand",
+      "description": "Boisson gazeuse à l'orange - Grand format",
+      "estFroid": false
+    },
+    {
+      "nom": "Sprite",
+      "prix": [500.0, 750.0],
+      "modele": "petit",
+      "description": "Boisson gazeuse citron-lime",
+      "estFroid": false
+    },
+    {
+      "nom": "Sprite",
+      "prix": [750.0, 1000.0],
+      "modele": "grand",
+      "description": "Boisson gazeuse citron-lime - Grand format",
+      "estFroid": false
+    },
+    {
+      "nom": "Youki Cocktail",
+      "prix": [400.0, 650.0],
+      "modele": "petit",
+      "description": "Jus de fruit cocktail",
+      "estFroid": false
+    },
+    {
+      "nom": "Youki Ananas",
+      "prix": [400.0, 650.0],
+      "modele": "petit",
+      "description": "Jus d'ananas",
+      "estFroid": false
+    },
+    {
+      "nom": "Malta Guinness",
+      "prix": [600.0, 900.0],
+      "modele": "petit",
+      "description": "Boisson maltée non alcoolisée",
+      "estFroid": false
+    },
+    {
+      "nom": "Eau Minérale",
+      "prix": [300.0, 500.0],
+      "modele": "petit",
+      "description": "Eau minérale naturelle",
+      "estFroid": false
+    },
+    {
+      "nom": "Eau Minérale",
+      "prix": [500.0, 800.0],
+      "modele": "grand",
+      "description": "Eau minérale naturelle - Grand format",
+      "estFroid": false
+    },
+    {
+      "nom": "33 Export",
+      "prix": [800.0, 1200.0],
+      "modele": "petit",
+      "description": "Bière blonde premium",
+      "estFroid": false
+    },
+    {
+      "nom": "Castel",
+      "prix": [700.0, 1000.0],
+      "modele": "petit",
+      "description": "Bière légère",
+      "estFroid": false
+    },
+    {
+      "nom": "Beaufort",
+      "prix": [700.0, 1000.0],
+      "modele": "petit",
+      "description": "Bière blonde",
+      "estFroid": false
+    },
+    {
+      "nom": "Desperados",
+      "prix": [1000.0, 1500.0],
+      "modele": "petit",
+      "description": "Bière aromatisée tequila",
+      "estFroid": false
+    }
+  ]
+}
+

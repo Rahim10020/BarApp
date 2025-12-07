@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projet7/pages/settings/auth_setup_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/provider/theme_provider.dart';
+import 'package:projet7/services/auth_service.dart';
 import 'package:projet7/ui/theme/app_colors.dart';
 import 'package:projet7/ui/theme/theme_constants.dart';
 import 'package:projet7/ui/widgets/buttons/app_button.dart';
@@ -20,6 +22,24 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool _isBackingUp = false;
   bool _isRestoring = false;
+  final AuthService _authService = AuthService();
+  bool _isAuthEnabled = false;
+  bool _useBiometric = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAuthStatus();
+  }
+
+  Future<void> _loadAuthStatus() async {
+    final isEnabled = await _authService.isAuthEnabled();
+    final useBiometric = await _authService.shouldUseBiometric();
+    setState(() {
+      _isAuthEnabled = isEnabled;
+      _useBiometric = useBiometric;
+    });
+  }
 
   Future<void> _handleBackup(BarAppProvider provider) async {
     setState(() => _isBackingUp = true);
@@ -128,6 +148,130 @@ class _SettingsPageState extends State<SettingsPage> {
                   onChanged: (_) => themeProvider.toggleTheme(),
                   activeTrackColor: AppColors.primary,
                 ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: ThemeConstants.spacingXl),
+
+          // Section Sécurité
+          Text(
+            'Sécurité',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: ThemeConstants.spacingMd),
+
+          AppCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(ThemeConstants.spacingSm),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        borderRadius:
+                            BorderRadius.circular(ThemeConstants.radiusMd),
+                      ),
+                      child: Icon(
+                        _isAuthEnabled ? Icons.lock : Icons.lock_open,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? AppColors.accent
+                            : AppColors.primary,
+                        size: ThemeConstants.iconSizeMd,
+                      ),
+                    ),
+                    const SizedBox(width: ThemeConstants.spacingMd),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Authentification',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            _isAuthEnabled
+                                ? (_useBiometric
+                                    ? 'Biométrie activée'
+                                    : 'Code PIN activé')
+                                : 'Désactivée',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    CupertinoSwitch(
+                      value: _isAuthEnabled,
+                      onChanged: (value) async {
+                        if (value) {
+                          // Activer l'authentification
+                          final result = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const AuthSetupScreen(),
+                            ),
+                          );
+
+                          if (result == true) {
+                            await _loadAuthStatus();
+                            if (mounted) {
+                              context.showSuccessSnackBar(
+                                'Authentification activée',
+                              );
+                            }
+                          }
+                        } else {
+                          // Désactiver l'authentification
+                          final confirmed = await AppDialogs.showConfirmDialog(
+                            context,
+                            title: 'Désactiver l\'authentification',
+                            message:
+                                'Voulez-vous vraiment désactiver la protection de l\'application ?',
+                            confirmText: 'Désactiver',
+                            cancelText: 'Annuler',
+                          );
+
+                          if (confirmed == true) {
+                            await _authService.disableAuth();
+                            await _loadAuthStatus();
+                            if (mounted) {
+                              context.showSuccessSnackBar(
+                                'Authentification désactivée',
+                              );
+                            }
+                          }
+                        }
+                      },
+                      activeTrackColor: AppColors.primary,
+                    ),
+                  ],
+                ),
+
+                if (_isAuthEnabled) ...[
+                  const Divider(height: ThemeConstants.spacingLg),
+
+                  // Bouton pour changer le code PIN
+                  AppButton.secondary(
+                    text: 'Modifier le code PIN',
+                    icon: Icons.edit,
+                    isFullWidth: true,
+                    onPressed: () async {
+                      final result = await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AuthSetupScreen(),
+                        ),
+                      );
+
+                      if (result == true) {
+                        await _loadAuthStatus();
+                        if (mounted) {
+                          context.showSuccessSnackBar('Code PIN modifié');
+                        }
+                      }
+                    },
+                  ),
+                ],
               ],
             ),
           ),
