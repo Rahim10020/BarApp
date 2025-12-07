@@ -1,10 +1,3 @@
-POUR LE MOMENT ON VA PAS MODIFIER LE CODE
-- C'est une application mobile de gestion donc ca dois etre securiser. Comment 
-    me suggeres tu de faire pour que la personne saisisse un mot de passe 
-    avant d'y avoir acces ?
-- La creation et l'ajout des boissons est une tache qui pourrais etre fastidieuse
-    pour l'administrateur donc ce que je veux qu'on fasse c'est qu'on cree un fichier 
-    qui va contenir toutes les boissons qui sont sur le marche actuellement avec leurs prix 
-    repectives et 
-    leur modeles et autres (bref toutes les attributs du modele boisson) et il pourrais 
-    charger ca des le debut de l'app (on reflechira a quelle moment)
+- Griser le bouton "Se connecter" sur la page de login tant que la personne n'a pas rempli tous les champs obligatoires.
+- pour modifier un code pin, demander d'abord l'ancien code pin avant de permettre la modification.
+- Afficher un message d'erreur si l'utilisateur entre un code pin incorrect plus de 3 fois.
