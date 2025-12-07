@@ -121,8 +121,7 @@ class _BoissonImportScreenState extends State<BoissonImportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Importer des boissons'),
-        centerTitle: true,
+        title: Text('Importer des boissons', style: Theme.of(context).textTheme.titleMedium),
         actions: [
           if (_boissonsToImport != null && _boissonsToImport!.isNotEmpty)
             IconButton(
