@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/domain/entities/refrigerateur.dart';
 import 'package:projet7/presentation/pages/refrigerateur/ajouter_boisson_refrigerateur_screen.dart';
 import 'package:projet7/presentation/pages/refrigerateur/refrigerateur_detail_screen.dart';
@@ -58,14 +59,10 @@ class RefrigerateurListItem extends StatelessWidget {
           // Icône avec fond coloré
           Container(
             padding: const EdgeInsets.all(ThemeConstants.spacingMd),
-            decoration: BoxDecoration(
-              color: AppColors.coldDrink.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
-            ),
-            child: const Icon(
-              Icons.kitchen_rounded,
-              color: AppColors.coldDrink,
-              size: ThemeConstants.iconSizeLg,
+            child: SvgPicture.asset(
+              'assets/icons/fridge.svg',
+              width: ThemeConstants.iconSizeLg,
+              height: ThemeConstants.iconSizeLg,
             ),
           ),
 

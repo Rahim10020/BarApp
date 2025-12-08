@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/presentation/theme/app_colors.dart';
 import 'package:projet7/presentation/theme/theme_constants.dart';
@@ -39,14 +40,10 @@ class _RefrigerateurFormState extends State<RefrigerateurForm> {
             children: [
               Container(
                 padding: const EdgeInsets.all(ThemeConstants.spacingSm),
-                decoration: BoxDecoration(
-                  color: AppColors.coldDrink.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
-                ),
-                child: const Icon(
-                  Icons.kitchen_rounded,
-                  color: AppColors.coldDrink,
-                  size: ThemeConstants.iconSizeMd,
+                child: SvgPicture.asset(
+                  'assets/icons/fridge.svg',
+                  width: ThemeConstants.iconSizeMd,
+                  height: ThemeConstants.iconSizeMd,
                 ),
               ),
               const SizedBox(width: ThemeConstants.spacingMd),

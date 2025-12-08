@@ -84,6 +84,7 @@ flutter:
     - assets/icons/boissons.svg
     - assets/icons/casier.svg
     - assets/icons/fanta-youki2.svg
+    - assets/icons/fridge.svg
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

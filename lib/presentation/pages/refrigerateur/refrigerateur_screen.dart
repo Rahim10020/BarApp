@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/presentation/pages/refrigerateur/ajouter_refrigerateur_screen.dart';
 import 'package:projet7/presentation/pages/refrigerateur/components/refrigerateur_list_item.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
-import 'package:projet7/presentation/theme/app_colors.dart';
 import 'package:projet7/presentation/theme/theme_constants.dart';
 import 'package:projet7/presentation/widgets/cards/app_card.dart';
 import 'package:provider/provider.dart';
@@ -45,10 +45,10 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
-                              Icons.kitchen_outlined,
-                              size: ThemeConstants.iconSize3Xl,
-                              color: AppColors.textSecondary,
+                            SvgPicture.asset(
+                              'assets/icons/fridge.svg',
+                              width: ThemeConstants.iconSize3Xl,
+                              height: ThemeConstants.iconSize3Xl,
                             ),
                             const SizedBox(height: ThemeConstants.spacingMd),
                             Text(
