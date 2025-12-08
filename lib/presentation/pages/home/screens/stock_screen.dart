@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/presentation/pages/detail/boisson/boisson_screen.dart';
 import 'package:projet7/presentation/pages/detail/casier/casier_screen.dart';
 import 'package:projet7/presentation/pages/refrigerateur/refrigerateur_screen.dart';
@@ -50,16 +51,21 @@ class _StockScreenState extends State<StockScreen>
             indicatorWeight: 3,
             labelStyle: Theme.of(context).textTheme.titleSmall,
             unselectedLabelStyle: Theme.of(context).textTheme.titleSmall,
-            tabs: const [
+            tabs: [
               Tab(
-                icon: Icon(Icons.local_drink),
+                icon: SvgPicture.asset(
+                  'assets/icons/boissons.svg',
+                  width: 24,
+                  height: 24,
+                ),
                 text: 'Boissons',
               ),
               Tab(
-                icon: Icon(Icons.inventory),
+                icon: SvgPicture.asset('assets/icons/casier.svg',
+                    width: 24, height: 24),
                 text: 'Casiers',
               ),
-              Tab(
+              const Tab(
                 icon: Icon(Icons.kitchen),
                 text: 'Frigos',
               ),

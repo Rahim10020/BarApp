@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/domain/entities/casier.dart';
 import 'package:projet7/presentation/pages/detail/casier/ajouter_casier_screen.dart';
 import 'package:projet7/presentation/pages/detail/casier/casier_detail_screen.dart';
@@ -144,19 +145,14 @@ class _CasierListItem extends StatelessWidget {
           // Icône
           Container(
             padding: const EdgeInsets.all(ThemeConstants.spacingMd),
-            decoration: BoxDecoration(
-              color: AppColors.stockAvailable.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
-            ),
-            child: const Icon(
-              Icons.inventory_2_rounded,
-              color: AppColors.stockAvailable,
-              size: ThemeConstants.iconSizeLg,
+            child: SvgPicture.asset(
+              'assets/icons/casier.svg',
+              width: ThemeConstants.iconSizeLg,
+              height: ThemeConstants.iconSizeLg,
             ),
           ),
 
           const SizedBox(width: ThemeConstants.spacingMd),
-
           // Informations
           Expanded(
             child: Column(
@@ -194,7 +190,6 @@ class _CasierListItem extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: ThemeConstants.spacingXs),
-
                 // Prix et Quantité
                 Row(
                   children: [

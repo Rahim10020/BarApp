@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/domain/entities/boisson.dart';
 import 'package:projet7/presentation/pages/detail/boisson/boisson_detail_screen.dart';
 import 'package:projet7/presentation/pages/detail/boisson/modifier_boisson_screen.dart';
@@ -34,23 +35,14 @@ class BoissonListItem extends StatelessWidget {
           // Icône avec fond coloré
           Container(
             padding: const EdgeInsets.all(ThemeConstants.spacingMd),
-            decoration: BoxDecoration(
-              color: boisson.estFroid
-                  ? AppColors.coldDrink.withValues(alpha: 0.1)
-                  : AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
-            ),
-            child: Icon(
-              boisson.estFroid
-                  ? Icons.ac_unit_rounded
-                  : Icons.local_bar_rounded,
-              color: boisson.estFroid ? AppColors.coldDrink : AppColors.primary,
-              size: ThemeConstants.iconSizeLg,
+            child: SvgPicture.asset(
+              Helpers.getBoissonIconPath(boisson.nom),
+              width: ThemeConstants.iconSizeLg,
+              height: ThemeConstants.iconSizeLg,
             ),
           ),
 
           const SizedBox(width: ThemeConstants.spacingMd),
-
           // Informations
           Expanded(
             child: Column(

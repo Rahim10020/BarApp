@@ -68,4 +68,27 @@ class Helpers {
   static String formatterDateCourt(DateTime date) {
     return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}";
   }
+
+  /// Retourne le chemin de l'icône appropriée pour une boisson.
+  ///
+  /// [nom] : le nom de la boisson.
+  /// Retourne 'assets/icons/fanta-youki2.svg' pour Fanta, Youki et Coca Cola,
+  /// 'assets/icons/boissons.svg' pour les autres boissons.
+  static String getBoissonIconPath(String? nom) {
+    if (nom == null) return 'assets/icons/boissons.svg';
+    final lowerNom = nom.toLowerCase();
+    if (lowerNom.contains('fanta') ||
+        lowerNom.contains('youki') ||
+        lowerNom.contains('coca')) {
+      return 'assets/icons/fanta-youki2.svg';
+    }
+    return 'assets/icons/boissons.svg';
+  }
+
+  /// Retourne le chemin de l'icône pour les casiers.
+  ///
+  /// Retourne toujours 'assets/icons/casier.svg'.
+  static String getCasierIconPath() {
+    return 'assets/icons/casier.svg';
+  }
 }
