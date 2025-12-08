@@ -159,7 +159,7 @@ class _CommandeListItem extends StatelessWidget {
                     ),
                     if (commande.fournisseur != null) ...[
                       const SizedBox(width: ThemeConstants.spacingXs),
-                      Flexible(
+                      Expanded(
                         child: Text(
                           commande.fournisseur!.nom,
                           style: Theme.of(context).textTheme.titleMedium,
@@ -174,16 +174,22 @@ class _CommandeListItem extends StatelessWidget {
                 // Montant et Date
                 Row(
                   children: [
-                    Text(
-                      Helpers.formatterEnCFA(commande.montantTotal),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.expense,
-                            fontWeight: FontWeight.w600,
-                          ),
+                    Flexible(
+                      child: Text(
+                        Helpers.formatterEnCFA(commande.montantTotal),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.expense,
+                              fontWeight: FontWeight.w600,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    Text(
-                      ' • ${Helpers.formatterDate(commande.dateCommande)}',
-                      style: Theme.of(context).textTheme.bodySmall,
+                    Flexible(
+                      child: Text(
+                        ' • ${Helpers.formatterDate(commande.dateCommande)}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
