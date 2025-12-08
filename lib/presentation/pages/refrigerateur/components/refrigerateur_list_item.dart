@@ -19,6 +19,27 @@ class RefrigerateurListItem extends StatelessWidget {
     required this.provider,
   });
 
+  Future<void> _handleDelete(BuildContext context) async {
+    final confirmed = await AppDialogs.showDeleteDialog(
+      context,
+      title: 'Supprimer le réfrigérateur',
+      message: 'Voulez-vous vraiment supprimer ${refrigerateur.nom} ?',
+    );
+
+    if (confirmed == true && context.mounted) {
+      try {
+        await provider.deleteRefrigerateur(refrigerateur);
+        if (context.mounted) {
+          context.showSuccessSnackBar('${refrigerateur.nom} supprimé');
+        }
+      } catch (e) {
+        if (context.mounted) {
+          context.showErrorSnackBar('Erreur: ${e.toString()}');
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final boissonTotal = refrigerateur.getBoissonTotal();
@@ -113,57 +134,63 @@ class RefrigerateurListItem extends StatelessWidget {
             ),
           ),
 
-          // Actions
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Ajouter des boissons
-              IconButton(
-                icon: const Icon(
-                  Icons.add_circle_rounded,
-                  color: AppColors.success,
-                  size: ThemeConstants.iconSizeMd,
-                ),
-                tooltip: 'Ajouter des boissons',
-                onPressed: () => Navigator.push(
+          // Menu d'actions
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_horiz,
+              color: AppColors.textSecondary,
+              size: ThemeConstants.iconSizeMd,
+            ),
+            onSelected: (value) {
+              if (value == 'add') {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => AjouterBoissonRefrigerateurScreen(
                       refrigerateur: refrigerateur,
                     ),
                   ),
+                );
+              } else if (value == 'delete') {
+                _handleDelete(context);
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem<String>(
+                value: 'add',
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.add_circle_rounded,
+                      color: AppColors.success,
+                      size: ThemeConstants.iconSizeSm,
+                    ),
+                    const SizedBox(width: ThemeConstants.spacingSm),
+                    Text(
+                      'Ajouter des boissons',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
               ),
-              // Supprimer
-              IconButton(
-                icon: const Icon(
-                  Icons.delete_rounded,
-                  color: AppColors.error,
-                  size: ThemeConstants.iconSizeMd,
+              PopupMenuItem<String>(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.delete_rounded,
+                      color: AppColors.error,
+                      size: ThemeConstants.iconSizeSm,
+                    ),
+                    const SizedBox(width: ThemeConstants.spacingSm),
+                    Text(
+                      'Supprimer',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.error,
+                          ),
+                    ),
+                  ],
                 ),
-                tooltip: 'Supprimer',
-                onPressed: () async {
-                  final confirmed = await AppDialogs.showDeleteDialog(
-                    context,
-                    title: 'Supprimer le réfrigérateur',
-                    message:
-                        'Voulez-vous vraiment supprimer ${refrigerateur.nom} ?',
-                  );
-
-                  if (confirmed == true && context.mounted) {
-                    try {
-                      await provider.deleteRefrigerateur(refrigerateur);
-                      if (context.mounted) {
-                        context.showSuccessSnackBar(
-                            '${refrigerateur.nom} supprimé');
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        context.showErrorSnackBar('Erreur: ${e.toString()}');
-                      }
-                    }
-                  }
-                },
               ),
             ],
           ),
