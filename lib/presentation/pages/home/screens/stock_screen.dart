@@ -65,8 +65,11 @@ class _StockScreenState extends State<StockScreen>
                     width: 24, height: 24),
                 text: 'Casiers',
               ),
-              const Tab(
-                icon: Icon(Icons.kitchen),
+              Tab(
+                icon: SvgPicture.asset(
+                  'assets/icons/fridge.svg',
+                  width: 24, height: 24
+                ),
                 text: 'Frigos',
               ),
             ],
