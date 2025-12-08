@@ -53,6 +53,7 @@ class RefrigerateurListItem extends StatelessWidget {
           // Informations
           Expanded(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Nom
@@ -64,38 +65,49 @@ class RefrigerateurListItem extends StatelessWidget {
                 const SizedBox(height: ThemeConstants.spacingXs),
 
                 // Température et Boissons
-                Row(
-                  children: [
-                    if (refrigerateur.temperature != null) ...[
+                Flexible(
+                  child: Row(
+                    children: [
+                      if (refrigerateur.temperature != null) ...[
+                        const Icon(
+                          Icons.thermostat_rounded,
+                          size: ThemeConstants.iconSizeSm,
+                          color: AppColors.coldDrink,
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            '${refrigerateur.temperature}°C',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: AppColors.coldDrink,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Text(
+                          ' • ',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
                       const Icon(
-                        Icons.thermostat_rounded,
+                        Icons.local_drink_rounded,
                         size: ThemeConstants.iconSizeSm,
-                        color: AppColors.coldDrink,
+                        color: AppColors.textSecondary,
                       ),
                       const SizedBox(width: 4),
-                      Text(
-                        '${refrigerateur.temperature}°C',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.coldDrink,
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                      Text(
-                        ' • ',
-                        style: Theme.of(context).textTheme.bodySmall,
+                      Flexible(
+                        child: Text(
+                          '$boissonTotal boisson${boissonTotal > 1 ? 's' : ''}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
-                    const Icon(
-                      Icons.local_drink_rounded,
-                      size: ThemeConstants.iconSizeSm,
-                      color: AppColors.textSecondary,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '$boissonTotal boisson${boissonTotal > 1 ? 's' : ''}',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
