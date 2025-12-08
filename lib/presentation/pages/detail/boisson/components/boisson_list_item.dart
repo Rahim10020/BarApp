@@ -21,6 +21,27 @@ class BoissonListItem extends StatelessWidget {
     required this.provider,
   });
 
+  Future<void> _handleDelete(BuildContext context) async {
+    final confirmed = await AppDialogs.showDeleteDialog(
+      context,
+      title: 'Supprimer la boisson',
+      message: 'Voulez-vous vraiment supprimer ${boisson.nom} ?',
+    );
+
+    if (confirmed == true && context.mounted) {
+      try {
+        await provider.deleteBoisson(boisson);
+        if (context.mounted) {
+          context.showSuccessSnackBar('${boisson.nom} supprimée');
+        }
+      } catch (e) {
+        if (context.mounted) {
+          context.showErrorSnackBar('Erreur: ${e.toString()}');
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppCard(
@@ -80,7 +101,6 @@ class BoissonListItem extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: ThemeConstants.spacingXs),
-
                 // Prix
                 Text(
                   Helpers.formatterEnCFA(boisson.prix.last),
@@ -93,51 +113,63 @@ class BoissonListItem extends StatelessWidget {
             ),
           ),
 
-          // Actions
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.edit_rounded,
-                  color: AppColors.info,
-                  size: ThemeConstants.iconSizeMd,
-                ),
-                onPressed: () => Navigator.push(
+          // Menu d'actions
+          PopupMenuButton<String>(
+            icon: const Icon(
+              Icons.more_horiz,
+              color: AppColors.textSecondary,
+              size: ThemeConstants.iconSizeMd,
+            ),
+            onSelected: (value) {
+              if (value == 'edit') {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ModifierBoissonScreen(
                       boisson: boisson,
                     ),
                   ),
+                );
+              } else if (value == 'delete') {
+                _handleDelete(context);
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem<String>(
+                value: 'edit',
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.edit_rounded,
+                      color: AppColors.info,
+                      size: ThemeConstants.iconSizeSm,
+                    ),
+                    const SizedBox(width: ThemeConstants.spacingSm),
+                    Text(
+                      'Modifier',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(
-                  Icons.delete_rounded,
-                  color: AppColors.error,
-                  size: ThemeConstants.iconSizeMd,
+              PopupMenuItem<String>(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.delete_rounded,
+                      color: AppColors.error,
+                      size: ThemeConstants.iconSizeSm,
+                    ),
+                    const SizedBox(width: ThemeConstants.spacingSm),
+                    Text(
+                      'Supprimer',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.error,
+                          ),
+                    ),
+                  ],
                 ),
-                onPressed: () async {
-                  final confirmed = await AppDialogs.showDeleteDialog(
-                    context,
-                    title: 'Supprimer la boisson',
-                    message: 'Voulez-vous vraiment supprimer ${boisson.nom} ?',
-                  );
-
-                  if (confirmed == true && context.mounted) {
-                    try {
-                      await provider.deleteBoisson(boisson);
-                      if (context.mounted) {
-                        context.showSuccessSnackBar('${boisson.nom} supprimée');
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        context.showErrorSnackBar('Erreur: ${e.toString()}');
-                      }
-                    }
-                  }
-                },
               ),
             ],
           ),
