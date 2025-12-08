@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:projet7/models/id_counter.dart';
+import 'package:projet7/domain/entities/id_counter.dart';
 
 /// Générateur d'identifiants uniques séquentiels pour chaque type d'entité.
 ///

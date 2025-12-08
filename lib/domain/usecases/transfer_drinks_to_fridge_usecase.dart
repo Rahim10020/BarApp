@@ -2,8 +2,8 @@ import 'package:projet7/core/error/failures.dart';
 import 'package:projet7/core/utils/id_generator.dart';
 import 'package:projet7/domain/repositories/i_commande_repository.dart';
 import 'package:projet7/domain/repositories/i_refrigerateur_repository.dart';
-import 'package:projet7/models/boisson.dart';
-import 'package:projet7/models/casier.dart';
+import 'package:projet7/domain/entities/boisson.dart';
+import 'package:projet7/domain/entities/casier.dart';
 
 /// Use case pour transférer des boissons d'un casier vers un réfrigérateur.
 ///

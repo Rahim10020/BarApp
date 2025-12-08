@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:projet7/core/utils/id_generator.dart';
 import 'package:projet7/domain/repositories/i_bar_repository.dart';
-import 'package:projet7/models/bar_instance.dart';
+import 'package:projet7/domain/entities/bar_instance.dart';
 
 /// Implémentation concrète du repository pour la configuration du bar.
 ///

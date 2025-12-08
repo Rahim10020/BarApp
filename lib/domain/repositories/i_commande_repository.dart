@@ -1,4 +1,4 @@
-import 'package:projet7/models/commande.dart';
+import 'package:projet7/domain/entities/commande.dart';
 import 'i_base_repository.dart';
 
 /// Repository pour la gestion des commandes auprès des fournisseurs.

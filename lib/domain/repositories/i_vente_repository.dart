@@ -1,4 +1,4 @@
-import 'package:projet7/models/vente.dart';
+import 'package:projet7/domain/entities/vente.dart';
 import 'i_base_repository.dart';
 
 /// Repository pour la gestion des ventes et l'analyse des revenus.

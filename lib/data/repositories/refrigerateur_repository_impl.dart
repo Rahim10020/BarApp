@@ -1,6 +1,6 @@
 import 'package:projet7/data/repositories/base_repository_impl.dart';
 import 'package:projet7/domain/repositories/i_refrigerateur_repository.dart';
-import 'package:projet7/models/refrigerateur.dart';
+import 'package:projet7/domain/entities/refrigerateur.dart';
 
 /// Implémentation concrète du repository des réfrigérateurs.
 ///

@@ -1,8 +1,8 @@
 import 'package:projet7/domain/repositories/i_bar_repository.dart';
 import 'package:projet7/domain/usecases/get_statistics_usecase.dart';
-import 'package:projet7/models/commande.dart';
-import 'package:projet7/models/vente.dart';
-import 'package:projet7/services/pdf_service.dart';
+import 'package:projet7/domain/entities/commande.dart';
+import 'package:projet7/domain/entities/vente.dart';
+import 'package:projet7/data/services/pdf_service.dart';
 
 /// Use case pour générer les rapports PDF de l'application.
 ///

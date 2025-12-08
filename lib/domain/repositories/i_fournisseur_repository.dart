@@ -1,4 +1,4 @@
-import 'package:projet7/models/fournisseur.dart';
+import 'package:projet7/domain/entities/fournisseur.dart';
 import 'i_base_repository.dart';
 
 /// Repository pour la gestion des fournisseurs de boissons.

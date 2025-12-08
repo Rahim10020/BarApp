@@ -1,6 +1,6 @@
 import 'package:projet7/data/repositories/base_repository_impl.dart';
 import 'package:projet7/domain/repositories/i_commande_repository.dart';
-import 'package:projet7/models/commande.dart';
+import 'package:projet7/domain/entities/commande.dart';
 
 /// Implémentation concrète du repository des commandes fournisseurs.
 ///

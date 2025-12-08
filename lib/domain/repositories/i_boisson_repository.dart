@@ -1,4 +1,4 @@
-import 'package:projet7/models/boisson.dart';
+import 'package:projet7/domain/entities/boisson.dart';
 import 'i_base_repository.dart';
 
 /// Repository pour la gestion des boissons avec des méthodes de recherche avancées.

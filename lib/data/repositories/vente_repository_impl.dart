@@ -1,6 +1,6 @@
 import 'package:projet7/data/repositories/base_repository_impl.dart';
 import 'package:projet7/domain/repositories/i_vente_repository.dart';
-import 'package:projet7/models/vente.dart';
+import 'package:projet7/domain/entities/vente.dart';
 
 /// Implémentation concrète du repository des ventes.
 ///

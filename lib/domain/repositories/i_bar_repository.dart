@@ -1,4 +1,4 @@
-import 'package:projet7/models/bar_instance.dart';
+import 'package:projet7/domain/entities/bar_instance.dart';
 
 /// Repository pour la configuration et l'identification du bar.
 ///

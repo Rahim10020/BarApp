@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:projet7/pages/home/home_page.dart';
-import 'package:projet7/pages/settings/auth_login_screen.dart';
+import 'package:projet7/presentation/pages/home/home_page.dart';
+import 'package:projet7/presentation/pages/settings/auth_login_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
-import 'package:projet7/provider/theme_provider.dart';
-import 'package:projet7/services/auth_service.dart';
-import 'package:projet7/services/hive_setup.dart';
-import 'package:projet7/ui/theme/theme_constants.dart';
-import 'package:projet7/ui/widgets/buttons/app_button.dart';
-import 'package:projet7/ui/widgets/inputs/app_text_field.dart';
+import 'package:projet7/presentation/providers/theme_provider.dart';
+import 'package:projet7/data/services/auth_service.dart';
+import 'package:projet7/data/services/hive_setup.dart';
+import 'package:projet7/presentation/theme/theme_constants.dart';
+import 'package:projet7/presentation/widgets/buttons/app_button.dart';
+import 'package:projet7/presentation/widgets/inputs/app_text_field.dart';
 import 'package:provider/provider.dart';
 
 /// Point d'entrée principal de l'application BarApp.

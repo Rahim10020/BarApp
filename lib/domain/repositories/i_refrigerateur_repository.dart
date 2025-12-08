@@ -1,4 +1,4 @@
-import 'package:projet7/models/refrigerateur.dart';
+import 'package:projet7/domain/entities/refrigerateur.dart';
 import 'i_base_repository.dart';
 
 /// Repository pour la gestion des réfrigérateurs et du stockage froid.

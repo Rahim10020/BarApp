@@ -20,14 +20,14 @@ import 'package:projet7/domain/usecases/generate_pdf_usecase.dart';
 import 'package:projet7/domain/usecases/get_inventory_alerts_usecase.dart';
 import 'package:projet7/domain/usecases/get_statistics_usecase.dart';
 import 'package:projet7/domain/usecases/transfer_drinks_to_fridge_usecase.dart';
-import 'package:projet7/models/bar_instance.dart';
-import 'package:projet7/models/boisson.dart';
-import 'package:projet7/models/casier.dart';
-import 'package:projet7/models/commande.dart';
-import 'package:projet7/models/fournisseur.dart';
-import 'package:projet7/models/id_counter.dart';
-import 'package:projet7/models/refrigerateur.dart';
-import 'package:projet7/models/vente.dart';
+import 'package:projet7/domain/entities/bar_instance.dart';
+import 'package:projet7/domain/entities/boisson.dart';
+import 'package:projet7/domain/entities/casier.dart';
+import 'package:projet7/domain/entities/commande.dart';
+import 'package:projet7/domain/entities/fournisseur.dart';
+import 'package:projet7/domain/entities/id_counter.dart';
+import 'package:projet7/domain/entities/refrigerateur.dart';
+import 'package:projet7/domain/entities/vente.dart';
 
 /// Gestionnaire centralisé pour l'injection de dépendances de l'application.
 ///

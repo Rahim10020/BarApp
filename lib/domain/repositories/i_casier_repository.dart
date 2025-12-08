@@ -1,4 +1,4 @@
-import 'package:projet7/models/casier.dart';
+import 'package:projet7/domain/entities/casier.dart';
 import 'i_base_repository.dart';
 
 /// Repository pour la gestion des casiers de boissons.
