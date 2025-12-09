@@ -112,7 +112,7 @@ class _CasierScreenState extends State<CasierScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _navigateToAjouterCasier,
         icon: const Icon(Icons.add),
-        label: const Text('Ajouter'),
+        label: const SizedBox.shrink(),
         heroTag: 'ajouter-casier',
       ),
     );

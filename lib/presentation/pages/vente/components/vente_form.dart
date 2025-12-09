@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/domain/entities/boisson.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/presentation/theme/app_colors.dart';
@@ -37,10 +38,10 @@ class _VenteFormState extends State<VenteForm> {
       return AppCard(
         child: Column(
           children: [
-            const Icon(
-              Icons.inventory_2_outlined,
-              size: ThemeConstants.iconSize2Xl,
-              color: AppColors.textSecondary,
+            SvgPicture.asset(
+              'assets/icons/boissons.svg',
+              width: 32,
+              height: 32,
             ),
             const SizedBox(height: ThemeConstants.spacingMd),
             Text(

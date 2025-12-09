@@ -159,11 +159,7 @@ class _VenteScreenState extends State<VenteScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          isSearching ? SvgPicture.asset(
-            'assets/icons/no-result.svg',
-            width: 32,
-            height: 32,
-          ):SvgPicture.asset(
+          SvgPicture.asset(
             'assets/icons/ventes.svg',
             width: 32,
             height: 32,

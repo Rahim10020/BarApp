@@ -84,7 +84,7 @@ class _RefrigerateurScreenState extends State<RefrigerateurScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _navigateToAjouterRefrigerateur,
         icon: const Icon(Icons.add),
-        label: const Text('Ajouter'),
+        label: const SizedBox.shrink(),
         heroTag: 'ajouter-refrigerateur',
       ),
     );

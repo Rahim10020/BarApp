@@ -86,8 +86,8 @@ class _BoissonScreenState extends State<BoissonScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _navigateToAjouterBoisson,
         icon: const Icon(Icons.add),
-        label: const Text('Ajouter'),
         heroTag: 'ajouter-boisson',
+        label: const SizedBox.shrink(),
       ),
     );
   }
