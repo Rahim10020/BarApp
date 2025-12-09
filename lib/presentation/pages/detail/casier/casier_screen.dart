@@ -50,10 +50,10 @@ class _CasierScreenState extends State<CasierScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
-                              Icons.inventory_outlined,
-                              size: ThemeConstants.iconSize3Xl,
-                              color: AppColors.textSecondary,
+                            SvgPicture.asset(
+                              'assets/icons/casier.svg',
+                              width: ThemeConstants.iconSizeMd,
+                              height: ThemeConstants.iconSizeMd,
                             ),
                             const SizedBox(height: ThemeConstants.spacingMd),
                             Text(

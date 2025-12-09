@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/domain/entities/boisson.dart';
 import 'package:projet7/domain/entities/ligne_vente.dart';
 import 'package:projet7/domain/entities/vente.dart';
@@ -124,7 +125,7 @@ class _VenteScreenState extends State<VenteScreen> {
           // === RECHERCHE ===
           AppSearchField(
             controller: _searchController,
-            hint: 'Rechercher par ID, date ou boisson...',
+            hint: 'Rechercher par date ou boisson...',
             onChanged: (_) {}, // Le setState est dans initState
           ),
 
@@ -158,11 +159,16 @@ class _VenteScreenState extends State<VenteScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            isSearching ? Icons.search_off_rounded : Icons.receipt_long_rounded,
-            size: ThemeConstants.iconSize2Xl,
-            color: Theme.of(context).colorScheme.outline,
+          isSearching ? SvgPicture.asset(
+            'assets/icons/no-result.svg',
+            width: 32,
+            height: 32,
+          ):SvgPicture.asset(
+            'assets/icons/ventes.svg',
+            width: 32,
+            height: 32,
           ),
+
           const SizedBox(height: ThemeConstants.spacingMd),
           Text(
             isSearching ? 'Aucun résultat' : 'Aucune vente',

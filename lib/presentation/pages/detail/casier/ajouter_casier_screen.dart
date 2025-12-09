@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/domain/entities/boisson.dart';
 import 'package:projet7/domain/entities/casier.dart';
 import 'package:projet7/presentation/pages/detail/casier/components/casier_form.dart';
@@ -112,10 +113,10 @@ class _AjouterCasierScreenState extends State<AjouterCasierScreen> {
                       color: AppColors.warning.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
-                      Icons.inventory_2_rounded,
-                      color: AppColors.warning,
-                      size: 48,
+                    child: SvgPicture.asset(
+                      'assets/icons/casier.svg',
+                      width: ThemeConstants.iconSizeMd,
+                      height: ThemeConstants.iconSizeMd,
                     ),
                   ),
                   const SizedBox(height: ThemeConstants.spacingLg),
