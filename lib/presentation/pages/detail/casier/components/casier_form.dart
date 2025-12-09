@@ -64,7 +64,7 @@ class _CasierFormState extends State<CasierForm> {
                     ),
                     const SizedBox(height: ThemeConstants.spacingXs),
                     Text(
-                      'Créez un casier de boissons',
+                      'Ajoutez un casier de boissons',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.textSecondary,
                           ),
@@ -232,7 +232,7 @@ class _CasierFormState extends State<CasierForm> {
 
           // Bouton Créer
           AppButton.primary(
-            text: 'Créer le casier',
+            text: 'Ajoutez le casier',
             icon: Icons.add_box_rounded,
             size: AppButtonSize.medium,
             isFullWidth: true,

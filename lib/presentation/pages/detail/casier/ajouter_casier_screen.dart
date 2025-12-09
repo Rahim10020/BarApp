@@ -98,7 +98,6 @@ class _AjouterCasierScreenState extends State<AjouterCasierScreen> {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Ajouter un casier'),
-          centerTitle: true,
         ),
         body: Center(
           child: Padding(
@@ -128,7 +127,7 @@ class _AjouterCasierScreenState extends State<AjouterCasierScreen> {
                   ),
                   const SizedBox(height: ThemeConstants.spacingSm),
                   Text(
-                    'Créez des boissons avant de créer des casiers',
+                    'Ajoutez des boissons avant d\'ajouter des casiers',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.textSecondary,
                         ),
@@ -145,7 +144,6 @@ class _AjouterCasierScreenState extends State<AjouterCasierScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ajouter un casier'),
-        centerTitle: true,
       ),
       body: SafeArea(
         child: LayoutBuilder(
