@@ -77,7 +77,6 @@ class _AjouterRefrigerateurScreenState
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ajouter un réfrigérateur'),
-        centerTitle: true,
       ),
       body: SafeArea(
         child: LayoutBuilder(

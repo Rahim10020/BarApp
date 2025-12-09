@@ -40,18 +40,10 @@ class _RefrigerateurFormState extends State<RefrigerateurForm> {
             children: [
               Container(
                 padding: const EdgeInsets.all(ThemeConstants.spacingSm),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
-                ),
                 child: SvgPicture.asset(
                   'assets/icons/fridge.svg',
                   width: ThemeConstants.iconSizeMd,
                   height: ThemeConstants.iconSizeMd,
-                  colorFilter: const ColorFilter.mode(
-                    AppColors.primary,
-                    BlendMode.srcIn,
-                  ),
                 ),
               ),
               const SizedBox(width: ThemeConstants.spacingMd),

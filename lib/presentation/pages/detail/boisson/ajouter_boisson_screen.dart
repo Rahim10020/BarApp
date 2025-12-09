@@ -91,7 +91,6 @@ class _AjouterBoissonScreenState extends State<AjouterBoissonScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ajouter une boisson'),
-        centerTitle: true,
       ),
       body: SafeArea(
         child: LayoutBuilder(

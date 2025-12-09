@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projet7/domain/entities/modele.dart';
 import 'package:projet7/presentation/pages/detail/boisson/boisson_import_screen.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
@@ -47,14 +48,10 @@ class _BoissonFormState extends State<BoissonForm> {
             children: [
               Container(
                 padding: const EdgeInsets.all(ThemeConstants.spacingSm),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
-                ),
-                child: const Icon(
-                  Icons.local_drink_rounded,
-                  color: AppColors.primary,
-                  size: ThemeConstants.iconSizeMd,
+                child: SvgPicture.asset(
+                  'assets/icons/boissons.svg',
+                  width: ThemeConstants.iconSizeMd,
+                  height: ThemeConstants.iconSizeMd,
                 ),
               ),
               const SizedBox(width: ThemeConstants.spacingMd),
@@ -123,7 +120,7 @@ class _BoissonFormState extends State<BoissonForm> {
             controller: widget.descriptionController,
             label: 'Description (optionnel)',
             hint: 'Décrivez la boisson...',
-            maxLines: 3,
+            maxLines: 2,
             prefixIcon: Icons.description_rounded,
           ),
 
