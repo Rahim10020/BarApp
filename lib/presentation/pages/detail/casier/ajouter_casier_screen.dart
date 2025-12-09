@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:projet7/domain/entities/boisson.dart';
 import 'package:projet7/domain/entities/casier.dart';
+import 'package:projet7/presentation/pages/detail/casier/components/casier_form.dart';
 import 'package:projet7/presentation/providers/bar_app_provider.dart';
 import 'package:projet7/presentation/theme/app_colors.dart';
 import 'package:projet7/presentation/theme/theme_constants.dart';
-import 'package:projet7/presentation/widgets/buttons/app_button.dart';
 import 'package:projet7/presentation/widgets/cards/app_card.dart';
 import 'package:projet7/presentation/widgets/dialogs/app_dialogs.dart';
-import 'package:projet7/presentation/widgets/inputs/app_text_field.dart';
 import 'package:provider/provider.dart';
 
 /// Écran pour ajouter un nouveau casier
@@ -102,22 +101,41 @@ class _AjouterCasierScreenState extends State<AjouterCasierScreen> {
           centerTitle: true,
         ),
         body: Center(
-          child: AppCard(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: ThemeConstants.spacingMd),
-                Text(
-                  'Aucune boisson disponible',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: ThemeConstants.spacingXs),
-                Text(
-                  'Créez des boissons avant de créer des casiers',
-                  style: Theme.of(context).textTheme.bodySmall,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+          child: Padding(
+            padding: ThemeConstants.pagePadding,
+            child: AppCard(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(ThemeConstants.spacingMd),
+                    decoration: BoxDecoration(
+                      color: AppColors.warning.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.inventory_2_rounded,
+                      color: AppColors.warning,
+                      size: 48,
+                    ),
+                  ),
+                  const SizedBox(height: ThemeConstants.spacingLg),
+                  Text(
+                    'Aucune boisson disponible',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: ThemeConstants.spacingSm),
+                  Text(
+                    'Créez des boissons avant de créer des casiers',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -155,143 +173,14 @@ class _AjouterCasierScreenState extends State<AjouterCasierScreen> {
                         ),
                       );
                     },
-                    child: AppCard(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Titre
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(
-                                    ThemeConstants.spacingSm),
-                                decoration: BoxDecoration(
-                                  color:
-                                      AppColors.primary.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(
-                                      ThemeConstants.radiusMd),
-                                ),
-                                child: const Icon(
-                                  Icons.inventory_2_rounded,
-                                  color: AppColors.primary,
-                                  size: ThemeConstants.iconSizeMd,
-                                ),
-                              ),
-                              const SizedBox(width: ThemeConstants.spacingMd),
-                              Text(
-                                'Nouveau Casier',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: ThemeConstants.spacingMd),
-
-                          // Quantité
-                          AppNumberField(
-                            controller: _quantiteController,
-                            label: 'Quantité de boissons',
-                            hint: '24',
-                            prefixIcon: Icons.numbers_rounded,
-                          ),
-
-                          const SizedBox(height: ThemeConstants.spacingMd),
-
-                          // Sélecteur de boisson
-                          Text(
-                            'Type de boisson',
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          const SizedBox(height: ThemeConstants.spacingSm),
-
-                          SizedBox(
-                            height: 60,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: provider.boissons.length,
-                              separatorBuilder: (_, __) => const SizedBox(
-                                  width: ThemeConstants.spacingSm),
-                              itemBuilder: (context, index) {
-                                final boisson = provider.boissons[index];
-                                final isSelected =
-                                    _boissonSelectionnee?.id == boisson.id;
-
-                                return GestureDetector(
-                                  onTap: () => setState(
-                                      () => _boissonSelectionnee = boisson),
-                                  child: AnimatedContainer(
-                                    duration: ThemeConstants.animationFast,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: ThemeConstants.spacingMd,
-                                      vertical: ThemeConstants.spacingSm,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? AppColors.primary
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .surfaceContainerHighest,
-                                      borderRadius: BorderRadius.circular(
-                                          ThemeConstants.radiusMd),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? AppColors.primary
-                                            : Theme.of(context).dividerColor,
-                                        width: isSelected
-                                            ? ThemeConstants.borderWidthMedium
-                                            : ThemeConstants.borderWidthThin,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          boisson.nom ?? 'Sans nom',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleSmall
-                                              ?.copyWith(
-                                                color: isSelected
-                                                    ? Colors.white
-                                                    : null,
-                                                fontWeight: isSelected
-                                                    ? FontWeight.bold
-                                                    : null,
-                                              ),
-                                        ),
-                                        Text(
-                                          boisson.modele?.name ?? '',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.copyWith(
-                                                color: isSelected
-                                                    ? Colors.white
-                                                        .withValues(alpha: 0.9)
-                                                    : AppColors.textSecondary,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-
-                          const SizedBox(height: ThemeConstants.spacingMd),
-
-                          // Bouton Créer
-                          AppButton.primary(
-                            text: 'Créer le casier',
-                            icon: Icons.add_box_rounded,
-                            size: AppButtonSize.small,
-                            isFullWidth: true,
-                            onPressed: () => _ajouterCasier(provider),
-                          ),
-                        ],
-                      ),
+                    child: CasierForm(
+                      provider: provider,
+                      quantiteController: _quantiteController,
+                      boissonSelectionnee: _boissonSelectionnee,
+                      onBoissonSelected: (boisson) {
+                        setState(() => _boissonSelectionnee = boisson);
+                      },
+                      onAjouterCasier: () => _ajouterCasier(provider),
                     ),
                   ),
                 ),

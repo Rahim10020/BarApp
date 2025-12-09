@@ -35,57 +35,129 @@ class _RefrigerateurFormState extends State<RefrigerateurForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Titre
+          // En-tête avec icône
           Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(ThemeConstants.spacingSm),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(ThemeConstants.radiusMd),
+                ),
                 child: SvgPicture.asset(
                   'assets/icons/fridge.svg',
                   width: ThemeConstants.iconSizeMd,
                   height: ThemeConstants.iconSizeMd,
-                ),
-              ),
-              const SizedBox(width: ThemeConstants.spacingMd),
-              Text(
-                'Nouveau Réfrigérateur',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ],
-          ),
-
-          const SizedBox(height: ThemeConstants.spacingMd),
-
-          // Nom et Température (ligne)
-          Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: AppTextField(
-                  controller: widget.nomController,
-                  label: 'Nom',
-                  hint: 'Ex: Frigo Principal',
-                  prefixIcon: Icons.label_rounded,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.primary,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
               const SizedBox(width: ThemeConstants.spacingMd),
               Expanded(
-                child: AppNumberField(
-                  controller: widget.tempController,
-                  label: 'Temp. (°C)',
-                  hint: '4',
-                  prefixIcon: Icons.thermostat_rounded,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Nouveau Réfrigérateur',
+                      style:
+                          Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                    const SizedBox(height: ThemeConstants.spacingXs),
+                    Text(
+                      'Ajoutez un réfrigérateur à votre bar',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
 
+          const SizedBox(height: ThemeConstants.spacingLg),
+
+          // Divider
+          const Divider(height: 1),
+
+          const SizedBox(height: ThemeConstants.spacingLg),
+
+          // Section Informations
+          Text(
+            'Informations du réfrigérateur',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
           const SizedBox(height: ThemeConstants.spacingMd),
+
+          // Nom
+          AppTextField(
+            controller: widget.nomController,
+            label: 'Nom du réfrigérateur',
+            hint: 'Ex: Frigo Principal',
+            prefixIcon: Icons.label_rounded,
+          ),
+
+          const SizedBox(height: ThemeConstants.spacingMd),
+
+          // Température
+          AppNumberField(
+            controller: widget.tempController,
+            label: 'Température (°C)',
+            hint: 'Ex: 4',
+            prefixIcon: Icons.thermostat_rounded,
+          ),
+
+          const SizedBox(height: ThemeConstants.spacingSm),
+
+          // Info température
+          Container(
+            padding: const EdgeInsets.all(ThemeConstants.spacingSm),
+            decoration: BoxDecoration(
+              color: AppColors.info.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(ThemeConstants.radiusSm),
+              border: Border.all(
+                color: AppColors.info.withValues(alpha: 0.3),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.info_outline_rounded,
+                  color: AppColors.info,
+                  size: 16,
+                ),
+                const SizedBox(width: ThemeConstants.spacingSm),
+                Expanded(
+                  child: Text(
+                    'Température recommandée : entre 2°C et 6°C',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.info,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: ThemeConstants.spacingXl),
+
+          // Divider
+          const Divider(height: 1),
+
+          const SizedBox(height: ThemeConstants.spacingLg),
 
           // Bouton Ajouter
           AppButton.primary(
             text: 'Ajouter le réfrigérateur',
             icon: Icons.add_circle_rounded,
+            size: AppButtonSize.medium,
             isFullWidth: true,
             onPressed: widget.onAjouterRefrigerateur,
           ),
